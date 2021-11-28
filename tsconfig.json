@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "es5", // 컴파일 된 결과물이 어느 버전의 ECMAScript를 따를 것인지
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // 컴파일 시 포함시켜야하는 javascript 내장 API들의 타입 정의에 대한 정보들
+    "module": "esnext", // 프로그램에서 사용할 모듈 시스템. import/export 코드가 어떤 방식의 코드로 컴파일 될지 결정한다
+    "allowJs": true, // js files를 허용할 것인가
+    "jsx": "react", // jsx 코드를 어떻게 컴파일 할 것인가
+    "baseUrl": "./", // 비상대적 import 모듈 해석시 기준이 되는 경로
+    "moduleResolution": "Node", // 모듈 해석 전략. 웬만해선 node로 고정할 것
+    "esModuleInterop": true, // es module 사용시 컴파일 단계에서 헬퍼 함수를 사용할 것인가
+    "strict": true, // 타입을 얼마나 엄격하게 검사할지 검사하는 옵션
+    "alwaysStrict": true, // ECMAScript의 strict 모드를 구현
+    "isolatedModules": true, // 각 파일을 분리된 모듈로 트랜스파일링할 것인가
+    "forceConsistentCasingInFileNames": true, // 사용할 파일의 이름을 대소문자까지 정확하게 작성하도록 강제할 것인가
+    "declaration": false, // d.ts 파일을 생성할 것인가
+    "removeComments": true, // 컴파일시 불필요한 주석 제거
+    "pretty": true, // 에러와 메세지를 색, 컨텍스트를 사용해서 스타일을 지정할 것인가
+    "strictFunctionTypes": true, // 함수, 메소드의 인자 타입을 더 정확히 추론할 것인가
+    "skipLibCheck": true, // 사용하는 라이브러리의 타입 검사를 skip할 것인가
+    "noImplicitThis": true, // any 타입으로 암시한 this 표현식에 오류를 보고할 것인가
+    "noFallthroughCasesInSwitch": true, // switch문에서 fallthrough case가 발견되면 에러를 발생시킬 것인가
+    "noImplicitReturns": true, // void가 아닌 함수가 리턴을 제대로 하지 않는 경우가 있다면 에러 발생
+    "noEmit": true, // 컴파일러가 js 파일 등 출력 결과물을 만들지 않을 것인가
+    "noEmitOnError": true, // 에러 발생시 js 소스코드, source map, declaration 등이 생성되지 않는다
+    "noUnusedLocals": false,
+    "downlevelIteration": true, // 사용되지 않는 지역 변수에 대해 에러를 발생시킬 것인가
+    "paths": {
+      "@/*": ["src/*"],
+      "#/*": ["test/*"]
+    }
+  },
+  // 컴파일 대상 폴더 경로
+  "include": ["src"],
+  // 상속 받을 다른 tsconfig 설정 파일 경로
+  "exclude": ["node_modules"]
+}
+
+// "noImplicitAny": false, // any 타입으로 구현된 표현식 혹은 정의를 에러처리 할 것인가
