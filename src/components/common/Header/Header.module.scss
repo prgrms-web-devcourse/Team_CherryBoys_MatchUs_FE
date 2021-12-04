@@ -9,14 +9,14 @@
   background: #f3f3f3;
 
   div {
-    height: 100%;
     min-width: 4.2rem;
+    display: flex;
+    align-items: center;
 
     button {
       background: none;
-      height: 100%;
+      padding: 0.4rem;
       width: 100%;
-      line-height: 4.2rem;
     }
 
     svg {
@@ -25,7 +25,6 @@
     }
 
     a {
-      line-height: 4.2rem;
       font-size: 1.6rem;
       display: block;
       color: #777777;
@@ -40,7 +39,13 @@
 
     &.buttonBox {
       button {
-        width: 50%;
+        width: fit-content;
+        margin: 0 0.4rem;
+        &.loginButton {
+          border: 2px solid #56ad79;
+          border-radius: 5px;
+          padding: 0.4rem 0.8rem;
+        }
       }
     }
   }
