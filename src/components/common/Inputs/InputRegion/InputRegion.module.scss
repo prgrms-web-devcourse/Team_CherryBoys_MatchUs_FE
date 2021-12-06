@@ -1,0 +1,38 @@
+.inputBox {
+  padding: 1.6rem;
+
+  .inputName {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .inputContent {
+    font-size: 1.2rem;
+    border: 2px solid #c4c4c4;
+    border-radius: 5px;
+
+    .input {
+      height: fit-content;
+      position: relative;
+
+      select {
+        min-height: 4rem;
+        height: 100%;
+        border: none;
+        outline: none;
+        padding: 0.8rem;
+        width: 100%;
+      }
+
+      &_City {
+      }
+
+      &_Region {
+      }
+
+      &_groundName {
+      }
+    }
+  }
+}

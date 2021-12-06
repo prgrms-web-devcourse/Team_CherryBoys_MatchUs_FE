@@ -1,0 +1,38 @@
+.inputBox {
+  padding: 1.6rem;
+
+  .inputName {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .inputContent {
+    font-size: 1.2rem;
+    border: 2px solid #c4c4c4;
+    border-radius: 5px;
+
+    .input {
+      height: fit-content;
+      position: relative;
+
+      &_text {
+        width: 100%;
+        padding: 0.8rem;
+
+        &_content {
+          width: 100%;
+          min-height: 4rem;
+          border: none;
+          outline: none;
+          overflow: auto;
+          &:empty::before {
+            content: attr(placeholder);
+            color: #c4c4c4;
+            cursor: text;
+          }
+        }
+      }
+    }
+  }
+}

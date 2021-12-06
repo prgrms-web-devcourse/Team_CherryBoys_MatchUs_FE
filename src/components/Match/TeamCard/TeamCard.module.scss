@@ -1,0 +1,73 @@
+.TeamCard {
+  font-size: 1.2rem;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  border: 2px solid #c4c4c4;
+  border-radius: 5px;
+  box-sizing: border-box;
+  align-items: center;
+  margin: 1.6rem;
+
+  > div {
+    padding: 0.4rem;
+  }
+
+  .logo {
+    grid-row: 1/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 9.6rem;
+    img {
+      height: 100%;
+      width: fit-content;
+      max-width: 100%;
+      border-radius: 5px;
+      border: 1px solid #c4c4c4;
+      box-sizing: border-box;
+    }
+  }
+
+  .teamName {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .captainInfo {
+    display: flex;
+    align-items: center;
+    .captainName {
+      font-size: 1.6rem;
+      margin-right: 1.6rem;
+    }
+
+    .buttonBox {
+      button {
+        background: none;
+        border-radius: 5px;
+        i {
+          color: #c4c4c4;
+        }
+      }
+      .goUserInfoButton {
+      }
+
+      .chattingButton {
+      }
+    }
+  }
+
+  .tags {
+    .tag {
+      border-radius: 15px;
+      border: 1px solid #56ad79;
+      box-sizing: border-box;
+      box-shadow: 2px 2px 2px 0px rgba(86, 173, 121, 0.5);
+      width: fit-content;
+      padding: 0.4rem;
+      &.teamMannerTemperature {
+      }
+    }
+  }
+}

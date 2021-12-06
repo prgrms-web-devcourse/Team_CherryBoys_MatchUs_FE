@@ -1,0 +1,67 @@
+.inputBox {
+  padding: 1.6rem;
+
+  .inputName {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .inputContent {
+    font-size: 1.2rem;
+    border: 2px solid #c4c4c4;
+    border-radius: 5px;
+
+    .input {
+      height: fit-content;
+      position: relative;
+
+      input,
+      select {
+        min-height: 4rem;
+        height: 100%;
+        border: none;
+        outline: none;
+        padding: 0.8rem;
+      }
+
+      &_text {
+        width: calc(100% - 4.8rem);
+
+        input {
+          width: 100%;
+        }
+
+        .inputButtonBox {
+          height: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+
+          .inputButton {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            background: none;
+
+            i {
+              font-size: 3.2rem;
+            }
+            .selected {
+              i {
+                color: #56ad79;
+              }
+            }
+          }
+        }
+      }
+
+      &_dropBox {
+        width: 100%;
+        padding: 0.8rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.matchButtonBox {
+  position: fixed;
+  bottom: 4.2rem;
+  left: 0;
+  width: 100%;
+  height: 4.2rem;
+  border: 1px solid gold;
+  display: flex;
+  .matchButton {
+    width: 100%;
+    background: #56ad79;
+    color: #fff;
+    font-size: 1.6rem;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    &.approveButton {
+      display: none;
+      &.show {
+        display: block;
+      }
+    }
+
+    &.applyButton {
+      display: none;
+      &.show {
+        display: block;
+      }
+    }
+  }
+}

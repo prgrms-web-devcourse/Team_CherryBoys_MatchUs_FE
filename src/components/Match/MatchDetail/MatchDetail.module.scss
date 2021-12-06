@@ -1,0 +1,44 @@
+.matchDetail {
+  padding: 1.6rem;
+  margin-bottom: 8.4rem;
+  &_menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    .name {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-indent: 1.6rem;
+    }
+    .buttonBox {
+      button {
+        padding: 0.8rem;
+        border-radius: 5px;
+        border: 2px solid #c4c4c4;
+        background: none;
+        width: 7.2rem;
+      }
+      .modifyButton {
+        margin-right: 0.8rem;
+        i {
+          color: #c4c4c4;
+        }
+      }
+      .removeButton {
+        i {
+          color: red;
+        }
+      }
+    }
+  }
+
+  &_content {
+    padding: 1.6rem;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    border-radius: 5px;
+    border: 2px solid #c4c4c4;
+    min-height: 40rem;
+  }
+}
