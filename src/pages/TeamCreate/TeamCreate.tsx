@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { CustomButton, CustomInput, CustomLabel } from '@/components/common';
+import { CustomButton, CustomInput, CustomLabel } from '@/components';
 
 const SPORTS_CATEGORY = [
   { id: 'FOOTBALL', name: '축구' },
