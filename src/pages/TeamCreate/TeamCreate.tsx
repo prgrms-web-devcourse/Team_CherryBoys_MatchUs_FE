@@ -1,12 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import { SPORTS_CATEGORY, AGE_GROUP } from '@/consts';
 import { CustomButton, CustomInput, CustomLabel } from '@/components';
-
-const SPORTS_CATEGORY = [
-  { id: 'FOOTBALL', name: '축구' },
-  { id: 'FUTSAL', name: '풋살' },
-];
-const AGE_GROUP = ['20', '30', '40', '50', '60', '70'];
 
 const handleSubmitTeamInfo = (e: React.FormEvent<HTMLFormElement>) => {
   // TODO: API 구현 완료 시, 본 handler를 통해서 통신 할 예정
