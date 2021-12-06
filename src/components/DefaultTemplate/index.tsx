@@ -9,6 +9,8 @@ interface Props {
 }
 
 const DefaultTemplate = ({ children }: Props) => {
+  const { main } = styles;
+
   return (
     <BrowserRouter>
       <link
@@ -16,7 +18,7 @@ const DefaultTemplate = ({ children }: Props) => {
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
       />
       <Header />
-      <main className={classNames(styles.main)}>{children}</main>
+      <main className={classNames(main)}>{children}</main>
       <TabBar />
     </BrowserRouter>
   );
