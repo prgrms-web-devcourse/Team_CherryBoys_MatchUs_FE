@@ -5,12 +5,11 @@ interface Props {
   type: string;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick?: () => React.MouseEventHandler<HTMLInputElement>;
   placeholder?: string;
   className?: string;
 }
 
-const CustomInput = ({ id, type, value, placeholder, onChange, onClick, className }: Props) => {
+const CustomInput = ({ id, type, value, placeholder, onChange, className }: Props) => {
   return (
     <input
       id={id}
@@ -18,7 +17,6 @@ const CustomInput = ({ id, type, value, placeholder, onChange, onClick, classNam
       value={value}
       className={className}
       onChange={onChange}
-      onClick={onClick}
       placeholder={placeholder}
     />
   );
