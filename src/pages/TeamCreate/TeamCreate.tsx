@@ -8,8 +8,9 @@ const SPORTS_CATEGORY = [
 ];
 const AGE_GROUP = ['20', '30', '40', '50', '60', '70'];
 
-const handleSubmitTeamInfo = () => {
-  console.log('submit');
+const handleSubmitTeamInfo = (e: React.FormEvent<HTMLFormElement>) => {
+  // TODO: API 구현 완료 시, 본 handler를 통해서 통신 할 예정
+  e.preventDefault();
 };
 
 const TeamCreate = () => {
