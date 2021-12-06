@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faCog } from '@fortawesome/free-solid-svg-icons';
 import styles from './Header.module.scss';
 
 const Header = () => {
@@ -13,19 +11,19 @@ const Header = () => {
 
   return (
     <div className={classNames(styles.header)}>
-      <div>
-        <button type="button" onClick={handleGoBack}>
-          <FontAwesomeIcon icon={faChevronLeft} />
+      <div className={classNames(styles.leftButtonBox)}>
+        <button type="button" onClick={handleGoBack} className={classNames(styles.goBackButton)}>
+          <i className="far fa-chevronLeft" />
         </button>
       </div>
-      <div className={classNames(styles.buttonBox)}>
-        <button type="button" className={classNames(styles.loginButton)}>
+      <div className={classNames(styles.rightButtonBox)}>
+        <button type="button" className={classNames(styles.goLoginPageButton)}>
           {/* 로그인 상태 생기면 토글로 로그인/로그아웃 구분 */}
           <Link to="/login">로그인</Link>
         </button>
-        <button type="button">
+        <button type="button" className={classNames(styles.goSettingPageButton)}>
           <Link to="/setting">
-            <FontAwesomeIcon icon={faCog} />
+            <i className="fas fa-cog" />
           </Link>
         </button>
       </div>
