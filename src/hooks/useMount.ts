@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 
-export default (fn: () => void) => {
+export default (func: () => void) => {
   return useEffect(() => {
-    fn();
+    func();
   }, []);
 };

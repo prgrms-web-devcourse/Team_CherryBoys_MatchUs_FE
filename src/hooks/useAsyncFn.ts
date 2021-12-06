@@ -8,7 +8,10 @@ interface stateProps {
   error?: undefined;
 }
 
-const useAsyncFn = (fn: AsyncFn, deps: DependencyList): [state: stateProps, callback: AsyncFn] => {
+const useAsyncFn = (
+  func: AsyncFn,
+  deps: DependencyList
+): [state: stateProps, callback: AsyncFn] => {
   const lastCallId = useRef(0);
   const [state, setState] = useState<stateProps>({
     isLoading: false,
@@ -23,7 +26,7 @@ const useAsyncFn = (fn: AsyncFn, deps: DependencyList): [state: stateProps, call
       setState({ ...state, isLoading: true });
     }
 
-    return fn(...args).then(
+    return func(...args).then(
       (value) => {
         if (callId === lastCallId.current) setState({ value, isLoading: false });
         return value;

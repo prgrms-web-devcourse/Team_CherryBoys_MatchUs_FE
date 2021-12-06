@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 
-const useUnMount = (fn: () => void) => {
+const useUnMount = (func: () => void) => {
   return useEffect(() => {
-    return fn();
+    return func();
   }, []);
 };
 

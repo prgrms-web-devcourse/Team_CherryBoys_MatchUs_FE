@@ -6,8 +6,8 @@ interface stateProps {
   value?: any;
 }
 
-const useAsync = (fn: AsyncFn, deps: DependencyList): stateProps => {
-  const [state, callback] = useAsyncFn(fn, deps);
+const useAsync = (func: AsyncFn, deps: DependencyList): stateProps => {
+  const [state, callback] = useAsyncFn(func, deps);
 
   useEffect(() => {
     callback();
