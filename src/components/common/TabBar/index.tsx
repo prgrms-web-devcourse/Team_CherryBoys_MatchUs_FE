@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import styles from './TabBar.module.scss';
 
 const TabBar = () => {
+  const { tabBar } = styles;
   return (
-    <div className={classNames(styles.tabBar)}>
+    <div className={classNames(tabBar)}>
       <nav>
         <Link to="/">
           <i className="fas fa-home" />
