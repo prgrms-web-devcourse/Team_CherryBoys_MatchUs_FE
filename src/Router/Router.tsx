@@ -1,18 +1,19 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+// TODO: Router관련 const 객체로 변경해 보기
 import {
   HOME_PAGE,
-  MERCENARY_PAGE,
-  MERCENARY_DETAIL_PAGE,
-  MERCENARY_POST_PAGE,
-  MERCENARY_EDIT_PAGE,
-  MERCENARY_CHAT_PAGE,
-  MERCENARY_ACCEPT_PAGE,
-  MATCHING_PAGE,
-  MATCHING_POST_PAGE,
-  MATCHING_DETAIL_PAGE,
-  MATCHING_EDIT_PAGE,
+  HIRES_PAGE,
+  HIRES_DETAIL_PAGE,
+  HIRES_POST_PAGE,
+  HIRES_EDIT_PAGE,
+  HIRES_CHAT_PAGE,
+  HIRES_ACCEPT_PAGE,
+  MATCHES_PAGE,
+  MATCHES_POST_PAGE,
+  MATCHES_DETAIL_PAGE,
+  MATCHES_EDIT_PAGE,
   TEAM_PAGE,
   TEAM_CREATE_PAGE,
   TEAM_MATCHING_LIST_PAGE,
@@ -22,6 +23,7 @@ import {
   TEAM_MEMBERS_EDIT_PAGE,
   SIGNUP_PAGE,
   LOGIN_PAGE,
+  SETTING_PAGE,
   USER_PAGE,
   USER_EDIT_PAGE,
   USER_MATCHING_LIST_PAGE,
@@ -37,16 +39,16 @@ const Router: React.FC = () => {
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
       <Route path={HOME_PAGE} exact component={} />
       <Route path={HOME_PAGE} exact component={} />
-      <Route path={MERCENARY_PAGE} exact component={} />
-      <Route path={MERCENARY_DETAIL_PAGE} exact component={} />
-      <Route path={MERCENARY_POST_PAGE} exact component={} />
-      <Route path={MERCENARY_EDIT_PAGE} exact component={} />
-      <Route path={MERCENARY_CHAT_PAGE} exact component={} />
-      <Route path={MERCENARY_ACCEPT_PAGE} exact component={} />
-      <Route path={MATCHING_PAGE} exact component={} />
-      <Route path={MATCHING_POST_PAGE} exact component={} />
-      <Route path={MATCHING_DETAIL_PAGE} exact component={} />
-      <Route path={MATCHING_EDIT_PAGE} exact component={} />
+      <Route path={HIRES_PAGE} exact component={} />
+      <Route path={HIRES_DETAIL_PAGE} exact component={} />
+      <Route path={HIRES_POST_PAGE} exact component={} />
+      <Route path={HIRES_EDIT_PAGE} exact component={} />
+      <Route path={HIRES_CHAT_PAGE} exact component={} />
+      <Route path={HIRES_ACCEPT_PAGE} exact component={} />
+      <Route path={MATCHES_PAGE} exact component={} />
+      <Route path={MATCHES_POST_PAGE} exact component={} />
+      <Route path={MATCHES_DETAIL_PAGE} exact component={} />
+      <Route path={MATCHES_EDIT_PAGE} exact component={} />
       <Route path={TEAM_PAGE} exact component={} />
       <Route path={TEAM_CREATE_PAGE} exact component={} />
       <Route path={TEAM_MATCHING_LIST_PAGE} exact component={} />
@@ -56,6 +58,7 @@ const Router: React.FC = () => {
       <Route path={TEAM_MEMBERS_EDIT_PAGE} exact component={} />
       <Route path={SIGNUP_PAGE} exact component={} />
       <Route path={LOGIN_PAGE} exact component={} />
+      <Route path={SETTING_PAGE} exact component={} />
       <Route path={USER_PAGE} exact component={} />
       <Route path={USER_EDIT_PAGE} exact component={} />
       <Route path={USER_MATCHING_LIST_PAGE} exact component={} />
