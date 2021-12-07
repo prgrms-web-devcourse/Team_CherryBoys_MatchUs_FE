@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { matches } from './match';
+import { posts } from './posts/posts';
 
 export const store = configureStore({
   reducer: {
-    matches: matches.reducer,
+    posts: posts.reducer,
   },
 });
 
