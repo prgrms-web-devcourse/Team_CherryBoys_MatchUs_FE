@@ -2,18 +2,18 @@
 export const HOME_PAGE = '/';
 
 // 용병
-export const MERCENARY_PAGE = '/mercenary';
-export const MERCENARY_DETAIL_PAGE = '/mercenary/:postId';
-export const MERCENARY_POST_PAGE = '/mercenary/post/new';
-export const MERCENARY_EDIT_PAGE = '/mercenary/edit/:postId';
-export const MERCENARY_CHAT_PAGE = '/mercenary/chat/:postId';
-export const MERCENARY_ACCEPT_PAGE = '/mercenary/accept/:postId';
+export const HIRES_PAGE = '/hires';
+export const HIRES_DETAIL_PAGE = '/hires/:postId';
+export const HIRES_POST_PAGE = '/hires/post/new';
+export const HIRES_EDIT_PAGE = '/hires/edit/:postId';
+export const HIRES_CHAT_PAGE = '/hires/chat/:postId';
+export const HIRES_ACCEPT_PAGE = '/hires/accept/:postId';
 
 // 매칭
-export const MATCHING_PAGE = '/matching/';
-export const MATCHING_POST_PAGE = '/matching/post/new';
-export const MATCHING_DETAIL_PAGE = '/matching/post/:postId';
-export const MATCHING_EDIT_PAGE = '/matching/edit/:postId';
+export const MATCHES_PAGE = '/matches/';
+export const MATCHES_POST_PAGE = '/matches/post/new';
+export const MATCHES_DETAIL_PAGE = '/matches/post/:postId';
+export const MATCHES_EDIT_PAGE = '/matches/edit/:postId';
 
 // 팀
 export const TEAM_PAGE = '/team/:teamId';
@@ -27,6 +27,7 @@ export const TEAM_MEMBERS_EDIT_PAGE = '/team/:teamId/member/edit';
 // 회원
 export const SIGNUP_PAGE = '/signup';
 export const LOGIN_PAGE = '/login';
+export const SETTING_PAGE = '/setting';
 
 // 개인
 export const USER_PAGE = '/user';
