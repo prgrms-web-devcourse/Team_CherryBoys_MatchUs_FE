@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Match } from '@/dummyMatch';
+import { PostItem } from '@/store/posts/posts';
 import styles from './MatchInfo.module.scss';
 
 interface Props {
-  match: Match;
+  match: PostItem;
 }
 
 const { matchInfoCard, matchInfoRow, importantInfo, normalInfo, matchInfo, matchInfo_content } =

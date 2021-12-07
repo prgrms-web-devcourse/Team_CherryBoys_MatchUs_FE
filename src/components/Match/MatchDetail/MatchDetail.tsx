@@ -3,11 +3,10 @@ import classNames from 'classnames';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styles from './MatchDetail.module.scss';
-import { Match } from '@/dummyMatch';
-import { deleteMatchById } from '@/store/matches/matches';
+import { deleteMatchById, PostItem } from '@/store/posts/posts';
 
 interface Props {
-  match: Match;
+  match: PostItem;
 }
 
 const {
