@@ -1,31 +1,31 @@
 .matchInfoCard {
-  padding: 0 1.6rem;
-  border-radius: 20px;
-  border: 2px solid #c4c4c4;
   box-sizing: border-box;
   margin: 0 1.6rem;
+  padding: 0 1.6rem;
+  border: 2px solid #c4c4c4;
+  border-radius: 20px;
 
   .matchInfoRow {
+    display: flex;
+    margin: 0.8rem 0;
     font-size: 1.2rem;
     text-align: center;
-    margin: 0.8rem 0;
-    display: flex;
 
     &.importantInfo {
       .matchInfo {
-        margin-bottom: 1.2rem;
         align-items: center;
+        margin-bottom: 1.2rem;
       }
     }
 
     &.normalInfo {
       justify-content: space-around;
       .matchInfo {
+        box-sizing: border-box;
         width: fit-content;
         min-width: 8rem;
-        border-radius: 20px;
         border: 2px solid #c4c4c4;
-        box-sizing: border-box;
+        border-radius: 20px;
       }
     }
 
@@ -33,11 +33,11 @@
       width: 100%;
 
       &_name {
-        border: 2px solid #c4c4c4;
         box-sizing: border-box;
-        border-radius: 5px;
         padding: 0.8rem 0;
         letter-spacing: 0.2rem;
+        border: 2px solid #c4c4c4;
+        border-radius: 5px;
       }
 
       &_content {
