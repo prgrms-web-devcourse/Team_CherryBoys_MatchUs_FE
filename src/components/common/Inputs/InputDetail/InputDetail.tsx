@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import classNames from 'classnames';
 import styles from './InputDetail.module.scss';
 
 interface Props {
   labelName: string;
   placeholder?: string;
-  onChange: React.FormEventHandler<HTMLFormElement>;
+  onChange: Dispatch<React.SetStateAction<string>>;
 }
 
-const { inputBox, inputName, inputContent, input, inputText, inputTextContent } = styles;
+const { inputBox, inputName, inputContent, inputText, inputTextContent } = styles;
 
 const InputDetail = ({ labelName, placeholder, onChange }: Props) => {
   return (
@@ -17,15 +17,14 @@ const InputDetail = ({ labelName, placeholder, onChange }: Props) => {
         <h3>{labelName}</h3>
       </div>
       <div className={classNames(inputContent)}>
-        <form className={classNames(input)} onChange={onChange}>
-          <div className={classNames(inputText)}>
-            <div
-              className={classNames(inputTextContent)}
-              contentEditable
-              placeholder={placeholder && placeholder}
-            />
-          </div>
-        </form>
+        <div className={classNames(inputText)}>
+          <div
+            className={classNames(inputTextContent)}
+            contentEditable
+            placeholder={placeholder && placeholder}
+            onInput={(e: React.ChangeEvent<HTMLDivElement>) => onChange(e.target.innerText)}
+          />
+        </div>
       </div>
     </div>
   );

@@ -9,53 +9,51 @@ interface Props {
   placeholder?: string;
   icon?: string;
   options?: string[];
-  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  onChange: React.ChangeEventHandler<HTMLInputElement> &
+    React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-const {
-  inputBox,
-  inputName,
-  inputContent,
-  input,
-  inputText,
-  inputDropBox,
-  inputButtonBox,
-  inputButton,
-} = styles;
+const { inputBox, inputName, inputContent, inputText, inputDropBox, inputButtonBox, inputButton } =
+  styles;
 
-const Input = ({ labelName, inputId, placeholder, type, icon, options, onSubmit }: Props) => {
-  const ICON_COLLECTION = {
-    CHECK: icon,
-  };
+const ICON_COLLECTION = {
+  CHECK: 'fas fa-comment',
+};
+
+const Input = ({ labelName, inputId, placeholder, type, icon, options, onChange }: Props) => {
+  ICON_COLLECTION.CHECK = icon || '';
   return (
     <div className={classNames(inputBox)}>
       <div className={classNames(inputName)}>
         <label htmlFor={inputId}>{labelName}</label>
       </div>
       <div className={classNames(inputContent)}>
-        <form className={classNames(input)} onSubmit={onSubmit}>
-          {type === 'text' && (
-            <div className={classNames(inputText)}>
-              <input id={inputId} type="text" placeholder={placeholder && placeholder} />
-              {icon && (
-                <div className={classNames(inputButtonBox)}>
-                  <button type="button" className={classNames(inputButton)}>
-                    <i className={classNames(ICON_COLLECTION.CHECK)} />
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-          {type === 'dropbox' && (
-            <select id={inputId} name={labelName} className={classNames(inputDropBox)}>
-              {options?.map((option, index) => (
-                <option value={option} key={`dropBoxOption${index}`}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          )}
-        </form>
+        {type === 'text' && (
+          <div className={classNames(inputText)}>
+            <input id={inputId} type="text" placeholder={placeholder} onChange={onChange} />
+            {icon && (
+              <div className={classNames(inputButtonBox)}>
+                <button type="button" className={classNames(inputButton)}>
+                  <i className={classNames(ICON_COLLECTION.CHECK)} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {type === 'dropbox' && (
+          <select
+            id={inputId}
+            name={labelName}
+            className={classNames(inputDropBox)}
+            onChange={onChange}
+          >
+            {options?.map((option, index) => (
+              <option value={option} key={`dropBoxOption${index}`}>
+                {option}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
     </div>
   );
