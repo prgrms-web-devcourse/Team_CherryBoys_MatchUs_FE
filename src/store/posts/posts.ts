@@ -1,10 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import axios from 'axios';
-import {
-  matches as matchesDummy,
-  match as matchDummy
-} from '@/dummyMatch';
+import { matches as matchesDummy, matchDummy, matchDummy2 } from '@/dummyMatch';
 
 export const fetchAllMatch = createAsyncThunk('matches/fetchAllMatches', async () => {
   /**
@@ -17,6 +14,7 @@ export const fetchAllMatch = createAsyncThunk('matches/fetchAllMatches', async (
 });
 
 export const fetchMatchById = createAsyncThunk('matches/fetchMatchById', async (id: number) => {
+  if (id === 2) return matchDummy2.data;
   return matchDummy.data;
 });
 
@@ -33,6 +31,7 @@ interface TeamUser {
   teamUserId?: number;
   teamUserName?: string;
 }
+
 export interface Team {
   teamId: number;
   teamLogo: string;
@@ -76,7 +75,7 @@ export interface PostItem {
 export interface PostsState {
   data: {
     matches: PostItem[];
-    match: PostItem[]
+    match: PostItem[];
   };
 }
 
@@ -85,7 +84,8 @@ export const posts = createSlice({
   initialState: {
     data: {
       matches: [],
-      match: []
+      match: [],
+      teamWithUser: [],
     },
   } as PostsState,
   reducers: {},
@@ -99,15 +99,13 @@ export const posts = createSlice({
       state.data.matches.push(...action.payload.data.matches);
     },
     [fetchMatchById.fulfilled.type]: (state: PostsState, action: PayloadAction<PostItem>) => {
-      const index = state.data.match.findIndex((post) => post.matchId === action.payload.matchId);
-      if (index === -1) {
+      if (!state.data.match[0] || state.data.match[0].matchId !== action.payload.matchId) {
+        state.data.match = [];
         state.data.match.push(action.payload);
-      } else {
-        state.data.match[index] = action.payload;
       }
     },
     [deleteMatchById.fulfilled.type]: (state: PostsState) => {
       state.data.match = [];
-    }
+    },
   },
 });
