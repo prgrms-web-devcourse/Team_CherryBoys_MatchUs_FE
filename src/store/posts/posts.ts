@@ -3,9 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import axios from 'axios';
 import {
   matches as matchesDummy,
-  match as matchDummy,
-  TeamWithUser,
-  teamWithUser as teamWithUserDummy,
+  match as matchDummy
 } from '@/dummyMatch';
 
 export const fetchAllMatch = createAsyncThunk('matches/fetchAllMatches', async () => {
@@ -29,13 +27,6 @@ export const deleteMatchById = createAsyncThunk(
   }
 );
 
-export const fetchTeamWithUser = createAsyncThunk(
-  'matches/fetchTeamWithUser',
-  async (token: number) => {
-    return teamWithUserDummy;
-  }
-);
-
 interface TeamUser {
   captainId?: number;
   captainName?: string;
@@ -47,12 +38,6 @@ export interface Team {
   teamLogo: string;
   teamName: string;
   teamMannerTemperature: number;
-  teamUsers: TeamUser[];
-}
-
-export interface TeamSimple {
-  teamId: number;
-  teamName: string;
   teamUsers: TeamUser[];
 }
 
@@ -91,8 +76,7 @@ export interface PostItem {
 export interface PostsState {
   data: {
     matches: PostItem[];
-    match: PostItem[];
-    teamWithUser: TeamSimple[];
+    match: PostItem[]
   };
 }
 
@@ -101,8 +85,7 @@ export const posts = createSlice({
   initialState: {
     data: {
       matches: [],
-      match: [],
-      teamWithUser: [],
+      match: []
     },
   } as PostsState,
   reducers: {},
@@ -125,13 +108,6 @@ export const posts = createSlice({
     },
     [deleteMatchById.fulfilled.type]: (state: PostsState) => {
       state.data.match = [];
-    },
-    [fetchTeamWithUser.fulfilled.type]: (
-      state: PostsState,
-      action: PayloadAction<TeamWithUser>
-    ) => {
-      state.data.teamWithUser = [];
-      state.data.teamWithUser.push(...action.payload.data.teams);
-    },
+    }
   },
 });
