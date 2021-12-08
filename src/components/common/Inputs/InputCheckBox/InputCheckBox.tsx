@@ -6,7 +6,7 @@ interface Options {
   [key: string]: boolean;
 }
 interface Props {
-  name: string;
+  labelName: string;
   options: Options;
   onChange: React.FormEventHandler<HTMLFormElement>;
 }
@@ -23,11 +23,11 @@ const {
   selected,
 } = styles;
 
-const InputCheckBox = ({ name, options, onChange }: Props) => {
+const InputCheckBox = ({ labelName, options, onChange }: Props) => {
   return (
     <div className={classNames(inputBox)}>
       <div className={classNames(inputName)}>
-        <h3>{name}</h3>
+        <h3>{labelName}</h3>
       </div>
       <div className={classNames(inputContent)}>
         <form className={classNames(input)} onChange={onChange}>
