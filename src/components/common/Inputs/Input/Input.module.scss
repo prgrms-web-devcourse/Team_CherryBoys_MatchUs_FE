@@ -27,31 +27,6 @@
       input {
         width: 100%;
       }
-
-      .inputButtonBox {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-
-        .inputButton {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 4rem;
-          height: 100%;
-          background: none;
-
-          i {
-            font-size: 3.2rem;
-          }
-          .selected {
-            i {
-              color: #56ad79;
-            }
-          }
-        }
-      }
     }
 
     .inputDropBox {

@@ -9,6 +9,9 @@
 
   .inputContent {
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
     height: fit-content;
     font-size: 1.2rem;
     border: 0.2rem solid #c4c4c4;
@@ -16,17 +19,18 @@
 
     .inputCheckBox {
       position: relative;
+      display: flex;
       flex-direction: row;
-      width: 100%;
-      height: 4rem;
-      line-height: 4rem;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
       cursor: pointer;
 
       .label {
         display: block;
         width: 100%;
         height: 100%;
-        text-indent: 0.8rem;
+        padding: 0.8rem;
         cursor: pointer;
       }
 
@@ -35,14 +39,8 @@
       }
 
       .checkBoxIcon {
-        position: absolute;
-        top: calc(50% - 1.6rem);
-        right: 0.8rem;
-        font-size: 3.2rem;
-
-        &.selected {
-          color: #56ad79;
-        }
+        margin-right: 0.8rem;
+        font-size: 2.4rem;
       }
     }
   }
