@@ -1,1 +1,1 @@
-export { default as PeopleList } from './PeopleList/PeopleList';
+export { default as MemberList } from './MemberList/MemberList';
