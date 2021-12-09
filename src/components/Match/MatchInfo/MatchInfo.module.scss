@@ -2,8 +2,8 @@
   box-sizing: border-box;
   margin: 0 1.6rem;
   padding: 0 1.6rem;
-  border: 2px solid #c4c4c4;
-  border-radius: 20px;
+  border: 0.2rem solid #c4c4c4;
+  border-radius: 2rem;
 
   .matchInfoRow {
     display: flex;
@@ -24,8 +24,8 @@
         box-sizing: border-box;
         width: fit-content;
         min-width: 8rem;
-        border: 2px solid #c4c4c4;
-        border-radius: 20px;
+        border: 0.2rem solid #c4c4c4;
+        border-radius: 2rem;
       }
     }
 
@@ -36,8 +36,8 @@
         box-sizing: border-box;
         padding: 0.8rem 0;
         letter-spacing: 0.2rem;
-        border: 2px solid #c4c4c4;
-        border-radius: 5px;
+        border: 0.2rem solid #c4c4c4;
+        border-radius: 0.5rem;
       }
 
       &_content {
