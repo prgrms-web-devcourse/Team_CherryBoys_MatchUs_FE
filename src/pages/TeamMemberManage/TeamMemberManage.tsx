@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
-import { Header, PeopleList } from '@/components';
-import style from './teamPlayerManage.module.scss';
+import { Header, MemberList } from '@/components';
+import style from './teamMemberManage.module.scss';
 import api from '@/api/core';
 
 interface MemberElementType {
@@ -13,8 +13,8 @@ interface MemberElementType {
 const { playerManange } = style;
 
 // 어떤 타입인지는 이름을 명시적으로 바꿔줘야할듯?
-const TeamPlayerManage = () => {
-  const [peopleType, setPeopleType] = useState('');
+const TeamMemberManage = () => {
+  const [peopleType, setPeopleType] = useState('member');
   const [isEnterEditPage, setIsEnterEditPage] = useState(true);
   const [hasAuthorization, setHasAuthorization] = useState(true);
   const [memberInfo, setMemberInfo] = useState<MemberElementType[]>([]);
@@ -58,10 +58,10 @@ const TeamPlayerManage = () => {
     <>
       <Header />
       <div className={classNames(playerManange)}>
-        <PeopleList // TODO: PeopleList 네이밍을 명시적으로 변경 예정
+        <MemberList
           isEditing={isEnterEditPage}
           isMember={peopleType === 'member'}
-          peopleInfo={memberInfo}
+          memberInfo={memberInfo}
           hasAuthorization={hasAuthorization}
           handleChangeEditButtonStatus={handleChangeEditButtonStatus}
         />
@@ -71,4 +71,4 @@ const TeamPlayerManage = () => {
   );
 };
 
-export default TeamPlayerManage;
+export default TeamMemberManage;
