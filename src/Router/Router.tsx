@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import HiresDetailPage from '@/pages/Hires/HiresDetailPage';
-import FilterHiresPage from '@/pages/Hires/FilterHiresPage';
 
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -39,7 +38,6 @@ const Router: React.FC = () => {
   return (
     <Switch>
       <Route path="/hires/detail" exact component={HiresDetailPage} />
-      <Route path="/hires/filter" exact component={FilterHiresPage} />
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
       <Route path={HOME_PAGE} exact component={} />
       <Route path={HOME_PAGE} exact component={} />
