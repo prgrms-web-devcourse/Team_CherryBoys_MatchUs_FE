@@ -3,11 +3,16 @@ import React, { useState, useEffect } from 'react';
 import style from './teamDetail.module.scss';
 import api from '@/api/core';
 import { throwErrorMessage } from '@/utils';
+import { deleteTeam, withdrawTeam } from '@/api';
 
-const { teamBaseInfo, logImage, teamCoreInfo, teamPlayersInfo, teamMathchesInfo } = style;
+const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
+  style;
 
 const TeamDetail = () => {
-  const teamId = 'temp';
+  // userGrade[teamId]
+  const authorizaiton = false;
+  const [teamId, setTeamId] = useState<number>();
+  const [hasAuthorization, setHasAuthorization] = useState(authorizaiton);
   const [teamInfo, setTeamInfo] = useState({
     teamId: 0,
     teamName: '',
@@ -20,7 +25,8 @@ const TeamDetail = () => {
     captainName: '',
     ageGroup: '',
     teamCreatedAt: '',
-    team_users: [{ userId: 0, userName: '', grade: '' }],
+    teamMembers: [{ userId: 0, userName: '', grade: '' }],
+    hiredMembers: [{ userId: 0, userName: '', grade: '' }],
     matchesSummary: [
       {
         matchId: 0,
@@ -44,24 +50,40 @@ const TeamDetail = () => {
     captainName,
     ageGroup,
     teamCreatedAt,
-    team_users,
+    teamMembers,
+    hiredMembers,
     matchesSummary,
   } = teamInfo;
 
-  useEffect(() => {
-    // TODO: 전역에서 TeamId 받는 로직 추가 필요.
-    const getTeamInfo = async (id: string) => {
-      const { data } = await api
-        .get({
-          url: `/team/${id}`,
-        })
-        .catch(throwErrorMessage);
+  const handleWithdrawTeam = () => {
+    withdrawTeam(teamId);
+  };
 
-      setTeamInfo(data);
+  const handleDeleteTeam = () => {
+    deleteTeam(teamId);
+  };
+
+  useEffect(() => {
+    const newTeamId = parseInt(window.location.pathname.split('/')[2], 10);
+
+    if (newTeamId && newTeamId !== teamId) {
+      setTeamId(newTeamId);
+    }
+
+    const getTeamInfo = async (id: number | undefined) => {
+      if (id) {
+        const { data } = await api
+          .get({
+            url: `/team/${id}`,
+          })
+          .catch(throwErrorMessage);
+
+        setTeamInfo(data);
+      }
     };
 
     getTeamInfo(teamId);
-  }, []);
+  }, [teamId]);
 
   return (
     <div>
@@ -83,12 +105,13 @@ const TeamDetail = () => {
         <section>생성일자 {teamCreatedAt}</section>
       </article>
 
-      <article className={classNames(teamPlayersInfo)}>
-        {team_users.map((user) => (
-          <span key={`user-${user.userId}`}>{user.userName}</span>
+      <article className={classNames(teamMemberInfo)}>
+        {teamMembers.map((member) => (
+          <div key={`member-${member.userId}`}>{member.userName}</div>
         ))}
       </article>
 
+      {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
       <article className={classNames(teamMathchesInfo)}>
         {matchesSummary.map((match) => (
           <section key={`match-${match.matchId}`}>
@@ -97,6 +120,10 @@ const TeamDetail = () => {
           </section>
         ))}
       </article>
+
+      <button type="button" onClick={hasAuthorization ? handleDeleteTeam : handleWithdrawTeam}>
+        {hasAuthorization ? '팀 해체' : '팀 탈퇴'}
+      </button>
     </div>
   );
 };
