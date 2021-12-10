@@ -1,17 +1,19 @@
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 import api from '@/api/core';
 import { throwErrorMessage } from '@/utils';
 import { deleteTeam, withdrawTeam } from '@/api';
+import { CustomButton } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
   style;
 
 const TeamDetail = () => {
-  // userGrade[teamId]
-  const authorizaiton = false;
-  const [teamId, setTeamId] = useState<number>();
+  const history = useHistory();
+  const authorizaiton = false; // userGrade[teamId]
+  const [teamId, setTeamId] = useState<number>(123);
   const [hasAuthorization, setHasAuthorization] = useState(authorizaiton);
   const [teamInfo, setTeamInfo] = useState({
     teamId: 0,
@@ -106,15 +108,27 @@ const TeamDetail = () => {
       </article>
 
       <article className={classNames(teamMemberInfo)}>
-        {teamMembers.map((member) => (
-          <div key={`member-${member.userId}`}>{member.userName}</div>
-        ))}
+        <div>
+          팀원 목록
+          <Link to={`/team/${teamId}/member`}>더보기</Link>
+        </div>
+        <div>
+          {teamMembers.map((member) => (
+            <div key={`member-${member.userId}`}>{member.userName}</div>
+          ))}
+        </div>
       </article>
 
       <article className={classNames(hiredMemberInfo)}>
-        {hiredMembers.map((member) => (
-          <div key={`member-${member.userId}`}>{member.userName}</div>
-        ))}
+        <div>
+          용병 목록
+          <Link to={`/team/${teamId}/hired`}>더보기</Link>
+        </div>
+        <div>
+          {hiredMembers.map((member) => (
+            <div key={`member-${member.userId}`}>{member.userName}</div>
+          ))}
+        </div>
       </article>
 
       {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
