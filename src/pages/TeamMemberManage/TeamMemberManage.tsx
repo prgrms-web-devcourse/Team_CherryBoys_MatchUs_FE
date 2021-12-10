@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
 import api from '@/api/core';
@@ -108,6 +108,7 @@ const dummyData = [
 // 어떤 타입인지는 이름을 명시적으로 바꿔줘야할듯?
 const TeamMemberManage = () => {
   const [peopleType, setPeopleType] = useState('member');
+  const [deletedMember, setDeletedMember] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState(true);
   const [hasAuthorization, setHasAuthorization] = useState(true);
   const [memberInfo, setMemberInfo] = useState<MemberElementType[]>(dummyData);
@@ -133,18 +134,27 @@ const TeamMemberManage = () => {
     setMemberInfo(newMemberInfo);
   };
 
-  // const handleClickWillDeletedMembers = (e: any) => {};
+  const handleAddDeletedMembers = (e: any) => {
+    const { id } = e.target;
+    const [prefix, userId] = id.split('-');
+
+    const numberUserId = parseInt(userId, 10);
+
+    if (numberUserId) {
+      setDeletedMember((prev) => [...prev, numberUserId]);
+    }
+  };
 
   useEffect(() => {
     const newTeamId = window.location.pathname.split('/')[2];
-    const newPeopleType = window.location.pathname.split('/')[3];
+    const newMemberType = window.location.pathname.split('/')[3];
 
     if (newTeamId) {
       setTeamId(newTeamId);
     }
 
-    if (newPeopleType) {
-      setPeopleType(newPeopleType);
+    if (newMemberType) {
+      setPeopleType(newMemberType);
     }
 
     // TODO: 로그인 페이지 머지된 이후에, 리덕스에서 정보를 받아올 예정.
@@ -162,7 +172,7 @@ const TeamMemberManage = () => {
     // };
 
     // getPeopleInfo();
-  }, [teamId, peopleType]);
+  }, []);
 
   return (
     <>
@@ -173,6 +183,7 @@ const TeamMemberManage = () => {
           isMember={peopleType === 'member'}
           memberInfo={memberInfo}
           hasAuthorization={hasAuthorization}
+          handleAddDeletedMembers={handleAddDeletedMembers}
           handleChangeMemberGrade={handleChangeMemberGrade}
           handleChangeEditButtonStatus={handleChangeEditButtonStatus}
         />

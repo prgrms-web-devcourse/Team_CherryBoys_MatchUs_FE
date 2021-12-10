@@ -15,6 +15,7 @@ interface Props {
   memberInfo: MemberElementType[];
   hasAuthorization: boolean;
   isEditing: boolean;
+  handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
   handleChangeMemberGrade: React.ChangeEventHandler<HTMLSelectElement>;
   handleChangeEditButtonStatus: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -26,6 +27,7 @@ const MemberList = ({
   memberInfo,
   hasAuthorization,
   isEditing,
+  handleAddDeletedMembers,
   handleChangeMemberGrade,
   handleChangeEditButtonStatus,
 }: Props) => {
@@ -48,7 +50,7 @@ const MemberList = ({
             </button>
           )}
         </div>
-        <ul>
+        <div>
           {isMember && (
             <>
               <MemberListElement
@@ -59,6 +61,7 @@ const MemberList = ({
                 isEditing={isEditing}
                 grade={captain?.grade}
                 handleChangeMemberGrade={handleChangeMemberGrade}
+                handleAddDeletedMembers={handleAddDeletedMembers}
               />
             </>
           )}
@@ -73,6 +76,7 @@ const MemberList = ({
                   isEditing={isEditing}
                   grade={subCaptain.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
+                  handleAddDeletedMembers={handleAddDeletedMembers}
                 />
               ))}
             </>
@@ -88,6 +92,7 @@ const MemberList = ({
                   isEditing={isEditing}
                   grade={generalMember.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
+                  handleAddDeletedMembers={handleAddDeletedMembers}
                 />
               ))}
             </>
@@ -101,12 +106,13 @@ const MemberList = ({
                   key={`hiredMember-${hiredMember.userId}`}
                   isEditing={isEditing}
                   grade={hiredMember.grade}
+                  handleAddDeletedMembers={handleAddDeletedMembers}
                   handleChangeMemberGrade={handleChangeMemberGrade}
                 />
               ))}
             </>
           )}
-        </ul>
+        </div>
       </article>
       {isEditing && (
         <>
