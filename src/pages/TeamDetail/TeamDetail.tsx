@@ -111,6 +111,12 @@ const TeamDetail = () => {
         ))}
       </article>
 
+      <article className={classNames(hiredMemberInfo)}>
+        {hiredMembers.map((member) => (
+          <div key={`member-${member.userId}`}>{member.userName}</div>
+        ))}
+      </article>
+
       {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
       <article className={classNames(teamMathchesInfo)}>
         {matchesSummary.map((match) => (
