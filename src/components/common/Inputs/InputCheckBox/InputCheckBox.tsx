@@ -10,14 +10,14 @@ interface StyleProps {
   [inputBoxWidth: string]: string | undefined;
   inputNameWidth?: string;
   inputNameFontColor?: string;
-  checkBoxContainerWidth?: string;
-  checkBoxWidth?: string;
-  checkBoxHeight?: string;
-  checkBoxMargin?: string;
-  checkBoxFontColor?: string;
-  checkBoxBackgroundColor?: string;
-  checkBoxBorderRadius?: string;
-  checkBoxBorder?: string;
+  unCheckedBoxContainerWidth?: string;
+  unCheckedBoxWidth?: string;
+  unCheckedBoxHeight?: string;
+  unCheckedBoxMargin?: string;
+  unCheckedBoxFontColor?: string;
+  unCheckedBoxBackgroundColor?: string;
+  unCheckedBoxBorderRadius?: string;
+  unCheckedBoxBorder?: string;
   checkedBoxFontColor?: string;
   checkedBoxBackgroundColor?: string;
   checkedBoxBorder?: string;
@@ -37,14 +37,14 @@ const styleFormat: StyleProps = {
   inputBoxWidth: '100%',
   inputNameWidth: '100%',
   inputNameFontColor: '#000',
-  checkBoxContainerWidth: '100%',
-  checkBoxWidth: '100%',
-  checkBoxHeight: '100%',
-  checkBoxMargin: '0',
-  checkBoxFontColor: '#000',
-  checkBoxBackgroundColor: '#fff',
-  checkBoxBorderRadius: '0',
-  checkBoxBorder: 'none',
+  unCheckedBoxContainerWidth: '100%',
+  unCheckedBoxWidth: '100%',
+  unCheckedBoxHeight: '100%',
+  cunCheckedBoxMargin: '0',
+  unCheckedBoxFontColor: '#000',
+  unCheckedBoxBackgroundColor: '#fff',
+  unCheckedBoxBorderRadius: '0',
+  unCheckedBoxBorder: 'none',
   checkedBoxFontColor: '#fff',
   checkedBoxBackgroundColor: '#56ad79',
   checkedBoxBorder: 'none',
@@ -63,14 +63,14 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
     inputBoxWidth,
     inputNameWidth,
     inputNameFontColor,
-    checkBoxContainerWidth,
-    checkBoxWidth,
-    checkBoxHeight,
-    checkBoxMargin,
-    checkBoxFontColor,
-    checkBoxBackgroundColor,
-    checkBoxBorderRadius,
-    checkBoxBorder,
+    unCheckedBoxContainerWidth,
+    unCheckedBoxWidth,
+    unCheckedBoxHeight,
+    unCheckedBoxMargin,
+    unCheckedBoxFontColor,
+    unCheckedBoxBackgroundColor,
+    unCheckedBoxBorderRadius,
+    unCheckedBoxBorder,
     checkedBoxFontColor,
     checkedBoxBackgroundColor,
     checkedBoxBorder,
@@ -86,19 +86,19 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
           <h3>{labelName}</h3>
         </div>
       )}
-      <div className={classNames(inputContent)} style={{ width: checkBoxContainerWidth }}>
+      <div className={classNames(inputContent)} style={{ width: unCheckedBoxContainerWidth }}>
         {Object.keys(options).map((option, index) => (
           <div
             className={classNames(inputCheckBox)}
             key={`dropBoxOption${index}`}
             style={{
-              width: checkBoxWidth,
-              height: checkBoxHeight,
-              margin: checkBoxMargin,
-              color: options[option] ? checkedBoxFontColor : checkBoxFontColor,
-              background: options[option] ? checkedBoxBackgroundColor : checkBoxBackgroundColor,
-              borderRadius: checkBoxBorderRadius,
-              border: options[option] ? checkedBoxBorder : checkBoxBorder,
+              width: unCheckedBoxWidth,
+              height: unCheckedBoxHeight,
+              margin: unCheckedBoxMargin,
+              color: options[option] ? checkedBoxFontColor : unCheckedBoxFontColor,
+              background: options[option] ? checkedBoxBackgroundColor : unCheckedBoxBackgroundColor,
+              borderRadius: unCheckedBoxBorderRadius,
+              border: options[option] ? checkedBoxBorder : unCheckedBoxBorder,
             }}
           >
             <label className={classNames(label)} htmlFor={`checkBox${option}`}>
@@ -115,8 +115,10 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
               <i
                 className={classNames(icon, checkBoxIcon)}
                 style={{
-                  color: options[option] ? checkedBoxFontColor : checkBoxFontColor,
-                  background: options[option] ? checkedBoxBackgroundColor : checkBoxBackgroundColor,
+                  color: options[option] ? checkedBoxFontColor : unCheckedBoxFontColor,
+                  background: options[option]
+                    ? checkedBoxBackgroundColor
+                    : unCheckedBoxBackgroundColor,
                 }}
               />
             )}
