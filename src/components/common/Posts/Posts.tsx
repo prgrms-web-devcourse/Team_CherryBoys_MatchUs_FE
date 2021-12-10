@@ -1,30 +1,41 @@
+/* eslint-disable react/jsx-fragments */
 import React from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { RootState } from '@/store/index';
+import { useHistory } from 'react-router-dom';
+import { RootState } from '@/store';
 import style from './posts.module.scss';
-
-import PostItem from '../PostItem/PostItem';
+import { PostItem } from '@/components';
 import { PostWrapper } from '@/store/posts/posts';
 
-const { post__title } = style;
+const { postsContainer, postTitleBox, postTitle, filterPostButton, postItems, addPostButton } =
+  style;
 
 const Posts = ({ isMatch }: PostWrapper) => {
   const { data } = useSelector((state: RootState) => state.posts);
+  const history = useHistory();
 
   return (
-    <>
-      <div className={classNames(post__title)}>
-        {isMatch ? <span className="match">모집중인 매치</span> : <span>모집중인 용병</span>}
-        <button type="button">필터</button>
+    <div className={classNames(postsContainer)}>
+      <div className={classNames(postTitleBox)}>
+        <span className={classNames(postTitle)}>{`모집중인 ${isMatch ? '매치' : '용병'}`}</span>
+        <button className={classNames(filterPostButton)} type="button">
+          <i className="fas fa-filter" />
+        </button>
       </div>
-      <ul>
-        {data.matches.map((item) => (
-          <PostItem item={item} />
+      <ul className={classNames(postItems)}>
+        {data.matches.map((item, index) => (
+          <PostItem item={item} key={`matchPost${index}`} />
         ))}
       </ul>
-      <button type="button">추가</button>
-    </>
+      <button
+        className={classNames(addPostButton)}
+        onClick={() => history.push(`/${isMatch ? 'matches' : 'hires'}/new`)}
+        type="button"
+      >
+        <i className="fas fa-plus" />
+      </button>
+    </div>
   );
 };
 
