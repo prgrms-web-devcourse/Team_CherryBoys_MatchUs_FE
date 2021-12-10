@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -5,16 +6,14 @@ import style from './teamDetail.module.scss';
 import api from '@/api/core';
 import { throwErrorMessage } from '@/utils';
 import { deleteTeam, withdrawTeam } from '@/api';
-import { CustomButton } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
   style;
 
 const TeamDetail = () => {
   const history = useHistory();
-  const authorizaiton = false; // userGrade[teamId]
   const [teamId, setTeamId] = useState<number>(123);
-  const [hasAuthorization, setHasAuthorization] = useState(authorizaiton);
+  const [hasAuthorization, setHasAuthorization] = useState();
   const [teamInfo, setTeamInfo] = useState({
     teamId: 0,
     teamName: '',
@@ -57,15 +56,22 @@ const TeamDetail = () => {
     matchesSummary,
   } = teamInfo;
 
+  //
   const handleWithdrawTeam = () => {
-    withdrawTeam(teamId);
+    // TODO: Modal Component Merge되면 교체 예정.
+    if (confirm('정말 삭제하시겠습니까?')) {
+      withdrawTeam(teamId);
+    }
   };
 
   const handleDeleteTeam = () => {
-    deleteTeam(teamId);
+    if (confirm('정말 삭제하시겠습니까?')) {
+      deleteTeam(teamId);
+    }
   };
 
   useEffect(() => {
+    // TODO: 로그인 시 얻을 수 있는 userGrade를 통해서 hasAuth 업데이트
     const newTeamId = parseInt(window.location.pathname.split('/')[2], 10);
 
     if (newTeamId && newTeamId !== teamId) {
@@ -89,6 +95,7 @@ const TeamDetail = () => {
 
   return (
     <div>
+      {hasAuthorization && <Link to={`/team/${teamId}`}>수정</Link>}
       <article className={classNames(teamBaseInfo)}>
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
         <p key={`team-${teamId}`}>{teamName}</p>
