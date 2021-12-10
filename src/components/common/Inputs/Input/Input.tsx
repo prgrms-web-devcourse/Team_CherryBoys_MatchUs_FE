@@ -7,6 +7,7 @@ interface StyleProps {
   inputNameWidth?: string;
   inputNameFontColor?: string;
   inputContentWidth?: string;
+  inputContentHeight?: string;
   inputContentFontColor?: string;
   inputContentBackgroundColor?: string;
   inputContentCursor?: string;
@@ -29,6 +30,7 @@ const styleFormat: StyleProps = {
   inputNameWidth: '100%',
   inputNameFontColor: '#000',
   inputContentWidth: '100%',
+  inputContentHeight: '100%',
   inputContentFontColor: '#000',
   inputContentBackgroundColor: '#fff',
   inputContentCursor: 'default',
@@ -48,6 +50,7 @@ const Input = ({ labelName, inputId, placeholder, type, options, onChange, style
     inputNameWidth,
     inputNameFontColor,
     inputContentWidth,
+    inputContentHeight,
     inputContentFontColor,
     inputContentBackgroundColor,
     inputContentCursor,
@@ -63,7 +66,10 @@ const Input = ({ labelName, inputId, placeholder, type, options, onChange, style
           <label htmlFor={inputId}>{labelName}</label>
         </div>
       )}
-      <div className={classNames(inputContent)} style={{ width: inputContentWidth }}>
+      <div
+        className={classNames(inputContent)}
+        style={{ width: inputContentWidth, height: inputContentHeight }}
+      >
         {type === 'text' && (
           <div className={classNames(inputText)}>
             <input
