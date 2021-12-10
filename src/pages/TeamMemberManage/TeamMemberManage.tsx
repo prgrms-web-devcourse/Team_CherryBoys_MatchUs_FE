@@ -133,6 +133,8 @@ const TeamMemberManage = () => {
     setMemberInfo(newMemberInfo);
   };
 
+  // const handleClickWillDeletedMembers = (e: any) => {};
+
   useEffect(() => {
     const newTeamId = window.location.pathname.split('/')[2];
     const newPeopleType = window.location.pathname.split('/')[3];
@@ -166,9 +168,6 @@ const TeamMemberManage = () => {
     <>
       <Header />
       <div className={classNames(playerManange)}>
-        <button type="button" onClick={handleChangeMemberGrade}>
-          테스트
-        </button>
         <MemberList
           isEditing={isEnterEditPage}
           isMember={peopleType === 'member'}
