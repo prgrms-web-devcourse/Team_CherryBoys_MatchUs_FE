@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styles from './MatchApproveModal.module.scss';
 import { TeamCard } from '@/components';
 import { RootState } from '@/store';
@@ -32,10 +33,11 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     teamMannerTemperature: 0,
     teamUsers: [{}],
   });
+  const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
 
   const dispatch = useDispatch();
   useMount(() => {
-    dispatch(fetchWaitingTeams(parseInt(window.location.pathname.split('/')[3], 10)));
+    dispatch(fetchWaitingTeams(matchId));
   });
 
   const handleCloseModal = (e: any) => {

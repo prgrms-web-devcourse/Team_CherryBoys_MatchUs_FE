@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import { useParams } from 'react-router-dom';
 import { RootState } from '@/store';
 import { fetchMatchById } from '@/store/posts/posts';
 import {
@@ -20,7 +21,7 @@ const { awayTeam, versus } = styles;
 
 const Match = () => {
   const dispatch = useDispatch();
-  const matchId = parseInt(window.location.pathname.split('/')[3], 10);
+  const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
 
   useMount(() => {
     dispatch(fetchMatchById(matchId));

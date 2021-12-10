@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
@@ -75,7 +76,7 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
       return acc;
     }, []);
     const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
-    const matchId = parseInt(window.location.pathname.split('/')[3], 10);
+    const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
 
     // Parameters
     // Path = matchId: Number, teamId: Number (상대팀: 추후 추가)
