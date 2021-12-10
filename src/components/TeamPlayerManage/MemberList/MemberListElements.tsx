@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 
 interface MemberElementType {
@@ -6,6 +8,7 @@ interface MemberElementType {
   grade: string | undefined;
   isEditing: boolean;
   memberType: string;
+  handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
   handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
@@ -15,17 +18,26 @@ const gradeCollection: Record<string, string> = {
 };
 
 export const MemberListElement = ({
-  memberType = 'generalMember',
-  isEditing,
   memberId,
   memberName,
+  memberType,
+  isEditing,
   grade,
+  handleAddDeletedMembers,
   handleChangeMemberGrade,
 }: MemberElementType) => {
   return isEditing ? (
     <>
-      <li key={`${memberType}-${memberId}`}>
-        {memberName}
+      <div id={`${memberId}`} onClick={handleAddDeletedMembers}>
+        {memberType === 'captain' ? (
+          <>{memberName}</>
+        ) : (
+          <>
+            {' '}
+            <input id={`memberName-${memberId}`} type="checkbox" />
+            <label htmlFor={`memberName-${memberId}`}>{memberName}</label>
+          </>
+        )}
         {memberType === 'hiredMember' || memberType === 'captain' ? (
           <>{grade}</>
         ) : (
@@ -36,14 +48,14 @@ export const MemberListElement = ({
             </option>
           </select>
         )}
-      </li>
+      </div>
     </>
   ) : (
     <>
-      <li key={`generalMember-${memberId}`}>
+      <div id={`${memberType}-${memberId}`} onClick={handleAddDeletedMembers}>
         {memberName}
         {grade}
-      </li>
+      </div>
     </>
   );
 };
