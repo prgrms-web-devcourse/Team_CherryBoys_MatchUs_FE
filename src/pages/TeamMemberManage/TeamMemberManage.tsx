@@ -152,9 +152,8 @@ const TeamMemberManage = () => {
       }
       return true;
     });
-    console.log(notDeletedMemberInfo);
-
-    deleteTeamMembers(1, notDeletedMemberInfo);
+    // TODO: 백엔드와 연동 시, 추가 예정.
+    // deleteTeamMembers('', notDeletedMemberInfo);
   };
 
   useEffect(() => {
@@ -198,6 +197,7 @@ const TeamMemberManage = () => {
           handleAddDeletedMembers={handleAddDeletedMembers}
           handleChangeMemberGrade={handleChangeMemberGrade}
           handleChangeEditButtonStatus={handleChangeEditButtonStatus}
+          handleSubmitDeletedMember={handleSubmitDeletedMember}
         />
         {isAddTeamMember && <button type="button">팀원 초대</button>}
       </div>
