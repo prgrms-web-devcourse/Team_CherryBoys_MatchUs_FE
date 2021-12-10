@@ -1,12 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import style from './memberList.module.scss';
-import {
-  CaptainListElement,
-  GeneralMemberListElement,
-  HiredMemberListElement,
-  SubCaptainListElement,
-} from './MemberListElements';
+import { MemberListElement } from './MemberListElements';
 
 // TODO: 타입을 어떻게 정리할지에 대해서 이야기 나눈 뒤, 분리 예정.
 interface MemberElementType {
@@ -34,12 +29,12 @@ const MemberList = ({
   handleChangeMemberGrade,
   handleChangeEditButtonStatus,
 }: Props) => {
-  const captain = memberInfo.find((player: MemberElementType) => player.grade === '주장');
-  const subCaptains = memberInfo.filter((player: MemberElementType) => player.grade === '부주장');
+  const captain = memberInfo.find((member: MemberElementType) => member.grade === '주장');
+  const subCaptains = memberInfo.filter((member: MemberElementType) => member.grade === '부주장');
   const generalMemberList = memberInfo.filter(
-    (player: MemberElementType) => player.grade === '회원'
+    (member: MemberElementType) => member.grade === '회원'
   );
-  const hiredMemberList = memberInfo.filter((player: MemberElementType) => player.grade === '용병');
+  const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
 
   return (
     <>
@@ -56,21 +51,26 @@ const MemberList = ({
         <ul>
           {isMember && (
             <>
-              <CaptainListElement
+              <MemberListElement
                 memberId={captain?.userId}
                 memberName={captain?.userName}
+                memberType="captain"
+                key={`captain-${captain?.userId}`}
+                isEditing={isEditing}
                 grade={captain?.grade}
+                handleChangeMemberGrade={handleChangeMemberGrade}
               />
             </>
           )}
           {isMember && (
             <>
               {subCaptains.map((subCaptain: MemberElementType) => (
-                <SubCaptainListElement
-                  key={`subCaptain-${subCaptain.userId}`}
-                  isEditing={isEditing}
+                <MemberListElement
                   memberId={subCaptain.userId}
                   memberName={subCaptain.userName}
+                  memberType="subCaptain"
+                  key={`subCaptain-${subCaptain.userId}`}
+                  isEditing={isEditing}
                   grade={subCaptain.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
                 />
@@ -80,11 +80,12 @@ const MemberList = ({
           {isMember ? (
             <>
               {generalMemberList.map((generalMember: MemberElementType) => (
-                <GeneralMemberListElement
-                  key={`generalMember-${generalMember.userId}`}
-                  isEditing={isEditing}
+                <MemberListElement
                   memberId={generalMember.userId}
                   memberName={generalMember.userName}
+                  memberType="generalMember"
+                  key={`generalMember-${generalMember.userId}`}
+                  isEditing={isEditing}
                   grade={generalMember.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
                 />
@@ -93,11 +94,12 @@ const MemberList = ({
           ) : (
             <>
               {hiredMemberList.map((hiredMember: MemberElementType) => (
-                <HiredMemberListElement
-                  key={`hiredMember-${hiredMember.userId}`}
-                  isEditing={isEditing}
+                <MemberListElement
                   memberId={hiredMember.userId}
                   memberName={hiredMember.userName}
+                  memberType="hiredMember"
+                  key={`hiredMember-${hiredMember.userId}`}
+                  isEditing={isEditing}
                   grade={hiredMember.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
                 />

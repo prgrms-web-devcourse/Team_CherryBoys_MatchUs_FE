@@ -1,50 +1,21 @@
 import React from 'react';
 
-interface CaptainElementType {
+interface MemberElementType {
   memberId: number | undefined;
   memberName: string | undefined;
   grade: string | undefined;
-}
-
-interface MemberElementType extends CaptainElementType {
   isEditing: boolean;
+  memberType: string;
   handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-export const CaptainListElement = ({ memberId, memberName, grade }: CaptainElementType) => (
-  <li key={`captainId-${memberId}`}>
-    {memberName} {grade}
-  </li>
-);
-
-export const SubCaptainListElement = ({
-  isEditing,
-  memberId,
-  memberName,
-  grade,
-  handleChangeMemberGrade,
-}: MemberElementType) => {
-  return isEditing ? (
-    <>
-      <li>
-        {memberName}
-        <select onChange={handleChangeMemberGrade}>
-          <option value={`${memberId}-${grade}`}>{grade}</option>
-          <option value={`${memberId}-회원`}>회원</option>
-        </select>
-      </li>
-    </>
-  ) : (
-    <>
-      <li>
-        {memberName}
-        {grade}
-      </li>
-    </>
-  );
+const gradeCollection: Record<string, string> = {
+  subCaptain: '회원',
+  generalMember: '부주장',
 };
 
-export const GeneralMemberListElement = ({
+export const MemberListElement = ({
+  memberType = 'generalMember',
   isEditing,
   memberId,
   memberName,
@@ -53,44 +24,23 @@ export const GeneralMemberListElement = ({
 }: MemberElementType) => {
   return isEditing ? (
     <>
-      <li key={`generalMember-${memberId}`}>
+      <li key={`${memberType}-${memberId}`}>
         {memberName}
-        <select onChange={handleChangeMemberGrade}>
-          <option value={`${memberId}-${grade}`}>{grade}</option>
-          <option value={`${memberId}-부주장`}>부주장</option>
-        </select>
+        {memberType === 'hiredMember' || memberType === 'captain' ? (
+          <>{grade}</>
+        ) : (
+          <select onChange={handleChangeMemberGrade}>
+            <option value={`${memberId}-${grade}`}>{grade}</option>
+            <option value={`${memberId}-${gradeCollection[memberType]}`}>
+              {gradeCollection[memberType]}
+            </option>
+          </select>
+        )}
       </li>
     </>
   ) : (
     <>
       <li key={`generalMember-${memberId}`}>
-        {memberName}
-        {grade}
-      </li>
-    </>
-  );
-};
-
-export const HiredMemberListElement = ({
-  isEditing,
-  memberId,
-  memberName,
-  grade,
-  handleChangeMemberGrade,
-}: MemberElementType) => {
-  return isEditing ? (
-    <>
-      <li key={`hiredMember-${memberId}`}>
-        {memberName}
-        <select onChange={handleChangeMemberGrade}>
-          <option value={`${memberId}-${grade}`}>{grade}</option>
-          <option value={`${memberId}-회원`}>회원</option>
-        </select>
-      </li>
-    </>
-  ) : (
-    <>
-      <li key={`hiredMember-${memberId}`}>
         {memberName}
         {grade}
       </li>
