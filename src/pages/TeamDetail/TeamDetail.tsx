@@ -69,8 +69,8 @@ const TeamDetail = () => {
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
         <p key={`team-${teamId}`}>{teamName}</p>
         <div>팀 세부설명{bio}</div>
-        {tagNames.map((tagType) => (
-          <span key={`tagType-${tagType}`}>{tagType}</span>
+        {tagNames.map((tagName) => (
+          <span key={`tagName-${tagName}`}>{tagName}</span>
         ))}
       </article>
 
