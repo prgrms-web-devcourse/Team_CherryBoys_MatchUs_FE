@@ -118,7 +118,7 @@ const MemberList = ({
         <>
           {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
           <button type="button">방출</button>
-          <button type="button">위임</button>
+          {isMember && <button type="button">위임</button>}
         </>
       )}
     </>
