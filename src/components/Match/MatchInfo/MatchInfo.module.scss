@@ -2,19 +2,20 @@
   box-sizing: border-box;
   margin: 0 1.6rem;
   padding: 0 1.6rem;
-  border: 0.2rem solid #c4c4c4;
-  border-radius: 2rem;
+  border: 2px solid #c4c4c4;
+  border-radius: 20px;
 
   .matchInfoRow {
     display: flex;
+    align-items: center;
     margin: 0.8rem 0;
     font-size: 1.2rem;
     text-align: center;
 
     &.importantInfo {
       .matchInfo {
-        align-items: center;
-        margin-bottom: 1.2rem;
+        font-size: 1.6rem;
+        letter-spacing: 0.1rem;
       }
     }
 
@@ -24,8 +25,8 @@
         box-sizing: border-box;
         width: fit-content;
         min-width: 8rem;
-        border: 0.2rem solid #c4c4c4;
-        border-radius: 2rem;
+        border: 2px solid #c4c4c4;
+        border-radius: 20px;
       }
     }
 
@@ -36,8 +37,8 @@
         box-sizing: border-box;
         padding: 0.8rem 0;
         letter-spacing: 0.2rem;
-        border: 0.2rem solid #c4c4c4;
-        border-radius: 0.5rem;
+        border: 2px solid #c4c4c4;
+        border-radius: 5px;
       }
 
       &_content {
