@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
 import api from '@/api/core';
+import { deleteTeamMembers } from '@/api';
 
 interface MemberElementType {
   userId: number;
@@ -105,10 +106,9 @@ const dummyData = [
   },
 ];
 
-// 어떤 타입인지는 이름을 명시적으로 바꿔줘야할듯?
 const TeamMemberManage = () => {
-  const [peopleType, setPeopleType] = useState('member');
-  const [deletedMember, setDeletedMember] = useState<Array<number>>([]);
+  const [peopleType, setPeopleType] = useState('hired');
+  const [deletedMembers, setDeletedMembers] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState(true);
   const [hasAuthorization, setHasAuthorization] = useState(true);
   const [memberInfo, setMemberInfo] = useState<MemberElementType[]>(dummyData);
@@ -119,7 +119,7 @@ const TeamMemberManage = () => {
     setIsEnterEditPage(!isEnterEditPage);
   };
 
-  const handleChangeMemberGrade = (e: any) => {
+  const handleChangeMemberGrade = (e: any & { target: HTMLInputElement }) => {
     const { value } = e.target;
     const [userId, grade] = value.split('-');
 
@@ -141,8 +141,20 @@ const TeamMemberManage = () => {
     const numberUserId = parseInt(userId, 10);
 
     if (numberUserId) {
-      setDeletedMember((prev) => [...prev, numberUserId]);
+      setDeletedMembers((prev) => [...prev, numberUserId]);
     }
+  };
+
+  const handleSubmitDeletedMember = (e: any) => {
+    const notDeletedMemberInfo = memberInfo.filter((member) => {
+      if (deletedMembers.includes(member.userId)) {
+        return false;
+      }
+      return true;
+    });
+    console.log(notDeletedMemberInfo);
+
+    deleteTeamMembers(1, notDeletedMemberInfo);
   };
 
   useEffect(() => {
