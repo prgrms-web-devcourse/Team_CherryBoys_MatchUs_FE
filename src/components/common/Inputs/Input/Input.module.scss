@@ -1,7 +1,8 @@
 .inputBox {
   padding: 0.8rem 1.6rem;
 
-  .inputName {
+  .inputName > label {
+    display: block;
     margin-bottom: 0.8rem;
     font-weight: 700;
     font-size: 1.6rem;
