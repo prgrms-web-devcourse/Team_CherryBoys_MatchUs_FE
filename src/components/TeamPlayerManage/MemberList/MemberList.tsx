@@ -8,101 +8,7 @@ import {
   SubCaptainListElement,
 } from './MemberListElements';
 
-const dummyData = {
-  member: [
-    {
-      userId: 1,
-      userName: '김1',
-      grade: '회원',
-    },
-    {
-      userId: 2,
-      userName: '김2',
-      grade: '용병',
-    },
-    {
-      userId: 3,
-      userName: '오3',
-      grade: '용병',
-    },
-    {
-      userId: 4,
-      userName: '김4',
-      grade: '부주장',
-    },
-    {
-      userId: 5,
-      userName: '김5',
-      grade: '회원',
-    },
-    {
-      userId: 6,
-      userName: '오6',
-      grade: '회원',
-    },
-    {
-      userId: 7,
-      userName: '김7',
-      grade: '회원',
-    },
-    {
-      userId: 8,
-      userName: '김8',
-      grade: '회원',
-    },
-    {
-      userId: 9,
-      userName: '오9',
-      grade: '회원',
-    },
-    {
-      userId: 10,
-      userName: '김10',
-      grade: '주장',
-    },
-    {
-      userId: 11,
-      userName: '김11',
-      grade: '회원',
-    },
-    {
-      userId: 12,
-      userName: '오12',
-      grade: '회원',
-    },
-    {
-      userId: 13,
-      userName: '김13',
-      grade: '회원',
-    },
-    {
-      userId: 14,
-      userName: '오14',
-      grade: '회원',
-    },
-    {
-      userId: 15,
-      userName: '김15',
-      grade: '회원',
-    },
-    {
-      userId: 16,
-      userName: '김16',
-      grade: '회원',
-    },
-    {
-      userId: 17,
-      userName: '오17',
-      grade: '용병',
-    },
-    {
-      userId: 18,
-      userName: '김18',
-      grade: '용병',
-    },
-  ],
-};
-
+// TODO: 타입을 어떻게 정리할지에 대해서 이야기 나눈 뒤, 분리 예정.
 interface MemberElementType {
   userId: number;
   userName: string;
@@ -114,6 +20,7 @@ interface Props {
   memberInfo: MemberElementType[];
   hasAuthorization: boolean;
   isEditing: boolean;
+  handleChangeMemberGrade: React.ChangeEventHandler<HTMLSelectElement>;
   handleChangeEditButtonStatus: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -121,16 +28,18 @@ const { categoryTitle, playerDetailInfo } = style;
 
 const MemberList = ({
   isMember,
-  memberInfo, // TODO: API 연동 완료 시, 멤버 정보가 memberInfo라는 props로 내려옴 ( 현재는 dummyData 사용 중)
+  memberInfo,
   hasAuthorization,
   isEditing,
+  handleChangeMemberGrade,
   handleChangeEditButtonStatus,
 }: Props) => {
-  const { member } = dummyData;
-  const captain = member.find((player: MemberElementType) => player.grade === '주장');
-  const subCaptain = member.find((player: MemberElementType) => player.grade === '부주장');
-  const generalMemberList = member.filter((player: MemberElementType) => player.grade === '회원');
-  const hiredMemberList = member.filter((player: MemberElementType) => player.grade === '용병');
+  const captain = memberInfo.find((player: MemberElementType) => player.grade === '주장');
+  const subCaptains = memberInfo.filter((player: MemberElementType) => player.grade === '부주장');
+  const generalMemberList = memberInfo.filter(
+    (player: MemberElementType) => player.grade === '회원'
+  );
+  const hiredMemberList = memberInfo.filter((player: MemberElementType) => player.grade === '용병');
 
   return (
     <>
@@ -148,17 +57,24 @@ const MemberList = ({
           {isMember && (
             <>
               <CaptainListElement
-                isEditing={isEditing}
                 memberId={captain?.userId}
                 memberName={captain?.userName}
                 grade={captain?.grade}
               />
-              <SubCaptainListElement
-                isEditing={isEditing}
-                memberId={subCaptain?.userId}
-                memberName={subCaptain?.userName}
-                grade={subCaptain?.grade}
-              />
+            </>
+          )}
+          {isMember && (
+            <>
+              {subCaptains.map((subCaptain: MemberElementType) => (
+                <SubCaptainListElement
+                  key={`subCaptain-${subCaptain.userId}`}
+                  isEditing={isEditing}
+                  memberId={subCaptain.userId}
+                  memberName={subCaptain.userName}
+                  grade={subCaptain.grade}
+                  handleChangeMemberGrade={handleChangeMemberGrade}
+                />
+              ))}
             </>
           )}
           {isMember ? (
@@ -170,6 +86,7 @@ const MemberList = ({
                   memberId={generalMember.userId}
                   memberName={generalMember.userName}
                   grade={generalMember.grade}
+                  handleChangeMemberGrade={handleChangeMemberGrade}
                 />
               ))}
             </>
@@ -178,9 +95,11 @@ const MemberList = ({
               {hiredMemberList.map((hiredMember: MemberElementType) => (
                 <HiredMemberListElement
                   key={`hiredMember-${hiredMember.userId}`}
+                  isEditing={isEditing}
                   memberId={hiredMember.userId}
                   memberName={hiredMember.userName}
                   grade={hiredMember.grade}
+                  handleChangeMemberGrade={handleChangeMemberGrade}
                 />
               ))}
             </>

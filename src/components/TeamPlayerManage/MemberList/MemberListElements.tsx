@@ -1,19 +1,18 @@
 import React from 'react';
 
-interface MemberElementType {
-  isEditing?: boolean | undefined;
+interface CaptainElementType {
   memberId: number | undefined;
   memberName: string | undefined;
   grade: string | undefined;
 }
 
-export const CaptainListElement = ({
-  isEditing,
-  memberId,
-  memberName,
-  grade,
-}: MemberElementType) => (
-  <li>
+interface MemberElementType extends CaptainElementType {
+  isEditing: boolean;
+  handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
+}
+
+export const CaptainListElement = ({ memberId, memberName, grade }: CaptainElementType) => (
+  <li key={`captainId-${memberId}`}>
     {memberName} {grade}
   </li>
 );
@@ -23,19 +22,24 @@ export const SubCaptainListElement = ({
   memberId,
   memberName,
   grade,
+  handleChangeMemberGrade,
 }: MemberElementType) => {
   return isEditing ? (
     <>
-      {memberName}
-      <select>
-        <option key={memberId}>{grade}</option>
-        <option>회원</option>
-      </select>
+      <li>
+        {memberName}
+        <select onChange={handleChangeMemberGrade}>
+          <option value={`${memberId}-${grade}`}>{grade}</option>
+          <option value={`${memberId}-회원`}>회원</option>
+        </select>
+      </li>
     </>
   ) : (
     <>
-      {memberName}
-      {grade}
+      <li>
+        {memberName}
+        {grade}
+      </li>
     </>
   );
 };
@@ -45,14 +49,15 @@ export const GeneralMemberListElement = ({
   memberId,
   memberName,
   grade,
+  handleChangeMemberGrade,
 }: MemberElementType) => {
   return isEditing ? (
     <>
       <li key={`generalMember-${memberId}`}>
         {memberName}
-        <select>
-          <option>{grade}</option>
-          <option>부팀장</option>
+        <select onChange={handleChangeMemberGrade}>
+          <option value={`${memberId}-${grade}`}>{grade}</option>
+          <option value={`${memberId}-부주장`}>부주장</option>
         </select>
       </li>
     </>
@@ -71,14 +76,15 @@ export const HiredMemberListElement = ({
   memberId,
   memberName,
   grade,
+  handleChangeMemberGrade,
 }: MemberElementType) => {
   return isEditing ? (
     <>
       <li key={`hiredMember-${memberId}`}>
         {memberName}
-        <select>
-          <option>{grade}</option>
-          <option>회원</option>
+        <select onChange={handleChangeMemberGrade}>
+          <option value={`${memberId}-${grade}`}>{grade}</option>
+          <option value={`${memberId}-회원`}>회원</option>
         </select>
       </li>
     </>
