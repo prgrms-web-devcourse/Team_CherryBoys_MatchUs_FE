@@ -1,3 +1,47 @@
-.card__gameInfos {
-  display: flex;
+.postCard {
+  margin: 0.8rem 0;
+  padding: 0.4rem;
+  border: 0.2rem solid #56ad79;
+  border-radius: 0.5rem;
+
+  .postBox {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
+    > section {
+      padding: 0.4rem;
+    }
+
+    .postTeamLogo {
+      width: fit-content;
+      max-width: 100%;
+      height: 100%;
+    }
+
+    .postInfos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      > div {
+        width: 100%;
+        margin: 0.4rem 0;
+        font-size: 1.4rem;
+      }
+    }
+
+    .postTags {
+      display: flex;
+      align-items: center;
+
+      > span {
+        margin: 0 0.4rem;
+        padding: 0.4rem;
+        font-size: 1.2rem;
+        text-align: center;
+        border: 0.1rem solid #56ad79;
+        border-radius: 1.5rem;
+      }
+    }
+  }
 }
