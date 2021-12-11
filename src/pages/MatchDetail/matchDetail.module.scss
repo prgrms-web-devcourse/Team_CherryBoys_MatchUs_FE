@@ -1,10 +1,7 @@
-.s_highlight {
-  color: #56ad79;
-  font-weight: 700;
-}
+@use '@/styles/color.scss';
 
-.s_mainTitle {
-  font-size: 2.4rem;
+.matchComponentContainer {
+  margin-top: 4.2rem;
 }
 
 .titleContainer {
@@ -15,6 +12,10 @@
   }
 }
 
-.s_matchComponentContainer {
-  margin-top: 4.2rem;
+.mainTitle {
+  font-size: 2.4rem;
+  .highlight {
+    color: color.$primary;
+    font-weight: 700;
+  }
 }
