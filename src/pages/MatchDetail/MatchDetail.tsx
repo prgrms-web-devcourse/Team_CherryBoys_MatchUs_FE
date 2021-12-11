@@ -47,7 +47,7 @@ const MatchDetail = () => {
                 render: () => <div>평가 후</div>,
               },
             ]}
-            onTabChange={(key) => {
+            onTabChange={(key: string) => {
               setActiveTabKey(key);
             }}
           />
