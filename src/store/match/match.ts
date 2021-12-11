@@ -37,7 +37,7 @@ interface MatchState {
 }
 
 export const match = createSlice({
-  name: 'posts',
+  name: 'match',
   initialState: {
     data: {
       userTeams: [],
