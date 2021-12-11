@@ -12,8 +12,9 @@ const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, t
 
 const TeamDetail = () => {
   const history = useHistory();
-  const [teamId, setTeamId] = useState<number>(123);
-  const [hasAuthorization, setHasAuthorization] = useState();
+  const [teamId, setTeamId] = useState<number>();
+  // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>();
   const [teamInfo, setTeamInfo] = useState({
     teamId: 0,
     teamName: '',
