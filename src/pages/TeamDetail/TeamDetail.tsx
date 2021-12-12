@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 import api from '@/api/core';
 import { throwErrorMessage } from '@/utils';
@@ -11,8 +11,7 @@ const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, t
   style;
 
 const TeamDetail = () => {
-  const history = useHistory();
-  const [teamId, setTeamId] = useState<number>();
+  const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>();
   const [teamInfo, setTeamInfo] = useState({
@@ -72,14 +71,7 @@ const TeamDetail = () => {
   };
 
   useEffect(() => {
-    // TODO: 로그인 시 얻을 수 있는 userGrade를 통해서 hasAuth 업데이트
-    const newTeamId = parseInt(window.location.pathname.split('/')[2], 10);
-
-    if (newTeamId && newTeamId !== teamId) {
-      setTeamId(newTeamId);
-    }
-
-    const getTeamInfo = async (id: number | undefined) => {
+    const getTeamInfo = async (id: number) => {
       if (id) {
         const { data } = await api
           .get({
