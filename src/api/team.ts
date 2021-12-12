@@ -1,4 +1,4 @@
-import { throwErrorMessage } from '../utils/api';
+import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
 
 export const deleteTeam = (teamId: number | undefined) =>
