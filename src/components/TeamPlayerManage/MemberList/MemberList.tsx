@@ -17,6 +17,7 @@ interface Props {
   isEditing: boolean;
   handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
   handleChangeMemberGrade: React.ChangeEventHandler<HTMLSelectElement>;
+  handleSubmitDeletedMember: React.FormEventHandler<HTMLFormElement>;
   handleChangeEditButtonStatus: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -29,6 +30,7 @@ const MemberList = ({
   isEditing,
   handleAddDeletedMembers,
   handleChangeMemberGrade,
+  handleSubmitDeletedMember,
   handleChangeEditButtonStatus,
 }: Props) => {
   const captain = memberInfo.find((member: MemberElementType) => member.grade === '주장');
@@ -40,7 +42,7 @@ const MemberList = ({
 
   return (
     <>
-      <article className={classNames(playerDetailInfo)}>
+      <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
         {/* article Header */}
         <div>
           <p className={classNames(categoryTitle)}>{isMember ? '팀원' : '용병'} 정보</p>
@@ -111,7 +113,7 @@ const MemberList = ({
             </>
           )}
         </div>
-      </article>
+      </form>
       {isEditing && (
         <>
           {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
