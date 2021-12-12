@@ -6,6 +6,7 @@ import { TeamCard } from '@/components';
 import { RootState } from '@/store';
 import { fetchWaitingTeams, match } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
+import { WaitingTeam } from '@/dummyMatch';
 
 const {
   modalBackground,
@@ -23,8 +24,8 @@ interface ModalState {
 }
 
 const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
-  const { waitingTeams } = useSelector((store: RootState) => store.match).data;
-  const [selectedTeam, setSelectedTeam] = useState({
+  const { waitingTeams } = useSelector((store: RootState) => store.match.data);
+  const [selectedTeam, setSelectedTeam] = useState<WaitingTeam>({
     teamWaitingId: 0,
     teamId: 0,
     teamLogo: '',
