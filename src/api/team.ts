@@ -1,4 +1,3 @@
-
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
 
@@ -7,7 +6,6 @@ type MemberElementType = {
   userName: string;
   grade: string;
 };
-
 
 export const deleteTeam = (teamId: number | undefined) =>
   api
