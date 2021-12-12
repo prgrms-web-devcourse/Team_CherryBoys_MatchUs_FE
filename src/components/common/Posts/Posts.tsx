@@ -15,6 +15,14 @@ const Posts = ({ isMatch }: PostWrapper) => {
   const { data } = useSelector((state: RootState) => state.posts);
   const history = useHistory();
 
+  // 사용자의 권한을 체크하는 로직 추가 필요
+  const handelCheckUserAuthority = (grade: string) => {
+    if (!['주장', '부주장'].includes(grade)) {
+      return;
+    }
+    history.push(`/${isMatch ? 'matches' : 'hires'}/post/new`);
+  };
+
   return (
     <div className={classNames(postsContainer)}>
       <div className={classNames(postTitleBox)}>
@@ -30,7 +38,7 @@ const Posts = ({ isMatch }: PostWrapper) => {
       </ul>
       <button
         className={classNames(addPostButton)}
-        onClick={() => history.push(`/${isMatch ? 'matches' : 'hires'}/new`)}
+        onClick={() => handelCheckUserAuthority('주장')}
         type="button"
       >
         <i className="fas fa-plus" />
