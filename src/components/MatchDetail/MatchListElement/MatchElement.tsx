@@ -21,6 +21,7 @@ const MatchListElement = ({
 }: MatchInfoProps) => {
   return (
     <>
+      <div>{matchDate}</div>
       <div>
         <img src={registerTeamLogo} alt="등록 팀 로고 이미지" />
         <p>{registerTeamName}</p>
