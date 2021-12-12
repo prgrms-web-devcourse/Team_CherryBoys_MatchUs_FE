@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
 import { RootState } from '@/store';
+import { match as matchReducer } from '@/store/match/match';
 import { fetchMatchById } from '@/store/posts/posts';
 import {
   MatchInfo,
@@ -21,14 +22,16 @@ const { awayTeam, versus } = styles;
 
 const Match = () => {
   const dispatch = useDispatch();
-  const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+  const { match } = useSelector((store: RootState) => store.posts.data);
+  const { modal } = useSelector((store: RootState) => store.match.data);
 
   useMount(() => {
     dispatch(fetchMatchById(matchId));
+    dispatch(matchReducer.actions.setMatchId({ matchId }));
   });
 
-  const { match } = useSelector((store: RootState) => store.posts.data);
-  const { modal } = useSelector((store: RootState) => store.match).data;
+  console.log(useSelector((store: RootState) => store.match.data));
 
   return (
     <div>

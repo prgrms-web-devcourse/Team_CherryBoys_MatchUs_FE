@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   TeamWithUser,
-  userTeam as userTeamDummy,
+  userTeamDummy,
   TeamSimple,
   WaitingTeam,
   WaitingTeams,
@@ -33,6 +33,7 @@ interface MatchState {
       matchApprove: boolean;
       matchReview: boolean;
     };
+    matchId: number;
   };
 }
 
@@ -47,11 +48,15 @@ export const match = createSlice({
         matchApprove: false,
         matchReview: false,
       },
+      matchId: -1,
     },
   } as MatchState,
   reducers: {
     toggleModal: (state, { payload }: PayloadAction<{ modalName: string }>) => {
       state.data.modal[payload.modalName] = !state.data.modal[payload.modalName];
+    },
+    setMatchId: (state, { payload }: PayloadAction<{ matchId: number }>) => {
+      state.data.matchId = payload.matchId;
     },
   },
   extraReducers: {
