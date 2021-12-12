@@ -35,17 +35,13 @@ const Match = () => {
     <div>
       {match.map((matchInfo) => (
         <Fragment key={`match${matchInfo.matchId}`}>
-          <MatchInfo key={`matchInfo${matchInfo.matchId}`} match={matchInfo} />
-          {matchInfo.homeTeam && (
-            <TeamCard key={`teamInfo${matchInfo.homeTeam}`} team={matchInfo.homeTeam} />
-          )}
-          {!matchInfo.awayTeam && (
-            <MatchDetail key={`matchDetail${matchInfo.matchId}`} match={matchInfo} />
-          )}
+          <MatchInfo match={matchInfo} />
+          {matchInfo.homeTeam && <TeamCard team={matchInfo.homeTeam} />}
+          {!matchInfo.awayTeam && <MatchDetail match={matchInfo} />}
           {matchInfo.awayTeam && (
             <div className={classNames(awayTeam)}>
               <div className={classNames(versus)}>VS</div>
-              <TeamCard key={`teamInfo${matchInfo.awayTeam}`} team={matchInfo.awayTeam} />
+              <TeamCard team={matchInfo.awayTeam} />
             </div>
           )}
         </Fragment>
