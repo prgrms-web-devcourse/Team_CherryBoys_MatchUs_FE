@@ -23,11 +23,7 @@ const hireItem = {
 };
 
 const HiresDetailPage = () => {
-  return (
-    <>
-      <HiresDetails hireItem={hireItem} />
-    </>
-  );
+  return <HiresDetails hireItem={hireItem} />;
 };
 
 export default HiresDetailPage;
