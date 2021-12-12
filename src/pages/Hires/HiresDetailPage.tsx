@@ -17,7 +17,7 @@ const hireItem = {
   groundName: '어린이대공원풋살장',
   position: '윙백',
   ageGroup: '20s',
-  teamMannerTemperature: '36.5도',
+  teamMannerTemperature: 36.5,
   hiredPlayerNumber: 1,
   hirePlayerNumber: 3,
   teamName: '쭝쭝',
@@ -66,7 +66,7 @@ const HiresDetailPage = () => {
         <section className={classNames(card__tags)}>
           <span>{position}</span>
           <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
-          <span>{teamMannerTemperature}</span>
+          <span>{`${teamMannerTemperature}도`}</span>
         </section>
       </article>
       <div>팀 정보</div>
