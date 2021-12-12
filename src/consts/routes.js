@@ -21,7 +21,7 @@ export const TEAM_CREATE_PAGE = '/team/new';
 export const TEAM_MATCHING_LIST_PAGE = '/team/:teamId/match';
 export const TEAM_EDIT_PAGE = '/team/:teamId/edit';
 export const TEAM_SELECT_PAGE = '/team/select';
-export const TEAM_MEMBERS_PAGE = '/team/:teamId/member';
+export const TEAM_MEMBERS_PAGE = '/team/:teamId/:memberType';
 export const TEAM_MEMBERS_EDIT_PAGE = '/team/:teamId/member/edit';
 
 // 회원
