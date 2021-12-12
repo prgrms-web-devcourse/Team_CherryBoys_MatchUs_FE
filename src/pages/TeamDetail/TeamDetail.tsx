@@ -13,7 +13,7 @@ const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, t
 const TeamDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
-  const [hasAuthorization, setHasAuthorization] = useState<boolean>();
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
   const [teamInfo, setTeamInfo] = useState({
     teamId: 0,
     teamName: '',
