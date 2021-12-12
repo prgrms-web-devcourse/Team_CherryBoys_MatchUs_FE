@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { RootState } from '@/store/index';
-import style from './posts.module.scss';
 
+import { RootState } from '@/store/index';
 import PostItem from './PostItem';
+import style from './posts.module.scss';
 import { PostWrapper } from '@/store/posts';
 
 const { post__title } = style;
