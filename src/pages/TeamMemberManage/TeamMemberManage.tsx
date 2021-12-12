@@ -107,7 +107,7 @@ const dummyData = [
 ];
 
 const TeamMemberManage = () => {
-  const [peopleType, setPeopleType] = useState('hired');
+  const [peopleType, setPeopleType] = useState('members');
   const [deletedMembers, setDeletedMembers] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState(true);
   const [hasAuthorization, setHasAuthorization] = useState(true);
@@ -119,8 +119,8 @@ const TeamMemberManage = () => {
     setIsEnterEditPage(!isEnterEditPage);
   };
 
-  const handleChangeMemberGrade = (e: any & { target: HTMLInputElement }) => {
-    const { value } = e.target;
+  const handleChangeMemberGrade = (e: React.ChangeEvent<HTMLElement>) => {
+    const { value } = e.target as HTMLInputElement;
     const [userId, grade] = value.split('-');
 
     const newMemberInfo = memberInfo.map((member) => {
@@ -134,8 +134,8 @@ const TeamMemberManage = () => {
     setMemberInfo(newMemberInfo);
   };
 
-  const handleAddDeletedMembers = (e: any) => {
-    const { id } = e.target;
+  const handleAddDeletedMembers = (e: React.MouseEvent<HTMLElement>) => {
+    const { id } = e.target as HTMLInputElement;
     const [prefix, userId] = id.split('-');
 
     const numberUserId = parseInt(userId, 10);
@@ -145,15 +145,18 @@ const TeamMemberManage = () => {
     }
   };
 
-  const handleSubmitDeletedMember = (e: any) => {
+  const handleSubmitDeletedMember = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+
     const notDeletedMemberInfo = memberInfo.filter((member) => {
       if (deletedMembers.includes(member.userId)) {
         return false;
       }
       return true;
     });
+
     // TODO: 백엔드와 연동 시, 추가 예정.
-    // deleteTeamMembers('', notDeletedMemberInfo);
+    // deleteTeamMembers(teamId, notDeletedMemberInfo);
   };
 
   useEffect(() => {
@@ -191,7 +194,7 @@ const TeamMemberManage = () => {
       <div className={classNames(playerManange)}>
         <MemberList
           isEditing={isEnterEditPage}
-          isMember={peopleType === 'member'}
+          isMember={peopleType === 'members'}
           memberInfo={memberInfo}
           hasAuthorization={hasAuthorization}
           handleAddDeletedMembers={handleAddDeletedMembers}
