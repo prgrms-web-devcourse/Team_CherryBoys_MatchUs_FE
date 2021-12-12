@@ -52,18 +52,16 @@ const MemberList = ({
         </div>
         <div>
           {isMember && (
-            <>
-              <MemberListElement
-                memberId={captain?.userId}
-                memberName={captain?.userName}
-                memberType="captain"
-                key={`captain-${captain?.userId}`}
-                isEditing={isEditing}
-                grade={captain?.grade}
-                handleChangeMemberGrade={handleChangeMemberGrade}
-                handleAddDeletedMembers={handleAddDeletedMembers}
-              />
-            </>
+            <MemberListElement
+              memberId={captain?.userId}
+              memberName={captain?.userName}
+              memberType="captain"
+              key={`captain-${captain?.userId}`}
+              isEditing={isEditing}
+              grade={captain?.grade}
+              handleChangeMemberGrade={handleChangeMemberGrade}
+              handleAddDeletedMembers={handleAddDeletedMembers}
+            />
           )}
           {isMember && (
             <>
