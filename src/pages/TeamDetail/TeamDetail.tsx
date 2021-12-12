@@ -109,7 +109,7 @@ const TeamDetail = () => {
       <article className={classNames(teamCoreInfo)}>
         <section>총 경기 수{matchCount}</section>
         <section>매너온도 {manner_temperature}</section>
-        <section key={`captain-${captainId}`}>{`운영진 ${captainName}`}</section>
+        <section id={`captain-${captainId}`}>{`운영진 ${captainName}`}</section>
         <section>주요 종목 {sportsName}</section>
         <section>연령대 {ageGroup}</section>
         <section>생성일자 {teamCreatedAt}</section>
