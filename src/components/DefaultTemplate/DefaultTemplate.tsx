@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { Header, TabBar } from '@/components/common';
 import styles from './DefaultTemplate.module.scss';
@@ -12,7 +11,7 @@ const DefaultTemplate = ({ children }: Props) => {
   const { main } = styles;
 
   return (
-    <BrowserRouter>
+    <>
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
@@ -20,7 +19,7 @@ const DefaultTemplate = ({ children }: Props) => {
       <Header />
       <main className={classNames(main)}>{children}</main>
       <TabBar />
-    </BrowserRouter>
+    </>
   );
 };
 
