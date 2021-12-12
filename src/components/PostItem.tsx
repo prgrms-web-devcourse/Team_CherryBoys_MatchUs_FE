@@ -38,7 +38,7 @@ const PostItem = ({ item }: Post) => {
           <section className={classNames(card__tags)}>
             <span>{isMatching ? `${cost}원` : position}</span>
             <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
-            <span>{teamMannerTemperature}</span>
+            <span>{`${teamMannerTemperature}도`}</span>
           </section>
         </article>
       </li>

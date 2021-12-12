@@ -12,7 +12,7 @@ const matchItems = [
     groundName: '어린이대공원풋살장',
     cost: 10000,
     ageGroup: '20s',
-    teamMannerTemperature: '36.5도',
+    teamMannerTemperature: 36.5,
   },
   {
     matchId: 2,
@@ -24,7 +24,7 @@ const matchItems = [
     groundName: '제1 체육관',
     cost: 30000,
     ageGroup: '30s',
-    teamMannerTemperature: '36.1도',
+    teamMannerTemperature: 36.1,
   },
   {
     matchId: 3,
@@ -36,7 +36,7 @@ const matchItems = [
     groundName: '제2 체육관',
     cost: 20000,
     ageGroup: '40s',
-    teamMannerTemperature: '36.5도',
+    teamMannerTemperature: 36.5,
   },
 ];
 

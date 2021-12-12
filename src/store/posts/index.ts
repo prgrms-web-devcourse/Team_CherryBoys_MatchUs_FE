@@ -25,7 +25,7 @@ export interface PostItem {
   ageGroup: string;
   teamLogo: string;
   teamName: string;
-  teamMannerTemperature: string;
+  teamMannerTemperature: number;
 }
 
 export const fetchAllPost = createAsyncThunk('posts/fetchAllPost', async () => {

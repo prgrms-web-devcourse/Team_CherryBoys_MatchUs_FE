@@ -12,7 +12,7 @@ const hireItems = [
     groundName: '어린이대공원풋살장',
     position: '윙백',
     ageGroup: '20s',
-    teamMannerTemperature: '36.5도',
+    teamMannerTemperature: 36.5,
   },
   {
     postId: 2,
@@ -24,7 +24,7 @@ const hireItems = [
     groundName: '제1 체육관',
     position: '윙백',
     ageGroup: '30s',
-    teamMannerTemperature: '36.1도',
+    teamMannerTemperature: 36.1,
   },
   {
     postId: 3,
@@ -36,7 +36,7 @@ const hireItems = [
     groundName: '제2 체육관',
     position: '풀백',
     ageGroup: '40s',
-    teamMannerTemperature: '36.5도',
+    teamMannerTemperature: 36.5,
   },
 ];
 
