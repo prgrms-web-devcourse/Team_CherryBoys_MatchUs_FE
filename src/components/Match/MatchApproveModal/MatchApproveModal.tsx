@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import styles from './MatchApproveModal.module.scss';
 import { TeamCard } from '@/components';
 import { RootState } from '@/store';
@@ -33,15 +32,15 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     teamMannerTemperature: 0,
     teamUsers: [{}],
   });
-  const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
+  const { matchId } = useSelector((store: RootState) => store.match.data);
 
   const dispatch = useDispatch();
   useMount(() => {
     dispatch(fetchWaitingTeams(matchId));
   });
 
-  const handleCloseModal = (e: any) => {
-    if (e.target.classList.contains('modalBackground')) {
+  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
+    if ((e.target as Element).classList.contains('modalBackground')) {
       dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
     }
   };
@@ -58,8 +57,8 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     // dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
   };
 
-  const handleOnChangeTeamCard = (e: any) => {
-    setSelectedTeam(waitingTeams[e.target.value]);
+  const handleOnChangeTeamCard = (e: React.ChangeEvent<HTMLElement>) => {
+    setSelectedTeam(waitingTeams[parseInt((e.target as HTMLInputElement).value, 10)]);
   };
 
   return (

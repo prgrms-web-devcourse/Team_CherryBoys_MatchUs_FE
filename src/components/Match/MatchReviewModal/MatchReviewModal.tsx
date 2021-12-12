@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
+import { RootState } from '@/store';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
@@ -34,18 +34,19 @@ interface ModalState {
 }
 
 const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
+  const { matchId } = useSelector((store: RootState) => store.match.data);
   const dispatch = useDispatch();
 
-  const handleCloseModal = (e: any) => {
-    if (e.target.classList.contains('modalBackground')) {
+  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
+    if ((e.target as Element).classList.contains('modalBackground')) {
       dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
     }
   };
 
   const [selectedTags, setSelectedTags] = useState(tagOptions);
 
-  const handleOnChangeSelectedTags = (e: any, tagCategory: string) => {
-    const targetTag: string = e.target.value;
+  const handleOnChangeSelectedTags = (e: React.ChangeEvent<HTMLElement>, tagCategory: string) => {
+    const targetTag: string = (e.target as HTMLInputElement).value;
     const newSelectedTags: TagOptions = {
       skill: { ...selectedTags.skill },
       good: { ...selectedTags.good },
@@ -76,7 +77,6 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
       return acc;
     }, []);
     const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
-    const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
 
     // Parameters
     // Path = matchId: Number, teamId: Number (상대팀: 추후 추가)
