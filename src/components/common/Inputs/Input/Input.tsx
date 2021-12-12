@@ -96,6 +96,7 @@ const Input = ({ labelName, inputId, placeholder, type, options, onChange, style
               background: inputContentBackgroundColor,
               cursor: inputContentCursor,
             }}
+            defaultValue={Object.keys(options || {})[0]}
           >
             {options?.map((option, index) => (
               <option value={option} key={`dropBoxOption${index}`}>
