@@ -33,7 +33,7 @@ const styleFormat: StyleProps = {
   inputContentHeight: '100%',
   inputContentFontColor: '#000',
   inputContentBackgroundColor: '#fff',
-  inputContentCursor: 'default',
+  inputContentCursor: 'auto',
 };
 
 const Input = ({ labelName, inputId, placeholder, type, options, onChange, styleProps }: Props) => {
