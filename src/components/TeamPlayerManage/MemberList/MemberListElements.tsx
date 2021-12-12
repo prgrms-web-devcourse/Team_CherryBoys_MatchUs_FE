@@ -3,9 +3,9 @@
 import React from 'react';
 
 interface MemberElementType {
-  memberId: number | undefined;
-  memberName: string | undefined;
-  grade: string | undefined;
+  memberId?: number;
+  memberName?: string;
+  grade?: string;
   isEditing: boolean;
   memberType: string;
   handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
