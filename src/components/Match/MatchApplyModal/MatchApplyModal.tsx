@@ -6,7 +6,7 @@ import { Input, InputCheckBox } from '@/components';
 import { RootState } from '@/store';
 import { fetchTeamWithUser, match } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
-import { SPORTS_PLAYER } from '@/consts/info';
+import { SPORTS_PLAYER } from '@/consts';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 

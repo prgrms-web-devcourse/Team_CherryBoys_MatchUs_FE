@@ -24,6 +24,8 @@ const {
   showTeamUserButton,
 } = styles;
 
+const showPlayersLimit = 5;
+
 const TeamCard = ({ team }: Props) => {
   const [showTeamUser, setShowTeamUser] = useState(false);
 
@@ -57,8 +59,8 @@ const TeamCard = ({ team }: Props) => {
         {team.teamUsers.map((user, index) => (
           <div
             className={classNames(teamUser, {
-              [teamUser_extra]: index > 4,
-              [showTeamUser_extra]: index > 4 && showTeamUser,
+              [teamUser_extra]: index > showPlayersLimit - 1,
+              [showTeamUser_extra]: index > showPlayersLimit - 1 && showTeamUser,
             })}
           >
             {user.teamUserName}
