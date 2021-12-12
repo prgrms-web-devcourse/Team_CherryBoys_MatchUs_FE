@@ -31,8 +31,6 @@ const Match = () => {
     dispatch(matchReducer.actions.setMatchId({ matchId }));
   });
 
-  console.log(useSelector((store: RootState) => store.match.data));
-
   return (
     <div>
       {match.map((matchInfo) => (
