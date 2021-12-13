@@ -45,7 +45,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
     const teamUsersOptions: CheckboxOptions = {};
     selectedTeamUsers.forEach((user) => {
-      if (user.teamUserName) teamUsersOptions[user.teamUserName] = false;
+      if (user.userName) teamUsersOptions[user.userName] = false;
     });
     return teamUsersOptions;
   }, [selectedTeam, userTeams]);
@@ -76,9 +76,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
 
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((team) => team.teamName === selectedTeam)[0].teamId,
-      players: selectedTeamUsers.filter(
-        (user) => user.teamUserName && teamMembers[user.teamUserName]
-      ),
+      players: selectedTeamUsers.filter((user) => user.userName && teamMembers[user.userName]),
     };
     if (selectedTeamWithUsers.players.length !== userLimit) {
       window.alert('인원미달');

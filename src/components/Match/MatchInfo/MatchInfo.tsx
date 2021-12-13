@@ -27,7 +27,7 @@ const MatchInfo = ({ match }: Props) => {
       <div className={classNames(matchInfoRow, importantInfo)}>
         <div className={classNames(matchInfo)}>
           <div className={classNames(matchInfo_content)}>
-            {`${match.city} ${match.region} ${match.groundName}`}
+            {`${match.city} ${match.region} ${match.ground}`}
           </div>
         </div>
       </div>

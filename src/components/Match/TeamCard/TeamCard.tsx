@@ -28,6 +28,7 @@ const showPlayersLimit = 5;
 
 const TeamCard = ({ team }: Props) => {
   const [showTeamUser, setShowTeamUser] = useState(false);
+  const teamMembers = team.matchMembers || team.teamUsers || [];
 
   const handleShowTeamUser = () => {
     setShowTeamUser(!showTeamUser);
@@ -41,7 +42,9 @@ const TeamCard = ({ team }: Props) => {
         </div>
         <div className={classNames(teamName)}>{team.teamName}</div>
         <div className={classNames(captainInfo)}>
-          <div className={classNames(captainName)}>팀장 추후 업뎃</div>
+          <div className={classNames(captainName)}>
+            {team.captainName || teamMembers[0]?.userName}
+          </div>
           <div className={classNames(buttonBox)}>
             <button type="button">
               <i className="fas fa-user" />
@@ -56,7 +59,7 @@ const TeamCard = ({ team }: Props) => {
         </div>
       </div>
       <div className={classNames(teamUsers)}>
-        {team.teamUsers.map((user, index) => (
+        {teamMembers?.map((user, index) => (
           <div
             className={classNames(teamUser, {
               [teamUser_extra]: index > showPlayersLimit - 1,
@@ -64,7 +67,7 @@ const TeamCard = ({ team }: Props) => {
             })}
             key={`teamUser${index}`}
           >
-            {user.teamUserName}
+            {user.userName}
           </div>
         ))}
         <div>

@@ -18,7 +18,7 @@ const PostItem = ({ item }: Post) => {
     startTime,
     city,
     region,
-    groundName,
+    ground,
     position,
     cost,
     ageGroup,
@@ -40,7 +40,7 @@ const PostItem = ({ item }: Post) => {
         </section>
         <section className={classNames(postInfos)}>
           <div>{`${date} ${startTime}`}</div>
-          <div>{`${city} ${region} ${groundName}`}</div>
+          <div>{`${city} ${region} ${ground}`}</div>
           <div className={classNames(postTags)}>
             <span>{isMatching ? `${cost}원` : position}</span>
             <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>

@@ -31,7 +31,7 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     teamLogo: '',
     teamName: '',
     teamMannerTemperature: 0,
-    teamUsers: [{}],
+    teamUsers: [{ userId: -1, userName: '' }],
   });
   const { matchId } = useSelector((store: RootState) => store.match.data);
 
