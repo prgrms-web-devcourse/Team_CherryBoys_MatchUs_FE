@@ -26,18 +26,19 @@ export const deleteMatchById = createAsyncThunk(
 );
 
 interface TeamUser {
-  captainId?: number;
-  captainName?: string;
-  teamUserId?: number;
-  teamUserName?: string;
+  userId: number;
+  userName: string;
 }
 
 export interface Team {
+  captainId?: number;
+  captainName?: string;
   teamId: number;
   teamLogo: string;
   teamName: string;
   teamMannerTemperature: number;
-  teamUsers: TeamUser[];
+  matchMembers?: TeamUser[];
+  teamUsers?: TeamUser[];
 }
 
 export interface PostWrapper {
@@ -53,7 +54,7 @@ export interface PostItem {
   postId?: number;
   city: string;
   region: string;
-  groundName: string;
+  ground: string;
   date: string;
   startTime: string;
   endTime?: string;
@@ -70,6 +71,8 @@ export interface PostItem {
   teamUsers?: TeamUser[];
   sports?: string;
   status?: string;
+  registerTeamResponse?: Team;
+  applyTeamResponse?: Team;
 }
 
 export interface PostsState {
