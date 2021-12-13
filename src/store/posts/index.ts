@@ -4,8 +4,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import hireItems from '@/fixtures/hireItems';
 import matchItems from '@/fixtures/matchItems';
 
+export interface TeamInfo {
+  teamId: number;
+  grade: string;
+}
+
 export interface PostWrapper {
   isMatch: boolean;
+  selectedTeam: TeamInfo;
 }
 
 export interface Post {

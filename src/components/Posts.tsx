@@ -9,8 +9,12 @@ import { PostWrapper } from '@/store/posts';
 
 const { post__title } = style;
 
-const Posts = ({ isMatch }: PostWrapper) => {
+const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
   const { data } = useSelector((state: RootState) => state.posts);
+  const { grade } = selectedTeam;
+  console.log(grade);
+  const hasAuthority = grade.includes('CAPTAIN');
+  console.log(hasAuthority);
 
   return (
     <>
@@ -23,7 +27,7 @@ const Posts = ({ isMatch }: PostWrapper) => {
           <PostItem item={item} />
         ))}
       </ul>
-      <button type="button">추가</button>
+      {hasAuthority && <button type="button">추가</button>}
     </>
   );
 };
