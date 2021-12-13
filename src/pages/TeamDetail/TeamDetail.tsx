@@ -131,7 +131,13 @@ const TeamDetail = () => {
               hasCategoryTitle={false}
             />
           ) : (
-            <div>팀원이 없습니다.</div>
+            <p>
+              <span className={classNames('whiteSpace')}>팀원이이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>
+                열정 가득한 팀원을 모집하러 가볼까요?
+              </span>
+              <Link to="/teams">팀원 모집</Link>
+            </p>
           )}
         </div>
       </article>
@@ -151,7 +157,11 @@ const TeamDetail = () => {
               hasCategoryTitle={false}
             />
           ) : (
-            <div>팀원이 없습니다.</div>
+            <p>
+              <span className={classNames('whiteSpace')}>용병이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>멋진 용병을 모집하러 가볼까요?</span>
+              <Link to="/teams">용병 모집</Link>
+            </p>
           )}
         </div>
       </article>
@@ -178,7 +188,11 @@ const TeamDetail = () => {
             );
           })
         ) : (
-          <div>매칭 정보가 없습니다</div>
+          <p>
+            <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
+            <span className={classNames('whiteSpace')}>경기 모집 글을 올리러 가볼까요?</span>
+            <Link to="/teams">경기 등록</Link>
+          </p>
         )}
       </article>
 
