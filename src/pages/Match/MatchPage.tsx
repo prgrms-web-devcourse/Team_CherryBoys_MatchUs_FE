@@ -36,12 +36,12 @@ const Match = () => {
       {match.map((matchInfo) => (
         <Fragment key={`match${matchInfo.matchId}`}>
           <MatchInfo match={matchInfo} />
-          {matchInfo.homeTeam && <TeamCard team={matchInfo.homeTeam} />}
-          {!matchInfo.awayTeam && <MatchDetail match={matchInfo} />}
-          {matchInfo.awayTeam && (
+          {matchInfo.registerTeamResponse && <TeamCard team={matchInfo.registerTeamResponse} />}
+          {!matchInfo.applyTeamResponse && <MatchDetail match={matchInfo} />}
+          {matchInfo.applyTeamResponse && (
             <div className={classNames(awayTeam)}>
               <div className={classNames(versus)}>VS</div>
-              <TeamCard team={matchInfo.awayTeam} />
+              <TeamCard team={matchInfo.applyTeamResponse} />
             </div>
           )}
         </Fragment>
