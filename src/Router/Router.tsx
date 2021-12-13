@@ -32,12 +32,13 @@ import {
   NOT_FOUND_PAGE,
 } from '../consts/routes';
 import AuthorizedRouter from './AuthorizedRoute';
+import FilterHiresPage from '@/components/FilterHiresPage';
 
 const Router: React.FC = () => {
   return (
     <Switch>
+      <Route path="/hires/filter" exact component={FilterHiresPage} />
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
-      <Route path={HOME_PAGE} exact component={} />
       <Route path={HOME_PAGE} exact component={} />
       <Route path={HIRES_PAGE} exact component={} />
       <Route path={HIRES_DETAIL_PAGE} exact component={} />
