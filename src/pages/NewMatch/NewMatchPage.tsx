@@ -40,93 +40,6 @@ const NewMatch = () => {
     endTime: new Date(),
   });
 
-  useEffect(() => {
-    const today = new Date();
-    const defaultStartDate = today;
-    const defaultStartTime = today;
-
-    const nextDayTime = new Date(new Date().getTime() + 120 * 60000);
-    const defaultEndTime = nextDayTime;
-
-    let defaultEndDate = defaultStartDate;
-    const startHour = defaultStartTime.getHours();
-    if (startHour + 2 >= 24) {
-      const nextDayDate = new Date(defaultEndDate);
-      nextDayDate.setDate(nextDayDate.getDate() + 1);
-      defaultEndDate = nextDayDate;
-    }
-
-    setFormattedDate({
-      startDate: defaultStartDate,
-      endDate: defaultEndDate,
-      startTime: defaultStartTime,
-      endTime: defaultEndTime,
-    });
-  }, [setFormattedDate]);
-
-  const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
-    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
-    setNowDate(newDate);
-
-    const endTime = new Date(newDate.getTime() + 120 * 60000);
-
-    setFormattedDate({
-      startDate: newDate,
-      endDate: newDate,
-      startTime: newDate,
-      endTime,
-    });
-  };
-
-  const handleChangeStartTime = (selectedDate: React.SetStateAction<Date | null>) => {
-    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
-
-    const endTime = new Date(newDate.getTime() + 120 * 60000);
-
-    setFormattedDate({ ...formattedDate, startTime: newDate, endTime });
-  };
-
-  const handleChangEndTime = (selectedDate: React.SetStateAction<Date | null>) => {
-    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
-
-    setFormattedDate({ ...formattedDate, endDate: newDate, endTime: newDate });
-  };
-
-  const submitDate = () => {
-    const { startDate, endDate, startTime, endTime } = formattedDate;
-
-    const dateResult = {
-      date: startDate.toLocaleDateString('fr-CA', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }),
-      startTime: startTime.toLocaleTimeString('fr-BE', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-      endTime: endTime.toLocaleTimeString('fr-BE', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-    };
-
-    const todayString = new Date().toLocaleDateString('fr-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-
-    if (dateResult.date < todayString || startDate > endDate || startTime > endTime) {
-      window.alert('시간을 다시 입력해주세요');
-      return {};
-    }
-
-    return dateResult;
-  };
-
   const placeholder = '선택';
   const [sports, setSports] = useState('');
   const [ageGroup, setAgeGroup] = useState('');
@@ -200,10 +113,68 @@ const NewMatch = () => {
     setDetail(targetInput);
   };
 
-  useEffect(() => {
-    const newTeamUsers = setSelectedTeamUsers();
-    setTeamMembers({ ...newTeamUsers });
-  }, [setTeamMembers, setSelectedTeamUsers]);
+  const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
+    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
+    setNowDate(newDate);
+
+    const endTime = new Date(newDate.getTime() + 120 * 60000);
+
+    setFormattedDate({
+      startDate: newDate,
+      endDate: newDate,
+      startTime: newDate,
+      endTime,
+    });
+  };
+
+  const handleChangeStartTime = (selectedDate: React.SetStateAction<Date | null>) => {
+    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
+
+    const endTime = new Date(newDate.getTime() + 120 * 60000);
+
+    setFormattedDate({ ...formattedDate, startTime: newDate, endTime });
+  };
+
+  const handleChangEndTime = (selectedDate: React.SetStateAction<Date | null>) => {
+    const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
+
+    setFormattedDate({ ...formattedDate, endDate: newDate, endTime: newDate });
+  };
+
+  const submitDate = () => {
+    const { startDate, endDate, startTime, endTime } = formattedDate;
+
+    const dateResult = {
+      date: startDate.toLocaleDateString('fr-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }),
+      startTime: startTime.toLocaleTimeString('fr-BE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      endTime: endTime.toLocaleTimeString('fr-BE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+    };
+
+    const todayString = new Date().toLocaleDateString('fr-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    if (dateResult.date < todayString || startDate > endDate || startTime > endTime) {
+      window.alert('시간을 다시 입력해주세요');
+      return {};
+    }
+
+    return dateResult;
+  };
 
   const onSubmit = () => {
     if (team === '' || team === placeholder) {
@@ -267,6 +238,33 @@ const NewMatch = () => {
     // api 요청 바디
     console.log(requestData);
   };
+
+  useEffect(() => {
+    const today = new Date();
+    const defaultStartDate = today;
+    const defaultStartTime = today;
+
+    const nextDayTime = new Date(new Date().getTime() + 120 * 60000);
+    const defaultEndTime = nextDayTime;
+
+    let defaultEndDate = defaultStartDate;
+    const startHour = defaultStartTime.getHours();
+    if (startHour + 2 >= 24) {
+      const nextDayDate = new Date(defaultEndDate);
+      nextDayDate.setDate(nextDayDate.getDate() + 1);
+      defaultEndDate = nextDayDate;
+    }
+
+    setFormattedDate({
+      startDate: defaultStartDate,
+      endDate: defaultEndDate,
+      startTime: defaultStartTime,
+      endTime: defaultEndTime,
+    });
+
+    const newTeamUsers = setSelectedTeamUsers();
+    setTeamMembers({ ...newTeamUsers });
+  }, [setTeamMembers, setSelectedTeamUsers, setFormattedDate]);
 
   return (
     <div className={classNames(newMatchContainer)}>
