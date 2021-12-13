@@ -67,3 +67,24 @@ export const deleteTeamMembers = (teamId: number, memberInfo: MemberElementType[
       data: { memberInfo },
     })
     .catch(throwErrorMessage);
+
+export const getTeamInfo = (teamId: number) =>
+  api
+    .get({
+      url: `/teams/${teamId}`,
+    })
+    .catch(throwErrorMessage);
+
+export const getMemberInfo = (teamId: number) =>
+  api
+    .get({
+      url: `/teams/${teamId}/members`,
+    })
+    .catch(throwErrorMessage);
+
+export const getMatchHistory = (teamId: number) =>
+  api
+    .get({
+      url: `teams/${teamId}/matches`,
+    })
+    .catch(throwErrorMessage);
