@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store';
 import styles from './MatchDetail.module.scss';
 import { deleteMatchById, PostItem } from '@/store/posts/posts';
 
@@ -22,7 +23,7 @@ const {
 const MatchDetail = ({ match }: Props) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const matchId = parseInt(useParams<{ matchId: string }>().matchId, 10);
+  const { matchId } = useSelector((store: RootState) => store.match.data);
 
   const handleRemoveMatch = () => {
     if (window.confirm(`remove match${matchId}?`)) {
