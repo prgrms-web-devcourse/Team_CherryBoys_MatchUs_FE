@@ -1,6 +1,6 @@
 // 팀 이름 REGEX
 export const TEAM_REGEX = {
-  IS_VALID_NAME: /^[가-힣\s|ㄱ-ㅎ|a-z|A-Z|0-9]+$/g,
+  IS_VALID_NAME: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]+$/,
   HAS_SPACE_BAR: /\s/g,
   MIN_LEN: 1,
   MAX_LEN: 10,

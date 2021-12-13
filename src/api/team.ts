@@ -37,6 +37,15 @@ export const createTeam = ({
     .catch(throwErrorMessage);
 };
 
+export const checkTeamNameDuplication = (teamName: string) => {
+  return api
+    .get({
+      url: `/teams/name-check`,
+      data: teamName,
+    })
+    .catch(throwErrorMessage);
+};
+
 export const deleteTeam = (teamId: number) =>
   api
     .delete({
