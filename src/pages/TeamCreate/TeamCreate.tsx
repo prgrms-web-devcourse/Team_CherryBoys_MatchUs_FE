@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import { SPORTS_CATEGORY, AGE_GROUP } from '@/consts';
 import { CustomButton, CustomInput, CustomLabel } from '@/components';
 import useForm from '@/hooks/useForm';
@@ -10,6 +11,7 @@ import {
   validateTeamNameLength,
   validateTeamNameHasSpace,
 } from '@/utils/validation/validation';
+import { createTeam } from '@/api';
 
 const handleSubmitTeamInfo = (e: React.FormEvent<HTMLFormElement>) => {
   // TODO: API 구현 완료 시, 본 handler를 통해서 통신 할 예정
@@ -17,6 +19,8 @@ const handleSubmitTeamInfo = (e: React.FormEvent<HTMLFormElement>) => {
 };
 
 const TeamCreate = () => {
+  const history = useHistory();
+
   const initialValues = {
     image: {
       url: '',
@@ -30,7 +34,14 @@ const TeamCreate = () => {
 
   const { values, setValues, errors, isLoading, handleChange, handleSubmit } = useForm({
     initialValues,
-    onSubmit: () => {},
+    onSubmit: async ({ image, teamName, teamBio, teamSport, teamAgeGroup }) => {
+      const result = await createTeam({ image, teamName, teamBio, teamSport, teamAgeGroup });
+      const { data } = result;
+
+      if (data.teamId) {
+        history.push(`/teams/${data.teamId}`);
+      }
+    },
     validate: ({ teamName, teamBio, teamSport, teamAgeGroup }) => {
       const newErros = {} as any;
 
@@ -90,7 +101,7 @@ const TeamCreate = () => {
     <>
       <header />
       <form onSubmit={handleSubmit}>
-        <h1 className={classNames('s_a11yHidden')}>팀 생성 페이지</h1>
+        <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
         <p>멋진 팀을 만들어 볼까요?</p>
         <img src={values.image.url} alt="이미지" />
         <input
