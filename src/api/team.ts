@@ -1,11 +1,6 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-
-type MemberElementType = {
-  userId: number;
-  userName: string;
-  grade: string;
-};
+import { MemberElement } from '@/types';
 
 interface TeamInfoProps {
   image: Record<string, string>;
@@ -37,14 +32,13 @@ export const createTeam = ({
     .catch(throwErrorMessage);
 };
 
-export const checkTeamNameDuplication = (teamName: string) => {
-  return api
+export const checkTeamNameDuplication = (teamName: string) =>
+  api
     .get({
       url: `/teams/name-check`,
       data: teamName,
     })
     .catch(throwErrorMessage);
-};
 
 export const deleteTeam = (teamId: number) =>
   api
@@ -60,7 +54,7 @@ export const withdrawTeam = (teamId: number) =>
     })
     .catch(throwErrorMessage);
 
-export const deleteTeamMembers = (teamId: number, memberInfo: MemberElementType[]) =>
+export const deleteTeamMembers = (teamId: number, memberInfo: MemberElement[]) =>
   api
     .delete({
       url: `teams/${teamId}`,
