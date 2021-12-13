@@ -1,11 +1,14 @@
 import React, { ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { useHistory, useParams } from 'react-router-dom';
 import { SPORTS_CATEGORY, AGE_GROUP } from '@/consts';
 import { CustomButton, CustomInput, CustomLabel } from '@/components';
 import useForm from '@/hooks/useForm';
 import { validateTeamBioLength, TEAM_VALID_ERROR_MSG } from '@/utils/validation/validation';
+import { editTeamInfo } from '@/api';
 
 const TeamInfoEdit = () => {
+  const history = useHistory();
   const initialValues = {
     image: {
       url: '',
@@ -15,19 +18,22 @@ const TeamInfoEdit = () => {
     teamSport: '',
     teamAgeGroup: '',
   };
+  const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
 
   const { values, setValues, errors, isLoading, handleChange, handleSubmit } = useForm({
     initialValues,
-    onSubmit: () => {},
-    validate: ({ teamBio, teamSport, teamAgeGroup }) => {
+    onSubmit: async ({ image, teamBio, teamAgeGroup }) => {
+      const result = await editTeamInfo({ image, teamBio, teamAgeGroup, teamId });
+
+      if (result.teamId) {
+        history.push(`/teams/${result.teamId}`);
+      }
+    },
+    validate: ({ teamBio, teamAgeGroup }) => {
       const newErros = {} as any;
 
       if (!validateTeamBioLength(teamBio)) {
         newErros.teamBio = TEAM_VALID_ERROR_MSG.IS_VALID_BIO_LEN;
-      }
-
-      if (!teamSport) {
-        newErros.teamSport = TEAM_VALID_ERROR_MSG.IS_TEAM_SPORT;
       }
 
       if (!teamAgeGroup) {
@@ -60,7 +66,7 @@ const TeamInfoEdit = () => {
     readImageFileAsUrl({ name, files });
   };
 
-  const isDisabled = !!Object.keys(errors).length;
+  const isDisabled = !!Object.keys(errors).length || isLoading;
 
   return (
     <>
@@ -87,18 +93,6 @@ const TeamInfoEdit = () => {
         </div>
         {isDisabled ? <p>{errors.teamBio}</p> : ''}
         <div>
-          <CustomLabel htmlFor="teamSportCategory">종목</CustomLabel>
-          <select id="teamSportCategory" onChange={handleChange}>
-            <option>종목</option>
-            {SPORTS_CATEGORY.map((category) => (
-              <option id={`team-${category.id}`} key={`team-${category.id}`}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {isDisabled ? <p>{errors.teamSport}</p> : ''}
-        <div>
           <CustomLabel htmlFor="teamAgeGroup">연령대</CustomLabel>
           <select id="teamAgeGroup" onChange={handleChange}>
             <option>연령대</option>
@@ -109,8 +103,8 @@ const TeamInfoEdit = () => {
             ))}
           </select>
         </div>
-        {isDisabled ? <p>{errors.teamAgeGroup}</p> : ''}
-        <CustomButton buttonType="submit" isDisabled={isLoading}>
+        {values.teamAgeGroup && errors.teamAgeGroup ? <p>{errors.teamAgeGroup}</p> : ''}
+        <CustomButton buttonType="submit" isDisabled={isDisabled}>
           팀 정보 수정
         </CustomButton>
       </form>

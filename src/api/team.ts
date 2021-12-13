@@ -10,6 +10,13 @@ interface TeamInfoProps {
   teamAgeGroup: string;
 }
 
+interface EditTeamInfoProps {
+  image: Record<string, string>;
+  teamBio: string;
+  teamAgeGroup: string;
+  teamId: number;
+}
+
 export const createTeam = ({
   image,
   teamName,
@@ -17,17 +24,17 @@ export const createTeam = ({
   teamSport,
   teamAgeGroup,
 }: TeamInfoProps) => {
-  const postFormImage = new FormData();
-  postFormImage.append('logo', image.file);
-  postFormImage.append('teamName', teamName);
-  postFormImage.append('bio', teamBio);
-  postFormImage.append('sports', teamSport);
-  postFormImage.append('ageGroup', teamAgeGroup);
+  const postFormData = new FormData();
+  postFormData.append('logo', image.file);
+  postFormData.append('teamName', teamName);
+  postFormData.append('bio', teamBio);
+  postFormData.append('sports', teamSport);
+  postFormData.append('ageGroup', teamAgeGroup);
 
   return api
     .post({
       url: '/teams',
-      data: postFormImage,
+      data: postFormData,
     })
     .catch(throwErrorMessage);
 };
@@ -53,6 +60,18 @@ export const withdrawTeam = (teamId: number) =>
       url: `/teams/${teamId}/me`,
     })
     .catch(throwErrorMessage);
+
+export const editTeamInfo = ({ image, teamBio, teamAgeGroup, teamId }: EditTeamInfoProps) => {
+  const postFormData = new FormData();
+  postFormData.append('logo', image.file);
+  postFormData.append('bio', teamBio);
+  postFormData.append('ageGroup', teamAgeGroup);
+
+  return api.put({
+    url: `/teams/${teamId}`,
+    data: postFormData,
+  });
+};
 
 export const deleteTeamMembers = (teamId: number, memberInfo: MemberElement[]) =>
   api
