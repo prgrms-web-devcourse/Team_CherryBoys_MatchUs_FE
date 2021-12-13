@@ -7,7 +7,7 @@ import PostItem from './PostItem';
 import style from './posts.module.scss';
 import { PostWrapper } from '@/store/posts';
 
-const { post__title } = style;
+const { postTitle } = style;
 
 const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
   const { data } = useSelector((state: RootState) => state.posts);
@@ -16,7 +16,7 @@ const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
 
   return (
     <>
-      <div className={classNames(post__title)}>
+      <div className={classNames(postTitle)}>
         {isMatch ? <span className="match">모집중인 매치</span> : <span>모집중인 용병</span>}
         <button type="button">필터</button>
       </div>

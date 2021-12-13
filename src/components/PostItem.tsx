@@ -4,7 +4,7 @@ import style from './postItem.module.scss';
 
 import { Post } from '@/store/posts';
 
-const { card, card__gameInfos, card__tags, card__gameInfos__gameSchedule } = style;
+const { card, gameInfos, tags, gameSchedule } = style;
 
 const PostItem = ({ item }: Post) => {
   const {
@@ -28,14 +28,14 @@ const PostItem = ({ item }: Post) => {
     <>
       <li>
         <article className={classNames(card)}>
-          <section className={classNames(card__gameInfos)}>
+          <section className={classNames(gameInfos)}>
             <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />
-            <div className={classNames(card__gameInfos__gameSchedule)}>
+            <div className={classNames(gameSchedule)}>
               <div>{`${date} ${startTime}`}</div>
               <div>{`${city} ${region} ${groundName}`}</div>
             </div>
           </section>
-          <section className={classNames(card__tags)}>
+          <section className={classNames(tags)}>
             <span>{isMatching ? `${cost}원` : position}</span>
             <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
             <span>{`${teamMannerTemperature}도`}</span>
