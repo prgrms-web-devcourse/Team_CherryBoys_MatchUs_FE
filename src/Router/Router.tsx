@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { Match, Matches } from '@/pages';
 
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -44,11 +45,11 @@ const Router: React.FC = () => {
       <Route path={HIRES_POST_PAGE} exact component={} />
       <Route path={HIRES_EDIT_PAGE} exact component={} />
       <Route path={HIRES_CHAT_PAGE} exact component={} />
-      <Route path={HIRES_ACCEPT_PAGE} exact component={} />
-      <Route path={MATCHES_PAGE} exact component={} />
-      <Route path={MATCHES_POST_PAGE} exact component={} />
-      <Route path={MATCHES_DETAIL_PAGE} exact component={} />
-      <Route path={MATCHES_EDIT_PAGE} exact component={} />
+      <Route path={HIRES_ACCEPT_PAGE} exact component={} /> */}
+      <Route path={MATCHES_PAGE} exact component={Matches} />
+      {/* <Route path={MATCHES_POST_PAGE} exact component={} /> */}
+      <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      {/* <Route path={MATCHES_EDIT_PAGE} exact component={} />
       <Route path={TEAM_PAGE} exact component={} />
       <Route path={TEAM_CREATE_PAGE} exact component={} />
       <Route path={TEAM_MATCHING_LIST_PAGE} exact component={} />
