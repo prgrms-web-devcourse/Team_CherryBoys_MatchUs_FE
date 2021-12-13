@@ -88,13 +88,21 @@ const Signup = () => {
   };
 
   const signup = async () => {
-    // TODO: non-response API 이므로 status code check해서 isSignup에 전달
-    // true일때만 API call 보내기
     const isSignup = await requestSignup({ ...signupForm, name: userName });
+
+    if (isSignup) {
+      history.push('/login');
+    }
+
+    // TODO: 모달 예외처리
   };
 
   // 닉네임 중복 확인
   const checkDuplicatedNickname = async () => {
+    if (!isValidForm.nickname) {
+      return;
+    }
+
     const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
 
     const msg = !isduplicated
@@ -114,6 +122,10 @@ const Signup = () => {
 
   // 이메일 중복 확인
   const checkDuplicatedEmail = async () => {
+    if (!isValidForm.email) {
+      return;
+    }
+
     const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
     const msg = !isduplicated

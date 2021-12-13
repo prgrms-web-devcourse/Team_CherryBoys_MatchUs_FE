@@ -9,10 +9,6 @@ export const requestSignup = (signupForm: requestSignupFormType) =>
       url: '/users',
       data: signupForm,
     })
-    // 현재 미작동
-    .then((response) => {
-      return response.ok;
-    })
     .catch(throwErrorMessage);
 
 export const requestLogin = async (loginForm: loginFormType) =>
