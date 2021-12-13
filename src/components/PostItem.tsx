@@ -26,7 +26,7 @@ const PostItem = ({ item }: Post) => {
 
   return (
     <>
-      <li key={isMatching ? matchId : postId}>
+      <li>
         <article className={classNames(card)}>
           <section className={classNames(card__gameInfos)}>
             <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />

@@ -12,9 +12,7 @@ const { post__title } = style;
 const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
   const { data } = useSelector((state: RootState) => state.posts);
   const { grade } = selectedTeam;
-  console.log(grade);
   const hasAuthority = grade.includes('CAPTAIN');
-  console.log(hasAuthority);
 
   return (
     <>
@@ -24,7 +22,12 @@ const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
       </div>
       <ul>
         {data.map((item) => (
-          <PostItem item={item} />
+          <PostItem
+            key={
+              Object.prototype.hasOwnProperty.call(item, 'matchId') ? item?.matchId : item?.postId
+            }
+            item={item}
+          />
         ))}
       </ul>
       {hasAuthority && <button type="button">추가</button>}
