@@ -101,7 +101,7 @@ const TeamCreate = () => {
     setIsDuplicatedTeamName(true);
   };
 
-  const isDisabled = !!Object.keys(errors).length;
+  const isDisabled = !!Object.keys(errors).length || isLoading;
 
   return (
     <>
