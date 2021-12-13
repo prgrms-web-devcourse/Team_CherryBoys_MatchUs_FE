@@ -18,7 +18,7 @@ export const SIGNUP_VALIDATION_ERR_MSG = {
   INVALID_PASSWORD_LEN: `패스워드는 ${PASSWORD_MIN_LEN}자 이상 ${PASSWORD_MAX_LEN}자 이하이어야 합니다.`,
   INVALID_CONFIRMED_PASSWORD: '패스워드가 일치하지 않습니다.',
   INVALID_GENDER: '성별을 선택해주세요.',
-  INVALID_AGE: '연령대를 선택해주세요.',
+  INVALID_AGEGROUP: '연령대를 선택해주세요.',
   INVALID_SPORTS: '주종목을 선택해주세요.',
   DUPLICATE_EMIAL: '이미 존재하는 이메일입니다.',
   DUPLICATE_NICKNAME: '이미 존재하는 닉네임입니다.',
@@ -66,10 +66,10 @@ export const validateSignup: { [index: string]: (key: string, state?: string) =>
   gender: (gender: string): string => {
     return gender === '성별' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_GENDER : '';
   },
-  age: (age: string): string => {
-    return age === '연령대' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_GENDER : '';
+  ageGroup: (age: string): string => {
+    return age === '연령대' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_AGEGROUP : '';
   },
   sports: (sports: string): string => {
-    return sports === '주종목' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_GENDER : '';
+    return sports === '주종목' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_SPORTS : '';
   },
 };
