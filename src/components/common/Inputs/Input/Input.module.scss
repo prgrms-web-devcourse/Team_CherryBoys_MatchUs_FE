@@ -1,0 +1,38 @@
+.inputBox {
+  padding: 0.8rem 1.6rem;
+
+  .inputName > label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    font-size: 1.6rem;
+  }
+
+  .inputContent {
+    position: relative;
+    height: fit-content;
+    font-size: 1.2rem;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 0.5rem;
+
+    input,
+    select {
+      height: 100%;
+      min-height: 4rem;
+      padding: 0.8rem;
+      border: none;
+      outline: none;
+    }
+
+    .inputText {
+      input {
+        width: 100%;
+      }
+    }
+
+    .inputDropBox {
+      width: 100%;
+      padding: 0.8rem;
+    }
+  }
+}
