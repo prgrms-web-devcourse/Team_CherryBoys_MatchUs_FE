@@ -5,11 +5,6 @@ import { CustomButton, CustomInput, CustomLabel } from '@/components';
 import useForm from '@/hooks/useForm';
 import { validateTeamBioLength, TEAM_VALID_ERROR_MSG } from '@/utils/validation/validation';
 
-const handleEditTeamInfo = (e: React.FormEvent<HTMLFormElement>) => {
-  // TODO: API 구현 완료 시, 본 handler를 통해서 통신 할 예정
-  e.preventDefault();
-};
-
 const TeamInfoEdit = () => {
   const initialValues = {
     image: {

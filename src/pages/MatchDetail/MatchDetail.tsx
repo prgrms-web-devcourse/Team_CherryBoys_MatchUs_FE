@@ -36,11 +36,10 @@ const MatchDetail = () => {
   const hasEndReviewState = endReview.length !== 0;
 
   const updateTeamMatchHistory = useCallback(async () => {
-    const { data } = await getMatchHistory(teamId);
-    const { matchesSummary } = data;
+    const { matchesSummary } = await getMatchHistory(teamId);
 
     // TODO: 객체 배열을 검사해서, 다른 경우에만 업데이트 하는 로직으로 개선*
-    if (data.matchesSummary) {
+    if (matchesSummary) {
       setMatchHistory(matchesSummary);
     }
   }, [teamId]);

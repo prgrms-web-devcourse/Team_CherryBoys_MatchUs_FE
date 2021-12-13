@@ -66,14 +66,13 @@ const TeamDetail = () => {
   };
 
   const updateTeamInfo = useCallback(async () => {
-    const { data } = await getTeamInfo(teamId);
+    const result = await getTeamInfo(teamId);
 
-    setTeamInfo(data);
+    setTeamInfo(result);
   }, [teamId]);
 
   const updateMemberInfo = useCallback(async () => {
-    const { data } = await getMemberInfo(teamId);
-    const { member } = data;
+    const { member } = await getMemberInfo(teamId);
 
     if (member) {
       setMemberInfo(member);
@@ -81,10 +80,9 @@ const TeamDetail = () => {
   }, [teamId]);
 
   const updateTeamMatchHistory = useCallback(async () => {
-    const { data } = await getMatchHistory(teamId);
-    const { matchesSummary } = data;
+    const { matchesSummary } = await getMatchHistory(teamId);
 
-    if (data.matchesSummary) {
+    if (matchesSummary) {
       setMatchHistory(matchesSummary);
     }
   }, [teamId]);

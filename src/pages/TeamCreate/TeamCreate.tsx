@@ -31,10 +31,10 @@ const TeamCreate = () => {
   const { values, setValues, errors, isLoading, handleChange, handleSubmit } = useForm({
     initialValues,
     onSubmit: async ({ image, teamName, teamBio, teamSport, teamAgeGroup }) => {
-      const { data } = await createTeam({ image, teamName, teamBio, teamSport, teamAgeGroup });
+      const { teamId } = await createTeam({ image, teamName, teamBio, teamSport, teamAgeGroup });
 
-      if (data.teamId) {
-        history.push(`/teams/${data.teamId}`);
+      if (teamId) {
+        history.push(`/teams/${teamId}`);
       }
     },
     validate: ({ teamName, teamBio, teamSport, teamAgeGroup }) => {
@@ -91,9 +91,9 @@ const TeamCreate = () => {
   };
 
   const handleCheckTeamNameDuplication = async () => {
-    const { data } = await checkTeamNameDuplication(values.teamName);
+    const result = await checkTeamNameDuplication(values.teamName);
 
-    if (data.success) {
+    if (result.success) {
       alert('사용 하셔도 좋습니다.');
       setIsDuplicatedTeamName(false);
     }
