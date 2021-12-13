@@ -1,0 +1,50 @@
+@use '@/styles/color';
+
+.componentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+.mainTitle {
+  font-weight: 700;
+  font-size: 2.2rem;
+
+  .highlight {
+    color: color.$primary;
+    font-weight: 700;
+  }
+}
+
+.subTitle {
+  margin-top: 2.3rem;
+  text-align: center;
+
+  span {
+    color: #777777;
+    font-size: 1.4rem;
+  }
+}
+
+.buttonContainer {
+  width: 23rem;
+}
+
+.radiusButton {
+  width: 100%;
+  height: 5.4rem;
+  margin-top: 3rem;
+  color: white;
+  font-weight: 700;
+  font-size: 1.6rem;
+  background-color: color.$primary;
+  border-radius: 2.7rem;
+
+  &:disabled {
+    color: #1d1d1d;
+    background-color: color.$disable;
+    cursor: not-allowed;
+  }
+}
