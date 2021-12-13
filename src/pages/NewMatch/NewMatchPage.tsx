@@ -46,7 +46,7 @@ const NewMatch = () => {
   const [city, setCity] = useState('');
   const [region, setRegion] = useState('');
   const [ground, setGround] = useState('');
-  const [cost, setCost] = useState('');
+  const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState('');
   const [team, setTeam] = useState(placeholder);
   const cityOptions = ['행정구역', ...Object.keys(CITIES).map((cityName) => cityName)] || [];
@@ -93,7 +93,8 @@ const NewMatch = () => {
       return;
     }
     if (category === 'cost') {
-      setCost(targetInput);
+      const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      setCost(targetInputNumber);
       return;
     }
     if (category === 'team') {
@@ -209,7 +210,7 @@ const NewMatch = () => {
     const inputsKeys = Object.keys(inputs);
 
     const badValues = [placeholder, '행정구역', '시/군/구', '구장', ''];
-    console.log(inputs);
+
     for (let i = 0; i < inputsKeys.length; i += 1) {
       if (badValues.includes(inputs[inputsKeys[i]] as string) && inputsKeys[i] !== 'detail') {
         window.alert(`${INPUT_DICITIONARY[inputsKeys[i]]}을(를) 입력해주세요`);
@@ -230,7 +231,7 @@ const NewMatch = () => {
       players: selectedTeamWithUsers.players,
     };
 
-    if (typeof requestData.cost !== 'number') {
+    if (Number.isNaN(cost)) {
       window.alert('참가비는 숫자만 입력할 수 있습니다');
       return;
     }
