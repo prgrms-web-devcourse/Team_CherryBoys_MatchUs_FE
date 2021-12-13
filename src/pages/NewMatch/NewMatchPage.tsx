@@ -149,7 +149,7 @@ const NewMatch = () => {
     const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
     const teamUsersOptions: CheckboxOptions = {};
     selectedTeamUsers.forEach((user) => {
-      if (user.teamUserName) teamUsersOptions[user.teamUserName] = false;
+      if (user.userName) teamUsersOptions[user.userName] = false;
     });
     return teamUsersOptions;
   }, [team, userTeams]);
@@ -216,8 +216,8 @@ const NewMatch = () => {
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
       players: selectedTeamUsers
-        .filter((user) => user.teamUserName && teamMembers[user.teamUserName])
-        .map((user) => user.teamUserId),
+        .filter((user) => user.userName && teamMembers[user.userName])
+        .map((user) => user.userId),
     };
     const matchDate = submitDate();
     if (selectedTeamWithUsers.players.length < userLimit) {
