@@ -2,66 +2,24 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // @flow
 import * as React from 'react';
-// import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import ValidInput from './ValidInput';
 import { SIGNUP_VALIDATION_SUCCESS_MSG, validateSignup } from '@/utils/validation/signupValidation';
 import { SIGNUP_VALIDATION_ERR_MSG } from '../../utils/validation/signupValidation';
-
-export interface signupFormType {
-  userName: string;
-  nickname: string;
-  email: string;
-  password: string;
-  confirmedPassword: string;
-  gender: string;
-  age: string;
-  sports: string;
-  [key: string]: string;
-}
-
-export interface isValidFormType {
-  userName: boolean;
-  nickname: boolean;
-  email: boolean;
-  password: boolean;
-  confirmedPassword: boolean;
-  gender: boolean;
-  age: boolean;
-  sports: boolean;
-  [key: string]: boolean;
-}
-
-export interface validMsgType {
-  userName: string;
-  nickname: string;
-  email: string;
-  password: string;
-  confirmedPassword: string;
-  gender: string;
-  age: string;
-  sports: string;
-  [key: string]: string;
-}
+import {
+  requestCheckDuplicatedEmail,
+  requestCheckDuplicatedNickname,
+  requestSignup,
+} from '../../api/auth';
+import { isValidFormType, signupFormType, validMsgType } from '@/types/auth';
+import { AGE, GENDER, SPORTS } from '@/consts/signup';
 
 const Signup = () => {
-  const GENDER = ['성별', '남자', '여자'];
-  const AGE = [
-    '연령대',
-    '10s',
-    '20s',
-    '30s',
-    '40s',
-    '50s',
-    '60s',
-    '70s',
-    '80s',
-    '90s',
-    '100s',
-    '110s',
-  ];
-  const SPORTS = ['주종목', 'SOCCER', 'FUTSAL'];
+  const dispatch = useDispatch();
 
+  // 회원가입에 필요한 상태
   const [signupForm, setSignupForm] = useState<signupFormType>({
     userName: '',
     nickname: '',
@@ -69,10 +27,11 @@ const Signup = () => {
     password: '',
     confirmedPassword: '',
     gender: '',
-    age: '',
+    ageGroup: '',
     sports: '',
   });
 
+  // 폼 검증을 위한 상태
   const [isValidForm, setIsValidForm] = useState<isValidFormType>({
     userName: false,
     nickname: false,
@@ -80,10 +39,11 @@ const Signup = () => {
     password: false,
     confirmedPassword: false,
     gender: false,
-    age: false,
+    ageGroup: false,
     sports: false,
   });
 
+  // 검증 메세지를 위한 상태
   const [validMsg, setValidMsg] = useState<validMsgType>({
     userName: '',
     nickname: '',
@@ -91,23 +51,26 @@ const Signup = () => {
     password: '',
     confirmedPassword: '',
     gender: '',
-    age: '',
+    ageGroup: '',
     sports: '',
   });
 
-  const { userName, nickname, email, password, confirmedPassword, gender, age, sports } =
+  const { userName, nickname, email, password, confirmedPassword, gender, ageGroup, sports } =
     signupForm;
+
+  const history = useHistory();
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
+    // 비밀번호 확인의 경우만 파라미터가 2개 들어가므로 체크
     const errMsg =
       name !== 'confirmedPassword'
         ? validateSignup[name](value)
         : validateSignup[name](value, password);
 
+    // 모든 상태 변경
     setValidMsg({
       ...validMsg,
       [name]: errMsg,
@@ -124,15 +87,17 @@ const Signup = () => {
     });
   };
 
-  const signup = () => {
-    // TODO: API 연동해서 사용하기
-    console.log(signupForm, isValidForm);
+  const signup = async () => {
+    // TODO: non-response API 이므로 status code check해서 isSignup에 전달
+    // true일때만 API call 보내기
+    const isSignup = await requestSignup({ ...signupForm, name: userName });
   };
 
-  const checkDuplicatedNickname = () => {
-    // TODO: 닉네임 중복확인 API 호출
-    const isDuplicated = true;
-    const msg = isDuplicated
+  // 닉네임 중복 확인
+  const checkDuplicatedNickname = async () => {
+    const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
+
+    const msg = !isduplicated
       ? SIGNUP_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
       : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
 
@@ -143,14 +108,15 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      nickname: isDuplicated,
+      nickname: isduplicated,
     });
   };
 
-  const checkDuplicatedEmail = () => {
-    // TODO: 이메일 중복확인 API 호출
-    const isDuplicated = true;
-    const msg = isDuplicated
+  // 이메일 중복 확인
+  const checkDuplicatedEmail = async () => {
+    const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
+
+    const msg = !isduplicated
       ? SIGNUP_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
       : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
 
@@ -161,14 +127,16 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      email: isDuplicated,
+      email: isduplicated,
     });
   };
 
+  // 전체 폼 검증. 하나라도 false일시 true가 나오므로 반전
   const IsSignupValid = () => {
     return !Object.values(isValidForm).includes(false);
   };
 
+  // 필수 항목 미입력시 메시지 수정
   const changeUnvalidateMsg = () => {
     const newValidMsgState: validMsgType = { ...validMsg };
 
@@ -186,6 +154,7 @@ const Signup = () => {
 
     if (!IsSignupValid()) {
       changeUnvalidateMsg();
+
       return;
     }
 
@@ -201,7 +170,7 @@ const Signup = () => {
           onChange={onChange}
           value={userName}
           type="input"
-          validMsg={validMsg.userName}
+          validMsg={validMsg.name}
         />
       </div>
 
@@ -265,11 +234,11 @@ const Signup = () => {
       <label>연령대</label>
       <div>
         <ValidInput
-          name="age"
+          name="ageGroup"
           onChange={onChange}
-          value={age}
+          value={ageGroup}
           type="select"
-          validMsg={validMsg.age}
+          validMsg={validMsg.ageGroup}
           selectOptions={AGE}
         />
       </div>
