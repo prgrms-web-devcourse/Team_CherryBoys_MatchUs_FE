@@ -37,7 +37,7 @@ const TeamCreate = () => {
         history.push(`/teams/${teamId}`);
       }
     },
-    validate: ({ teamName, teamBio, teamSport, teamAgeGroup }) => {
+    validate: ({ image, teamName, teamBio, teamSport, teamAgeGroup }) => {
       const newErros = {} as any;
 
       if (!validateTeamName(teamName)) {
@@ -54,6 +54,10 @@ const TeamCreate = () => {
 
       if (!validateTeamBioLength(teamBio)) {
         newErros.teamBio = TEAM_VALID_ERROR_MSG.IS_VALID_BIO_LEN;
+      }
+
+      if (image.file === '') {
+        newErros.image = TEAM_VALID_ERROR_MSG.HAS_TEAM_LOGO_IMAGE;
       }
 
       if (!teamSport) {

@@ -14,6 +14,7 @@ export const TEAM_VALID_ERROR_MSG = {
   IS_VALID_BIO_LEN: '세부 설명은 200자 이하로 작성해야합니다.',
   IS_TEAM_SPORT: '팀 종목을 선택해 주세요.',
   IS_TEAM_AGE_GROUP: '팀 연령대를 선택해 주세요.',
+  HAS_TEAM_LOGO_IMAGE: '사진을 첨부해 주세요',
 };
 
 export const validateTeamName = (teamName: string) => TEAM_REGEX.IS_VALID_NAME.test(teamName);

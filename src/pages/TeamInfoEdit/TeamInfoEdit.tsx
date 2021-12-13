@@ -29,11 +29,15 @@ const TeamInfoEdit = () => {
         history.push(`/teams/${result.teamId}`);
       }
     },
-    validate: ({ teamBio, teamAgeGroup }) => {
+    validate: ({ image, teamBio, teamAgeGroup }) => {
       const newErros = {} as any;
 
       if (!validateTeamBioLength(teamBio)) {
         newErros.teamBio = TEAM_VALID_ERROR_MSG.IS_VALID_BIO_LEN;
+      }
+
+      if (image.file === '') {
+        newErros.image = TEAM_VALID_ERROR_MSG.HAS_TEAM_LOGO_IMAGE;
       }
 
       if (!teamAgeGroup) {
