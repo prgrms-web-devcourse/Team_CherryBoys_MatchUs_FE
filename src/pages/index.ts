@@ -5,3 +5,6 @@ export { default as Users } from './Users/Users';
 export { default as Login } from './Login/Login';
 export { default as Setting } from './Setting/Setting';
 export { default as TeamMemberManage } from './TeamMemberManage/TeamMemberManage';
+export { default as Match } from './Match/MatchPage';
+export { default as NewMatch } from './NewMatch/NewMatchPage';
+export { default as EditMatch } from './EditMatch/EditMatchPage';
