@@ -53,7 +53,6 @@ export const matchListDummy = {
   },
 };
 
-
 export const matchDummy = {
   data: {
     matchId: 1,
@@ -65,13 +64,13 @@ export const matchDummy = {
       hour: 18,
       minute: 30,
       second: 0,
-      nano:0
+      nano: 0,
     },
     endTime: {
       hour: 20,
       minute: 30,
       second: 0,
-      nano:0
+      nano: 0,
     },
     cost: 30000,
     ageGroup: 'TEENAGER',
@@ -126,13 +125,13 @@ export const matchDummy2 = {
       hour: 18,
       minute: 30,
       second: 0,
-      nano:0
+      nano: 0,
     },
     endTime: {
       hour: 20,
       minute: 30,
       second: 0,
-      nano:0
+      nano: 0,
     },
     cost: 30000,
     ageGroup: 'TEENAGER',
@@ -209,7 +208,6 @@ export const matchDummy2 = {
     },
   },
 };
-
 
 export const userTeamDummy = {
   data: {
@@ -323,7 +321,6 @@ export const userTeamDummy = {
     ],
   },
 };
-
 
 export const WaitingTeamsDummy = {
   data: {
