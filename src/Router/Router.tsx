@@ -47,6 +47,7 @@ import {
   USER_MATCHING_LIST_PAGE,
   USER_TEAM_INVITAION_LIST_PAGE,
   USER_MERCENARY_INVITAION_LIST_PAGE,
+  NOT_FOUND_PAGE,
   HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
 
@@ -91,7 +92,7 @@ const Router: React.FC = () => {
       <Route path={TEAM_MATCHING_LIST_PAGE} exact component={MatchDetail} />
       <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
-      {/* <Route path={NOT_FOUND_PAGE} exact component={NotFound} /> */}
+      <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
       {/* <Route path={TEAM_SELECT_PAGE} exact component={} /> */}
       {/* <Route path={SIGNUP_PAGE} exact component={} />
       <Route path={LOGIN_PAGE} exact component={} />
