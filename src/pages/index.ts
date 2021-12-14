@@ -1,7 +1,16 @@
+export { default as MatchesPage } from './MatchesPage';
 export { default as Matches } from './Matches/Matches';
 export { default as Hires } from './Hires/Hires';
+export { default as HiresPage } from './HiresPage';
 export { default as Teams } from './Teams/Teams';
 export { default as Users } from './Users/Users';
 export { default as Login } from './Login/Login';
 export { default as Setting } from './Setting/Setting';
 export { default as TeamMemberManage } from './TeamMemberManage/TeamMemberManage';
+export { default as TeamDetail } from './TeamDetail/TeamDetail';
+export { default as MatchDetail } from './MatchDetail/MatchDetail';
+export { default as TeamCreate } from './TeamCreate/TeamCreate';
+export { default as TeamInfoEdit } from './TeamInfoEdit/TeamInfoEdit';
+// export { default as Match } from './Match/MatchPage';
+// export { default as NewMatch } from './NewMatch/NewMatchPage';
+// export { default as EditMatch } from './EditMatch/EditMatchPage';

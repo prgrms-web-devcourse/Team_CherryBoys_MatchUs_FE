@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { TeamMemberManage, TeamDetail, MatchDetail, TeamCreate, TeamInfoEdit } from '@/pages';
 
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -63,6 +64,26 @@ const Router: React.FC = () => {
       <Route path={TEAM_MEMBERS_PAGE} exact component={} />
       <Route path={TEAM_MEMBERS_EDIT_PAGE} exact component={} />
       <Route path={SIGNUP_PAGE} exact component={} />
+      {/* <Route path={MATCHES_EDIT_PAGE} exact component={} /> */}
+      {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
+      <Route path={HOME_PAGE} exact component={} />
+      <Route path={HIRES_PAGE} exact component={} />
+      <Route path={HIRES_DETAIL_PAGE} exact component={} />
+      <Route path={HIRES_POST_PAGE} exact component={} />
+      <Route path={HIRES_EDIT_PAGE} exact component={} />
+      <Route path={HIRES_CHAT_PAGE} exact component={} />
+      <Route path={HIRES_ACCEPT_PAGE} exact component={} /> */}
+      {/* <Route path={MATCHES_PAGE} exact component={Matches} />
+      <Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
+      <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      <Route path={MATCHES_EDIT_PAGE} exact component={EditMatch} /> */}
+      <Route path={TEAM_PAGE} exact component={TeamDetail} />
+      <Route path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
+      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={MatchDetail} />
+      <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
+      <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
+      {/* <Route path={TEAM_SELECT_PAGE} exact component={} /> */}
+      {/* <Route path={SIGNUP_PAGE} exact component={} />
       <Route path={LOGIN_PAGE} exact component={} />
       <Route path={SETTING_PAGE} exact component={} />
       <Route path={USER_PAGE} exact component={} />
