@@ -110,7 +110,7 @@ const NewMatch = () => {
   };
 
   const handleDetail = (e: React.SetStateAction<string>) => {
-    const targetInput = e as string;
+    const targetInput = e;
     setDetail(targetInput);
   };
 
@@ -169,15 +169,23 @@ const NewMatch = () => {
       day: '2-digit',
     });
 
-    if (dateResult.date < todayString || startDate > endDate || startTime > endTime) {
-      window.alert('시간을 다시 입력해주세요');
+    if (dateResult.date < todayString) {
+      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
+      return {};
+    }
+    if (startDate > endDate) {
+      window.alert('종료일자가 시작일자보다 빠를 수 없습니다');
+      return {};
+    }
+    if (startTime > endTime) {
+      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
       return {};
     }
 
     return dateResult;
   };
 
-  const onSubmit = () => {
+  const handleSubmitMatchInfo = () => {
     if (team === '' || team === placeholder) {
       window.alert('올바른 팀을 선택해주세요');
       return;
@@ -194,7 +202,6 @@ const NewMatch = () => {
     const matchDate = submitDate();
     if (selectedTeamWithUsers.players.length < userLimit) {
       window.alert('인원미달');
-      return;
     }
 
     const inputs: StringKey = {
@@ -364,7 +371,7 @@ const NewMatch = () => {
         onChange={(e) => handleDetail(e)}
       />
       <div className={classNames(buttonBox)}>
-        <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
+        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
           매칭 등록
         </button>
       </div>
