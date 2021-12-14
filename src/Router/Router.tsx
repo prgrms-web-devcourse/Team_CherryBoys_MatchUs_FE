@@ -1,6 +1,14 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { TeamMemberManage, TeamDetail, MatchDetail, TeamCreate, TeamInfoEdit } from '@/pages';
+import {
+  TeamMemberManage,
+  TeamDetail,
+  MatchDetail,
+  TeamCreate,
+  TeamInfoEdit,
+  Match,
+  Matches,
+} from '@/pages';
 
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -46,9 +54,9 @@ const Router: React.FC = () => {
       <Route path={HIRES_EDIT_PAGE} exact component={} />
       <Route path={HIRES_CHAT_PAGE} exact component={} />
       <Route path={HIRES_ACCEPT_PAGE} exact component={} /> */}
-      {/* <Route path={MATCHES_PAGE} exact component={Matches} />
-      <Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
+      <Route path={MATCHES_PAGE} exact component={Matches} />
       <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      {/* <<Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
       <Route path={MATCHES_EDIT_PAGE} exact component={EditMatch} /> */}
       <Route path={TEAM_PAGE} exact component={TeamDetail} />
       <Route path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
