@@ -32,3 +32,10 @@ export const requestCheckDuplicatedEmail = (email: string) =>
       url: `/users/email-check/${email}`,
     })
     .catch(throwErrorMessage);
+
+export const requestReAuth = () =>
+  api
+    .get({
+      url: '/users/reissue',
+    })
+    .catch(throwErrorMessage);
