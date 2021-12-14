@@ -9,8 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { Input, InputCheckBox, InputDetail } from '@/components';
 import { RootState } from '@/store';
-import { fetchTeamWithUser } from '@/store/match/match';
-import { fetchMatchById } from '@/store/posts/posts';
+import { fetchTeamWithUser, fetchMatchById } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
 import style from './EditMatch.module.scss';
 import { SPORTS, SPORTS_PLAYER, AGE_GROUP, CITIES, REGIONS, INPUT_DICITIONARY } from '@/consts';
@@ -34,7 +33,7 @@ const EditMatch = () => {
     dispatch(fetchMatchById(matchId));
     dispatch(fetchTeamWithUser(tokenDummy));
   });
-  const editedMatch = useSelector((store: RootState) => store.posts.data.match[0]);
+  const editedMatch = useSelector((store: RootState) => store.match.data.match[0]);
 
   const [nowDate, setNowDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState({
@@ -341,7 +340,7 @@ const EditMatch = () => {
         <div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              value={nowDate}
+              value={formattedDate.startTime}
               onChange={handleChangeStartDate}
               renderInput={(params) => <TextField {...params} />}
             />
