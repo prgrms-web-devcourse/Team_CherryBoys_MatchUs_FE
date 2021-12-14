@@ -14,20 +14,9 @@ const MatchDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
 
-  const previousMatch = matchHistory.filter((match) => {
-    if (match.status === 'previousMatch') return true;
-    return false;
-  });
-
-  const previousReview = matchHistory.filter((match) => {
-    if (match.status === 'previousReview') return true;
-    return false;
-  });
-
-  const endReview = matchHistory.filter((match) => {
-    if (match.status === 'endReview') return true;
-    return false;
-  });
+  const previousMatch = matchHistory.filter((match) => match.status === 'previousMatch');
+  const previousReview = matchHistory.filter((match) => match.status === 'previousReview');
+  const endReview = matchHistory.filter((match) => match.status === 'endReview');
 
   const [activeTabKey, setActiveTabKey] = useState<string>('beforeMatch');
 
