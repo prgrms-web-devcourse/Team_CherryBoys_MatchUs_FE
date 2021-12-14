@@ -1,21 +1,29 @@
-export const matches = {
+export const matchListDummy = {
   data: {
-    matches: [
+    matchList: [
       {
         matchId: 1,
         city: '서울특별시',
         region: '광진구',
         ground: '어린이대공원풋살장',
         date: '2021-12-25',
-        startTime: '10:30',
-        endTime: '12:30',
+        startTime: {
+          hour: 10,
+          minute: 30,
+          second: 0,
+        },
+        endTime: {
+          hour: 12,
+          minute: 30,
+          second: 0,
+        },
         cost: 30000,
-        ageGroup: '20s',
+        ageGroup: 'TEENAGER',
+        teamId: 125,
         teamLogo: 's3://aasdfasd',
         teamName: '데브코스',
         teamMannerTemperature: 36.1,
         sports: '축구',
-        status: '매칭전',
       },
       {
         matchId: 2,
@@ -23,23 +31,33 @@ export const matches = {
         region: '광진구',
         ground: '어린이대공원풋살장',
         date: '2021-12-25',
-        startTime: '10:30',
-        endTime: '12:30',
+        startTime: {
+          hour: 18,
+          minute: 30,
+          second: 0,
+        },
+        endTime: {
+          hour: 20,
+          minute: 30,
+          second: 0,
+        },
         cost: 30000,
-        ageGroup: '20s',
+        ageGroup: 'TWEINTIES',
+        teamId: 225,
         teamLogo: 's3://aasdfasd',
         teamName: '데브코스',
-        teamMannerTemperature: 36.1,
+        teamMannerTemperature: 56.1,
         sports: '축구',
-        status: '매칭전',
       },
     ],
   },
 };
+
 export interface TeamUser {
   userId: number;
   userName: string;
 }
+
 export interface Team {
   captainId?: number;
   captainName?: string;
@@ -57,15 +75,41 @@ export interface Match {
   region: string;
   ground: string;
   date: string;
-  startTime: string;
-  endTime: string;
+  startTime: {
+    hour: number;
+    minute: number;
+    second: number;
+    nano?: number;
+  };
+  endTime: {
+    hour: number;
+    minute: number;
+    second: number;
+    nano?: number;
+  };
   status: string;
   cost: number;
   ageGroup: string;
   sports: string;
   detail: string;
-  registerTeamResponse: Team;
-  applyTeamResponse?: Team;
+  registerTeamInfo: {
+    captainId: number;
+    captainName: string;
+    teamId: number;
+    teamLogo: string;
+    teamName: string;
+    mannerTemperature: number;
+    matchMembers: TeamUser[];
+  };
+  applyTeamInfo?: {
+    captainId: number;
+    captainName: string;
+    teamId: number;
+    teamLogo: string;
+    teamName: string;
+    mannerTemperature: number;
+    matchMembers: TeamUser[];
+  };
 }
 
 export interface MatchDetail {
@@ -79,20 +123,28 @@ export const matchDummy: MatchDetail = {
     region: '광진구',
     ground: '어린이대공원풋살장',
     date: '2021-12-25',
-    startTime: '10:30',
-    endTime: '12:30',
+    startTime: {
+      hour: 18,
+      minute: 30,
+      second: 0,
+    },
+    endTime: {
+      hour: 20,
+      minute: 30,
+      second: 0,
+    },
     cost: 30000,
-    ageGroup: '20s',
+    ageGroup: 'TEENAGER',
     sports: '풋살',
     detail: '어르신들환영',
-    status: '매칭전',
-    registerTeamResponse: {
+    status: 'WAITING',
+    registerTeamInfo: {
       captainId: 1,
       captainName: '꺼북이',
       teamId: 1,
       teamLogo: 's3://aasdfasd',
       teamName: '데브코스',
-      teamMannerTemperature: 36.1,
+      mannerTemperature: 36.1,
       matchMembers: [
         {
           userId: 1,
@@ -130,20 +182,28 @@ export const matchDummy2: MatchDetail = {
     region: '광진구',
     ground: '어린이대공원풋살장',
     date: '2021-12-25',
-    startTime: '10:30',
-    endTime: '12:30',
+    startTime: {
+      hour: 18,
+      minute: 30,
+      second: 0,
+    },
+    endTime: {
+      hour: 20,
+      minute: 30,
+      second: 0,
+    },
     cost: 30000,
-    ageGroup: '20s',
+    ageGroup: 'TEENAGER',
     sports: '풋살',
     detail: '어르신들환영',
     status: '매칭전',
-    registerTeamResponse: {
+    registerTeamInfo: {
       captainId: 1,
       captainName: '꺼북이',
       teamId: 1,
       teamLogo: 's3://aasdfasd',
       teamName: '데브코스',
-      teamMannerTemperature: 36.1,
+      mannerTemperature: 36.1,
       matchMembers: [
         {
           userId: 1,
@@ -171,13 +231,13 @@ export const matchDummy2: MatchDetail = {
         },
       ],
     },
-    applyTeamResponse: {
+    applyTeamInfo: {
       captainId: 5,
       captainName: '꼬부기',
       teamId: 2,
       teamLogo: 's3://aassbb',
       teamName: '머쓱',
-      teamMannerTemperature: 40.2,
+      mannerTemperature: 40.2,
       matchMembers: [
         {
           userId: 11,
@@ -243,11 +303,51 @@ export const userTeamDummy: TeamWithUser = {
         teamUsers: [
           {
             userId: 11,
-            userName: '쭝쭝',
+            userName: '쭝쭝1',
           },
           {
             userId: 12,
-            userName: '세호',
+            userName: '세호1',
+          },
+          {
+            userId: 21,
+            userName: '쭝쭝2',
+          },
+          {
+            userId: 22,
+            userName: '세호2',
+          },
+          {
+            userId: 31,
+            userName: '쭝쭝3',
+          },
+          {
+            userId: 32,
+            userName: '세호3',
+          },
+          {
+            userId: 41,
+            userName: '쭝쭝4',
+          },
+          {
+            userId: 42,
+            userName: '세호4',
+          },
+          {
+            userId: 51,
+            userName: '쭝쭝5',
+          },
+          {
+            userId: 52,
+            userName: '세호5',
+          },
+          {
+            userId: 61,
+            userName: '쭝쭝6',
+          },
+          {
+            userId: 62,
+            userName: '세호6',
           },
         ],
       },

@@ -32,7 +32,7 @@ const Posts = ({ isMatch }: PostWrapper) => {
         </button>
       </div>
       <ul className={classNames(postItems)}>
-        {data.matches.map((item, index) => (
+        {data.matchList.map((item, index) => (
           <PostItem item={item} key={`matchPost${index}`} />
         ))}
       </ul>

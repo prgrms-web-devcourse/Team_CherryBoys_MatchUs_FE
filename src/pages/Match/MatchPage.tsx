@@ -23,6 +23,7 @@ const { awayTeam, versus } = styles;
 const Match = () => {
   const dispatch = useDispatch();
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+
   const { match } = useSelector((store: RootState) => store.posts.data);
   const { modal } = useSelector((store: RootState) => store.match.data);
 
@@ -36,12 +37,12 @@ const Match = () => {
       {match.map((matchInfo) => (
         <Fragment key={`match${matchInfo.matchId}`}>
           <MatchInfo match={matchInfo} />
-          {matchInfo.registerTeamResponse && <TeamCard team={matchInfo.registerTeamResponse} />}
-          {!matchInfo.applyTeamResponse && <MatchDetail match={matchInfo} />}
-          {matchInfo.applyTeamResponse && (
+          {matchInfo.registerTeamInfo && <TeamCard team={matchInfo.registerTeamInfo} />}
+          {!matchInfo.applyTeamInfo && <MatchDetail match={matchInfo} />}
+          {matchInfo.applyTeamInfo && (
             <div className={classNames(awayTeam)}>
               <div className={classNames(versus)}>VS</div>
-              <TeamCard team={matchInfo.applyTeamResponse} />
+              <TeamCard team={matchInfo.applyTeamInfo} />
             </div>
           )}
         </Fragment>

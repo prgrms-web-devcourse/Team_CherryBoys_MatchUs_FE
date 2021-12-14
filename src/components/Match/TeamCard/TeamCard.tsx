@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { Team } from '@/dummyMatch';
 import styles from './TeamCard.module.scss';
 
 interface Props {
-  team: Team;
+  team: {
+    captainId?: number;
+    captainName?: string;
+    teamId: number;
+    teamLogo: string;
+    teamName: string;
+    mannerTemperature?: number;
+    teamMannerTemperature?: number;
+    matchMembers?: {
+      userId: number;
+      userName: string;
+    }[];
+    teamUsers?: {
+      userId: number;
+      userName: string;
+    }[];
+  };
 }
 
 const {
@@ -55,7 +70,9 @@ const TeamCard = ({ team }: Props) => {
           </div>
         </div>
         <div className={classNames(tags)}>
-          <div className={classNames(tag)}>{`${team.teamMannerTemperature}℃`}</div>
+          <div className={classNames(tag)}>{`${
+            team.mannerTemperature || team.teamMannerTemperature
+          }℃`}</div>
         </div>
       </div>
       <div className={classNames(teamUsers)}>

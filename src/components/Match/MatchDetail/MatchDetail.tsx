@@ -4,10 +4,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import styles from './MatchDetail.module.scss';
-import { deleteMatchById, PostItem } from '@/store/posts/posts';
+import { deleteMatchById } from '@/store/posts/posts';
+import { Match } from '@/dummyMatch';
 
 interface Props {
-  match: PostItem;
+  match: Match;
 }
 
 const {
