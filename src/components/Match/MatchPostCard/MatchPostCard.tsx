@@ -35,7 +35,7 @@ const MatchPostCard = ({ matchInfo }: Props) => {
     >
       <article className={classNames(postBox)}>
         <section className={classNames(postTeamLogo)}>
-          <img src={teamLogo} alt={`team logo`} />
+          <img src={teamLogo} alt="team logo" />
         </section>
         <section className={classNames(postInfos)}>
           <div>{`${date} ${startTime}`}</div>

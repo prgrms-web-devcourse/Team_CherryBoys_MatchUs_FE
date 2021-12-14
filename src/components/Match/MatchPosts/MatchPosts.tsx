@@ -25,7 +25,7 @@ const MatchPosts = () => {
   return (
     <div className={classNames(postsContainer)}>
       <div className={classNames(postTitleBox)}>
-        <span className={classNames(postTitle)}>{'모집중인 매치'}</span>
+        <span className={classNames(postTitle)}>모집중인 매치</span>
         <button className={classNames(filterPostButton)} type="button">
           <i className="fas fa-filter" />
         </button>

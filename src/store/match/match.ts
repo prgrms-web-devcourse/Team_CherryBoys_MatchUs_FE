@@ -1,10 +1,17 @@
+/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {MatchCard,Match,
+import {
+  MatchCard,
+  Match,
   TeamWithUser,
   TeamSimple,
   WaitingTeam,
-  WaitingTeams,} from '@/types/match'
-import {  matchListDummy, matchDummy, matchDummy2,
+  WaitingTeams,
+} from '@/types/match';
+import {
+  matchListDummy,
+  matchDummy,
+  matchDummy2,
   userTeamDummy,
   WaitingTeamsDummy,
 } from '@/dummyMatch';

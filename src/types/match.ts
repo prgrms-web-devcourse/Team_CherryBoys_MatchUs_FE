@@ -7,13 +7,13 @@ export interface MatchCard {
   startTime: {
     hour: number;
     minute: number;
-    second:number;
-  },
+    second: number;
+  };
   endTime: {
     hour: number;
     minute: number;
-    second:number;
-  },
+    second: number;
+  };
   cost: number;
   ageGroup: string;
   teamId: number;
@@ -86,7 +86,6 @@ export interface MatchDetail {
   data: Match;
 }
 
-
 export interface TeamSimple {
   teamId: number;
   teamName: string;
@@ -98,7 +97,6 @@ export interface TeamWithUser {
     teams: TeamSimple[];
   };
 }
-
 
 export interface WaitingTeam {
   teamWaitingId: number;
@@ -114,4 +112,3 @@ export interface WaitingTeams {
     waitingTeams: WaitingTeam[];
   };
 }
-

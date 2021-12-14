@@ -14,7 +14,7 @@ const { matchButtonBox, matchButton, approveButton, applyButton, show } = styles
 const MatchButton = ({ enable }: Props) => {
   const dispatch = useDispatch();
 
-  const onToggle = (modal: any) => {
+  const onToggle = (modal: string) => {
     dispatch(match.actions.toggleModal({ modalName: modal }));
   };
 
