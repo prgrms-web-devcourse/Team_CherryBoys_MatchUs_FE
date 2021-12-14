@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
+import { useHistory } from 'react-router-dom';
 import { HTTP_METHODS } from '@/consts';
+import { getItemFromStorage, removeItemFromStorage } from '@/utils/storage';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://api.helltabus.com',
+  baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com/',
   timeout: 5000,
 });
 
@@ -11,16 +14,34 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  axiosInstance.defaults.headers.common.Authorization = process.env.DUMMY_TOKEN ?? '';
+  const token = getItemFromStorage('accessToken');
+  axiosInstance.defaults.headers.common.token = token || '';
 }
 
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
       if (!response.data) return response;
-      return response.data;
+      return response.data.data;
+    });
+
+    _axiosInstance.interceptors.request.use((requestConfig: AxiosRequestConfig) => {
+      const token = getItemFromStorage('accessToken');
+
+      if (token) {
+        const expireTime: number = getItemFromStorage('expireTime');
+
+        const nowDate = new Date().getTime();
+
+        if (nowDate - expireTime < 0) {
+          removeItemFromStorage('accessToken');
+          removeItemFromStorage('expireTime');
+          window.history.pushState('', '', '/login');
+        }
+      }
+
+      return requestConfig;
     });
 
     return _axiosInstance({
