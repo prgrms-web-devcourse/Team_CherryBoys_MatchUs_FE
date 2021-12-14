@@ -46,17 +46,20 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
   };
 
   const onSubmit = () => {
-    const selectedSkillTags = Object.entries(selectedTags.skill).reduce((acc: string[], cur) => {
-      if (cur[1]) acc.push(cur[0]);
-      return acc;
+    const skillTags = Object.entries(selectedTags.skill);
+    const selectedSkillTags = skillTags.reduce((selected: string[], tag) => {
+      if (tag[1]) selected.push(tag[0]);
+      return selected;
     }, []);
-    const selectedGoodTags = Object.entries(selectedTags.good).reduce((acc: string[], cur) => {
-      if (cur[1]) acc.push(cur[0]);
-      return acc;
+    const goodTags = Object.entries(selectedTags.good);
+    const selectedGoodTags = goodTags.reduce((selected: string[], tag) => {
+      if (tag[1]) selected.push(tag[0]);
+      return selected;
     }, []);
-    const selectedBadTags = Object.entries(selectedTags.bad).reduce((acc: string[], cur) => {
-      if (cur[1]) acc.push(cur[0]);
-      return acc;
+    const badTags = Object.entries(selectedTags.bad);
+    const selectedBadTags = badTags.reduce((selected: string[], tag) => {
+      if (tag[1]) selected.push(tag[0]);
+      return selected;
     }, []);
     const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
 
