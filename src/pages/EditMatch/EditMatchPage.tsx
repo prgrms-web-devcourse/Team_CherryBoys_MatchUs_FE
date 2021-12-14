@@ -137,7 +137,7 @@ const EditMatch = () => {
   };
 
   const handleDetail = (e: React.SetStateAction<string>) => {
-    const targetInput = e as string;
+    const targetInput = e;
     setDetail(targetInput);
   };
 
@@ -195,15 +195,19 @@ const EditMatch = () => {
       day: '2-digit',
     });
 
-    if (dateResult.date < todayString || startTime > endTime) {
-      window.alert('시간을 다시 입력해주세요');
+    if (dateResult.date < todayString) {
+      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
+      return {};
+    }
+    if (startTime > endTime) {
+      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
       return {};
     }
 
     return dateResult;
   };
 
-  const onSubmit = () => {
+  const handleSubmitMatchInfo = () => {
     if (team === '') {
       window.alert('올바른 팀을 선택해주세요');
       return;
@@ -367,7 +371,7 @@ const EditMatch = () => {
       />
       <InputDetail labelName="상세정보" placeholder={detail} onChange={(e) => handleDetail(e)} />
       <div className={classNames(buttonBox)}>
-        <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
+        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
           매칭 수정
         </button>
       </div>
