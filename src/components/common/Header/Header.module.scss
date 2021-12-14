@@ -1,0 +1,48 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 4.2rem;
+  background: #f3f3f3;
+
+  div {
+    display: flex;
+    align-items: center;
+    min-width: 4.2rem;
+
+    button {
+      width: 100%;
+      padding: 0.4rem;
+      background: none;
+    }
+
+    i {
+      color: #777777;
+      font-size: 1.6rem;
+    }
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      color: #777777;
+      font-size: 1.6rem;
+    }
+
+    &.rightButtonBox {
+      button {
+        width: fit-content;
+        margin: 0 0.4rem;
+        &.goLoginPageButton {
+          padding: 0.4rem 0.8rem;
+          border: 0.2rem solid #56ad79;
+          border-radius: 0.5rem;
+        }
+      }
+    }
+  }
+}

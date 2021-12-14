@@ -1,18 +1,14 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import HiresPage from './pages/HiresPage';
-import MatchesPage from './pages/MatchesPage';
+import { BrowserRouter } from 'react-router-dom';
+import Router from './Router/Router';
+import { DefaultTemplate } from '@/components';
 
 const App = () => {
   return (
-    <Switch>
-      <Route path="/matches">
-        <MatchesPage />
-      </Route>
-      <Route path="/hires">
-        <HiresPage />
-      </Route>
-    </Switch>
+    <BrowserRouter>
+      <DefaultTemplate>
+        <Router />
+      </DefaultTemplate>
+    </BrowserRouter>
   );
 };
 
