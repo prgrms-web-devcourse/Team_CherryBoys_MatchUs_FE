@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import axios from 'axios';
 
@@ -66,19 +67,15 @@ export const posts = createSlice({
   reducers: {},
   extraReducers: {
     [fetchAllPost.pending.type]: (state: PostsState) => {
-      // eslint-disable-next-line no-param-reassign
       state.data = [];
     },
     [fetchAllPost.fulfilled.type]: (state: PostsState, action: PayloadAction<PostItem[]>) => {
-      // eslint-disable-next-line no-param-reassign
       state.data = action.payload;
     },
     [fetchAllMatch.pending.type]: (state: PostsState) => {
-      // eslint-disable-next-line no-param-reassign
       state.data = [];
     },
     [fetchAllMatch.fulfilled.type]: (state: PostsState, action: PayloadAction<PostItem[]>) => {
-      // eslint-disable-next-line no-param-reassign
       state.data = action.payload;
     },
   },
