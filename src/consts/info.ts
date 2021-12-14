@@ -3,7 +3,7 @@ export const SPORTS_CATEGORY = [
   { id: 'FUTSAL', name: '풋살' },
 ];
 
-export const AGE_GROUP = ['10', '20', '30', '40', '50', '60', '70'];
+export const AGE_GROUP = ['10대', '20대', '30대', '40대', '50대', '60대'];
 
 export const SPORTS = ['축구', '풋살'];
 

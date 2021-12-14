@@ -210,7 +210,7 @@ const NewMatch = () => {
     const inputsKeys = Object.keys(inputs);
 
     const badValues = [placeholder, '행정구역', '시/군/구', '구장', ''];
-
+    console.log(inputs);
     for (let i = 0; i < inputsKeys.length; i += 1) {
       if (badValues.includes(inputs[inputsKeys[i]] as string) && inputsKeys[i] !== 'detail') {
         window.alert(`${INPUT_DICITIONARY[inputsKeys[i]]}을(를) 입력해주세요`);
@@ -235,7 +235,6 @@ const NewMatch = () => {
       window.alert('참가비는 숫자만 입력할 수 있습니다');
       return;
     }
-
     // api 요청 바디
     console.log(requestData);
   };
@@ -356,6 +355,7 @@ const NewMatch = () => {
         inputId="inputCost"
         labelName="참가비"
         type="text"
+        value={cost}
         onChange={(e) => handleInput(e, 'cost')}
       />
       <InputDetail
