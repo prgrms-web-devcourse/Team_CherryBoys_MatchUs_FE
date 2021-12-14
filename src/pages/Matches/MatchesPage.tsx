@@ -10,7 +10,7 @@ const MatchesPage = () => {
     dispatch(fetchAllMatch());
   }, [dispatch]);
 
-  return <MatchPosts isMatch />;
+  return <MatchPosts />;
 };
 
 export default MatchesPage;

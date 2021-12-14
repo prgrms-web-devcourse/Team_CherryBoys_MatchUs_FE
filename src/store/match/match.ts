@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { Match, matchListDummy, matchDummy, matchDummy2,
+import { MatchCard,Match, matchListDummy, matchDummy, matchDummy2,
   TeamWithUser,
   userTeamDummy,
   TeamSimple,
@@ -57,69 +56,10 @@ export interface Team {
   teamUsers?: TeamUser[];
 }
 
-export interface PostWrapper {
-  isMatch: boolean;
-}
-
-export interface Post {
-  item: PostItem;
-}
-
-export interface PostItem {
-  matchId?: number;
-  postId?: number;
-  city: string;
-  region: string;
-  ground: string;
-  date: string;
-  startTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano?: number;
-  };
-  endTime?: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano?: number;
-  };
-  cost?: number;
-  position?: string;
-  ageGroup: string;
-  teamLogo?: string;
-  teamName?: string;
-  teamMannerTemperature?: string;
-  teamId?: number;
-  homeTeam?: Team;
-  awayTeam?: Team;
-  detail?: string;
-  teamUsers?: TeamUser[];
-  sports?: string;
-  status?: string;
-  registerTeamInfo?: {
-    captainId: number;
-    captainName: string;
-    teamId: number;
-    teamLogo: string;
-    teamName: string;
-    mannerTemperature: number;
-    matchMembers: TeamUser[];
-  };
-  applyTeamInfo?: {
-    captainId: number;
-    captainName: string;
-    teamId: number;
-    teamLogo: string;
-    teamName: string;
-    mannerTemperature: number;
-    matchMembers: TeamUser[];
-  };
-}
 
 interface MatchState {
   data: {
-    matchList: Match[];
+    matchList: MatchCard[];
     match: Match[];
     userTeams: TeamSimple[];
     waitingTeams: WaitingTeam[];

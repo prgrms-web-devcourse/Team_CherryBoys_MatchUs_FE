@@ -6,12 +6,11 @@ import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
 import { MatchPostCard } from '@/components';
 import style from './MatchPosts.module.scss';
-import { PostWrapper } from '@/store/match/match';
 
 const { postsContainer, postTitleBox, postTitle, filterPostButton, postItems, addPostButton } =
   style;
 
-const MatchPosts = ({ isMatch }: PostWrapper) => {
+const MatchPosts = () => {
   const { matchList } = useSelector((state: RootState) => state.match.data);
   const history = useHistory();
 
@@ -20,20 +19,20 @@ const MatchPosts = ({ isMatch }: PostWrapper) => {
     if (!['주장', '부주장'].includes(grade)) {
       return;
     }
-    history.push(`/${isMatch ? 'matches' : 'hires'}/post/new`);
+    history.push('/matches/post/new');
   };
 
   return (
     <div className={classNames(postsContainer)}>
       <div className={classNames(postTitleBox)}>
-        <span className={classNames(postTitle)}>{`모집중인 ${isMatch ? '매치' : '용병'}`}</span>
+        <span className={classNames(postTitle)}>{'모집중인 매치'}</span>
         <button className={classNames(filterPostButton)} type="button">
           <i className="fas fa-filter" />
         </button>
       </div>
       <ul className={classNames(postItems)}>
-        {matchList.map((item, index) => (
-          <MatchPostCard item={item} key={`matchPost${index}`} />
+        {matchList.map((matchInfo, index) => (
+          <MatchPostCard matchInfo={matchInfo} key={`matchPost${index}`} />
         ))}
       </ul>
       <button

@@ -3,47 +3,46 @@ import React from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import style from './MatchPostCard.module.scss';
-import { Post } from '@/store/match/match';
+import { MatchCard } from '@/dummyMatch';
 
 const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
 
-const MatchPostCard = ({ item }: Post) => {
+interface Props {
+  matchInfo: MatchCard;
+}
+
+const MatchPostCard = ({ matchInfo }: Props) => {
   const history = useHistory();
 
   const {
     matchId,
-    postId,
-    teamLogo,
-    date,
-    startTime,
     city,
     region,
     ground,
-    position,
+    date,
+    startTime,
     cost,
     ageGroup,
+    teamLogo,
     teamMannerTemperature,
-  } = item;
-
-  const isMatching = Object.prototype.hasOwnProperty.call(item, 'matchId');
+  } = matchInfo;
 
   return (
     <li
-      key={isMatching ? matchId : postId}
       onClick={() => history.push(`/matches/post/${matchId}`)}
       role="presentation"
       className={classNames(postCard)}
     >
       <article className={classNames(postBox)}>
         <section className={classNames(postTeamLogo)}>
-          <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />
+          <img src={teamLogo} alt={`team logo`} />
         </section>
         <section className={classNames(postInfos)}>
           <div>{`${date} ${startTime}`}</div>
           <div>{`${city} ${region} ${ground}`}</div>
           <div className={classNames(postTags)}>
-            <span>{isMatching ? `${cost}원` : position}</span>
-            <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
+            <span>{`${cost}원`}</span>
+            <span>{ageGroup}</span>
             <span>{teamMannerTemperature}</span>
           </div>
         </section>

@@ -1,3 +1,28 @@
+export interface MatchCard {
+  matchId: number;
+  city: string;
+  region: string;
+  ground: string;
+  date: string;
+  startTime: {
+    hour: number;
+    minute: number;
+    second:number;
+  },
+  endTime: {
+    hour: number;
+    minute: number;
+    second:number;
+  },
+  cost: number;
+  ageGroup: string;
+  teamId: number;
+  teamLogo: string;
+  teamName: string;
+  teamMannerTemperature: number;
+  sports: string;
+}
+
 export const matchListDummy = {
   data: {
     matchList: [
