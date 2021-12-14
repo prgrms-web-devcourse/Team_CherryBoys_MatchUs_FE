@@ -58,6 +58,7 @@ export interface userGradeType {
 export interface userType {
   isLogged: boolean;
   accessToken: string | null;
+  expireTime: number | null;
   userInfo: null | {
     ageGroup: string;
     bio: null | string;
