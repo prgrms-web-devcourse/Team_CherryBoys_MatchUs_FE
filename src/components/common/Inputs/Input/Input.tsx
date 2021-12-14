@@ -92,7 +92,7 @@ const Input = ({
                 background: inputContentBackgroundColor,
                 cursor: inputContentCursor,
               }}
-              value={value || ''}
+              value={value}
             />
           </div>
         )}

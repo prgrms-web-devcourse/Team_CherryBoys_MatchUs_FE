@@ -67,10 +67,14 @@ const EditMatch = () => {
       setRegion(editedMatch.region);
       setGround(editedMatch.ground);
       setCost(editedMatch.cost || 0);
-      setTeam(editedMatch.registerTeamResponse?.teamName || '');
+      setTeam(editedMatch.registerTeamInfo?.teamName || '');
       setDetail(editedMatch.detail || '');
-      const prevStartTime = new Date(`${editedMatch.date} ${editedMatch.startTime}`);
-      const prevEndTime = new Date(`${editedMatch.date} ${editedMatch.endTime}`);
+      const prevStartTime = new Date(
+        `${editedMatch.date} ${editedMatch.startTime.hour}:${editedMatch.startTime.minute}:${editedMatch.startTime.second}`
+      );
+      const prevEndTime = new Date(
+        `${editedMatch.date} ${editedMatch.endTime.hour}:${editedMatch.endTime.minute}:${editedMatch.endTime.second}`
+      );
 
       setFormattedDate({
         startDate: prevStartTime,
