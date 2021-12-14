@@ -11,6 +11,7 @@ const NotFound = () => {
 
   return (
     <div className={classNames(componentContainer)}>
+      <h1 className={classNames('s_a11yHidden')}>Not Found 페이지</h1>
       <div>
         <img src={errorIcon} alt="에러 아이콘" />
       </div>
