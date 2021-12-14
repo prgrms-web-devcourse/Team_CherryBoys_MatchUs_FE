@@ -15,10 +15,11 @@ interface Props {
   memberInfo: MemberElementType[];
   hasAuthorization: boolean;
   isEditing: boolean;
+  hasCategoryTitle?: boolean;
   handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
-  handleChangeMemberGrade: React.ChangeEventHandler<HTMLSelectElement>;
-  handleSubmitDeletedMember: React.FormEventHandler<HTMLFormElement>;
-  handleChangeEditButtonStatus: React.MouseEventHandler<HTMLButtonElement>;
+  handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
+  handleSubmitDeletedMember?: React.FormEventHandler<HTMLFormElement>;
+  handleChangeEditButtonStatus?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const { categoryTitle, playerDetailInfo } = style;
@@ -28,6 +29,7 @@ const MemberList = ({
   memberInfo,
   hasAuthorization,
   isEditing,
+  hasCategoryTitle,
   handleAddDeletedMembers,
   handleChangeMemberGrade,
   handleSubmitDeletedMember,
@@ -45,7 +47,9 @@ const MemberList = ({
       <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
         {/* article Header */}
         <div>
-          <p className={classNames(categoryTitle)}>{isMember ? '팀원' : '용병'} 정보</p>
+          {hasCategoryTitle && (
+            <p className={classNames(categoryTitle)}>{isMember ? '팀원' : '용병'} 정보</p>
+          )}
           {hasAuthorization && (
             <button type="button" onClick={handleChangeEditButtonStatus}>
               {isEditing ? '완료' : '수정'}
