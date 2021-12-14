@@ -217,7 +217,7 @@ const NewMatch = () => {
     const inputsKeys = Object.keys(inputs);
 
     const badValues = [placeholder, '행정구역', '시/군/구', '구장', ''];
-    console.log(inputs);
+
     for (let i = 0; i < inputsKeys.length; i += 1) {
       if (badValues.includes(inputs[inputsKeys[i]] as string) && inputsKeys[i] !== 'detail') {
         window.alert(`${INPUT_DICITIONARY[inputsKeys[i]]}을(를) 입력해주세요`);
