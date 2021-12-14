@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import style from './MatchPostCard.module.scss';
-import { MatchCard } from '@/dummyMatch';
+import { MatchCard } from '@/types/match';
 
 const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
 

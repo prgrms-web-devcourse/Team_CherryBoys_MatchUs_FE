@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import styles from './MatchDetail.module.scss';
 import { deleteMatchById } from '@/store/match/match';
-import { Match } from '@/dummyMatch';
+import { Match } from '@/types/match';
 
 interface Props {
   match: Match;

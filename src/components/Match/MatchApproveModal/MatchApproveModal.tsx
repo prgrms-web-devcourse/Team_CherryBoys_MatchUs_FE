@@ -6,7 +6,7 @@ import { TeamCard } from '@/components';
 import { RootState } from '@/store';
 import { fetchWaitingTeams, match } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
-import { WaitingTeam } from '@/dummyMatch';
+import { WaitingTeam } from '@/types/match';
 
 const {
   modalBackground,

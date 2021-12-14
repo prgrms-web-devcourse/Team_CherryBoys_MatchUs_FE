@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MatchCard,Match, matchListDummy, matchDummy, matchDummy2,
+import {MatchCard,Match,
   TeamWithUser,
-  userTeamDummy,
   TeamSimple,
   WaitingTeam,
-  WaitingTeams,
+  WaitingTeams,} from '@/types/match'
+import {  matchListDummy, matchDummy, matchDummy2,
+  userTeamDummy,
   WaitingTeamsDummy,
 } from '@/dummyMatch';
 
@@ -38,24 +39,6 @@ export const fetchWaitingTeams = createAsyncThunk(
     return WaitingTeamsDummy;
   }
 );
-
-
-interface TeamUser {
-  userId: number;
-  userName: string;
-}
-
-export interface Team {
-  captainId?: number;
-  captainName?: string;
-  teamId: number;
-  teamLogo: string;
-  teamName: string;
-  teamMannerTemperature: number;
-  matchMembers?: TeamUser[];
-  teamUsers?: TeamUser[];
-}
-
 
 interface MatchState {
   data: {

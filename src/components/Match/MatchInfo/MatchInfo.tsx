@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Match } from '@/dummyMatch';
+import { Match } from '@/types/match';
 import styles from './MatchInfo.module.scss';
 
 interface Props {
