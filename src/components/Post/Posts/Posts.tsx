@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { RootState } from '@/store/index';
-import PostItem from './PostItem';
+import { PostItem } from '..';
 import style from './posts.module.scss';
 import { PostWrapper } from '@/store/posts';
 
