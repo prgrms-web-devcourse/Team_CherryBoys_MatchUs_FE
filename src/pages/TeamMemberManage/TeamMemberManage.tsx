@@ -168,10 +168,10 @@ const TeamMemberManage = () => {
     // }
     // TODO: API 연결 시, 주석 제거 예정
     // const getPeopleInfo = async () => {
-    //   const { data } = await api.get({
+    //   const result= await api.get({
     //     url: `/teams/${teamId}/${memberType}`,
     //   });
-    //   setMemberInfo(data);
+    //   setMemberInfo(result);
     // };
     // getPeopleInfo();
   }, []);
