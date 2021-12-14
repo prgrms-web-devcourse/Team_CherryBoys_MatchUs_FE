@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { HTTP_METHODS } from '@/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://api.helltabus.com',
+  baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com',
   timeout: 5000,
 });
 
