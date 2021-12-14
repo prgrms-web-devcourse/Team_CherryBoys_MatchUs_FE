@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
 import { HTTP_METHODS } from '@/consts';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://api.helltabus.com',
+  baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com',
   timeout: 5000,
 });
 
@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  axiosInstance.defaults.headers.common.Authorization = process.env.DUMMY_TOKEN ?? '';
+  axiosInstance.defaults.headers.common.token = process.env.DUMMY_TOKEN ?? '';
 }
 
 const createApiMethod =
@@ -20,7 +20,7 @@ const createApiMethod =
   (config: AxiosRequestConfig): Promise<any> => {
     _axiosInstance.interceptors.response.use((response) => {
       if (!response.data) return response;
-      return response.data;
+      return response.data.data;
     });
 
     return _axiosInstance({
