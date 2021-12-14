@@ -24,6 +24,13 @@ const PostItem = ({ item }: Post) => {
 
   const isMatching = Object.prototype.hasOwnProperty.call(item, 'matchId');
 
+  /**
+   * Todo(홍중) :
+   * 모달 컴포넌트 merge되면 카드뷰 형태로 만들기
+   * 모달 컴포넌트 mrege되면 필터 완성하기
+   * (2021-12-14)
+   */
+
   return (
     <>
       <li>
