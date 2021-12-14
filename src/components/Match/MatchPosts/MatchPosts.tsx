@@ -19,7 +19,7 @@ const MatchPosts = () => {
     if (!['주장', '부주장'].includes(grade)) {
       return;
     }
-    history.push('/matches/post/new');
+    history.push('/matches/new');
   };
 
   return (

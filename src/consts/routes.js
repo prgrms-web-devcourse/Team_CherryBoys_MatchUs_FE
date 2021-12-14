@@ -12,7 +12,7 @@ export const HIRES_ACCEPT_PAGE = '/hires/accept/:postId';
 
 // 매칭
 export const MATCHES_PAGE = '/matches/';
-export const MATCHES_POST_PAGE = '/matches/post/new';
+export const MATCHES_POST_PAGE = '/matches/new';
 export const MATCHES_DETAIL_PAGE = '/matches/post/:postId';
 export const MATCHES_EDIT_PAGE = '/matches/edit/:postId';
 
