@@ -60,9 +60,7 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
     }, []);
     const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
 
-    // Parameters
-    // Path = matchId: Number, teamId: Number (상대팀: 추후 추가)
-    // Body = Tags: Array
+    // TODO: 매칭 평가 API 요청
     console.log(matchId, totalSelectedTags);
     // dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
   };

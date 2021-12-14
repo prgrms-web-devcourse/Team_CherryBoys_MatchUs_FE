@@ -3,6 +3,7 @@ export const HOME_PAGE = '/';
 
 // 용병
 export const HIRES_PAGE = '/hires';
+export const HIRES_FILTER_PAGE = '/hires/filter'; // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 export const HIRES_DETAIL_PAGE = '/hires/:postId';
 export const HIRES_POST_PAGE = '/hires/post/new';
 export const HIRES_EDIT_PAGE = '/hires/edit/:postId';
@@ -21,7 +22,7 @@ export const TEAM_CREATE_PAGE = '/team/new';
 export const TEAM_MATCHING_LIST_PAGE = '/team/:teamId/match';
 export const TEAM_EDIT_PAGE = '/team/:teamId/edit';
 export const TEAM_SELECT_PAGE = '/team/select';
-export const TEAM_MEMBERS_PAGE = '/team/:teamId/member';
+export const TEAM_MEMBERS_PAGE = '/team/:teamId/:memberType';
 export const TEAM_MEMBERS_EDIT_PAGE = '/team/:teamId/member/edit';
 
 // 회원

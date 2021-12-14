@@ -52,8 +52,7 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
       return;
     }
 
-    // Parameters
-    // Path = waitingId: Number
+    // TODO: 매칭수락 API 요청
     console.log(`teamId:${selectedTeam.teamWaitingId}`, selectedTeam);
     // dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
   };

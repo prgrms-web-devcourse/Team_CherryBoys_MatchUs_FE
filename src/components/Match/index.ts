@@ -1,3 +1,5 @@
+export { default as MatchPosts } from './MatchPosts/MatchPosts';
+export { default as MatchPostCard } from './MatchPostCard/MatchPostCard';
 export { default as MatchDetail } from './MatchDetail/MatchDetail';
 export { default as MatchInfo } from './MatchInfo/MatchInfo';
 export { default as MatchButton } from './MatchButton/MatchButton';

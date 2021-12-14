@@ -76,16 +76,16 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
 
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((team) => team.teamName === selectedTeam)[0].teamId,
-      players: selectedTeamUsers.filter((user) => user.userName && teamMembers[user.userName]),
+      players: selectedTeamUsers
+        .filter((user) => user.userName && teamMembers[user.userName])
+        .map((user) => user.userId),
     };
     if (selectedTeamWithUsers.players.length !== userLimit) {
       window.alert('인원미달');
       return;
     }
 
-    // Parameters
-    // Path = matchId
-    // Body = teamId: Number, players: Array
+    // TODO: 매칭 신청 API 요청
     console.log(matchId, selectedTeamWithUsers);
     // dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
   };

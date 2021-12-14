@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchAllMatch } from '@/store/posts/posts';
-import { Posts } from '@/components';
+import { fetchAllMatch } from '@/store/match/match';
+import { MatchPosts } from '@/components';
 
 const MatchesPage = () => {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ const MatchesPage = () => {
     dispatch(fetchAllMatch());
   }, [dispatch]);
 
-  return <Posts isMatch />;
+  return <MatchPosts isMatch />;
 };
 
 export default MatchesPage;

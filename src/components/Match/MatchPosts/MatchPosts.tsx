@@ -4,18 +4,18 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
-import style from './posts.module.scss';
-import { PostItem } from '@/components';
-import { PostWrapper } from '@/store/posts/posts';
+import { MatchPostCard } from '@/components';
+import style from './MatchPosts.module.scss';
+import { PostWrapper } from '@/store/match/match';
 
 const { postsContainer, postTitleBox, postTitle, filterPostButton, postItems, addPostButton } =
   style;
 
-const Posts = ({ isMatch }: PostWrapper) => {
-  const { data } = useSelector((state: RootState) => state.posts);
+const MatchPosts = ({ isMatch }: PostWrapper) => {
+  const { matchList } = useSelector((state: RootState) => state.match.data);
   const history = useHistory();
 
-  // 사용자의 권한을 체크하는 로직 추가 필요
+  // TODO:사용자의 권한을 체크하는 로직 추가 필요
   const handelCheckUserAuthority = (grade: string) => {
     if (!['주장', '부주장'].includes(grade)) {
       return;
@@ -32,8 +32,8 @@ const Posts = ({ isMatch }: PostWrapper) => {
         </button>
       </div>
       <ul className={classNames(postItems)}>
-        {data.matchList.map((item, index) => (
-          <PostItem item={item} key={`matchPost${index}`} />
+        {matchList.map((item, index) => (
+          <MatchPostCard item={item} key={`matchPost${index}`} />
         ))}
       </ul>
       <button
@@ -47,4 +47,4 @@ const Posts = ({ isMatch }: PostWrapper) => {
   );
 };
 
-export default Posts;
+export default MatchPosts;

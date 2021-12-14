@@ -2,12 +2,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
-import style from './postItem.module.scss';
-import { Post } from '@/store/posts/posts';
+import style from './MatchPostCard.module.scss';
+import { Post } from '@/store/match/match';
 
 const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
 
-const PostItem = ({ item }: Post) => {
+const MatchPostCard = ({ item }: Post) => {
   const history = useHistory();
 
   const {
@@ -52,4 +52,4 @@ const PostItem = ({ item }: Post) => {
   );
 };
 
-export default PostItem;
+export default MatchPostCard;
