@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  axiosInstance.defaults.headers.common.Authorization = process.env.DUMMY_TOKEN ?? '';
+  axiosInstance.defaults.headers.common.token = process.env.DUMMY_TOKEN ?? '';
 }
 
 const createApiMethod =
