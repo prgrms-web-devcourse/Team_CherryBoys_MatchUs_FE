@@ -81,7 +81,7 @@ const MatchDetail = () => {
                         <span className={classNames('whiteSpace')}>
                           경기 모집 글을 올리러 가볼까요?
                         </span>
-                        <Link to="/teams">경기 등록</Link>
+                        <Link to="/matches/new">경기 등록</Link>
                       </p>
                     )}
                   </div>
