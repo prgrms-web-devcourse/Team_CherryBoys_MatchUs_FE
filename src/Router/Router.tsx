@@ -41,12 +41,39 @@ import {
   USER_TEAM_INVITAION_LIST_PAGE,
   USER_MERCENARY_INVITAION_LIST_PAGE,
   NOT_FOUND_PAGE,
+  HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
 import AuthorizedRouter from './AuthorizedRoute';
+import Hires from '@/pages/Hires/Hires';
+import HiresDetail from '@/pages/HiresDetail/HiresDetail';
+import HiresCreate from '@/pages/HiresCreate/HiresCreate';
+import HiresEdit from '@/pages/HiresEdit/HiresEdit';
+import HiresAccept from '@/pages/HiresAccept/HiresAccept';
+import HiresFilter from '@/pages/HiresFilter/HiresFilter';
 
 const Router: React.FC = () => {
   return (
     <Switch>
+      <Route path={HIRES_PAGE} exact component={Hires} />
+      <Route path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
+      <Route path={HIRES_POST_PAGE} exact component={HiresCreate} />
+      <Route path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
+      <Route path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
+      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
+      {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
+      <Route path={HOME_PAGE} exact component={} />
+      <Route path={MATCHES_PAGE} exact component={} />
+      <Route path={MATCHES_POST_PAGE} exact component={} />
+      <Route path={MATCHES_DETAIL_PAGE} exact component={} />
+      <Route path={MATCHES_EDIT_PAGE} exact component={} />
+      <Route path={TEAM_PAGE} exact component={} />
+      <Route path={TEAM_CREATE_PAGE} exact component={} />
+      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={} />
+      <Route path={TEAM_EDIT_PAGE} exact component={} />
+      <Route path={TEAM_SELECT_PAGE} exact component={} />
+      <Route path={TEAM_MEMBERS_PAGE} exact component={} />
+      <Route path={TEAM_MEMBERS_EDIT_PAGE} exact component={} />
+      <Route path={SIGNUP_PAGE} exact component={} />
       {/* <Route path={MATCHES_EDIT_PAGE} exact component={} /> */}
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
       <Route path={HOME_PAGE} exact component={} />
