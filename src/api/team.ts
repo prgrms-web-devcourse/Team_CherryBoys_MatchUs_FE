@@ -79,14 +79,6 @@ export const editTeamInfo = ({ image, teamBio, teamAgeGroup, teamId }: EditTeamI
   });
 };
 
-export const deleteTeamMembers = (teamId: number, memberInfo: MemberElement[]) =>
-  api
-    .delete({
-      url: `teams/${teamId}`,
-      data: { memberInfo },
-    })
-    .catch(throwErrorMessage);
-
 export const getTeamInfo = (teamId: number) =>
   api
     .get({
@@ -134,3 +126,11 @@ export const putChangeMemberGrade = (teamId: number, memberInfo: MemberElementTy
       },
     })
     .catch(throwErrorMessage);
+
+export const deleteTeamMembers = (teamId: number, deletedMembrInfo: MemberElementType[]) =>
+  api.delete({
+    url: `/teams/${teamId}/members`,
+    data: {
+      members: deletedMembrInfo,
+    },
+  });

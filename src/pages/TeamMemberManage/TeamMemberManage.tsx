@@ -70,15 +70,22 @@ const TeamMemberManage = () => {
   const handleSubmitDeletedMember = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
 
-    const notDeletedMemberInfo = memberInfo.filter((member) => {
+    const deletedMemberInfo = memberInfo.filter((member) => {
+      if (deletedMembers.includes(member.userId)) {
+        return true;
+      }
+      return false;
+    });
+
+    const remainMemberInfo = memberInfo.filter((member) => {
       if (deletedMembers.includes(member.userId)) {
         return false;
       }
       return true;
     });
 
-    // TODO: 백엔드와 연동 시, 추가 예정.
-    // deleteTeamMembers(teamId, notDeletedMemberInfo);
+    setMemberInfo(remainMemberInfo);
+    deleteTeamMembers(teamId, deletedMemberInfo);
   };
 
   const handleChangeModalInput = (e: React.ChangeEvent<HTMLElement>) => {
