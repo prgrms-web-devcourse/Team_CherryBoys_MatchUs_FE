@@ -57,7 +57,7 @@ const MemberList = ({
           )}
         </div>
         <div>
-          {isMember && (
+          {isMember && captain && (
             <MemberListElement
               memberId={captain?.userId}
               memberName={captain?.userName}
@@ -69,7 +69,7 @@ const MemberList = ({
               handleAddDeletedMembers={handleAddDeletedMembers}
             />
           )}
-          {isMember && (
+          {isMember && subCaptains && (
             <>
               {subCaptains.map((subCaptain: MemberElementType) => (
                 <MemberListElement
@@ -85,37 +85,39 @@ const MemberList = ({
               ))}
             </>
           )}
-          {isMember ? (
-            <>
-              {generalMemberList.map((generalMember: MemberElementType) => (
-                <MemberListElement
-                  memberId={generalMember.userId}
-                  memberName={generalMember.userName}
-                  memberType="generalMember"
-                  key={`generalMember-${generalMember.userId}`}
-                  isEditing={isEditing}
-                  grade={generalMember.grade}
-                  handleChangeMemberGrade={handleChangeMemberGrade}
-                  handleAddDeletedMembers={handleAddDeletedMembers}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {hiredMemberList.map((hiredMember: MemberElementType) => (
-                <MemberListElement
-                  memberId={hiredMember.userId}
-                  memberName={hiredMember.userName}
-                  memberType="hiredMember"
-                  key={`hiredMember-${hiredMember.userId}`}
-                  isEditing={isEditing}
-                  grade={hiredMember.grade}
-                  handleAddDeletedMembers={handleAddDeletedMembers}
-                  handleChangeMemberGrade={handleChangeMemberGrade}
-                />
-              ))}
-            </>
-          )}
+          {isMember
+            ? generalMemberList.length !== 0 && (
+                <>
+                  {generalMemberList.map((generalMember: MemberElementType) => (
+                    <MemberListElement
+                      memberId={generalMember.userId}
+                      memberName={generalMember.userName}
+                      memberType="generalMember"
+                      key={`generalMember-${generalMember.userId}`}
+                      isEditing={isEditing}
+                      grade={generalMember.grade}
+                      handleChangeMemberGrade={handleChangeMemberGrade}
+                      handleAddDeletedMembers={handleAddDeletedMembers}
+                    />
+                  ))}
+                </>
+              )
+            : hiredMemberList.length !== 0 && (
+                <>
+                  {hiredMemberList.map((hiredMember: MemberElementType) => (
+                    <MemberListElement
+                      memberId={hiredMember.userId}
+                      memberName={hiredMember.userName}
+                      memberType="hiredMember"
+                      key={`hiredMember-${hiredMember.userId}`}
+                      isEditing={isEditing}
+                      grade={hiredMember.grade}
+                      handleAddDeletedMembers={handleAddDeletedMembers}
+                      handleChangeMemberGrade={handleChangeMemberGrade}
+                    />
+                  ))}
+                </>
+              )}
         </div>
         {isEditing && (
           <>

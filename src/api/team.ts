@@ -101,3 +101,10 @@ export const getMatchHistory = (teamId: number) =>
       url: `teams/${teamId}/matches`,
     })
     .catch(throwErrorMessage);
+
+export const getTeamMemberInfo = (teamId: number, memberType: string) =>
+  api
+    .get({
+      url: `/teams/${teamId}/${memberType}`,
+    })
+    .catch(throwErrorMessage);

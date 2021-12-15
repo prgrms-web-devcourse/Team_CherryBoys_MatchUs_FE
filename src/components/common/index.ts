@@ -6,3 +6,4 @@ export { default as TabBar } from './TabBar/TabBar';
 export { default as Portal } from './Portal/Portal';
 export { default as Modal } from './Modal/Modal';
 export { default as CustomModalDialog } from './CustomModalDialog/CustomModalDialog';
+export * from './Inputs';
