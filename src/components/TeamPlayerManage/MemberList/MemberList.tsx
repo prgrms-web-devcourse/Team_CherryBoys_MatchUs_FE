@@ -2,13 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import style from './memberList.module.scss';
 import { MemberListElement } from './MemberListElements';
-
-// TODO: 타입을 어떻게 정리할지에 대해서 이야기 나눈 뒤, 분리 예정.
-interface MemberElementType {
-  userId: number;
-  userName: string;
-  grade: string;
-}
+import { MemberElementType } from '@/types';
 
 interface Props {
   isMember: boolean;

@@ -1,6 +1,6 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-import { MemberElement } from '@/types';
+import { MemberElementType } from '@/types';
 
 interface TeamInfoProps {
   image: Record<string, string>;
@@ -15,12 +15,6 @@ interface EditTeamInfoProps {
   teamBio: string;
   teamAgeGroup: string;
   teamId: number;
-}
-
-interface MemberElementType {
-  userId: number;
-  userName: string;
-  grade: string;
 }
 
 export const createTeam = ({

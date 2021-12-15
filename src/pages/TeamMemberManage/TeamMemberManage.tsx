@@ -10,11 +10,7 @@ import {
   putChangeMemberGrade,
 } from '@/api';
 
-interface MemberElementType {
-  userId: number;
-  userName: string;
-  grade: string;
-}
+import { MemberElementType } from '@/types';
 
 const {
   playerManange,
