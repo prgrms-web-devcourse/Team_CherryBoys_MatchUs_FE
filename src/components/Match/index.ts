@@ -7,3 +7,4 @@ export { default as TeamCard } from './TeamCard/TeamCard';
 export { default as MatchApplyModal } from './MatchApplyModal/MatchApplyModal';
 export { default as MatchApproveModal } from './MatchApproveModal/MatchApproveModal';
 export { default as MatchReviewModal } from './MatchReviewModal/MatchReviewModal';
+export { default as MatchListFilterModal } from './MatchListFilterModal/MatchListFilterModal';
