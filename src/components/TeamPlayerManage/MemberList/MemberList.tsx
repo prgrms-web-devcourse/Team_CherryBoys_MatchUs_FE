@@ -38,7 +38,7 @@ const MemberList = ({
   const captain = memberInfo.find((member: MemberElementType) => member.grade === '주장');
   const subCaptains = memberInfo.filter((member: MemberElementType) => member.grade === '부주장');
   const generalMemberList = memberInfo.filter(
-    (member: MemberElementType) => member.grade === '회원'
+    (member: MemberElementType) => member.grade === '일반'
   );
   const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
 
@@ -123,7 +123,6 @@ const MemberList = ({
           <>
             {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
             <button type="submit">방출</button>
-            {isMember && <button type="button">위임</button>}
           </>
         )}
       </form>
