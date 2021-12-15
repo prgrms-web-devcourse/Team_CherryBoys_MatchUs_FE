@@ -1,7 +1,7 @@
-export type loginFormType = {
+export interface loginFormType {
   email: string;
   password: string;
-};
+}
 
 export interface signupFormType {
   userName: string;
@@ -15,7 +15,7 @@ export interface signupFormType {
   [key: string]: string;
 }
 
-export type requestSignupFormType = {
+export interface requestSignupFormType {
   name: string;
   nickname: string;
   email: string;
@@ -24,7 +24,7 @@ export type requestSignupFormType = {
   gender: string;
   ageGroup: string;
   sports: string;
-};
+}
 
 export interface isValidFormType {
   userName: boolean;
