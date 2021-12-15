@@ -3,7 +3,12 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { CustomModalDialog, Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
-import { deleteTeamMembers, getTeamMemberInfo, postInviteTeamMember } from '@/api';
+import {
+  deleteTeamMembers,
+  getTeamMemberInfo,
+  postInviteTeamMember,
+  putChangeMemberGrade,
+} from '@/api';
 
 interface MemberElementType {
   userId: number;
@@ -35,7 +40,7 @@ const TeamMemberManage = () => {
     setIsEnterEditPage(!isEnterEditPage);
   };
 
-  const handleChangeMemberGrade = (e: React.ChangeEvent<HTMLElement>) => {
+  const handleChangeMemberGrade = async (e: React.ChangeEvent<HTMLElement>) => {
     const { value } = e.target as HTMLInputElement;
     const [userId, grade] = value.split('-');
 
@@ -48,6 +53,7 @@ const TeamMemberManage = () => {
     });
 
     setMemberInfo(newMemberInfo);
+    await putChangeMemberGrade(teamId, newMemberInfo);
   };
 
   const handleAddDeletedMembers = (e: React.MouseEvent<HTMLElement>) => {
@@ -98,12 +104,12 @@ const TeamMemberManage = () => {
     //   setHasAuthorization(true);
     // }
 
-    const upMemberInfo = async () => {
+    const updateMemberInfo = async () => {
       const { members } = await getTeamMemberInfo(teamId, memberType);
 
       setMemberInfo(members);
     };
-    upMemberInfo();
+    updateMemberInfo();
   }, [teamId, memberType]);
 
   return (

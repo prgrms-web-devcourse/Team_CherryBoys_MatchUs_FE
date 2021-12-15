@@ -17,6 +17,12 @@ interface EditTeamInfoProps {
   teamId: number;
 }
 
+interface MemberElementType {
+  userId: number;
+  userName: string;
+  grade: string;
+}
+
 export const createTeam = ({
   image,
   teamName,
@@ -115,6 +121,16 @@ export const postInviteTeamMember = (teamId: number, memberEmail: string) =>
       url: `/teams/${teamId}/members`,
       data: {
         email: memberEmail,
+      },
+    })
+    .catch(throwErrorMessage);
+
+export const putChangeMemberGrade = (teamId: number, memberInfo: MemberElementType[]) =>
+  api
+    .put({
+      url: `/teams/${teamId}/members`,
+      data: {
+        members: memberInfo,
       },
     })
     .catch(throwErrorMessage);
