@@ -19,7 +19,6 @@ import { isValidFormType, signupFormType, validMsgType } from '@/types/auths';
 import { AGE, GENDER, SPORTS } from '@/consts/signup';
 
 const Signup = () => {
-  // 회원가입에 필요한 상태
   const [signupForm, setSignupForm] = useState<signupFormType>({
     userName: '',
     nickname: '',
@@ -31,7 +30,6 @@ const Signup = () => {
     sports: '',
   });
 
-  // 폼 검증을 위한 상태
   const [isValidForm, setIsValidForm] = useState<isValidFormType>({
     userName: false,
     nickname: false,
@@ -43,7 +41,6 @@ const Signup = () => {
     sports: false,
   });
 
-  // 검증 메세지를 위한 상태
   const [validMsg, setValidMsg] = useState<validMsgType>({
     userName: '',
     nickname: '',
@@ -64,13 +61,11 @@ const Signup = () => {
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    // 비밀번호 확인의 경우만 파라미터가 2개 들어가므로 체크
     const errMsg =
       name !== 'confirmedPassword'
         ? validateSignup[name](value)
         : validateSignup[name](value, password);
 
-    // 모든 상태 변경
     setValidMsg({
       ...validMsg,
       [name]: errMsg,
@@ -102,7 +97,7 @@ const Signup = () => {
     if (!isValidForm.nickname) {
       return;
     }
-
+    
     const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
 
     const msg = !isduplicated
@@ -120,12 +115,10 @@ const Signup = () => {
     });
   };
 
-  // 이메일 중복 확인
   const handleClickCheckDuplicatedEmail = async () => {
     if (!isValidForm.email) {
       return;
     }
-
     const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
     const msg = !isduplicated
@@ -142,13 +135,11 @@ const Signup = () => {
       email: isduplicated,
     });
   };
-
-  // 전체 폼 검증. 하나라도 false일시 true가 나오므로 반전
+      
   const IsSignupValid = () => {
     return !Object.values(isValidForm).includes(false);
   };
 
-  // 필수 항목 미입력시 메시지 수정
   const changeUnvalidateMsg = () => {
     const newValidMsgState: validMsgType = { ...validMsg };
 

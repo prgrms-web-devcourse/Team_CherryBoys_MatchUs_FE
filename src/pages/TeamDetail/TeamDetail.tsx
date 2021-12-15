@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-globals */
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
-import api from '@/api/core';
-import { throwErrorMessage } from '@/utils';
-import { deleteTeam, withdrawTeam } from '@/api';
+
+import { deleteTeam, withdrawTeam, getTeamInfo, getMemberInfo, getMatchHistory } from '@/api';
+import { MemberElement, MatchElement } from '@/types';
+import { MemberList, MatchListElement } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
   style;
@@ -21,24 +22,22 @@ const TeamDetail = () => {
     sportsName: '',
     tagNames: [],
     matchCount: 0,
-    manner_temperature: 0,
+    mannerTemperature: 0,
     captainId: 0,
     captainName: '',
     ageGroup: '',
     teamCreatedAt: '',
-    teamMembers: [{ userId: 0, userName: '', grade: '' }],
-    hiredMembers: [{ userId: 0, userName: '', grade: '' }],
-    matchesSummary: [
-      {
-        matchId: 0,
-        matchDate: '',
-        registerTeamName: '',
-        registerTeamLogo: '',
-        applyTeamName: '',
-        applyTeamLogo: '',
-      },
-    ],
   });
+  const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
+  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
+
+  const previousMatchHistory = matchHistory.filter((match) => {
+    if (match.status === 'previousMatch') return true;
+    return false;
+  });
+
+  const hasMember = memberInfo.length !== 0;
+  const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
 
   const {
     teamName,
@@ -46,17 +45,13 @@ const TeamDetail = () => {
     sportsName,
     tagNames,
     matchCount,
-    manner_temperature,
+    mannerTemperature,
     captainId,
     captainName,
     ageGroup,
     teamCreatedAt,
-    teamMembers,
-    hiredMembers,
-    matchesSummary,
   } = teamInfo;
 
-  //
   const handleWithdrawTeam = () => {
     // TODO: Modal Component Merge되면 교체 예정.
     if (confirm('정말 삭제하시겠습니까?')) {
@@ -70,25 +65,38 @@ const TeamDetail = () => {
     }
   };
 
-  useEffect(() => {
-    const getTeamInfo = async (id: number) => {
-      if (id) {
-        const { data } = await api
-          .get({
-            url: `/team/${id}`,
-          })
-          .catch(throwErrorMessage);
+  const updateTeamInfo = useCallback(async () => {
+    const result = await getTeamInfo(teamId);
 
-        setTeamInfo(data);
-      }
-    };
-
-    getTeamInfo(teamId);
+    setTeamInfo(result);
   }, [teamId]);
+
+  const updateMemberInfo = useCallback(async () => {
+    const { member } = await getMemberInfo(teamId);
+
+    if (member) {
+      setMemberInfo(member);
+    }
+  }, [teamId]);
+
+  const updateTeamMatchHistory = useCallback(async () => {
+    const { matchesSummary } = await getMatchHistory(teamId);
+
+    if (matchesSummary) {
+      setMatchHistory(matchesSummary);
+    }
+  }, [teamId]);
+
+  useEffect(() => {
+    updateTeamInfo();
+    updateTeamMatchHistory();
+    updateMemberInfo();
+  }, [updateTeamInfo, updateMemberInfo, updateTeamMatchHistory]);
 
   return (
     <div>
-      {hasAuthorization && <Link to={`/team/${teamId}`}>수정</Link>}
+      <h1 className={classNames('a11yHidden')}>팀 상세보기 페이지</h1>
+      {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
       <article className={classNames(teamBaseInfo)}>
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
         <p key={`team-${teamId}`}>{teamName}</p>
@@ -100,7 +108,7 @@ const TeamDetail = () => {
 
       <article className={classNames(teamCoreInfo)}>
         <section>총 경기 수{matchCount}</section>
-        <section>매너온도 {manner_temperature}</section>
+        <section>매너온도 {mannerTemperature}</section>
         <section id={`captain-${captainId}`}>{`운영진 ${captainName}`}</section>
         <section>주요 종목 {sportsName}</section>
         <section>연령대 {ageGroup}</section>
@@ -110,35 +118,81 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div>
           팀원 목록
-          <Link to={`/team/${teamId}/member`}>더보기</Link>
+          <Link to={`/team/${teamId}/members`}>더보기</Link>
         </div>
         <div>
-          {teamMembers.map((member) => (
-            <div key={`member-${member.userId}`}>{member.userName}</div>
-          ))}
+          {hasMember ? (
+            <MemberList
+              isMember
+              memberInfo={memberInfo}
+              hasAuthorization={false}
+              isEditing={false}
+              hasCategoryTitle={false}
+            />
+          ) : (
+            <p>
+              <span className={classNames('whiteSpace')}>팀원이이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>
+                열정 가득한 팀원을 모집하러 가볼까요?
+              </span>
+              <Link to="/team/select">팀원 모집</Link>
+            </p>
+          )}
         </div>
       </article>
 
       <article className={classNames(hiredMemberInfo)}>
         <div>
           용병 목록
-          <Link to={`/team/${teamId}/hired`}>더보기</Link>
+          <Link to={`/team/${teamId}/hired-members`}>더보기</Link>
         </div>
         <div>
-          {hiredMembers.map((member) => (
-            <div key={`member-${member.userId}`}>{member.userName}</div>
-          ))}
+          {hasMember ? (
+            <MemberList
+              isMember={false}
+              memberInfo={memberInfo}
+              hasAuthorization={false}
+              isEditing={false}
+              hasCategoryTitle={false}
+            />
+          ) : (
+            <p>
+              <span className={classNames('whiteSpace')}>용병이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>멋진 용병을 모집하러 가볼까요?</span>
+              <Link to="/hires/post/new">용병 모집</Link>
+            </p>
+          )}
         </div>
       </article>
 
       {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
       <article className={classNames(teamMathchesInfo)}>
-        {matchesSummary.map((match) => (
-          <section key={`match-${match.matchId}`}>
-            <img src={match.registerTeamLogo} alt="등록 팀 로고" />
-            <img src={match.applyTeamLogo} alt="신청 팀 로고" />
-          </section>
-        ))}
+        <div>
+          매칭 목록
+          <Link to={`/team/${teamId}/match`}>더보기</Link>
+        </div>
+        {hasPreviousMatchHistory ? (
+          previousMatchHistory.map((match) => {
+            return (
+              <MatchListElement
+                key={`beforeMatch-${match.matchId}`}
+                matchId={match.matchId}
+                matchDate={match.matchDate}
+                registerTeamLogo={match.registerTeamLogo}
+                registerTeamName={match.registerTeamName}
+                applyTeamLogo={match.applyTeamLogo}
+                applyTeamName={match.applyTeamName}
+                status={match.status}
+              />
+            );
+          })
+        ) : (
+          <p>
+            <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
+            <span className={classNames('whiteSpace')}>경기 모집 글을 올리러 가볼까요?</span>
+            <Link to="/matches/new">경기 등록</Link>
+          </p>
+        )}
       </article>
 
       <button type="button" onClick={hasAuthorization ? handleDeleteTeam : handleWithdrawTeam}>

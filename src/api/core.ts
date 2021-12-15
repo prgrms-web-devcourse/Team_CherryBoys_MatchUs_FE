@@ -5,7 +5,8 @@ import { HTTP_METHODS } from '@/consts';
 import { getItemFromStorage, removeItemFromStorage } from '@/utils/storage';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com/',
+
+  baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com',
   timeout: 5000,
 });
 
@@ -14,8 +15,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  const token = getItemFromStorage('accessToken');
-  axiosInstance.defaults.headers.common.token = token || '';
+  axiosInstance.defaults.headers.common.token = process.env.DUMMY_TOKEN ?? '';
 }
 
 const createApiMethod =

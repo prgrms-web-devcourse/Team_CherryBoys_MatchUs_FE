@@ -1,7 +1,7 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-import { loginFormType, requestSignupFormType } from '@/types/auths';
 
+import { loginFormType, requestSignupFormType } from '@/types/auths';
 export const requestSignup = (signupForm: requestSignupFormType) =>
   api
     .post({
