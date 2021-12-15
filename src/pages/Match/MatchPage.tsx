@@ -13,6 +13,7 @@ import {
   MatchApplyModal,
   MatchApproveModal,
   MatchReviewModal,
+  MatchTeamMemberModal,
 } from '@/components';
 import useMount from '@/hooks/useMount';
 import styles from './Match.module.scss';
@@ -24,6 +25,18 @@ const Match = () => {
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
 
   const { match, modal } = useSelector((store: RootState) => store.match.data);
+  const registerTeam = match[0] && {
+    teamType: 'register',
+    teamId: match[0].registerTeamInfo.teamId,
+    teamName: match[0].registerTeamInfo.teamName,
+  };
+  const applyTeam = match[0] && {
+    teamType: 'apply',
+    teamId: match[0].applyTeamInfo?.teamId || 0,
+    teamName: match[0].applyTeamInfo?.teamName || '',
+  };
+  // TODO: 본인 팀이 참여중인지 확인하는 로직 추가 필요+권한체크
+  const matchTeams = match[0] && applyTeam.teamId ? [applyTeam, registerTeam] : [registerTeam];
 
   useMount(() => {
     dispatch(fetchMatchById(matchId));
@@ -52,7 +65,13 @@ const Match = () => {
       {match[0] && modal.matchApprove && (
         <MatchApproveModal showMatchApproveModal={modal.matchApprove} />
       )}
-
+      {match[0] && modal.matchTeamMember && (
+        <MatchTeamMemberModal
+          showMatchTeamMemberModal={modal.matchTeamMember}
+          sports={match[0].sports}
+          teams={matchTeams}
+        />
+      )}
       <MatchReviewModal showMatchReviewModal={modal.matchReview} />
     </div>
   );
