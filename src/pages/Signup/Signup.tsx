@@ -98,7 +98,7 @@ const Signup = () => {
   };
 
   // 닉네임 중복 확인
-  const handleClickNicknameDuplicateC = async () => {
+  const handleClickNicknameDuplicate = async () => {
     if (!isValidForm.nickname) {
       return;
     }
@@ -195,7 +195,7 @@ const Signup = () => {
           type="input"
           validMsg={validMsg.nickname}
         />
-        <button type="button" onClick={handleClickNicknameDuplicateC}>
+        <button type="button" onClick={handleClickNicknameDuplicate}>
           중복확인
         </button>
       </div>
