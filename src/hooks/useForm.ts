@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 
 interface UseFormArgs<T> {
   initialValues: T;
@@ -10,6 +10,12 @@ const useForm = <T>({ initialValues, onSubmit, validate }: UseFormArgs<T>) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<T>(initialValues);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const newError = validate(values);
+    setErrors(newError);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;

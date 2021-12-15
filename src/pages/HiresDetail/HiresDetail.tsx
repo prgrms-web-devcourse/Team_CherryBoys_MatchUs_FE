@@ -1,8 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import MatchDetail from '@/components/Match/MatchDetail/MatchDetail';
-import style from './hiresDetailPage.module.scss';
+import style from './hiresDetail.module.scss';
+import { RootState } from '@/store';
+import { match as matchReducer, fetchMatchById } from '@/store/match/match';
+import useMount from '@/hooks/useMount';
 
 const imageURL =
   'https://unsplash.com/photos/Cjfl8r_eYxY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjM4Njc4Mjg5&force=true&w=80';
@@ -33,7 +38,17 @@ const {
   card__gameInfos__gameSchedule__upper,
 } = style;
 
-const HiresDetailPage = () => {
+const HiresDetail = () => {
+  const dispatch = useDispatch();
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+
+  const { match } = useSelector((store: RootState) => store.match.data);
+
+  useMount(() => {
+    dispatch(fetchMatchById(matchId));
+    dispatch(matchReducer.actions.setMatchId({ matchId }));
+  });
+
   const {
     date,
     startTime,
@@ -48,7 +63,6 @@ const HiresDetailPage = () => {
     teamLogo,
     teamName,
     teamManagerName,
-    detail,
   } = hireItem;
 
   return (
@@ -81,10 +95,10 @@ const HiresDetailPage = () => {
         </div>
       </article>
 
-      <MatchDetail key={1} match={{ matchId: 1, detail }} />
+      {match.length > 0 && <MatchDetail match={match[0]} />}
       <button type="button">신청 용병 확인</button>
     </>
   );
 };
 
-export default HiresDetailPage;
+export default HiresDetail;
