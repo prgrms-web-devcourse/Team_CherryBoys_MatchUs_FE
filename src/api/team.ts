@@ -108,3 +108,13 @@ export const getTeamMemberInfo = (teamId: number, memberType: string) =>
       url: `/teams/${teamId}/${memberType}`,
     })
     .catch(throwErrorMessage);
+
+export const postInviteTeamMember = (teamId: number, memberEmail: string) =>
+  api
+    .post({
+      url: `/teams/${teamId}/members`,
+      data: {
+        email: memberEmail,
+      },
+    })
+    .catch(throwErrorMessage);

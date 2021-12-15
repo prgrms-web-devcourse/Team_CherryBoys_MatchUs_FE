@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { Header, MemberList } from '@/components';
+import { CustomModalDialog, Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
-import { deleteTeamMembers, getTeamMemberInfo } from '@/api';
+import { deleteTeamMembers, getTeamMemberInfo, postInviteTeamMember } from '@/api';
 
 interface MemberElementType {
   userId: number;
@@ -11,15 +11,23 @@ interface MemberElementType {
   grade: string;
 }
 
-const { playerManange } = style;
+const {
+  playerManange,
+  modalHighLight,
+  modalInputContainer,
+  inputSupportMessage,
+  addTeamMemberButton,
+} = style;
 
 const TeamMemberManage = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const { memberType } = useParams<{ memberType: string }>();
+  const [modalInput, setModalInput] = useState('');
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState<boolean>(false);
   const [deletedMembers, setDeletedMembers] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState<boolean>(false);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
-  const [hasAuthorization, setHasAuthorization] = useState<boolean>(false); // TODO : authorization으로 대체 예정
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
   const [memberInfo, setMemberInfo] = useState<MemberElementType[]>([]);
   const isAddTeamMember = hasAuthorization && isEnterEditPage === false;
 
@@ -67,15 +75,32 @@ const TeamMemberManage = () => {
     // deleteTeamMembers(teamId, notDeletedMemberInfo);
   };
 
+  const handleChangeModalInput = (e: React.ChangeEvent<HTMLElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setModalInput(value);
+  };
+
+  // TODO: 이메일 Vaildation & 존재하지 않는 경우 에러처리가 필요하다.
+  const handleSubmitUserEmailForInvite = async () => {
+    try {
+      const result = await postInviteTeamMember(teamId, modalInput);
+      if (result.teamId) {
+        // alert('초대 완료되었습니다.');
+      }
+    } catch (error) {
+      // alert('존재하지 않는 유저입니다.');
+    }
+  };
+
   useEffect(() => {
     // TODO: 로그인 페이지 머지된 이후에, 리덕스에서 정보를 받아올 예정.
     // if (userGrade[`${teamName}`] === '팀장') {
     //   setHasAuthorization(true);
     // }
 
-    // TODO: API 연결 시, 주석 제거 예정
     const upMemberInfo = async () => {
       const { members } = await getTeamMemberInfo(teamId, memberType);
+
       setMemberInfo(members);
     };
     upMemberInfo();
@@ -85,6 +110,25 @@ const TeamMemberManage = () => {
     <>
       <Header />
       <div className={classNames(playerManange)}>
+        {isModalDialogOpen && (
+          <CustomModalDialog
+            modalType="alert"
+            buttonLabel="전송"
+            handleCancel={() => setIsModalDialogOpen(false)}
+            handleApprove={() => {
+              handleSubmitUserEmailForInvite();
+              setIsModalDialogOpen(false);
+            }}
+          >
+            <span className={classNames(modalHighLight)}>플레이어 초대</span>
+            <div className={classNames(modalInputContainer)}>
+              <input type="input" placeholder="player@team.com" onChange={handleChangeModalInput} />
+            </div>
+            <span className={classNames(inputSupportMessage)}>
+              함께 할 플레이어의 이메일을 입력해주세요
+            </span>
+          </CustomModalDialog>
+        )}
         <MemberList
           isEditing={isEnterEditPage}
           isMember={memberType === 'members'}
@@ -95,7 +139,17 @@ const TeamMemberManage = () => {
           handleChangeEditButtonStatus={handleChangeEditButtonStatus}
           handleSubmitDeletedMember={handleSubmitDeletedMember}
         />
-        {isAddTeamMember && <button type="button">팀원 초대</button>}
+        {isAddTeamMember && (
+          <button
+            type="button"
+            className={classNames(addTeamMemberButton)}
+            onClick={() => {
+              setIsModalDialogOpen(true);
+            }}
+          >
+            +
+          </button>
+        )}
       </div>
     </>
   );
