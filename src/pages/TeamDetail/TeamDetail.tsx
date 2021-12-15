@@ -95,7 +95,8 @@ const TeamDetail = () => {
 
   return (
     <div>
-      {hasAuthorization && <Link to={`/team/${teamId}`}>수정</Link>}
+      <h1 className={classNames('a11yHidden')}>팀 상세보기 페이지</h1>
+      {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
       <article className={classNames(teamBaseInfo)}>
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
         <p key={`team-${teamId}`}>{teamName}</p>
@@ -117,7 +118,7 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div>
           팀원 목록
-          <Link to={`/team/${teamId}/member`}>더보기</Link>
+          <Link to={`/team/${teamId}/members`}>더보기</Link>
         </div>
         <div>
           {hasMember ? (
@@ -134,7 +135,7 @@ const TeamDetail = () => {
               <span className={classNames('whiteSpace')}>
                 열정 가득한 팀원을 모집하러 가볼까요?
               </span>
-              <Link to="/teams">팀원 모집</Link>
+              <Link to="/team/select">팀원 모집</Link>
             </p>
           )}
         </div>
@@ -143,7 +144,7 @@ const TeamDetail = () => {
       <article className={classNames(hiredMemberInfo)}>
         <div>
           용병 목록
-          <Link to={`/team/${teamId}/hired`}>더보기</Link>
+          <Link to={`/team/${teamId}/hired-members`}>더보기</Link>
         </div>
         <div>
           {hasMember ? (
@@ -158,7 +159,7 @@ const TeamDetail = () => {
             <p>
               <span className={classNames('whiteSpace')}>용병이 없습니다.</span>
               <span className={classNames('whiteSpace')}>멋진 용병을 모집하러 가볼까요?</span>
-              <Link to="/teams">용병 모집</Link>
+              <Link to="/hires/post/new">용병 모집</Link>
             </p>
           )}
         </div>
@@ -168,7 +169,7 @@ const TeamDetail = () => {
       <article className={classNames(teamMathchesInfo)}>
         <div>
           매칭 목록
-          <Link to={`/team/${teamId}/hired`}>더보기</Link>
+          <Link to={`/team/${teamId}/match`}>더보기</Link>
         </div>
         {hasPreviousMatchHistory ? (
           previousMatchHistory.map((match) => {
@@ -189,7 +190,7 @@ const TeamDetail = () => {
           <p>
             <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
             <span className={classNames('whiteSpace')}>경기 모집 글을 올리러 가볼까요?</span>
-            <Link to="/teams">경기 등록</Link>
+            <Link to="/matches/new">경기 등록</Link>
           </p>
         )}
       </article>
