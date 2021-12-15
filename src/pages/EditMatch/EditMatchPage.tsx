@@ -7,18 +7,15 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { Input, InputCheckBox, InputDetail } from '@/components';
+import { useHistory } from 'react-router-dom';
+import { Input, InputDetail } from '@/components';
 import { RootState } from '@/store';
-import { fetchTeamWithUser, fetchMatchById } from '@/store/match/match';
+import { fetchMatchById, modifyMatch } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
 import style from './EditMatch.module.scss';
-import { SPORTS, SPORTS_PLAYER, AGE_GROUP, LOCATIONS } from '@/consts';
+import { SPORTS, AGE_GROUP, LOCATIONS } from '@/consts';
 
 const { editMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
-
-interface CheckboxOptions {
-  [key: string]: boolean;
-}
 
 const defaultCity = {
   cityId: 0,
@@ -39,12 +36,11 @@ const defaultGround = {
 
 const EditMatch = () => {
   const dispatch = useDispatch();
-  // 작성자(유저) 더미 데이터 이용
-  const tokenDummy = 123;
+  const history = useHistory();
+
   const { matchId } = useSelector((store: RootState) => store.match.data);
   useMount(() => {
     dispatch(fetchMatchById(matchId));
-    dispatch(fetchTeamWithUser(tokenDummy));
   });
   const editedMatch = useSelector((store: RootState) => store.match.data.match[0]);
 
@@ -63,7 +59,6 @@ const EditMatch = () => {
   const [ground, setGround] = useState(defaultGround);
   const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState(placeholder);
-  const [team, setTeam] = useState(placeholder);
   const cityOptions = ['행정구역', ...LOCATIONS.cities.map((cityInfo) => cityInfo.cityName)];
   const regionOptions = [
     '시/군/구',
@@ -79,10 +74,6 @@ const EditMatch = () => {
       return acc;
     }, []),
   ];
-  const { userTeams } = useSelector((store: RootState) => store.match).data;
-  const userLimit = SPORTS_PLAYER[sports] || 0;
-  const teamNames = userTeams.map((userTeam) => userTeam.teamName);
-  const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
 
   const setInitialValue = useCallback(() => {
     if (editedMatch) {
@@ -102,14 +93,9 @@ const EditMatch = () => {
       )[0];
       setGround(prevGround || defaultGround);
       setCost(editedMatch.cost || 0);
-      setTeam(editedMatch.registerTeamInfo?.teamName || placeholder);
       setDetail(editedMatch.detail || placeholder);
-      const prevStartTime = new Date(
-        `${editedMatch.date} ${editedMatch.startTime.hour}:${editedMatch.startTime.minute}:${editedMatch.startTime.second}`
-      );
-      const prevEndTime = new Date(
-        `${editedMatch.date} ${editedMatch.endTime.hour}:${editedMatch.endTime.minute}:${editedMatch.endTime.second}`
-      );
+      const prevStartTime = new Date(`${editedMatch.date} ${editedMatch.startTime}`);
+      const prevEndTime = new Date(`${editedMatch.date} ${editedMatch.endTime}`);
 
       setFormattedDate({
         startDate: prevStartTime,
@@ -118,16 +104,6 @@ const EditMatch = () => {
       });
     }
   }, [editedMatch]);
-
-  const setSelectedTeamUsers = useCallback(() => {
-    const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
-    const teamUsersOptions: CheckboxOptions = {};
-    selectedTeamUsers.forEach((user) => {
-      if (user.userName) teamUsersOptions[user.userName] = false;
-    });
-    return teamUsersOptions;
-  }, [team, userTeams]);
 
   const handleInput = (e: React.ChangeEvent, category: string) => {
     const targetInput: string = (e.target as HTMLInputElement).value;
@@ -165,18 +141,7 @@ const EditMatch = () => {
     if (category === 'cost') {
       const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
       setCost(targetInputNumber);
-      return;
     }
-    if (category === 'team') {
-      setTeam(targetInput);
-    }
-  };
-
-  const handleOnChangeTeamMembers = (e: React.ChangeEvent) => {
-    const target: string = (e.target as HTMLInputElement).value;
-    const newTeamMembers: CheckboxOptions = { ...teamMembers };
-    newTeamMembers[target] = !newTeamMembers[target];
-    setTeamMembers({ ...newTeamMembers });
   };
 
   const handleDetail = (e: React.SetStateAction<string>) => {
@@ -232,19 +197,32 @@ const EditMatch = () => {
       }),
     };
 
-    const todayString = new Date().toLocaleDateString('fr-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
+    const today = new Date();
+    const todayResult = {
+      date: today.toLocaleDateString('fr-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }),
+      startTime: today.toLocaleTimeString('fr-BE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      endTime: today.toLocaleTimeString('fr-BE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+    };
 
-    if (dateResult.date < todayString) {
+    if (dateResult.date < todayResult.date) {
       window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
-      return {};
+      return todayResult;
     }
     if (startTime > endTime) {
       window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
-      return {};
+      return todayResult;
     }
 
     return dateResult;
@@ -255,26 +233,8 @@ const EditMatch = () => {
       window.alert('종목을 선택해주세요');
       return;
     }
-    if (team === placeholder) {
-      window.alert('올바른 팀을 선택해주세요');
-      return;
-    }
 
-    const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
-
-    const selectedTeamWithUsers = {
-      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
-      players: selectedTeamUsers
-        .filter((user) => user.userName && teamMembers[user.userName])
-        .map((user) => user.userId),
-    };
     const matchDate = submitDate();
-
-    if (selectedTeamWithUsers.players.length < userLimit) {
-      window.alert('인원미달');
-      return;
-    }
 
     if (ageGroup === placeholder) {
       window.alert('연령대를 선택해주세요');
@@ -299,27 +259,23 @@ const EditMatch = () => {
 
     const requestData = {
       ...matchDate,
-      matchId, // path
-      registerTeamId: selectedTeamWithUsers.teamId,
+      matchId,
       sports,
       ageGroup,
-      city,
-      region,
-      groundName: ground,
+      city: city.cityId,
+      region: region.regionId,
+      ground: ground.groundId,
       cost,
       detail,
-      players: selectedTeamWithUsers.players,
     };
 
-    // TODO: api 요청 바디
-    console.log(requestData);
+    dispatch(modifyMatch(requestData));
+    history.push('/matches/');
   };
 
   useEffect(() => {
-    const newTeamUsers = setSelectedTeamUsers();
-    setTeamMembers({ ...newTeamUsers });
     setInitialValue();
-  }, [setTeamMembers, setSelectedTeamUsers, setFormattedDate, setInitialValue]);
+  }, [setInitialValue]);
 
   return (
     <div className={classNames(editMatchContainer)}>
@@ -331,24 +287,6 @@ const EditMatch = () => {
         onChange={(e) => handleInput(e, 'sports')}
         value={sports}
       />
-      <Input
-        inputId="inputTeam"
-        labelName="팀*"
-        type="dropbox"
-        options={['선택', ...teamNames]}
-        onChange={(e) => handleInput(e, 'team')}
-        value={team}
-      />
-      {Object.keys(teamMembers).length > 0 && (
-        <InputCheckBox
-          labelName={`${team}(${
-            Object.values(teamMembers).filter((member) => member).length
-          }/${userLimit})`}
-          options={teamMembers}
-          onChange={handleOnChangeTeamMembers}
-          icon="far fa-check-square"
-        />
-      )}
       <Input
         inputId="inputAgeGroup"
         labelName="연령대*"
