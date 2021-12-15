@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import TextField from '@mui/material/TextField';
@@ -24,10 +24,6 @@ const {
   buttonBox,
   submitButton,
 } = styles;
-
-interface CheckboxOptions {
-  [key: string]: boolean;
-}
 
 interface ModalState {
   showMatchListFilterModal: boolean;
@@ -54,11 +50,12 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
   const dispatch = useDispatch();
   const { matchListFilter } = useSelector((store: RootState) => store.match.data);
 
-  const [ageGroup, setAgeGroup] = useState('');
+  const placeholder = 'placeholder';
+  const [ageGroup, setAgeGroup] = useState(placeholder);
   const [city, setCity] = useState(defaultCity);
   const [region, setRegion] = useState(defaultRegion);
   const [ground, setGround] = useState(defaultGround);
-  const [sports, setSports] = useState('');
+  const [sports, setSports] = useState(placeholder);
   const [date, setDate] = useState({
     date: new Date(),
     isSetted: false,
@@ -88,8 +85,8 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
 
   const setInitialValue = () => {
     if (matchListFilter) {
-      setSports(matchListFilter.sports || '선택');
-      setAgeGroup(matchListFilter.ageGroup || '선택');
+      setSports(matchListFilter.sports || placeholder);
+      setAgeGroup(matchListFilter.ageGroup || placeholder);
 
       const prevCity = LOCATIONS.cities.filter(
         (cityInfo) => cityInfo.cityId === matchListFilter.cityId
@@ -166,10 +163,10 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
     const requestBody: MatchListFilter = {
       size,
     };
-    if (sports !== '선택') {
+    if (sports !== placeholder) {
       requestBody.sports = sports;
     }
-    if (ageGroup !== '선택') {
+    if (ageGroup !== placeholder) {
       requestBody.ageGroup = ageGroup;
     }
     if (city.cityId > 0) {
@@ -211,7 +208,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
           inputId="inputSports"
           labelName="종목"
           type="dropbox"
-          options={['선택', ...SPORTS]}
+          options={[placeholder, ...SPORTS]}
           onChange={(e) => handleInput(e, 'sports')}
           value={sports}
         />
@@ -219,7 +216,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
           inputId="inputAgeGroup"
           labelName="연령대"
           type="dropbox"
-          options={['선택', ...AGE_GROUP]}
+          options={[placeholder, ...AGE_GROUP]}
           onChange={(e) => handleInput(e, 'ageGroup')}
           value={ageGroup}
         />
