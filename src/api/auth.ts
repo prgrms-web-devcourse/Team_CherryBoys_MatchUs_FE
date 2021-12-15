@@ -1,8 +1,7 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-import { loginFormType, requestSignupFormType } from '@/types/auth';
+import { loginFormType, requestSignupFormType } from '@/types/auths';
 
-// TODO: status code 전달하기
 export const requestSignup = (signupForm: requestSignupFormType) =>
   api
     .post({

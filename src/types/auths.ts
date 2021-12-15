@@ -38,17 +38,7 @@ export interface isValidFormType {
   [key: string]: boolean;
 }
 
-export interface validMsgType {
-  userName: string;
-  nickname: string;
-  email: string;
-  password: string;
-  confirmedPassword: string;
-  gender: string;
-  ageGroup: string;
-  sports: string;
-  [key: string]: string;
-}
+export type validMsgType = signupFormType;
 
 export interface userGradeType {
   teamId: number;
