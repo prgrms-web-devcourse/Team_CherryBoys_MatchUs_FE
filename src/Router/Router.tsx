@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import {
   TeamMemberManage,
   TeamDetail,
@@ -11,7 +12,6 @@ import {
   NewMatch,
   EditMatch,
 } from '@/pages';
-
 // TODO: Router관련 const 객체로 변경해 보기
 import {
   HOME_PAGE,
