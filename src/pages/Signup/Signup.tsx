@@ -4,21 +4,21 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import ValidInput from './ValidInput';
-import { SIGNUP_VALIDATION_SUCCESS_MSG, validateSignup } from '@/utils/validation/signupValidation';
-import { SIGNUP_VALIDATION_ERR_MSG } from '../../utils/validation/signupValidation';
+import {
+  SIGNUP_VALIDATION_SUCCESS_MSG,
+  validateSignup,
+  SIGNUP_VALIDATION_ERR_MSG,
+} from '@/utils/validation/signupValidation';
 import {
   requestCheckDuplicatedEmail,
   requestCheckDuplicatedNickname,
   requestSignup,
-} from '../../api/auth';
-import { isValidFormType, signupFormType, validMsgType } from '@/types/auth';
+} from '@/api/auth';
+import { isValidFormType, signupFormType, validMsgType } from '@/types/auths';
 import { AGE, GENDER, SPORTS } from '@/consts/signup';
 
 const Signup = () => {
-  const dispatch = useDispatch();
-
   // 회원가입에 필요한 상태
   const [signupForm, setSignupForm] = useState<signupFormType>({
     userName: '',
@@ -60,7 +60,7 @@ const Signup = () => {
 
   const history = useHistory();
 
-  const onChange = (
+  const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
@@ -98,7 +98,7 @@ const Signup = () => {
   };
 
   // 닉네임 중복 확인
-  const checkDuplicatedNickname = async () => {
+  const handleClickNicknameDuplicateC = async () => {
     if (!isValidForm.nickname) {
       return;
     }
@@ -121,7 +121,7 @@ const Signup = () => {
   };
 
   // 이메일 중복 확인
-  const checkDuplicatedEmail = async () => {
+  const handleClickCheckDuplicatedEmail = async () => {
     if (!isValidForm.email) {
       return;
     }
@@ -179,7 +179,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="userName"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={userName}
           type="input"
           validMsg={validMsg.name}
@@ -190,12 +190,12 @@ const Signup = () => {
       <div>
         <ValidInput
           name="nickname"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={nickname}
           type="input"
           validMsg={validMsg.nickname}
         />
-        <button type="button" onClick={checkDuplicatedNickname}>
+        <button type="button" onClick={handleClickNicknameDuplicateC}>
           중복확인
         </button>
       </div>
@@ -203,12 +203,12 @@ const Signup = () => {
       <div>
         <ValidInput
           name="email"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={email}
           type="input"
           validMsg={validMsg.email}
         />
-        <button type="button" onClick={checkDuplicatedEmail}>
+        <button type="button" onClick={handleClickCheckDuplicatedEmail}>
           중복확인
         </button>
       </div>
@@ -216,7 +216,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="password"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={password}
           type="input"
           validMsg={validMsg.password}
@@ -226,7 +226,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="confirmedPassword"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={confirmedPassword}
           type="input"
           validMsg={validMsg.confirmedPassword}
@@ -236,7 +236,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="gender"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={gender}
           type="select"
           validMsg={validMsg.gender}
@@ -247,7 +247,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="ageGroup"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={ageGroup}
           type="select"
           validMsg={validMsg.ageGroup}
@@ -258,7 +258,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="sports"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={sports}
           type="select"
           validMsg={validMsg.sports}
