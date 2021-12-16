@@ -17,8 +17,6 @@ const HiresCreate = () => {
       teamId: 1,
     };
     const res = await createHiresPosting(data);
-
-    console.log(res);
   };
 
   return (

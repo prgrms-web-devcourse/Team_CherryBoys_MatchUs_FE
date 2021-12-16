@@ -10,7 +10,6 @@ const HiresAccept = () => {
   useEffect(() => {
     const getCurrentHiresInfo = async () => {
       const res = await getApplications(currentPostId);
-      console.log(res);
     };
 
     getCurrentHiresInfo();
@@ -33,7 +32,6 @@ const HiresAccept = () => {
     };
 
     const res = await allowApplications({ postId: currentPostId, data });
-    console.log(res);
   };
 
   return (

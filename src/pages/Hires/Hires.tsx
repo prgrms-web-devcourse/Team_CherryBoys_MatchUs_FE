@@ -20,7 +20,6 @@ const Hires = () => {
         size: defaultSize,
       };
       const res = await getHiresInfo(params);
-      console.log(res);
     };
 
     getCurrentHiresInfo();

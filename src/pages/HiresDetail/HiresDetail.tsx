@@ -72,7 +72,6 @@ const HiresDetail = () => {
   useEffect(() => {
     const getHiresDetailInfo = async () => {
       const res = await getHiresDetail(currentPostId);
-      console.log(res);
     };
 
     getHiresDetailInfo();
@@ -80,7 +79,6 @@ const HiresDetail = () => {
 
   const handleClickRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
-    console.log(res);
   };
 
   return (

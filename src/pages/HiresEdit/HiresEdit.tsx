@@ -22,11 +22,6 @@ const HiresEdit = () => {
     };
     const editHires = async () => {
       const res = await editHiresPosting({ postId: currentPostId, data });
-      console.log(res);
-
-      // // 확인용
-      // const editedInfos = await getHiresDetail(res);
-      // console.log(editedInfos);
     };
 
     editHires();
