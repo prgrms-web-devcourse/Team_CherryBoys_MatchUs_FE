@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styles from './MatchApplyModal.module.scss';
 import { Input, InputCheckBox } from '@/components';
-import { RootState } from '@/store';
-import { fetchTeamWithUser, match } from '@/store/match/match';
-import useMount from '@/hooks/useMount';
+import { match } from '@/store/match/match';
 import { SPORTS_PLAYER } from '@/consts';
+import { fetchAuthorizedTeams, fetchTotalMembers } from '@/api';
+import { TeamSimple, TeamMemberInfo } from '@/types';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
@@ -20,11 +21,8 @@ interface ModalState {
 }
 
 const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
-  const { matchId } = useSelector((store: RootState) => store.match.data);
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const dispatch = useDispatch();
-  useMount(() => {
-    dispatch(fetchTeamWithUser(matchId));
-  });
 
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
@@ -32,22 +30,40 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     }
   };
 
-  const { userTeams } = useSelector((store: RootState) => store.match).data;
+  const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
+
+  // 작성자(유저) 더미 데이터 이용
+  const tokenDummy = '1';
+
+  const getAuhorizedTeams = useCallback(async () => {
+    const authorizedTeams = await fetchAuthorizedTeams(tokenDummy);
+    setUserTeams(authorizedTeams);
+  }, []);
+
+  useEffect(() => {
+    getAuhorizedTeams();
+  }, []);
 
   const placeholder = '팀을 선택해주세요';
   const userLimit = sports ? SPORTS_PLAYER[sports] : 0;
   const teamNames = userTeams.map((team) => team.teamName);
   const [selectedTeam, setSelectedTeam] = useState(placeholder);
+  const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMemberInfo[]>([]);
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
 
-  const setSelectedTeamUsers = useCallback(() => {
-    const selectedTeamInfo = userTeams.filter((team) => team.teamName === selectedTeam)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
-    const teamUsersOptions: CheckboxOptions = {};
-    selectedTeamUsers.forEach((user) => {
-      if (user.userName) teamUsersOptions[user.userName] = false;
-    });
-    return teamUsersOptions;
+  const getSelectedTeamMembers = useCallback(async () => {
+    const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === selectedTeam)[0];
+    if (selectedTeamInfo) {
+      const selectedTeamId = selectedTeamInfo.teamId;
+      const selectedTeamUsers = await fetchTotalMembers(selectedTeamId);
+      setTeamMembersInfo(selectedTeamUsers);
+
+      const teamUsersOptions: CheckboxOptions = {};
+      selectedTeamUsers.forEach((user: TeamMemberInfo) => {
+        if (user.userName) teamUsersOptions[user.userName] = false;
+      });
+      setTeamMembers(teamUsersOptions);
+    }
   }, [selectedTeam, userTeams]);
 
   const handleOnChangeTeams = (e: React.ChangeEvent<HTMLElement>) => {
@@ -62,21 +78,18 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
   };
 
   useEffect(() => {
-    const newTeamUsers = setSelectedTeamUsers();
-    setTeamMembers({ ...newTeamUsers });
-  }, [setTeamMembers, setSelectedTeamUsers]);
+    getSelectedTeamMembers();
+  }, [getSelectedTeamMembers]);
 
   const onSubmit = () => {
     if (!selectedTeam || selectedTeam === placeholder) {
       window.alert('올바른 팀을 선택해주세요');
       return;
     }
-    const selectedTeamInfo = userTeams.filter((team) => team.teamName === selectedTeam)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
 
     const selectedTeamWithUsers = {
-      teamId: userTeams.filter((team) => team.teamName === selectedTeam)[0].teamId,
-      players: selectedTeamUsers
+      teamId: userTeams.filter((userTeam) => userTeam.teamName === selectedTeam)[0].teamId,
+      players: teamMembersInfo
         .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
@@ -86,8 +99,8 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     }
 
     // TODO: 매칭 신청 API 요청
+    // applyMatch(requestData)
     console.log(matchId, selectedTeamWithUsers);
-    // dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
   };
 
   return (

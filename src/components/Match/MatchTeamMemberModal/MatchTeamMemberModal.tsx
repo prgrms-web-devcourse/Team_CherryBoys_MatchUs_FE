@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styles from './MatchTeamMemberModal.module.scss';
 import { InputCheckBox } from '@/components';
-import { RootState } from '@/store';
-import { fetchTeamWithUser, match, modifyTeamMember } from '@/store/match/match';
-import useMount from '@/hooks/useMount';
+import { match } from '@/store/match/match';
 import { SPORTS_PLAYER } from '@/consts';
-import { getMemberInfo } from '@/api';
-import { TeamMemberInfo } from '@/types/match';
+import { fetchTotalMembers, modifyTeamMember } from '@/api';
+import { TeamMemberInfo } from '@/types';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
@@ -24,15 +22,18 @@ interface ModalState {
     teamName: string;
     teamId: number;
   };
+  matchId: number;
 }
 
-const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: ModalState) => {
-  const { matchId } = useSelector((store: RootState) => store.match.data);
+const MatchTeamMemberModal = ({
+  showMatchTeamMemberModal,
+  sports,
+  teamInfo,
+  matchId,
+}: ModalState) => {
+  const { teamId, teamName } = teamInfo;
   const history = useHistory();
   const dispatch = useDispatch();
-  useMount(() => {
-    dispatch(fetchTeamWithUser(matchId));
-  });
 
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
@@ -41,14 +42,12 @@ const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: Mo
   };
 
   // TODO: team 회원정보를 받아오는 API콜 추가필요
-  const placeholder = teamInfo.teamName;
   const userLimit = sports ? SPORTS_PLAYER[sports] : 0;
-  const [selectedTeam, setSelectedTeam] = useState(placeholder);
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
   const [teamAllMembers, setTeamAllMembers] = useState<TeamMemberInfo[]>([]);
 
-  const setmembers = useCallback(async () => {
-    const { members } = await getMemberInfo(teamInfo.teamId);
+  const setMembers = useCallback(async () => {
+    const members = await fetchTotalMembers(teamId);
     setTeamAllMembers(members);
 
     const teamUsersOptions: CheckboxOptions = {};
@@ -57,7 +56,7 @@ const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: Mo
     });
 
     setTeamMembers(teamUsersOptions);
-  }, [teamInfo]);
+  }, [teamId]);
 
   const handleOnChangeTeamMembers = (e: React.ChangeEvent<HTMLElement>) => {
     const target: string = (e.target as HTMLInputElement).value;
@@ -67,8 +66,8 @@ const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: Mo
   };
 
   useEffect(() => {
-    setmembers();
-  }, [setmembers]);
+    setMembers();
+  }, [setMembers]);
 
   const onSubmit = () => {
     const selectedTeamWithUsers = {
@@ -89,7 +88,7 @@ const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: Mo
     };
 
     // TODO: 매칭 신청 API 요청
-    dispatch(modifyTeamMember(requestBody));
+    modifyTeamMember(requestBody);
     dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
     history.go(0);
   };
@@ -104,7 +103,7 @@ const MatchTeamMemberModal = ({ showMatchTeamMemberModal, sports, teamInfo }: Mo
     >
       <div className={classNames(modalContainer)}>
         <div className={classNames(modalName)}>
-          <h3>팀원 변경</h3>
+          <h3>{`팀원 변경(${teamName})`}</h3>
         </div>
         {Object.keys(teamMembers).length > 0 && (
           <InputCheckBox

@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import style from './MatchPostCard.module.scss';
-import { MatchCard } from '@/types/match';
+import { MatchCard } from '@/types';
 
 const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
 
@@ -24,7 +24,8 @@ const MatchPostCard = ({ matchInfo }: Props) => {
     cost,
     ageGroup,
     teamLogo,
-    teamMannerTemperature,
+    mannerTemperature,
+    sports,
   } = matchInfo;
 
   return (
@@ -41,9 +42,9 @@ const MatchPostCard = ({ matchInfo }: Props) => {
           <div>{`${date} ${startTime}`}</div>
           <div>{`${city} ${region} ${ground}`}</div>
           <div className={classNames(postTags)}>
-            <span>{`${cost}원`}</span>
+            <span>{sports}</span>
             <span>{ageGroup}</span>
-            <span>{teamMannerTemperature}</span>
+            <span>{mannerTemperature}</span>
           </div>
         </section>
       </article>
