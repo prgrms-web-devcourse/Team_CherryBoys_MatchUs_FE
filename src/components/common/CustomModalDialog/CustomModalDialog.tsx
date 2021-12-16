@@ -5,6 +5,7 @@ import style from './customModalDialog.module.scss';
 
 interface Props {
   modalType: string;
+  buttonLabel?: string;
   handleApprove: React.MouseEventHandler<HTMLButtonElement>;
   handleCancel?: React.MouseEventHandler<HTMLButtonElement>;
   children: ReactNode;
@@ -12,7 +13,13 @@ interface Props {
 
 const { alertDialog, buttonContainer, approvalButton, cancelButton, alertButton } = style;
 
-const CustomModalDialog = ({ modalType, handleApprove, handleCancel, children }: Props) => {
+const CustomModalDialog = ({
+  modalType,
+  buttonLabel,
+  handleApprove,
+  handleCancel,
+  children,
+}: Props) => {
   return (
     <Modal>
       {modalType === 'confirm' ? (
@@ -32,7 +39,7 @@ const CustomModalDialog = ({ modalType, handleApprove, handleCancel, children }:
           {children}
           <div className={classNames(buttonContainer)}>
             <button type="button" className={classNames(alertButton)} onClick={handleApprove}>
-              확인
+              {buttonLabel}
             </button>
           </div>
         </div>

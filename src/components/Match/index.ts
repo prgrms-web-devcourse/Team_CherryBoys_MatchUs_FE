@@ -8,3 +8,4 @@ export { default as MatchApplyModal } from './MatchApplyModal/MatchApplyModal';
 export { default as MatchApproveModal } from './MatchApproveModal/MatchApproveModal';
 export { default as MatchReviewModal } from './MatchReviewModal/MatchReviewModal';
 export { default as MatchTeamMemberModal } from './MatchTeamMemberModal/MatchTeamMemberModal';
+export { default as MatchListFilterModal } from './MatchListFilterModal/MatchListFilterModal';

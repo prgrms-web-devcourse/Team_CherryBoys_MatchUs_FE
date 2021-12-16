@@ -107,7 +107,7 @@ const Input = ({
               background: inputContentBackgroundColor,
               cursor: inputContentCursor,
             }}
-            defaultValue={Object.keys(options || {})[0]}
+            value={value}
           >
             {options?.map((option, index) => (
               <option value={option} key={`dropBoxOption${index}`}>

@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { setItemFromStorage, getItemFromStorage } from '@/utils/storage';
 import { requestLogin, requestReAuth } from '../api/auth';
-import { loginFormType, userType } from '@/types/auth';
+import { loginFormType, userType } from '@/types/auths';
 
 const initialState: userType = {
   isLogged: false,
