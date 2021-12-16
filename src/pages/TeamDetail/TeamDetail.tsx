@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import classNames from 'classnames';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -128,6 +127,7 @@ const TeamDetail = () => {
               hasAuthorization={false}
               isEditing={false}
               hasCategoryTitle={false}
+              memberIndexLimit={3}
             />
           ) : (
             <p>
@@ -154,6 +154,7 @@ const TeamDetail = () => {
               hasAuthorization={false}
               isEditing={false}
               hasCategoryTitle={false}
+              hiredIndexLimit={3}
             />
           ) : (
             <p>

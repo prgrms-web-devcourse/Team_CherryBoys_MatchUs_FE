@@ -10,6 +10,8 @@ interface Props {
   hasAuthorization: boolean;
   isEditing: boolean;
   hasCategoryTitle?: boolean;
+  memberIndexLimit?: number;
+  hiredIndexLimit?: number;
   handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
   handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
   handleSubmitDeletedMember?: React.FormEventHandler<HTMLFormElement>;
@@ -24,6 +26,8 @@ const MemberList = ({
   hasAuthorization,
   isEditing,
   hasCategoryTitle,
+  memberIndexLimit = 0,
+  hiredIndexLimit = 0,
   handleAddDeletedMembers,
   handleChangeMemberGrade,
   handleSubmitDeletedMember,
@@ -35,6 +39,8 @@ const MemberList = ({
     (member: MemberElementType) => member.grade === '일반'
   );
   const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
+
+  console.log(hiredIndexLimit);
 
   return (
     <>
@@ -82,34 +88,42 @@ const MemberList = ({
           {isMember
             ? generalMemberList.length !== 0 && (
                 <>
-                  {generalMemberList.map((generalMember: MemberElementType) => (
-                    <MemberListElement
-                      memberId={generalMember.userId}
-                      memberName={generalMember.userName}
-                      memberType="generalMember"
-                      key={`generalMember-${generalMember.userId}`}
-                      isEditing={isEditing}
-                      grade={generalMember.grade}
-                      handleChangeMemberGrade={handleChangeMemberGrade}
-                      handleAddDeletedMembers={handleAddDeletedMembers}
-                    />
-                  ))}
+                  {generalMemberList.map((generalMember: MemberElementType, index) => {
+                    if (index < memberIndexLimit && memberIndexLimit !== 0) {
+                      return (
+                        <MemberListElement
+                          memberId={generalMember.userId}
+                          memberName={generalMember.userName}
+                          memberType="generalMember"
+                          key={`generalMember-${generalMember.userId}`}
+                          isEditing={isEditing}
+                          grade={generalMember.grade}
+                          handleChangeMemberGrade={handleChangeMemberGrade}
+                          handleAddDeletedMembers={handleAddDeletedMembers}
+                        />
+                      );
+                    }
+                  })}
                 </>
               )
             : hiredMemberList.length !== 0 && (
                 <>
-                  {hiredMemberList.map((hiredMember: MemberElementType) => (
-                    <MemberListElement
-                      memberId={hiredMember.userId}
-                      memberName={hiredMember.userName}
-                      memberType="hiredMember"
-                      key={`hiredMember-${hiredMember.userId}`}
-                      isEditing={isEditing}
-                      grade={hiredMember.grade}
-                      handleAddDeletedMembers={handleAddDeletedMembers}
-                      handleChangeMemberGrade={handleChangeMemberGrade}
-                    />
-                  ))}
+                  {hiredMemberList.map((hiredMember: MemberElementType, index) => {
+                    if (index < hiredIndexLimit && hiredIndexLimit !== 0) {
+                      return (
+                        <MemberListElement
+                          memberId={hiredMember.userId}
+                          memberName={hiredMember.userName}
+                          memberType="hiredMember"
+                          key={`hiredMember-${hiredMember.userId}`}
+                          isEditing={isEditing}
+                          grade={hiredMember.grade}
+                          handleChangeMemberGrade={handleChangeMemberGrade}
+                          handleAddDeletedMembers={handleAddDeletedMembers}
+                        />
+                      );
+                    }
+                  })}
                 </>
               )}
         </div>
