@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import style from './teamChoice.module.scss';
 
 export interface TeamCardInfo {
@@ -24,7 +25,9 @@ const TeamInfoCard = ({
     <div className={classNames(cardContainer)}>
       <div key={`teamCard-${teamId}`}>
         {/* TODO: API를 통해 로고가 넘어오면, 채울 예정 */}
-        <div>{/* <img src={} /> */}</div>
+        <div>
+          <Link to={`/team/${teamId}`}>{/* <img src={} /> */}</Link>
+        </div>
       </div>
       <div>
         <p>
