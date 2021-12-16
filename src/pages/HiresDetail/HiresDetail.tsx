@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import style from './hiresDetail.module.scss';
 import { RootState } from '@/store';
 import { match as matchReducer, fetchMatchById } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
+import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
 
 const imageURL =
   'https://unsplash.com/photos/Cjfl8r_eYxY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjM4Njc4Mjg5&force=true&w=80';
@@ -65,8 +66,29 @@ const HiresDetail = () => {
     teamManagerName,
   } = hireItem;
 
+  const { postId } = useParams<{ postId: string }>();
+  const currentPostId = parseInt(postId, 10);
+
+  useEffect(() => {
+    const getHiresDetailInfo = async () => {
+      const res = await getHiresDetail(currentPostId);
+      console.log(res);
+    };
+
+    getHiresDetailInfo();
+  }, [currentPostId]);
+
+  const handleClickRemove = async () => {
+    const res = await deleteHiresPosting(currentPostId);
+    console.log(res);
+  };
+
   return (
     <>
+      <button type="button" onClick={handleClickRemove}>
+        삭제
+      </button>
+      <button type="button">수정</button>
       <article>
         <section>
           <div className={classNames(card__gameInfos__gameSchedule)}>

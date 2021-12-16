@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchAllPost } from '@/store/posts';
 import { Posts } from '@/components';
-
+import { getHiresInfo } from '@/api/hires';
 // Todo(홍중) : 임시 데이터, 팀 정보 관리하는곳에서 가져오기(12/13)
 const selectedTeam = { teamId: 3, grade: 'GENERAL' };
 
@@ -13,6 +13,14 @@ const Hires = () => {
     dispatch(fetchAllPost());
   }, [dispatch]);
 
+  useEffect(() => {
+    const getCurrentHiresInfo = async () => {
+      const res = await getHiresInfo();
+      console.log(res);
+    };
+
+    getCurrentHiresInfo();
+  }, []);
   return <Posts isMatch={false} selectedTeam={selectedTeam} />;
 };
 
