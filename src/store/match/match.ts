@@ -7,6 +7,7 @@ import {
   TeamSimple,
   WaitingTeam,
   WaitingTeams,
+  MatchListFilter,
 } from '@/types/match';
 import {
   matchListDummy,
@@ -57,8 +58,10 @@ interface MatchState {
       [matchApply: string]: boolean;
       matchApprove: boolean;
       matchReview: boolean;
+      matchListFilter: boolean;
     };
     matchId: number;
+    matchListFilter: MatchListFilter;
   };
 }
 
@@ -74,8 +77,12 @@ export const match = createSlice({
         matchApply: false,
         matchApprove: false,
         matchReview: false,
+        matchListFilter: false,
       },
       matchId: -1,
+      matchListFilter: {
+        size: 10,
+      },
     },
   } as MatchState,
   reducers: {
@@ -84,6 +91,12 @@ export const match = createSlice({
     },
     setMatchId: (state, { payload }: PayloadAction<{ matchId: number }>) => {
       state.data.matchId = payload.matchId;
+    },
+    setMatchListFilter: (
+      state,
+      { payload }: PayloadAction<{ matchListFilter: MatchListFilter }>
+    ) => {
+      state.data.matchListFilter = payload.matchListFilter;
     },
   },
   extraReducers: {

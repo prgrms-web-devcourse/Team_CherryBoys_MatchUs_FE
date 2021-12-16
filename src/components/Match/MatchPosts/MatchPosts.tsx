@@ -1,18 +1,20 @@
 /* eslint-disable react/jsx-fragments */
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
-import { MatchPostCard } from '@/components';
+import { match } from '@/store/match/match';
+import { MatchPostCard, MatchListFilterModal } from '@/components';
 import style from './MatchPosts.module.scss';
 
 const { postsContainer, postTitleBox, postTitle, filterPostButton, postItems, addPostButton } =
   style;
 
 const MatchPosts = () => {
-  const { matchList } = useSelector((state: RootState) => state.match.data);
+  const { matchList, modal } = useSelector((state: RootState) => state.match.data);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   // TODO:사용자의 권한을 체크하는 로직 추가 필요
   const handelCheckUserAuthority = (grade: string) => {
@@ -22,11 +24,19 @@ const MatchPosts = () => {
     history.push('/matches/new');
   };
 
+  const handleToggleListFilterModal = () => {
+    dispatch(match.actions.toggleModal({ modalName: 'matchListFilter' }));
+  };
+
   return (
     <div className={classNames(postsContainer)}>
       <div className={classNames(postTitleBox)}>
         <span className={classNames(postTitle)}>모집중인 매치</span>
-        <button className={classNames(filterPostButton)} type="button">
+        <button
+          className={classNames(filterPostButton)}
+          onClick={handleToggleListFilterModal}
+          type="button"
+        >
           <i className="fas fa-filter" />
         </button>
       </div>
@@ -42,6 +52,7 @@ const MatchPosts = () => {
       >
         <i className="fas fa-plus" />
       </button>
+      <MatchListFilterModal showMatchListFilterModal={modal.matchListFilter} />
     </div>
   );
 };

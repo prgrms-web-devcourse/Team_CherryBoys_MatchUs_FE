@@ -112,3 +112,25 @@ export interface WaitingTeams {
     waitingTeams: WaitingTeam[];
   };
 }
+
+export interface MatchListFilter {
+  ageGroup?: string;
+  cityId?: number;
+  date?: string;
+  groundId?: number;
+  lastId?: number;
+  regionId?: number;
+  size: number;
+  sports?: string;
+}
+
+export interface Locations {
+  [key: string]: {
+    cityId?: number;
+    cityName?: string;
+    regionId?: number;
+    regionName?: string;
+    groundId?: number;
+    groundName?: string;
+  }[];
+}
