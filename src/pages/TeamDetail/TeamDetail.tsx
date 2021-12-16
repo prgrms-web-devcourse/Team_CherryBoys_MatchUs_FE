@@ -1,10 +1,9 @@
-/* eslint-disable no-restricted-globals */
 import classNames from 'classnames';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 
-import { deleteTeam, withdrawTeam, getTeamInfo, getMemberInfo, getMatchHistory } from '@/api';
+import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
 import { MemberElement, MatchElement } from '@/types';
 import { MemberList, MatchListElement } from '@/components';
 
@@ -72,18 +71,18 @@ const TeamDetail = () => {
   }, [teamId]);
 
   const updateMemberInfo = useCallback(async () => {
-    const { member } = await getMemberInfo(teamId);
+    const { members } = await getTotalMemberInfo(teamId);
 
-    if (member) {
-      setMemberInfo(member);
+    if (members) {
+      setMemberInfo(members);
     }
   }, [teamId]);
 
   const updateTeamMatchHistory = useCallback(async () => {
-    const { matchesSummary } = await getMatchHistory(teamId);
+    const { teamMatches } = await getMatchHistory(teamId);
 
-    if (matchesSummary) {
-      setMatchHistory(matchesSummary);
+    if (teamMatches) {
+      setMatchHistory(teamMatches);
     }
   }, [teamId]);
 
@@ -128,6 +127,7 @@ const TeamDetail = () => {
               hasAuthorization={false}
               isEditing={false}
               hasCategoryTitle={false}
+              memberIndexLimit={3}
             />
           ) : (
             <p>
@@ -154,6 +154,7 @@ const TeamDetail = () => {
               hasAuthorization={false}
               isEditing={false}
               hasCategoryTitle={false}
+              hiredIndexLimit={3}
             />
           ) : (
             <p>
