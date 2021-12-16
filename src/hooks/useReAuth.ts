@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/store';
-import { reAuth } from '@/store/authSlice';
+import { reAuth } from '@/store/userSlice';
 import { getItemFromStorage } from '@/utils/storage';
 
 const useReAuth = () => {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const accessToken = getItemFromStorage('accessToken');
 
@@ -13,7 +14,7 @@ const useReAuth = () => {
     }
 
     dispatch(reAuth());
-  });
+  }, [dispatch]);
 };
 
 export default useReAuth;
