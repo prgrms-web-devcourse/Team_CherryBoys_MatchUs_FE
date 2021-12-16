@@ -11,7 +11,22 @@ import TeamInfoCard from './TeamInfoCard';
 const { highlight, addTeamButton } = style;
 
 const TeamChoice = () => {
-  const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
+  // TODO: 체리와 로그인 연결한 후에 지울 데이터입니다.
+  const [myTeams, setMyTeams] = useState<TeamInfo[]>([
+    {
+      ageGroup: '12',
+      bio: '12',
+      captainId: 1,
+      captainName: '12',
+      mannerTemperature: 36.5,
+      matchCount: 0,
+      sportsName: '12',
+      tagNames: [],
+      teamCreatedAt: '언제언제 만들어짐',
+      teamId: 1,
+      teamName: '김동현과김동현',
+    },
+  ]);
   const result = useSelector((store: RootState) => store.auth.userInfo);
 
   useEffect(() => {
