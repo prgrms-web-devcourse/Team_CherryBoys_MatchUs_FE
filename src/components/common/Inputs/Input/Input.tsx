@@ -22,6 +22,7 @@ interface Props {
     React.ChangeEventHandler<HTMLSelectElement>;
   styleProps?: StyleProps;
   value?: string | number;
+  disable?: boolean;
 }
 
 const { inputBox, inputName, inputContent, inputText, inputDropBox } = styles;
@@ -46,6 +47,7 @@ const Input = ({
   onChange,
   styleProps,
   value,
+  disable,
 }: Props) => {
   const defaultStyle = { ...styleFormat };
 
@@ -93,6 +95,7 @@ const Input = ({
                 cursor: inputContentCursor,
               }}
               value={value}
+              disabled={disable}
             />
           </div>
         )}
@@ -108,6 +111,7 @@ const Input = ({
               cursor: inputContentCursor,
             }}
             value={value}
+            disabled={disable}
           >
             {options?.map((option, index) => (
               <option value={option} key={`dropBoxOption${index}`}>
