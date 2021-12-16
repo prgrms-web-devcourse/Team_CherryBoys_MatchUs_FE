@@ -15,7 +15,11 @@ const Hires = () => {
 
   useEffect(() => {
     const getCurrentHiresInfo = async () => {
-      const res = await getHiresInfo();
+      const defaultSize = 6;
+      const params = {
+        size: defaultSize,
+      };
+      const res = await getHiresInfo(params);
       console.log(res);
     };
 

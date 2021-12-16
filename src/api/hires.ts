@@ -34,13 +34,23 @@ interface allowedApplications {
   postId: number;
   data: allApplications;
 }
+interface conditions {
+  ageGroup?: string;
+  cityId?: number;
+  date?: string;
+  groundId?: number;
+  lastId?: number;
+  positon?: string;
+  regionId?: number;
+  size: number; // Todo(김홍중) : 현재 필수지만 백엔드에서 optional로 만들게되면 optional로 수정 (2021-12-16)
+  sports?: string;
+}
 
-const defaultSize = 6;
-export const getHiresInfo = () =>
+export const getHiresInfo = (params: conditions) =>
   api
     .get({
       url: `/hires`,
-      params: { size: defaultSize },
+      params,
     })
     .catch(throwErrorMessage);
 
