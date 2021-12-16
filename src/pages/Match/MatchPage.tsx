@@ -13,6 +13,7 @@ import {
   MatchApplyModal,
   MatchApproveModal,
   MatchReviewModal,
+  MatchTeamMemberModal,
 } from '@/components';
 import useMount from '@/hooks/useMount';
 import styles from './Match.module.scss';
@@ -24,6 +25,11 @@ const Match = () => {
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
 
   const { match, modal } = useSelector((store: RootState) => store.match.data);
+
+  const registerTeamInfo = match[0] && {
+    teamName: match[0].registerTeamInfo.teamName,
+    teamId: match[0].registerTeamInfo.teamId,
+  };
 
   useMount(() => {
     dispatch(fetchMatchById(matchId));
@@ -52,7 +58,13 @@ const Match = () => {
       {match[0] && modal.matchApprove && (
         <MatchApproveModal showMatchApproveModal={modal.matchApprove} />
       )}
-
+      {match[0] && modal.matchTeamMember && (
+        <MatchTeamMemberModal
+          showMatchTeamMemberModal={modal.matchTeamMember}
+          sports={match[0].sports}
+          teamInfo={registerTeamInfo}
+        />
+      )}
       <MatchReviewModal showMatchReviewModal={modal.matchReview} />
     </div>
   );

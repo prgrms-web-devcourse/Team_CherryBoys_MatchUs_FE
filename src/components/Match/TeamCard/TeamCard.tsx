@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
 import styles from './TeamCard.module.scss';
+import { match } from '@/store/match/match';
 
 interface Props {
   team: {
@@ -37,6 +39,7 @@ const {
   teamUser_extra,
   showTeamUser_extra,
   showTeamUserButton,
+  showTeamMemberModalButton,
 } = styles;
 
 const showPlayersLimit = 5;
@@ -44,9 +47,14 @@ const showPlayersLimit = 5;
 const TeamCard = ({ team }: Props) => {
   const [showTeamUser, setShowTeamUser] = useState(false);
   const teamMembers = team.matchMembers || team.teamUsers || [];
+  const dispatch = useDispatch();
 
   const handleShowTeamUser = () => {
     setShowTeamUser(!showTeamUser);
+  };
+
+  const handleShowTeamMemberModal = () => {
+    dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
   };
 
   return (
@@ -94,6 +102,13 @@ const TeamCard = ({ team }: Props) => {
             className={classNames(showTeamUserButton)}
           >
             {!showTeamUser ? '더보기' : '숨기기'}
+          </button>
+          <button
+            type="button"
+            onClick={handleShowTeamMemberModal}
+            className={classNames(showTeamMemberModalButton)}
+          >
+            팀원 변경
           </button>
         </div>
       </div>

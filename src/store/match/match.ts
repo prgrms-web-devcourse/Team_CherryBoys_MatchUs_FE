@@ -59,6 +59,7 @@ interface MatchState {
       matchApprove: boolean;
       matchReview: boolean;
       matchListFilter: boolean;
+      matchTeamMember: boolean;
     };
     matchId: number;
     matchListFilter: MatchListFilter;
@@ -78,6 +79,7 @@ export const match = createSlice({
         matchApprove: false,
         matchReview: false,
         matchListFilter: false,
+        matchTeamMember: false,
       },
       matchId: -1,
       matchListFilter: {

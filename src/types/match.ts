@@ -8,11 +8,13 @@ export interface MatchCard {
     hour: number;
     minute: number;
     second: number;
+    nano?: number;
   };
   endTime: {
     hour: number;
     minute: number;
     second: number;
+    nano?: number;
   };
   cost: number;
   ageGroup: string;
@@ -133,4 +135,30 @@ export interface Locations {
     groundId?: number;
     groundName?: string;
   }[];
+}
+
+export interface MatchPostEdit {
+  matchId: number;
+  sports: string;
+  ageGroup: string;
+  city: number;
+  region: number;
+  ground: number;
+  cost: number;
+  detail: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface TeamMemberEdit {
+  matchId: number;
+  teamId: number;
+  players: number[];
+}
+
+export interface TeamMemberInfo {
+  grade: string;
+  userId: number;
+  userName: string;
 }
