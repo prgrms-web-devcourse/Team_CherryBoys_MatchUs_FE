@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import styles from './MatchDetail.module.scss';
 import { deleteMatchById } from '@/api';
 import { Match } from '@/types';
@@ -23,10 +22,11 @@ const {
 const MatchDetail = ({ match }: Props) => {
   const history = useHistory();
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
-
+  // TODO: 유저 토큰
+  const token = '1';
   const handleRemoveMatch = () => {
     if (window.confirm(`remove match${matchId}?`)) {
-      deleteMatchById(matchId);
+      deleteMatchById({ matchId, token });
       history.push('/matches');
     }
   };

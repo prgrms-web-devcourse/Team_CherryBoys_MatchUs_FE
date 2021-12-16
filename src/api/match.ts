@@ -1,17 +1,13 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
 import {
-  MatchCard,
-  Match,
-  TeamWithUser,
-  TeamSimple,
-  WaitingTeam,
+  MatchDeleteInfo,
   TeamMemberEdit,
   MatchListFilter,
   MatchPostEdit,
   MatchReviewInfo,
+  MatchApplyInfo,
 } from '@/types';
-import { userTeamDummy, teamMembersDummy } from '@/dummyMatch';
 
 export const fetchAllMatch = async (filter: MatchListFilter) => {
   const data = await api
@@ -91,8 +87,14 @@ export const modifyMatch = async (editedMatchInfo: MatchPostEdit) => {
     .catch(throwErrorMessage);
 };
 
-export const deleteMatchById = async (matchId: number) => {
-  return { matchId };
+export const deleteMatchById = async (matchDeleteInfo: MatchDeleteInfo) => {
+  const { matchId, token } = matchDeleteInfo;
+  await api
+    .delete({
+      url: `/matches/${matchId}`,
+      data: token,
+    })
+    .catch(throwErrorMessage);
 };
 
 export const fetchAuthorizedTeams = async (token: string) => {
@@ -114,8 +116,15 @@ export const fetchTotalMembers = async (teamId: number) => {
   return data.members;
 };
 
-// TODO: 매칭신청
-export const applyMatch = async () => {};
+export const applyMatch = async (matchApplyInfo: MatchApplyInfo) => {
+  const { matchId, players, teamId } = matchApplyInfo;
+  await api
+    .post({
+      url: `/matchs/${matchId}/waitings`,
+      data: { players, teamId },
+    })
+    .catch(throwErrorMessage);
+};
 
 export const fetchWaitingTeams = async (matchId: number) => {
   const data = await api
@@ -135,6 +144,7 @@ export const approveMatch = async (teamWaitingId: number) => {
     .catch(throwErrorMessage);
 };
 
+// TODO: 태그 아이디 상수화
 export const postMatchReview = async (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewedTeamId } = matchReviewInfo;
   // await api

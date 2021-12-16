@@ -6,7 +6,7 @@ import styles from './MatchApplyModal.module.scss';
 import { Input, InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
 import { SPORTS_PLAYER } from '@/consts';
-import { fetchAuthorizedTeams, fetchTotalMembers } from '@/api';
+import { fetchAuthorizedTeams, fetchTotalMembers, applyMatch } from '@/api';
 import { TeamSimple, TeamMemberInfo } from '@/types';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
@@ -98,9 +98,9 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
       return;
     }
 
-    // TODO: 매칭 신청 API 요청
-    // applyMatch(requestData)
-    console.log(matchId, selectedTeamWithUsers);
+    const requestData = { matchId, ...selectedTeamWithUsers };
+
+    applyMatch(requestData);
   };
 
   return (

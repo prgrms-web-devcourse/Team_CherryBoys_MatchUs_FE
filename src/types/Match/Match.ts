@@ -172,3 +172,14 @@ export interface MatchReviewInfo {
   reviewerTeamId: number;
   reviewedTeamId: number;
 }
+
+export interface MatchDeleteInfo {
+  token: string;
+  matchId: number;
+}
+
+export interface MatchApplyInfo {
+  matchId: number;
+  players: number[];
+  teamId: number;
+}
