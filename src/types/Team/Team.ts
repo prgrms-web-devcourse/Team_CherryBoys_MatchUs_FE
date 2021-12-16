@@ -26,7 +26,7 @@ export interface TeamInfo {
   captainId: number;
   captainName: string;
   mannerTemperature: number;
-  matchCount: 0;
+  matchCount: number;
   sportsName: string;
   tagNames: string[];
   teamCreatedAt: string;
