@@ -4,22 +4,21 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import ValidInput from './ValidInput';
-import { SIGNUP_VALIDATION_SUCCESS_MSG, validateSignup } from '@/utils/validation/signupValidation';
-import { SIGNUP_VALIDATION_ERR_MSG } from '../../utils/validation/signupValidation';
+import {
+  SIGNUP_VALIDATION_SUCCESS_MSG,
+  validateSignup,
+  SIGNUP_VALIDATION_ERR_MSG,
+} from '@/utils/validation/signupValidation';
 import {
   requestCheckDuplicatedEmail,
   requestCheckDuplicatedNickname,
   requestSignup,
-} from '../../api/auth';
-import { isValidFormType, signupFormType, validMsgType } from '@/types/auth';
+} from '@/api/auth';
+import { isValidFormType, signupFormType, validMsgType } from '@/types/auths';
 import { AGE, GENDER, SPORTS } from '@/consts/signup';
 
 const Signup = () => {
-  const dispatch = useDispatch();
-
-  // 회원가입에 필요한 상태
   const [signupForm, setSignupForm] = useState<signupFormType>({
     userName: '',
     nickname: '',
@@ -31,7 +30,6 @@ const Signup = () => {
     sports: '',
   });
 
-  // 폼 검증을 위한 상태
   const [isValidForm, setIsValidForm] = useState<isValidFormType>({
     userName: false,
     nickname: false,
@@ -43,7 +41,6 @@ const Signup = () => {
     sports: false,
   });
 
-  // 검증 메세지를 위한 상태
   const [validMsg, setValidMsg] = useState<validMsgType>({
     userName: '',
     nickname: '',
@@ -60,17 +57,15 @@ const Signup = () => {
 
   const history = useHistory();
 
-  const onChange = (
+  const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    // 비밀번호 확인의 경우만 파라미터가 2개 들어가므로 체크
     const errMsg =
       name !== 'confirmedPassword'
         ? validateSignup[name](value)
         : validateSignup[name](value, password);
 
-    // 모든 상태 변경
     setValidMsg({
       ...validMsg,
       [name]: errMsg,
@@ -88,13 +83,21 @@ const Signup = () => {
   };
 
   const signup = async () => {
-    // TODO: non-response API 이므로 status code check해서 isSignup에 전달
-    // true일때만 API call 보내기
     const isSignup = await requestSignup({ ...signupForm, name: userName });
+
+    if (isSignup) {
+      history.push('/login');
+    }
+
+    // TODO: 모달 예외처리
   };
 
   // 닉네임 중복 확인
-  const checkDuplicatedNickname = async () => {
+  const handleClickNicknameDuplicate = async () => {
+    if (!isValidForm.nickname) {
+      return;
+    }
+    
     const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
 
     const msg = !isduplicated
@@ -112,8 +115,10 @@ const Signup = () => {
     });
   };
 
-  // 이메일 중복 확인
-  const checkDuplicatedEmail = async () => {
+  const handleClickCheckDuplicatedEmail = async () => {
+    if (!isValidForm.email) {
+      return;
+    }
     const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
     const msg = !isduplicated
@@ -130,13 +135,11 @@ const Signup = () => {
       email: isduplicated,
     });
   };
-
-  // 전체 폼 검증. 하나라도 false일시 true가 나오므로 반전
+      
   const IsSignupValid = () => {
     return !Object.values(isValidForm).includes(false);
   };
 
-  // 필수 항목 미입력시 메시지 수정
   const changeUnvalidateMsg = () => {
     const newValidMsgState: validMsgType = { ...validMsg };
 
@@ -167,7 +170,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="userName"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={userName}
           type="input"
           validMsg={validMsg.name}
@@ -178,12 +181,12 @@ const Signup = () => {
       <div>
         <ValidInput
           name="nickname"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={nickname}
           type="input"
           validMsg={validMsg.nickname}
         />
-        <button type="button" onClick={checkDuplicatedNickname}>
+        <button type="button" onClick={handleClickNicknameDuplicate}>
           중복확인
         </button>
       </div>
@@ -191,12 +194,12 @@ const Signup = () => {
       <div>
         <ValidInput
           name="email"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={email}
           type="input"
           validMsg={validMsg.email}
         />
-        <button type="button" onClick={checkDuplicatedEmail}>
+        <button type="button" onClick={handleClickCheckDuplicatedEmail}>
           중복확인
         </button>
       </div>
@@ -204,7 +207,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="password"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={password}
           type="input"
           validMsg={validMsg.password}
@@ -214,7 +217,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="confirmedPassword"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={confirmedPassword}
           type="input"
           validMsg={validMsg.confirmedPassword}
@@ -224,7 +227,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="gender"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={gender}
           type="select"
           validMsg={validMsg.gender}
@@ -235,7 +238,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="ageGroup"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={ageGroup}
           type="select"
           validMsg={validMsg.ageGroup}
@@ -246,7 +249,7 @@ const Signup = () => {
       <div>
         <ValidInput
           name="sports"
-          onChange={onChange}
+          onChange={handleOnChange}
           value={sports}
           type="select"
           validMsg={validMsg.sports}

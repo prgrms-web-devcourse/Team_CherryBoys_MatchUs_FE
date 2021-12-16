@@ -1,17 +1,12 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-import { loginFormType, requestSignupFormType } from '@/types/auth';
 
-// TODO: status code 전달하기
+import { loginFormType, requestSignupFormType } from '@/types/auths';
 export const requestSignup = (signupForm: requestSignupFormType) =>
   api
     .post({
       url: '/users',
       data: signupForm,
-    })
-    // 현재 미작동
-    .then((response) => {
-      return response.ok;
     })
     .catch(throwErrorMessage);
 
@@ -34,5 +29,12 @@ export const requestCheckDuplicatedEmail = (email: string) =>
   api
     .get({
       url: `/users/email-check/${email}`,
+    })
+    .catch(throwErrorMessage);
+
+export const requestReAuth = () =>
+  api
+    .get({
+      url: '/users/reissue',
     })
     .catch(throwErrorMessage);

@@ -3,8 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
-import api from '@/api/core';
-import { deleteTeamMembers } from '@/api';
+import { deleteTeamMembers, getTeamMemberInfo } from '@/api';
 
 interface MemberElementType {
   userId: number;
@@ -14,99 +13,6 @@ interface MemberElementType {
 
 const { playerManange } = style;
 
-const dummyData = [
-  {
-    userId: 1,
-    userName: '김1',
-    grade: '회원',
-  },
-  {
-    userId: 2,
-    userName: '김2',
-    grade: '용병',
-  },
-  {
-    userId: 3,
-    userName: '오3',
-    grade: '용병',
-  },
-  {
-    userId: 4,
-    userName: '김4',
-    grade: '부주장',
-  },
-  {
-    userId: 5,
-    userName: '김5',
-    grade: '회원',
-  },
-  {
-    userId: 6,
-    userName: '오6',
-    grade: '부주장',
-  },
-  {
-    userId: 7,
-    userName: '김7',
-    grade: '회원',
-  },
-  {
-    userId: 8,
-    userName: '김8',
-    grade: '회원',
-  },
-  {
-    userId: 9,
-    userName: '오9',
-    grade: '회원',
-  },
-  {
-    userId: 10,
-    userName: '김10',
-    grade: '주장',
-  },
-  {
-    userId: 11,
-    userName: '김11',
-    grade: '회원',
-  },
-  {
-    userId: 12,
-    userName: '오12',
-    grade: '회원',
-  },
-  {
-    userId: 13,
-    userName: '김13',
-    grade: '회원',
-  },
-  {
-    userId: 14,
-    userName: '오14',
-    grade: '회원',
-  },
-  {
-    userId: 15,
-    userName: '김15',
-    grade: '회원',
-  },
-  {
-    userId: 16,
-    userName: '김16',
-    grade: '회원',
-  },
-  {
-    userId: 17,
-    userName: '오17',
-    grade: '용병',
-  },
-  {
-    userId: 18,
-    userName: '김18',
-    grade: '용병',
-  },
-];
-
 const TeamMemberManage = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const { memberType } = useParams<{ memberType: string }>();
@@ -114,7 +20,7 @@ const TeamMemberManage = () => {
   const [isEnterEditPage, setIsEnterEditPage] = useState<boolean>(false);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(false); // TODO : authorization으로 대체 예정
-  const [memberInfo, setMemberInfo] = useState<MemberElementType[]>(dummyData);
+  const [memberInfo, setMemberInfo] = useState<MemberElementType[]>([]);
   const isAddTeamMember = hasAuthorization && isEnterEditPage === false;
 
   const handleChangeEditButtonStatus = () => {
@@ -166,15 +72,14 @@ const TeamMemberManage = () => {
     // if (userGrade[`${teamName}`] === '팀장') {
     //   setHasAuthorization(true);
     // }
+
     // TODO: API 연결 시, 주석 제거 예정
-    // const getPeopleInfo = async () => {
-    //   const result= await api.get({
-    //     url: `/teams/${teamId}/${memberType}`,
-    //   });
-    //   setMemberInfo(result);
-    // };
-    // getPeopleInfo();
-  }, []);
+    const upMemberInfo = async () => {
+      const { members } = await getTeamMemberInfo(teamId, memberType);
+      setMemberInfo(members);
+    };
+    upMemberInfo();
+  }, [teamId, memberType]);
 
   return (
     <>
