@@ -6,8 +6,9 @@ import { RootState } from '@/store';
 import style from './teamChoice.module.scss';
 import { TeamInfo } from '@/types';
 import { getTeamInfo } from '@/api';
+import TeamInfoCard from './TeamInfoCard';
 
-const { highlight } = style;
+const { highlight, addTeamButton } = style;
 
 const TeamChoice = () => {
   const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
@@ -33,6 +34,20 @@ const TeamChoice = () => {
           <span className={classNames('whiteSpace')}>
             <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
           </span>
+          {myTeams.map((myTeamInfo) => {
+            return (
+              <TeamInfoCard
+                teamId={myTeamInfo.teamId}
+                teamName={myTeamInfo.teamName}
+                teamCreatedAt={myTeamInfo.teamCreatedAt}
+                tagNames={myTeamInfo.tagNames}
+                mannerTemperature={myTeamInfo.mannerTemperature}
+              />
+            );
+          })}
+          <button type="button" className={classNames(addTeamButton)}>
+            +
+          </button>
         </>
       ) : (
         <>
