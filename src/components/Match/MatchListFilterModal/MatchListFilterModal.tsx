@@ -50,7 +50,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
   const dispatch = useDispatch();
   const { matchListFilter } = useSelector((store: RootState) => store.match.data);
 
-  const placeholder = 'placeholder';
+  const placeholder = '선택';
   const [ageGroup, setAgeGroup] = useState(placeholder);
   const [city, setCity] = useState(defaultCity);
   const [region, setRegion] = useState(defaultRegion);
@@ -119,7 +119,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
     setInitialValue();
   });
 
-  const handleInput = (e: React.ChangeEvent, category: string) => {
+  const handleMatchInputs = (e: React.ChangeEvent, category: string) => {
     const targetInput: string = (e.target as HTMLInputElement).value;
     if (category === 'sports') {
       setSports(targetInput);
@@ -209,7 +209,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
           labelName="종목"
           type="dropbox"
           options={[placeholder, ...SPORTS]}
-          onChange={(e) => handleInput(e, 'sports')}
+          onChange={(e) => handleMatchInputs(e, 'sports')}
           value={sports}
         />
         <Input
@@ -217,7 +217,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
           labelName="연령대"
           type="dropbox"
           options={[placeholder, ...AGE_GROUP]}
-          onChange={(e) => handleInput(e, 'ageGroup')}
+          onChange={(e) => handleMatchInputs(e, 'ageGroup')}
           value={ageGroup}
         />
         <div className={classNames(inputLocationBox)}>
@@ -227,7 +227,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
               inputId="inputCity"
               type="dropbox"
               options={cityOptions}
-              onChange={(e) => handleInput(e, 'city')}
+              onChange={(e) => handleMatchInputs(e, 'city')}
               styleProps={{ inputContentHeight: 'fit-content' }}
               value={city.cityName}
             />
@@ -235,7 +235,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
               inputId="inputRegion"
               type="dropbox"
               options={regionOptions}
-              onChange={(e) => handleInput(e, 'region')}
+              onChange={(e) => handleMatchInputs(e, 'region')}
               styleProps={{ inputContentHeight: 'fit-content' }}
               value={region.regionName}
             />
@@ -243,7 +243,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
               inputId="inputGround"
               type="dropbox"
               options={groundOptions}
-              onChange={(e) => handleInput(e, 'ground')}
+              onChange={(e) => handleMatchInputs(e, 'ground')}
               styleProps={{ inputContentHeight: 'fit-content' }}
               value={ground.groundName}
             />
