@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
 import style from './teamChoice.module.scss';
 import { TeamInfo } from '@/types';
@@ -11,6 +11,7 @@ import TeamInfoCard from './TeamInfoCard';
 const { highlight, addTeamButton } = style;
 
 const TeamChoice = () => {
+  const history = useHistory();
   // TODO: 체리와 로그인 연결한 후에 지울 데이터입니다.
   const [myTeams, setMyTeams] = useState<TeamInfo[]>([
     {
@@ -28,6 +29,10 @@ const TeamChoice = () => {
     },
   ]);
   const result = useSelector((store: RootState) => store.auth.userInfo);
+
+  const handleMoveToTeamCreatePage = () => {
+    history.push('/team/new');
+  };
 
   useEffect(() => {
     const updateMyTeamsInfo = () => {
@@ -60,7 +65,11 @@ const TeamChoice = () => {
               />
             );
           })}
-          <button type="button" className={classNames(addTeamButton)}>
+          <button
+            type="button"
+            className={classNames(addTeamButton)}
+            onClick={handleMoveToTeamCreatePage}
+          >
             +
           </button>
         </>
@@ -71,9 +80,13 @@ const TeamChoice = () => {
             새로운 <span className={classNames(highlight)}>팀</span>을 만들고
           </span>
           <span className={classNames('whiteSpace')}>다 함께 땀을 흘려볼까요? 🏃🏻</span>
-          <div>
-            <Link to="/team/new">+</Link>
-          </div>
+          <button
+            type="button"
+            className={classNames(addTeamButton)}
+            onClick={handleMoveToTeamCreatePage}
+          >
+            +
+          </button>
         </>
       )}
     </div>
