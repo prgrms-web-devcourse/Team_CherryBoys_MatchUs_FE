@@ -6,17 +6,17 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ValidInput from './ValidInput';
 import {
-  SIGNUP_VALIDATION_SUCCESS_MSG,
-  validateSignup,
-  SIGNUP_VALIDATION_ERR_MSG,
-} from '@/utils/validation/signupValidation';
+  USER_VALIDATION_SUCCESS_MSG,
+  validateUser,
+  USER_VALIDATION_ERR_MSG,
+} from '@/utils/validation/userValidation';
 import {
   requestCheckDuplicatedEmail,
   requestCheckDuplicatedNickname,
   requestSignup,
-} from '@/api/auth';
-import { isValidFormType, signupFormType, validMsgType } from '@/types/auths';
-import { AGE, GENDER, SPORTS } from '@/consts/signup';
+} from '@/api/user';
+import { isValidFormType, signupFormType, validMsgType } from '@/types/users';
+import { AGE, GENDER, SPORTS } from '@/consts/user';
 
 const Signup = () => {
   const [signupForm, setSignupForm] = useState<signupFormType>({
@@ -63,8 +63,8 @@ const Signup = () => {
     const { name, value } = e.target;
     const errMsg =
       name !== 'confirmedPassword'
-        ? validateSignup[name](value)
-        : validateSignup[name](value, password);
+        ? validateUser[name](value)
+        : validateUser[name](value, password);
 
     setValidMsg({
       ...validMsg,
@@ -97,12 +97,12 @@ const Signup = () => {
     if (!isValidForm.nickname) {
       return;
     }
-    
+
     const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
 
     const msg = !isduplicated
-      ? SIGNUP_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
-      : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
+      ? USER_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
+      : USER_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
 
     setValidMsg({
       ...validMsg,
@@ -122,8 +122,8 @@ const Signup = () => {
     const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
     const msg = !isduplicated
-      ? SIGNUP_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
-      : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
+      ? USER_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
+      : USER_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
 
     setValidMsg({
       ...validMsg,
@@ -135,7 +135,7 @@ const Signup = () => {
       email: isduplicated,
     });
   };
-      
+
   const IsSignupValid = () => {
     return !Object.values(isValidForm).includes(false);
   };
