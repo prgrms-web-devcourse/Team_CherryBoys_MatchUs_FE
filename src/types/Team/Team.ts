@@ -13,3 +13,9 @@ export interface MatchElement {
   applyTeamLogo: string;
   status: string;
 }
+
+export interface MemberElementType {
+  userId: number;
+  userName: string;
+  grade: string;
+}

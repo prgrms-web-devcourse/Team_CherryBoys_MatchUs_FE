@@ -95,14 +95,15 @@ const TeamCreate = () => {
   };
 
   const handleCheckTeamNameDuplication = async () => {
-    const result = await checkTeamNameDuplication(values.teamName);
+    const { teamName } = values;
 
-    if (result.success) {
-      alert('사용 하셔도 좋습니다.');
+    const { duplicated } = await checkTeamNameDuplication(teamName);
+
+    if (!duplicated) {
       setIsDuplicatedTeamName(false);
+    } else {
+      setIsDuplicatedTeamName(true);
     }
-    alert('중복된 팀 이름이 존재합니다.');
-    setIsDuplicatedTeamName(true);
   };
 
   const isDisabled = !!Object.keys(errors).length || isLoading;
