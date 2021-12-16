@@ -83,10 +83,10 @@ export const getTeamInfo = (teamId: number) =>
     })
     .catch(throwErrorMessage);
 
-export const getMemberInfo = (teamId: number) =>
+export const getTotalMemberInfo = (teamId: number) =>
   api
     .get({
-      url: `/teams/${teamId}/members`,
+      url: `/teams/${teamId}/total-members`,
     })
     .catch(throwErrorMessage);
 

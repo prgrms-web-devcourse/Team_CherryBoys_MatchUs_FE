@@ -80,10 +80,10 @@ const TeamDetail = () => {
   }, [teamId]);
 
   const updateTeamMatchHistory = useCallback(async () => {
-    const { matchesSummary } = await getMatchHistory(teamId);
+    const { teamMatches } = await getMatchHistory(teamId);
 
-    if (matchesSummary) {
-      setMatchHistory(matchesSummary);
+    if (teamMatches) {
+      setMatchHistory(teamMatches);
     }
   }, [teamId]);
 
