@@ -1,0 +1,49 @@
+.matchInfoCard {
+  box-sizing: border-box;
+  margin: 0 1.6rem;
+  padding: 0 1.6rem;
+  border: 2px solid #c4c4c4;
+  border-radius: 2rem;
+
+  .matchInfoRow {
+    display: flex;
+    align-items: center;
+    margin: 0.8rem 0;
+    font-size: 1.2rem;
+    text-align: center;
+
+    &.importantInfo {
+      .matchInfo {
+        font-size: 1.6rem;
+        letter-spacing: 0.1rem;
+      }
+    }
+
+    &.normalInfo {
+      justify-content: space-around;
+      .matchInfo {
+        box-sizing: border-box;
+        width: fit-content;
+        min-width: 8rem;
+        border: 2px solid #c4c4c4;
+        border-radius: 2rem;
+      }
+    }
+
+    .matchInfo {
+      width: 100%;
+
+      &_name {
+        box-sizing: border-box;
+        padding: 0.8rem 0;
+        letter-spacing: 0.2rem;
+        border: 2px solid #c4c4c4;
+        border-radius: 0.5rem;
+      }
+
+      &_content {
+        padding: 0.8rem 0;
+      }
+    }
+  }
+}

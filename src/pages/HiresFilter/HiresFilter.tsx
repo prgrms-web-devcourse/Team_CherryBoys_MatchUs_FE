@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SPORTS_CATEGORY, AGE_GROUP, CITY, REGION, GROUND_NAME } from '@/consts';
 
-const FilterPage = () => {
+const HiresFilter = () => {
   return (
     <>
       <div>
@@ -21,10 +21,10 @@ const FilterPage = () => {
       <div>
         <div>연령대</div>
         <select id="hiresAgeGroup">
-          <option>{`${AGE_GROUP[0]}대`}</option>
+          <option>{`${AGE_GROUP[0]}`}</option>
           {AGE_GROUP.map((group) => (
             <option id={`${group}s`} key={`hires-${group}`}>
-              {group}대
+              {group}
             </option>
           ))}
         </select>
@@ -79,4 +79,4 @@ const FilterPage = () => {
   );
 };
 
-export default FilterPage;
+export default HiresFilter;

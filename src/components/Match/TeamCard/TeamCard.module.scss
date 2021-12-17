@@ -1,0 +1,139 @@
+.TeamInfoCard {
+  .TeamInfo {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    box-sizing: border-box;
+    margin: 1.6rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 0.5rem;
+
+    > div {
+      height: 2.8rem;
+      padding: 0.4rem;
+    }
+
+    .logo {
+      display: flex;
+      grid-row: 1/4;
+      align-items: center;
+      justify-content: center;
+      height: 9.6rem;
+      .linkButton {
+        width: fit-content;
+        max-width: 100%;
+        height: 100%;
+        background: none;
+
+        img {
+          box-sizing: border-box;
+          width: fit-content;
+          max-width: 100%;
+          height: 100%;
+          border: 0.1rem solid #c4c4c4;
+          border-radius: 0.5rem;
+        }
+      }
+    }
+
+    .teamName {
+      .linkButton {
+        font-weight: 700;
+        font-size: 1.6rem;
+        background: none;
+      }
+    }
+
+    .captainInfo {
+      display: flex;
+      align-items: center;
+      .captainName {
+        margin-right: 1.6rem;
+        font-size: 1.6rem;
+      }
+
+      .buttonBox {
+        button {
+          background: none;
+          border-radius: 0.5rem;
+          i {
+            color: #c4c4c4;
+          }
+        }
+      }
+    }
+
+    .tags {
+      .tag {
+        box-sizing: border-box;
+        width: fit-content;
+        padding: 0.4rem;
+        border: 0.1rem solid #56ad79;
+        border-radius: 1.5rem;
+        box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(86, 173, 121, 0.5);
+      }
+    }
+  }
+
+  .teamUsers {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    box-sizing: border-box;
+    height: fit-content;
+    margin: 1.6rem;
+    margin-top: 0.8rem;
+    overflow: hidden;
+    font-size: 1.2rem;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 0.5rem;
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.8rem;
+      padding: 0.4rem;
+      text-align: center;
+      &:last-child {
+        grid-column: 3;
+      }
+    }
+
+    .teamUser {
+      &.teamUser_extra {
+        display: none;
+        &.showTeamUser_extra {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 2.8rem;
+          padding: 0.4rem;
+          text-align: center;
+        }
+      }
+    }
+
+    .showTeamUserButton {
+      box-sizing: border-box;
+      min-width: 5rem;
+      overflow: hidden;
+      background: none;
+      border: 0.2rem solid #c4c4c4;
+      border-radius: 0.5rem;
+    }
+
+    .showTeamMemberModalButton {
+      box-sizing: border-box;
+      min-width: 5rem;
+      overflow: hidden;
+      background: none;
+      border: 0.2rem solid #c4c4c4;
+      border-radius: 0.5rem;
+    }
+  }
+}

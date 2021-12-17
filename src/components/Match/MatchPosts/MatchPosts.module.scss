@@ -1,0 +1,48 @@
+.postsContainer {
+  margin: 0 1.6rem;
+  margin-bottom: 4.8rem;
+  padding: 0.8rem 0;
+
+  .postTitleBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 4rem;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 0.5rem;
+
+    .postTitle {
+      padding: 0 0.8rem;
+      font-size: 1.6rem;
+    }
+
+    .buttonBox {
+      .filterPostButton {
+        height: 100%;
+        color: #56ad79;
+        font-size: 1.6rem;
+        background: none;
+      }
+    }
+  }
+
+  .postItems {
+    margin: 0.8rem 0;
+  }
+
+  .addPostButton {
+    position: fixed;
+    right: 1.6rem;
+    bottom: 4.8rem;
+    width: 4.8rem;
+    height: 4.8rem;
+    padding: 0;
+    color: #fff;
+    font-size: 2.4rem;
+    line-height: 4.8rem;
+    text-align: center;
+    background: #56ad79;
+    border-radius: 2.4rem;
+  }
+}
