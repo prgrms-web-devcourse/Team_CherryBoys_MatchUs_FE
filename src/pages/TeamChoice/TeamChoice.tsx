@@ -12,22 +12,7 @@ const { highlight, addTeamButton } = style;
 
 const TeamChoice = () => {
   const history = useHistory();
-  // TODO: 체리와 로그인 연결한 후에 지울 데이터입니다.
-  const [myTeams, setMyTeams] = useState<TeamInfo[]>([
-    {
-      ageGroup: '12',
-      bio: '12',
-      captainId: 1,
-      captainName: '12',
-      mannerTemperature: 36.5,
-      matchCount: 0,
-      sportsName: '12',
-      tagNames: [],
-      teamCreatedAt: '언제언제 만들어짐',
-      teamId: 1,
-      teamName: '김동현과김동현',
-    },
-  ]);
+  const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
   const result = useSelector((store: RootState) => store.user.userInfo);
 
   const handleMoveToTeamCreatePage = () => {
@@ -36,15 +21,14 @@ const TeamChoice = () => {
 
   useEffect(() => {
     const updateMyTeamsInfo = () => {
-      result?.userGrade?.map(async (myTeamInfo) => {
+      result.userGradeResponse.map(async (myTeamInfo) => {
         const teamInfo = await getTeamInfo(myTeamInfo.teamId);
-
         setMyTeams((prev) => [...prev, teamInfo]);
       });
     };
 
     updateMyTeamsInfo();
-  });
+  }, [result.userGradeResponse]);
 
   return (
     <div>
@@ -54,11 +38,12 @@ const TeamChoice = () => {
           <span className={classNames('whiteSpace')}>
             <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
           </span>
-          {myTeams.map(({ teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
+          {myTeams.map(({ logo, teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
             return (
               <TeamInfoCard
-                key={`teamInfo-${teamId}`}
+                key={`teamCard-${teamId}`}
                 teamId={teamId}
+                teamLogo={logo}
                 teamName={teamName}
                 teamCreatedAt={teamCreatedAt}
                 tagNames={tagNames}

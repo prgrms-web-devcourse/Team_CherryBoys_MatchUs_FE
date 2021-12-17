@@ -5,7 +5,7 @@ import style from './teamChoice.module.scss';
 
 export interface TeamCardInfo {
   mannerTemperature: number;
-
+  teamLogo: string;
   tagNames: string[];
   teamCreatedAt: string;
   teamId: number;
@@ -16,28 +16,32 @@ const { cardContainer } = style;
 
 const TeamInfoCard = ({
   teamId,
+  teamLogo,
   teamName,
   teamCreatedAt,
   tagNames,
   mannerTemperature,
 }: TeamCardInfo) => {
+  const teamCreatedTime = teamCreatedAt.split('T');
+
   return (
     <div className={classNames(cardContainer)}>
       <div key={`teamCard-${teamId}`}>
-        {/* TODO: API를 통해 로고가 넘어오면, 채울 예정 */}
         <div>
-          <Link to={`/team/${teamId}`}>{/* <img src={} /> */}</Link>
+          <Link to={`/team/${teamId}`}>
+            <img src={teamLogo} alt="팀 로고" />
+          </Link>
         </div>
       </div>
       <div>
         <p>
           <span>{teamName}</span>
-          <span>{teamCreatedAt}</span>
+          <span>{teamCreatedTime[0]}</span>
         </p>
         <div>
           <article>
             {tagNames.map((tag) => {
-              return <span>{tag}</span>;
+              return <span key={`tagName-${tag}`}>{tag}</span>;
             })}
           </article>
           <div>{mannerTemperature}</div>
