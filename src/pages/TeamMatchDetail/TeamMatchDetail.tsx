@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs } from '@karrotframe/tabs';
 import { Link, useParams } from 'react-router-dom';
-import style from './matchDetail.module.scss';
+import style from './teamMatchDetail.module.scss';
 import { Header, MatchListElement } from '@/components';
 import '@karrotframe/tabs/index.css';
 import { getMatchHistory } from '@/api';
