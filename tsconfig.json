@@ -19,7 +19,7 @@
     "skipLibCheck": true, // 사용하는 라이브러리의 타입 검사를 skip할 것인가
     "noImplicitThis": true, // any 타입으로 암시한 this 표현식에 오류를 보고할 것인가
     "noFallthroughCasesInSwitch": true, // switch문에서 fallthrough case가 발견되면 에러를 발생시킬 것인가
-    "noImplicitReturns": true, // void가 아닌 함수가 리턴을 제대로 하지 않는 경우가 있다면 에러 발생
+    "noImplicitReturns": false, // void가 아닌 함수가 리턴을 제대로 하지 않는 경우가 있다면 에러 발생
     "noEmit": true, // 컴파일러가 js 파일 등 출력 결과물을 만들지 않을 것인가
     "noEmitOnError": true, // 에러 발생시 js 소스코드, source map, declaration 등이 생성되지 않는다
     "noUnusedLocals": false,

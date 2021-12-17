@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs } from '@karrotframe/tabs';
 import { Link, useParams } from 'react-router-dom';
-import style from './matchDetail.module.scss';
+import style from './teamMatchDetail.module.scss';
 import { Header, MatchListElement } from '@/components';
 import '@karrotframe/tabs/index.css';
 import { getMatchHistory } from '@/api';
@@ -10,7 +10,7 @@ import { MatchElement } from '@/types';
 
 const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
 
-const MatchDetail = () => {
+const TeamMatchDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
 
@@ -150,4 +150,4 @@ const MatchDetail = () => {
   );
 };
 
-export default MatchDetail;
+export default TeamMatchDetail;

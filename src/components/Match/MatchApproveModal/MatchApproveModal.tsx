@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styles from './MatchApproveModal.module.scss';
 import { TeamCard } from '@/components';
-import { RootState } from '@/store';
-import { fetchWaitingTeams, match } from '@/store/match/match';
-import useMount from '@/hooks/useMount';
-import { WaitingTeam } from '@/types/match';
+import { match } from '@/store/match/match';
+import { WaitingTeam } from '@/types';
+import { fetchWaitingTeams, approveMatch } from '@/api';
 
 const {
   modalBackground,
@@ -14,6 +14,7 @@ const {
   showModal,
   modalName,
   teamCardContainer,
+  noWaitingTeam,
   selectedTeamCard,
   buttonBox,
   submitButton,
@@ -24,37 +25,43 @@ interface ModalState {
 }
 
 const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
-  const { waitingTeams } = useSelector((store: RootState) => store.match.data);
+  const [waitingTeams, setWaitingTeams] = useState<WaitingTeam[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<WaitingTeam>({
+    teamInfo: {
+      captainId: 0,
+      captainName: '',
+      mannerTemperature: 0,
+      matchMembers: [],
+      teamId: 0,
+      teamLogo: '',
+      teamName: '',
+    },
     teamWaitingId: 0,
-    teamId: 0,
-    teamLogo: '',
-    teamName: '',
-    teamMannerTemperature: 0,
-    teamUsers: [{ userId: -1, userName: '' }],
   });
-  const { matchId } = useSelector((store: RootState) => store.match.data);
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
 
   const dispatch = useDispatch();
-  useMount(() => {
-    dispatch(fetchWaitingTeams(matchId));
-  });
+  const getWaitingTeams = useCallback(async () => {
+    const waitingTeamList = await fetchWaitingTeams(matchId);
+    setWaitingTeams(waitingTeamList);
+  }, [matchId]);
+  useEffect(() => {
+    getWaitingTeams();
+  }, []);
 
-  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
-    if ((e.target as Element).classList.contains('modalBackground')) {
+  const handleCloseModal = (e: React.MouseEvent<HTMLElement>, closeButton: boolean) => {
+    if ((e.target as Element).classList.contains('modalBackground') || closeButton) {
       dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
     }
   };
 
-  const onSubmit = () => {
-    if (!selectedTeam) {
+  const handleSubmitTeam = () => {
+    if (selectedTeam.teamWaitingId < 1) {
       window.alert('팀을 선택해주세요');
       return;
     }
 
-    // TODO: 매칭수락 API 요청
-    console.log(`teamId:${selectedTeam.teamWaitingId}`, selectedTeam);
-    // dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
+    approveMatch(selectedTeam.teamWaitingId);
   };
 
   const handleOnChangeTeamCard = (e: React.ChangeEvent<HTMLElement>) => {
@@ -66,7 +73,7 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
       className={classNames('modalBackground', modalBackground, {
         [showModal]: showMatchApproveModal,
       })}
-      onClick={handleCloseModal}
+      onClick={(e) => handleCloseModal(e, false)}
       role="presentation"
     >
       <div className={classNames(modalContainer)}>
@@ -74,17 +81,18 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
           <h3>매칭팀 수락</h3>
         </div>
         {waitingTeams.map((team, index) => (
-          <div key={`teamCard${team.teamId}`} className={classNames(teamCardContainer)}>
+          <div key={`teamCard${team.teamInfo.teamId}`} className={classNames(teamCardContainer)}>
             <label
               className={classNames({
-                [selectedTeamCard]: selectedTeam && selectedTeam.teamId === team.teamId,
+                [selectedTeamCard]:
+                  selectedTeam && selectedTeam.teamInfo.teamId === team.teamInfo.teamId,
               })}
-              htmlFor={`teamCard${team.teamId}`}
+              htmlFor={`teamCard${team.teamInfo.teamId}`}
             >
-              <TeamCard key={`teamInfo${team.teamId}`} team={team} />
+              <TeamCard key={`teamInfo${team.teamInfo.teamId}`} team={team.teamInfo} />
               <input
                 type="radio"
-                id={`teamCard${team.teamId}`}
+                id={`teamCard${team.teamInfo.teamId}`}
                 name="selectTeamCard"
                 value={index}
                 onChange={handleOnChangeTeamCard}
@@ -92,10 +100,26 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
             </label>
           </div>
         ))}
+        {waitingTeams.length < 1 && (
+          <div className={classNames(teamCardContainer, noWaitingTeam)}>
+            <div>매치에 신청한 팀이 없습니다</div>
+          </div>
+        )}
         <div className={classNames(buttonBox)}>
-          <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
-            선택
-          </button>
+          {waitingTeams.length < 1 && (
+            <button
+              className={classNames(submitButton)}
+              type="button"
+              onClick={(e) => handleCloseModal(e, true)}
+            >
+              닫기
+            </button>
+          )}
+          {waitingTeams.length > 0 && (
+            <button className={classNames(submitButton)} type="button" onClick={handleSubmitTeam}>
+              선택
+            </button>
+          )}
         </div>
       </div>
     </div>

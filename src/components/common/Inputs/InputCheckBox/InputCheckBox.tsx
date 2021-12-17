@@ -40,14 +40,17 @@ const styleFormat: StyleProps = {
   unCheckedBoxContainerWidth: '100%',
   unCheckedBoxWidth: '100%',
   unCheckedBoxHeight: '100%',
-  cunCheckedBoxMargin: '0',
+  unCheckedBoxMargin: '0',
   unCheckedBoxFontColor: '#000',
-  unCheckedBoxBackgroundColor: '#fff',
+  unCheckedBoxBackgroundColor: 'inherit',
+  unCheckedBoxInputBackgroundColor: '#F7F7F7',
   unCheckedBoxBorderRadius: '0',
   unCheckedBoxBorder: 'none',
-  checkedBoxFontColor: '#fff',
-  checkedBoxBackgroundColor: '#56ad79',
+  checkedBoxFontColor: '#000',
+  checkedBoxBackgroundColor: 'inherit',
+  checkedBoxInputBackgroundColor: '#F7F7F7',
   checkedBoxBorder: 'none',
+  checkedBoxIconColor: '#56ad79',
 };
 
 const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props) => {
@@ -69,11 +72,14 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
     unCheckedBoxMargin,
     unCheckedBoxFontColor,
     unCheckedBoxBackgroundColor,
+    unCheckedBoxInputBackgroundColor,
     unCheckedBoxBorderRadius,
     unCheckedBoxBorder,
     checkedBoxFontColor,
     checkedBoxBackgroundColor,
+    checkedBoxInputBackgroundColor,
     checkedBoxBorder,
+    checkedBoxIconColor,
   } = defaultStyle;
 
   return (
@@ -101,7 +107,15 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
               border: options[option] ? checkedBoxBorder : unCheckedBoxBorder,
             }}
           >
-            <label className={classNames(label)} htmlFor={`checkBox${option}`}>
+            <label
+              className={classNames(label)}
+              style={{
+                background: options[option]
+                  ? checkedBoxInputBackgroundColor
+                  : unCheckedBoxInputBackgroundColor,
+              }}
+              htmlFor={`checkBox${option}`}
+            >
               {option}
             </label>
             <input
@@ -115,7 +129,7 @@ const InputCheckBox = ({ labelName, options, icon, onChange, styleProps }: Props
               <i
                 className={classNames(icon, checkBoxIcon)}
                 style={{
-                  color: options[option] ? checkedBoxFontColor : unCheckedBoxFontColor,
+                  color: options[option] ? checkedBoxIconColor : unCheckedBoxFontColor,
                   background: options[option]
                     ? checkedBoxBackgroundColor
                     : unCheckedBoxBackgroundColor,

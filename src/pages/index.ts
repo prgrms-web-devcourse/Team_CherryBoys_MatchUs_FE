@@ -14,7 +14,7 @@ export { default as EditMatch } from './EditMatch/EditMatchPage';
 export { default as NewMatch } from './NewMatch/NewMatchPage';
 export { default as Match } from './Match/MatchPage';
 export { default as TeamDetail } from './TeamDetail/TeamDetail';
-export { default as MatchDetail } from './MatchDetail/MatchDetail';
+export { default as TeamMatchDetail } from './TeamMatchDetail/TeamMatchDetail';
 export { default as TeamCreate } from './TeamCreate/TeamCreate';
 export { default as TeamInfoEdit } from './TeamInfoEdit/TeamInfoEdit';
 export { default as NotFound } from './NotFound/NotFound';

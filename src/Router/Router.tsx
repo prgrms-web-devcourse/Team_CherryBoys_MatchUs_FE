@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import {
   TeamMemberManage,
   TeamDetail,
-  MatchDetail,
   TeamCreate,
   TeamInfoEdit,
   Match,
@@ -19,6 +18,7 @@ import {
   HiresFilter,
   NotFound,
   Login,
+  TeamMatchDetail,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -92,7 +92,7 @@ const Router: React.FC = () => {
       <Route path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
       <Route path={TEAM_PAGE} exact component={TeamDetail} />
       <Route path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
-      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={MatchDetail} />
+      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={TeamMatchDetail} />
       <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />

@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-fragments */
-import React, { Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
 import { RootState } from '@/store';
-import { match as matchReducer, fetchMatchById } from '@/store/match/match';
 import {
   MatchInfo,
   TeamCard,
@@ -13,47 +12,66 @@ import {
   MatchApplyModal,
   MatchApproveModal,
   MatchReviewModal,
+  MatchTeamMemberModal,
 } from '@/components';
-import useMount from '@/hooks/useMount';
 import styles from './Match.module.scss';
+import { fetchMatchById } from '@/api';
+import { Match as MatchType } from '@/types';
 
 const { awayTeam, versus } = styles;
 
 const Match = () => {
-  const dispatch = useDispatch();
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
 
-  const { match, modal } = useSelector((store: RootState) => store.match.data);
+  const { modal } = useSelector((store: RootState) => store.match.data);
+  const [match, setMatch] = useState<MatchType[]>([]);
 
-  useMount(() => {
-    dispatch(fetchMatchById(matchId));
-    dispatch(matchReducer.actions.setMatchId({ matchId }));
-  });
+  const getMatchInfo = useCallback(async () => {
+    const matchInfoById = await fetchMatchById(matchId);
+    setMatch([matchInfoById]);
+  }, [matchId]);
+
+  useEffect(() => {
+    getMatchInfo();
+  }, []);
+
+  const registerTeamInfo = match[0] && {
+    teamName: match[0].registerTeamInfo.teamName,
+    teamId: match[0].registerTeamInfo.teamId,
+  };
 
   return (
     <div>
-      {match.map((matchInfo) => (
-        <Fragment key={`match${matchInfo.matchId}`}>
-          <MatchInfo match={matchInfo} />
-          {matchInfo.registerTeamInfo && <TeamCard team={matchInfo.registerTeamInfo} />}
-          {!matchInfo.applyTeamInfo && <MatchDetail match={matchInfo} />}
-          {matchInfo.applyTeamInfo && (
-            <div className={classNames(awayTeam)}>
-              <div className={classNames(versus)}>VS</div>
-              <TeamCard team={matchInfo.applyTeamInfo} />
-            </div>
-          )}
-        </Fragment>
-      ))}
+      {match.length > 0 &&
+        match.map((matchInfo) => (
+          <Fragment key={`match${matchInfo.matchId}`}>
+            <MatchInfo match={matchInfo} />
+            {matchInfo.registerTeamInfo && <TeamCard team={matchInfo.registerTeamInfo} />}
+            {!matchInfo.applyTeamInfo && <MatchDetail match={matchInfo} />}
+            {matchInfo.applyTeamInfo && (
+              <div className={classNames(awayTeam)}>
+                <div className={classNames(versus)}>VS</div>
+                <TeamCard team={matchInfo.applyTeamInfo} />
+              </div>
+            )}
+          </Fragment>
+        ))}
       <MatchButton enable={{ apply: true, approve: true, review: false }} />
-      {match[0] && modal.matchApply && (
+      {match.length > 0 && (
         <MatchApplyModal showMatchApplyModal={modal.matchApply} sports={match[0].sports} />
       )}
-      {match[0] && modal.matchApprove && (
-        <MatchApproveModal showMatchApproveModal={modal.matchApprove} />
+      {match.length > 0 && <MatchApproveModal showMatchApproveModal={modal.matchApprove} />}
+      {match.length > 0 && (
+        <MatchTeamMemberModal
+          showMatchTeamMemberModal={modal.matchTeamMember}
+          sports={match[0].sports}
+          teamInfo={registerTeamInfo}
+          matchId={match[0].matchId}
+        />
       )}
-
-      <MatchReviewModal showMatchReviewModal={modal.matchReview} />
+      {match.length > 0 && (
+        <MatchReviewModal showMatchReviewModal={modal.matchReview} matchInfo={match[0]} />
+      )}
     </div>
   );
 };
