@@ -1,0 +1,21 @@
+@use '@/styles/color.scss';
+
+.matchComponentContainer {
+  margin-top: 4.2rem;
+}
+
+.titleContainer {
+  margin: {
+    top: 7.2rem;
+    bottom: 3rem;
+    left: 1.8rem;
+  }
+}
+
+.mainTitle {
+  font-size: 2.4rem;
+  .highlight {
+    color: color.$primary;
+    font-weight: 700;
+  }
+}
