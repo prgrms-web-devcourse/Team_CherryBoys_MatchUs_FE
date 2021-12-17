@@ -7,6 +7,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import { Input, InputCheckBox, InputDetail } from '@/components';
 import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
@@ -40,6 +41,7 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { locations } = useSelector((store: RootState) => store.match.data);
   const [locationInfo, setLocationInfo] = useState<Locations>(locations);
 
@@ -61,6 +63,11 @@ const NewMatch = () => {
     endDate: new Date(),
     startTime: new Date(),
     endTime: new Date(),
+  });
+  const [date, setDate] = useState({
+    date: '',
+    startTime: '',
+    endTime: '',
   });
 
   const placeholder = '선택';
@@ -174,6 +181,7 @@ const NewMatch = () => {
     }
     if (category === 'cost') {
       const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) return;
       setCost(targetInputNumber);
       return;
     }
@@ -262,7 +270,7 @@ const NewMatch = () => {
       return {};
     }
 
-    return dateResult;
+    setDate(dateResult);
   };
 
   const handleSubmitMatchInfo = () => {
@@ -281,7 +289,9 @@ const NewMatch = () => {
         .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
-    const matchDate = submitDate();
+
+    submitDate();
+
     if (selectedTeamWithUsers.players.length < userLimit) {
       window.alert('인원미달');
       return;
@@ -309,7 +319,7 @@ const NewMatch = () => {
     }
 
     const requestData = {
-      ...matchDate,
+      ...date,
       registerTeamId: selectedTeamWithUsers.teamId,
       sports,
       ageGroup,
@@ -321,12 +331,8 @@ const NewMatch = () => {
       players: selectedTeamWithUsers.players,
     };
 
-    if (Number.isNaN(cost)) {
-      window.alert('참가비는 숫자만 입력할 수 있습니다');
-    }
-    // TODO: 매칭 등록 api 요청
-    // createMatch(requestData)
-    console.log(requestData);
+    createMatch(requestData);
+    history.push('/matches/');
   };
 
   useEffect(() => {

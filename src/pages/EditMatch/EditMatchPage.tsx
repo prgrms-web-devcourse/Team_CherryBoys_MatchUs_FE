@@ -69,6 +69,11 @@ const EditMatch = () => {
     startTime: new Date(),
     endTime: new Date(),
   });
+  const [date, setDate] = useState({
+    date: '',
+    startTime: '',
+    endTime: '',
+  });
 
   const placeholder = '선택';
   const [sports, setSports] = useState(placeholder);
@@ -261,7 +266,7 @@ const EditMatch = () => {
       return todayResult;
     }
 
-    return dateResult;
+    setDate(dateResult);
   };
 
   const handleSubmitMatchInfo = () => {
@@ -270,7 +275,7 @@ const EditMatch = () => {
       return;
     }
 
-    const matchDate = submitDate();
+    submitDate();
 
     if (ageGroup === placeholder) {
       window.alert('연령대를 선택해주세요');
@@ -294,7 +299,7 @@ const EditMatch = () => {
     }
 
     const requestData = {
-      ...matchDate,
+      ...date,
       matchId,
       sports,
       ageGroup,
@@ -305,7 +310,7 @@ const EditMatch = () => {
       detail,
     };
 
-    dispatch(modifyMatch(requestData));
+    modifyMatch(requestData);
     history.push('/matches/');
   };
 

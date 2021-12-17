@@ -4,6 +4,7 @@ import {
   MatchDeleteInfo,
   TeamMemberEdit,
   MatchListFilter,
+  MatchPostNew,
   MatchPostEdit,
   MatchReviewInfo,
   MatchApplyInfo,
@@ -28,26 +29,11 @@ export const fetchMatchById = async (matchId: number) => {
   return matchInfo;
 };
 
-export const createMatch = async (createMatchInfo: Omit<MatchPostEdit, 'matchId'>) => {
-  const { sports, ageGroup, city, region, ground, cost, detail, date, startTime, endTime } =
-    createMatchInfo;
-  const matchInfo = {
-    sports,
-    ageGroup,
-    city,
-    region,
-    ground,
-    cost,
-    detail,
-    date,
-    startTime,
-    endTime,
-  };
-
+export const createMatch = async (createMatchInfo: MatchPostNew) => {
   await api
     .post({
       url: '/matches',
-      data: matchInfo,
+      data: createMatchInfo,
     })
     .catch(throwErrorMessage);
 };
@@ -66,23 +52,22 @@ export const modifyMatch = async (editedMatchInfo: MatchPostEdit) => {
     startTime,
     endTime,
   } = editedMatchInfo;
-  const matchInfo = {
-    sports,
-    ageGroup,
-    city,
-    region,
-    ground,
-    cost,
-    detail,
-    date,
-    startTime,
-    endTime,
-  };
 
   await api
     .put({
       url: `/matches/${matchId}`,
-      data: matchInfo,
+      data: {
+        sports,
+        ageGroup,
+        city,
+        region,
+        ground,
+        cost,
+        detail,
+        date,
+        startTime,
+        endTime,
+      },
     })
     .catch(throwErrorMessage);
 };
@@ -125,6 +110,16 @@ export const approveMatch = async (teamWaitingId: number) => {
     .catch(throwErrorMessage);
 };
 
+export const getTags = async () => {
+  const { tags } = await api
+    .get({
+      url: '/tags',
+    })
+    .catch(throwErrorMessage);
+
+  return tags;
+};
+
 // TODO: 태그 아이디 상수화
 export const postMatchReview = async (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewedTeamId } = matchReviewInfo;
@@ -138,15 +133,11 @@ export const postMatchReview = async (matchReviewInfo: MatchReviewInfo) => {
 
 export const modifyTeamMember = async (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
-  const editedTeamMember = {
-    teamId,
-    players,
-  };
 
   await api
     .put({
       url: `/matches/${matchId}/members`,
-      data: editedTeamMember,
+      data: { teamId, players },
     })
     .catch(throwErrorMessage);
 };
