@@ -8,6 +8,7 @@ import DatePicker from '@mui/lab/DatePicker';
 
 import { AGE_GROUP } from '@/consts';
 import { Input, InputDetail } from '@/components';
+import { createHiresPosting } from '@/api/hires';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -132,6 +133,25 @@ const HiresCreate = () => {
     setGroundName(value);
   };
 
+  // Todo(홍중) : api 통신 추후 추가 (2021-12-17)
+  // const handleClickCreatePosting = async () => {
+  //   const data = {
+  //     ageGroup: '20대',
+  //     cityId: 1,
+  //     date: '2021-12-15',
+  //     detail: '상세내용입니다~',
+  //     endTime: '19:30:00',
+  //     groundId: 1,
+  //     hirePlayerNumber: 3,
+  //     position: '윙백',
+  //     regionId: 1,
+  //     startTime: '17:30:00',
+  //     teamId: 1,
+  //   };
+
+  //   const res = await createHiresPosting(data);
+  // };
+
   const handleClickSelectDone = () => {
     const data = {
       city,
@@ -178,6 +198,7 @@ const HiresCreate = () => {
       return;
     }
     // Todo : 입력된 데이터 서버에 보내기
+    // handleClickCreatePosting(data);
     console.log(data);
   };
 
