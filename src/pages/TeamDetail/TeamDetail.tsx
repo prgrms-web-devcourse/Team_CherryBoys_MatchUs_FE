@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+
 import classNames from 'classnames';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
-
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
 import { MemberElement, MatchElement } from '@/types';
-import { MemberList, MatchListElement } from '@/components';
+import { MemberList, MatchListElement, CustomModalDialog } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
   style;
-
 const TeamDetail = () => {
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('LEAVE');
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
@@ -29,6 +31,16 @@ const TeamDetail = () => {
   });
   const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
+
+  const MODAL_MAIN_TITLE: Record<string, string> = {
+    LEAVE: '정말 탈퇴하시겠습니까?',
+    DISBAND: '정말 해체하시겠습니까?',
+  };
+
+  const MODAL_SUB_TITLE: Record<string, string> = {
+    LEAVE: '탈퇴하시면 현재 팀에서 더이상 경기를 할 수 없어요.',
+    DISBAND: '팀을 해체하면 되돌릴 수 없어요 :(',
+  };
 
   const previousMatchHistory = matchHistory.filter((match) => {
     if (match.status === 'previousMatch') return true;
@@ -50,19 +62,6 @@ const TeamDetail = () => {
     ageGroup,
     teamCreatedAt,
   } = teamInfo;
-
-  const handleWithdrawTeam = () => {
-    // TODO: Modal Component Merge되면 교체 예정.
-    if (confirm('정말 삭제하시겠습니까?')) {
-      withdrawTeam(teamId);
-    }
-  };
-
-  const handleDeleteTeam = () => {
-    if (confirm('정말 삭제하시겠습니까?')) {
-      deleteTeam(teamId);
-    }
-  };
 
   const updateTeamInfo = useCallback(async () => {
     const result = await getTeamInfo(teamId);
@@ -86,6 +85,8 @@ const TeamDetail = () => {
     }
   }, [teamId]);
 
+  const { modalMainTitle, modalSubTitle } = style;
+
   useEffect(() => {
     updateTeamInfo();
     updateTeamMatchHistory();
@@ -95,6 +96,24 @@ const TeamDetail = () => {
   return (
     <div>
       <h1 className={classNames('a11yHidden')}>팀 상세보기 페이지</h1>
+      {isModalDialogOpen && (
+        <CustomModalDialog
+          modalType="confirm"
+          buttonLabel="전송"
+          handleCancel={() => setIsModalDialogOpen(false)}
+          handleApprove={() => {
+            modalMessage === 'LEAVE' ? withdrawTeam(teamId) : deleteTeam(teamId);
+            setIsModalDialogOpen(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            {MODAL_MAIN_TITLE[modalMessage]}
+          </span>
+          <span className={classNames('whiteSpace', modalSubTitle)}>
+            {MODAL_SUB_TITLE[modalMessage]}
+          </span>
+        </CustomModalDialog>
+      )}
       {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
       <article className={classNames(teamBaseInfo)}>
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
@@ -104,7 +123,6 @@ const TeamDetail = () => {
           <span key={`tagName-${tagName}`}>{tagName}</span>
         ))}
       </article>
-
       <article className={classNames(teamCoreInfo)}>
         <section>총 경기 수{matchCount}</section>
         <section>매너온도 {mannerTemperature}</section>
@@ -113,7 +131,6 @@ const TeamDetail = () => {
         <section>연령대 {ageGroup}</section>
         <section>생성일자 {teamCreatedAt}</section>
       </article>
-
       <article className={classNames(teamMemberInfo)}>
         <div>
           팀원 목록
@@ -140,7 +157,6 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-
       <article className={classNames(hiredMemberInfo)}>
         <div>
           용병 목록
@@ -165,7 +181,6 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-
       {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
       <article className={classNames(teamMathchesInfo)}>
         <div>
@@ -195,8 +210,13 @@ const TeamDetail = () => {
           </p>
         )}
       </article>
-
-      <button type="button" onClick={hasAuthorization ? handleDeleteTeam : handleWithdrawTeam}>
+      <button
+        type="button"
+        onClick={() => {
+          hasAuthorization ? setModalMessage('DISBAND') : setModalMessage('LEAVE');
+          setIsModalDialogOpen(true);
+        }}
+      >
         {hasAuthorization ? '팀 해체' : '팀 탈퇴'}
       </button>
     </div>

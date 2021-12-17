@@ -40,8 +40,6 @@ const MemberList = ({
   );
   const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
 
-  console.log(hiredIndexLimit);
-
   return (
     <>
       <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
