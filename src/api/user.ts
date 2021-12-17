@@ -51,14 +51,14 @@ export const requestEditUser = (userEditForm: reqeustUserInfoType) =>
     data: userEditForm,
   });
 
-export const getUserMatchHistory = (userId: number | undefined) =>
+export const getUserMatchHistory = (userId: number | null) =>
   api
     .get({
       url: `users/${userId}/matches`,
     })
     .catch(throwErrorMessage);
 
-export const getUserInfo = (userId: number | undefined) =>
+export const getUserInfo = (userId: number | null) =>
   api
     .get({
       url: `/users/${userId}`,
