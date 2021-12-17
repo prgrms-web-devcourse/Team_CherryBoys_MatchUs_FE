@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Match } from '@/types/match';
+import { Match } from '@/types';
 import styles from './MatchInfo.module.scss';
 
 interface Props {
@@ -15,9 +15,7 @@ const MatchInfo = ({ match }: Props) => {
     <div className={classNames(matchInfoCard)}>
       <div className={classNames(matchInfoRow)}>
         <div className={classNames(matchInfo)}>
-          <div
-            className={classNames(matchInfo_content)}
-          >{`${match.date} ${match.startTime.hour}:${match.startTime.minute}`}</div>
+          <div className={classNames(matchInfo_content)}>{`${match.date} ${match.startTime}`}</div>
         </div>
         <div className={classNames(matchInfo)}>
           <div className={classNames(matchInfo_content)}>{match.sports}</div>
@@ -38,7 +36,7 @@ const MatchInfo = ({ match }: Props) => {
           <div className={classNames(matchInfo_content)}>{match.ageGroup}</div>
         </div>
         <div className={classNames(matchInfo)}>
-          <div className={classNames(matchInfo_content)}>{match.cost}</div>
+          <div className={classNames(matchInfo_content)}>{`${match.cost}원`}</div>
         </div>
       </div>
     </div>

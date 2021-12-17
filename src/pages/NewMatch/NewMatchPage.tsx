@@ -5,14 +5,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { Input, InputCheckBox, InputDetail } from '@/components';
-import { RootState } from '@/store';
-import { fetchTeamWithUser } from '@/store/match/match';
-import useMount from '@/hooks/useMount';
+import { fetchAuthorizedTeams, fetchTotalMembers, createMatch } from '@/api';
 import style from './NewMatch.module.scss';
 import { SPORTS, SPORTS_PLAYER, AGE_GROUP, LOCATIONS } from '@/consts';
+import { TeamSimple, TeamMemberInfo } from '@/types';
 
 const { newMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
 
@@ -39,11 +38,6 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
-  // 작성자(유저) 더미 데이터 이용
-  const tokenDummy = 123;
-  useMount(() => {
-    dispatch(fetchTeamWithUser(tokenDummy));
-  });
 
   const [nowDate, setNowDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState({
@@ -77,19 +71,39 @@ const NewMatch = () => {
       return acc;
     }, []),
   ];
-  const { userTeams } = useSelector((store: RootState) => store.match).data;
+
+  const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
+
+  // 작성자(유저) 더미 데이터 이용
+  const tokenDummy = '1';
+
+  const getAuhorizedTeams = useCallback(async () => {
+    const authorizedTeams = await fetchAuthorizedTeams(tokenDummy);
+    setUserTeams(authorizedTeams);
+  }, []);
+
+  useEffect(() => {
+    getAuhorizedTeams();
+  }, []);
+
   const userLimit = SPORTS_PLAYER[sports] || 0;
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
+  const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMemberInfo[]>([]);
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
 
-  const setSelectedTeamUsers = useCallback(() => {
+  const getSelectedTeamMembers = useCallback(async () => {
     const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
-    const teamUsersOptions: CheckboxOptions = {};
-    selectedTeamUsers.forEach((user) => {
-      if (user.userName) teamUsersOptions[user.userName] = false;
-    });
-    return teamUsersOptions;
+    if (selectedTeamInfo) {
+      const selectedTeamId = selectedTeamInfo.teamId;
+      const selectedTeamUsers = await fetchTotalMembers(selectedTeamId);
+      setTeamMembersInfo(selectedTeamUsers);
+
+      const teamUsersOptions: CheckboxOptions = {};
+      selectedTeamUsers.forEach((user: TeamMemberInfo) => {
+        if (user.userName) teamUsersOptions[user.userName] = false;
+      });
+      setTeamMembers(teamUsersOptions);
+    }
   }, [team, userTeams]);
 
   const handleInput = (e: React.ChangeEvent, category: string) => {
@@ -227,12 +241,10 @@ const NewMatch = () => {
       window.alert('올바른 팀을 선택해주세요');
       return;
     }
-    const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
-    const selectedTeamUsers = selectedTeamInfo ? selectedTeamInfo.teamUsers : [];
 
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
-      players: selectedTeamUsers
+      players: teamMembersInfo
         .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
@@ -278,9 +290,9 @@ const NewMatch = () => {
 
     if (Number.isNaN(cost)) {
       window.alert('참가비는 숫자만 입력할 수 있습니다');
-      return;
     }
-    // api 요청 바디
+    // TODO: 매칭 등록 api 요청
+    // createMatch(requestData)
     console.log(requestData);
   };
 
@@ -307,9 +319,8 @@ const NewMatch = () => {
       endTime: defaultEndTime,
     });
 
-    const newTeamUsers = setSelectedTeamUsers();
-    setTeamMembers({ ...newTeamUsers });
-  }, [setTeamMembers, setSelectedTeamUsers, setFormattedDate]);
+    getSelectedTeamMembers();
+  }, [setTeamMembers, getSelectedTeamMembers, setFormattedDate]);
 
   return (
     <div className={classNames(newMatchContainer)}>

@@ -11,7 +11,7 @@ import { Input } from '@/components';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
-import { MatchListFilter } from '@/types/match';
+import { MatchListFilter } from '@/types';
 import { SPORTS, LOCATIONS, AGE_GROUP } from '@/consts';
 
 const {
@@ -187,9 +187,7 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
     }
 
     dispatch(match.actions.setMatchListFilter({ matchListFilter: requestBody }));
-    // TODO: 매칭 신청 API 요청
-    console.log('FILTER', requestBody);
-    // dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
+    dispatch(match.actions.toggleModal({ modalName: 'matchListFilter' }));
   };
 
   return (

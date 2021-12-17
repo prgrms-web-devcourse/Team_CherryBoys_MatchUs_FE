@@ -7,13 +7,14 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Input, InputDetail } from '@/components';
 import { RootState } from '@/store';
-import { fetchMatchById, modifyMatch } from '@/store/match/match';
+import { fetchMatchById, modifyMatch } from '@/api';
 import useMount from '@/hooks/useMount';
 import style from './EditMatch.module.scss';
 import { SPORTS, AGE_GROUP, LOCATIONS } from '@/consts';
+import { Match as MatchType } from '@/types';
 
 const { editMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
 
@@ -38,11 +39,18 @@ const EditMatch = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { matchId } = useSelector((store: RootState) => store.match.data);
-  useMount(() => {
-    dispatch(fetchMatchById(matchId));
-  });
-  const editedMatch = useSelector((store: RootState) => store.match.data.match[0]);
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+
+  const [prevMatchInfo, setPrevMatchInfo] = useState<MatchType>();
+
+  const getMatchInfo = useCallback(async () => {
+    const matchInfoById = await fetchMatchById(matchId);
+    setPrevMatchInfo(matchInfoById);
+  }, [matchId]);
+
+  useEffect(() => {
+    getMatchInfo();
+  }, []);
 
   const [nowDate, setNowDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState({
@@ -76,26 +84,26 @@ const EditMatch = () => {
   ];
 
   const setInitialValue = useCallback(() => {
-    if (editedMatch) {
-      setSports(editedMatch.sports || placeholder);
-      setAgeGroup(editedMatch.ageGroup);
+    if (prevMatchInfo) {
+      setSports(prevMatchInfo.sports || placeholder);
+      setAgeGroup(prevMatchInfo.ageGroup);
 
       const prevCity = LOCATIONS.cities.filter(
-        (cityInfo) => cityInfo.cityName === editedMatch.city
+        (cityInfo) => cityInfo.cityName === prevMatchInfo.city
       )[0];
       setCity(prevCity || defaultCity);
       const prevRegion = LOCATIONS.regions.filter(
-        (regionInfo) => regionInfo.regionName === editedMatch.region
+        (regionInfo) => regionInfo.regionName === prevMatchInfo.region
       )[0];
       setRegion(prevRegion || defaultRegion);
       const prevGround = LOCATIONS.grounds.filter(
-        (groundInfo) => groundInfo.groundName === editedMatch.ground
+        (groundInfo) => groundInfo.groundName === prevMatchInfo.ground
       )[0];
       setGround(prevGround || defaultGround);
-      setCost(editedMatch.cost || 0);
-      setDetail(editedMatch.detail || placeholder);
-      const prevStartTime = new Date(`${editedMatch.date} ${editedMatch.startTime}`);
-      const prevEndTime = new Date(`${editedMatch.date} ${editedMatch.endTime}`);
+      setCost(prevMatchInfo.cost || 0);
+      setDetail(prevMatchInfo.detail || placeholder);
+      const prevStartTime = new Date(`${prevMatchInfo.date} ${prevMatchInfo.startTime}`);
+      const prevEndTime = new Date(`${prevMatchInfo.date} ${prevMatchInfo.endTime}`);
 
       setFormattedDate({
         startDate: prevStartTime,
@@ -103,7 +111,7 @@ const EditMatch = () => {
         endTime: prevEndTime,
       });
     }
-  }, [editedMatch]);
+  }, [prevMatchInfo]);
 
   const handleInput = (e: React.ChangeEvent, category: string) => {
     const targetInput: string = (e.target as HTMLInputElement).value;
