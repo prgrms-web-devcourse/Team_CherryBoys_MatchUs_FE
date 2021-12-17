@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-// @flow
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -18,6 +16,7 @@ import { requestCheckDuplicatedNickname } from '@/api/user';
 import { userInfoType } from '@/types/users';
 import { RootState, useAppDispatch } from '@/store';
 import { editEditabelUserState, editUser } from '@/store/userSlice';
+import { CustomLabel } from '@/components';
 
 export const UserInfoEdit = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +25,7 @@ export const UserInfoEdit = () => {
   const bioState = useSelector((state: RootState) => state.user.userInfo.bio);
   const ageGroupState = useSelector((state: RootState) => state.user.userInfo.ageGroup);
   const sportsState = useSelector((state: RootState) => state.user.userInfo.sports);
-  const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(true);
+  const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
 
   const [userInfo, setUserInfo] = useState<userInfoType>({
     nickname: {
@@ -149,9 +148,10 @@ export const UserInfoEdit = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>닉네임</label>
+      <CustomLabel htmlFor="nickname">닉네임</CustomLabel>
       <div>
         <ValidInput
+          id="nickname"
           name="nickname"
           onChange={handleOnChange}
           value={nickname.value}
@@ -162,9 +162,10 @@ export const UserInfoEdit = () => {
           중복확인
         </button>
       </div>
-      <label>자기 소개</label>
+      <CustomLabel htmlFor="bio">자기 소개</CustomLabel>
       <div>
         <ValidInput
+          id="bio"
           name="bio"
           onChange={handleOnChange}
           value={bio.value}
@@ -179,9 +180,10 @@ export const UserInfoEdit = () => {
         <small>{!bio.isValid && <small>{bio.validMsg}</small>}</small>
       </div>
 
-      <label>연령대</label>
+      <CustomLabel htmlFor="ageGroup">연령대</CustomLabel>
       <div>
         <ValidInput
+          id="ageGroup"
           name="ageGroup"
           onChange={handleOnChange}
           value={ageGroup.value}
@@ -190,9 +192,10 @@ export const UserInfoEdit = () => {
           selectOptions={AGE}
         />
       </div>
-      <label>종목</label>
+      <CustomLabel htmlFor="sports">종목</CustomLabel>
       <div>
         <ValidInput
+          id="sports"
           name="sports"
           onChange={handleOnChange}
           value={sports.value}

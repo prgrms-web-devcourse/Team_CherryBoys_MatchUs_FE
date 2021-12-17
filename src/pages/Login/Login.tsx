@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { loginFormType } from '@/types/users';
 import { login } from '@/store/userSlice';
 import { RootState, useAppDispatch } from '@/store';
+import { CustomLabel, CustomInput } from '@/components';
 
 const Login = () => {
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
@@ -40,10 +40,10 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="email">아이디</label>
-      <input name="email" id="email" value={email} onChange={handleChange} />
-      <label htmlFor="password">패스워드</label>
-      <input
+      <CustomLabel htmlFor="email">아이디</CustomLabel>
+      <CustomInput type="text" name="email" id="email" value={email} onChange={handleChange} />
+      <CustomLabel htmlFor="password">패스워드</CustomLabel>
+      <CustomInput
         name="password"
         id="password"
         value={password}
