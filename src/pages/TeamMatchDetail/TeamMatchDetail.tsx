@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs } from '@karrotframe/tabs';
 import { Link, useParams } from 'react-router-dom';
-import style from './matchDetail.module.scss';
+import style from './teamMatchDetail.module.scss';
 import { Header, MatchListElement } from '@/components';
 import '@karrotframe/tabs/index.css';
 import { getMatchHistory } from '@/api';
@@ -81,7 +81,7 @@ const MatchDetail = () => {
                         <span className={classNames('whiteSpace')}>
                           경기 모집 글을 올리러 가볼까요?
                         </span>
-                        <Link to="/teams">경기 등록</Link>
+                        <Link to="/matches/new">경기 등록</Link>
                       </p>
                     )}
                   </div>

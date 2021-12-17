@@ -1,127 +1,42 @@
 import classNames from 'classnames';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { Header, MemberList } from '@/components';
+import { CustomModalDialog, Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
-import api from '@/api/core';
-import { deleteTeamMembers } from '@/api';
+import {
+  deleteTeamMembers,
+  getTeamMemberInfo,
+  postInviteTeamMember,
+  putChangeMemberGrade,
+} from '@/api';
 
-interface MemberElementType {
-  userId: number;
-  userName: string;
-  grade: string;
-}
+import { MemberElementType } from '@/types';
 
-const { playerManange } = style;
-
-const dummyData = [
-  {
-    userId: 1,
-    userName: '김1',
-    grade: '회원',
-  },
-  {
-    userId: 2,
-    userName: '김2',
-    grade: '용병',
-  },
-  {
-    userId: 3,
-    userName: '오3',
-    grade: '용병',
-  },
-  {
-    userId: 4,
-    userName: '김4',
-    grade: '부주장',
-  },
-  {
-    userId: 5,
-    userName: '김5',
-    grade: '회원',
-  },
-  {
-    userId: 6,
-    userName: '오6',
-    grade: '부주장',
-  },
-  {
-    userId: 7,
-    userName: '김7',
-    grade: '회원',
-  },
-  {
-    userId: 8,
-    userName: '김8',
-    grade: '회원',
-  },
-  {
-    userId: 9,
-    userName: '오9',
-    grade: '회원',
-  },
-  {
-    userId: 10,
-    userName: '김10',
-    grade: '주장',
-  },
-  {
-    userId: 11,
-    userName: '김11',
-    grade: '회원',
-  },
-  {
-    userId: 12,
-    userName: '오12',
-    grade: '회원',
-  },
-  {
-    userId: 13,
-    userName: '김13',
-    grade: '회원',
-  },
-  {
-    userId: 14,
-    userName: '오14',
-    grade: '회원',
-  },
-  {
-    userId: 15,
-    userName: '김15',
-    grade: '회원',
-  },
-  {
-    userId: 16,
-    userName: '김16',
-    grade: '회원',
-  },
-  {
-    userId: 17,
-    userName: '오17',
-    grade: '용병',
-  },
-  {
-    userId: 18,
-    userName: '김18',
-    grade: '용병',
-  },
-];
+const {
+  playerManange,
+  modalHighLight,
+  modalInputContainer,
+  inputSupportMessage,
+  addTeamMemberButton,
+} = style;
 
 const TeamMemberManage = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const { memberType } = useParams<{ memberType: string }>();
+  const [modalInput, setModalInput] = useState('');
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState<boolean>(false);
   const [deletedMembers, setDeletedMembers] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState<boolean>(false);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
-  const [hasAuthorization, setHasAuthorization] = useState<boolean>(false); // TODO : authorization으로 대체 예정
-  const [memberInfo, setMemberInfo] = useState<MemberElementType[]>(dummyData);
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
+  const [memberInfo, setMemberInfo] = useState<MemberElementType[]>([]);
   const isAddTeamMember = hasAuthorization && isEnterEditPage === false;
 
   const handleChangeEditButtonStatus = () => {
     setIsEnterEditPage(!isEnterEditPage);
   };
 
-  const handleChangeMemberGrade = (e: React.ChangeEvent<HTMLElement>) => {
+  const handleChangeMemberGrade = async (e: React.ChangeEvent<HTMLElement>) => {
     const { value } = e.target as HTMLInputElement;
     const [userId, grade] = value.split('-');
 
@@ -134,6 +49,7 @@ const TeamMemberManage = () => {
     });
 
     setMemberInfo(newMemberInfo);
+    await putChangeMemberGrade(teamId, newMemberInfo);
   };
 
   const handleAddDeletedMembers = (e: React.MouseEvent<HTMLElement>) => {
@@ -150,15 +66,39 @@ const TeamMemberManage = () => {
   const handleSubmitDeletedMember = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
 
-    const notDeletedMemberInfo = memberInfo.filter((member) => {
+    const deletedMemberInfo = memberInfo.filter((member) => {
+      if (deletedMembers.includes(member.userId)) {
+        return true;
+      }
+      return false;
+    });
+
+    const remainMemberInfo = memberInfo.filter((member) => {
       if (deletedMembers.includes(member.userId)) {
         return false;
       }
       return true;
     });
 
-    // TODO: 백엔드와 연동 시, 추가 예정.
-    // deleteTeamMembers(teamId, notDeletedMemberInfo);
+    setMemberInfo(remainMemberInfo);
+    deleteTeamMembers(teamId, deletedMemberInfo);
+  };
+
+  const handleChangeModalInput = (e: React.ChangeEvent<HTMLElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setModalInput(value);
+  };
+
+  // TODO: 이메일 Vaildation & 존재하지 않는 경우 에러처리가 필요하다.
+  const handleSubmitUserEmailForInvite = async () => {
+    try {
+      const result = await postInviteTeamMember(teamId, modalInput);
+      if (result.teamId) {
+        // alert('초대 완료되었습니다.');
+      }
+    } catch (error) {
+      // alert('존재하지 않는 유저입니다.');
+    }
   };
 
   useEffect(() => {
@@ -166,20 +106,38 @@ const TeamMemberManage = () => {
     // if (userGrade[`${teamName}`] === '팀장') {
     //   setHasAuthorization(true);
     // }
-    // TODO: API 연결 시, 주석 제거 예정
-    // const getPeopleInfo = async () => {
-    //   const result= await api.get({
-    //     url: `/teams/${teamId}/${memberType}`,
-    //   });
-    //   setMemberInfo(result);
-    // };
-    // getPeopleInfo();
-  }, []);
+
+    const updateMemberInfo = async () => {
+      const { members } = await getTeamMemberInfo(teamId, memberType);
+
+      setMemberInfo(members);
+    };
+    updateMemberInfo();
+  }, [teamId, memberType]);
 
   return (
     <>
       <Header />
       <div className={classNames(playerManange)}>
+        {isModalDialogOpen && (
+          <CustomModalDialog
+            modalType="alert"
+            buttonLabel="전송"
+            handleCancel={() => setIsModalDialogOpen(false)}
+            handleApprove={() => {
+              handleSubmitUserEmailForInvite();
+              setIsModalDialogOpen(false);
+            }}
+          >
+            <span className={classNames(modalHighLight)}>플레이어 초대</span>
+            <div className={classNames(modalInputContainer)}>
+              <input type="input" placeholder="player@team.com" onChange={handleChangeModalInput} />
+            </div>
+            <span className={classNames(inputSupportMessage)}>
+              함께 할 플레이어의 이메일을 입력해주세요
+            </span>
+          </CustomModalDialog>
+        )}
         <MemberList
           isEditing={isEnterEditPage}
           isMember={memberType === 'members'}
@@ -190,7 +148,17 @@ const TeamMemberManage = () => {
           handleChangeEditButtonStatus={handleChangeEditButtonStatus}
           handleSubmitDeletedMember={handleSubmitDeletedMember}
         />
-        {isAddTeamMember && <button type="button">팀원 초대</button>}
+        {isAddTeamMember && (
+          <button
+            type="button"
+            className={classNames(addTeamMemberButton)}
+            onClick={() => {
+              setIsModalDialogOpen(true);
+            }}
+          >
+            +
+          </button>
+        )}
       </div>
     </>
   );

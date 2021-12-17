@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
-import { RootState } from '@/store';
 import { TAG_OPTIONS, TagOptions } from '@/consts';
+import { postMatchReview } from '@/api';
+import { Match } from '@/types';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
 interface ModalState {
   showMatchReviewModal: boolean;
+  matchInfo: Match;
 }
 
 const selectTagsLimit = 3;
 
-const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
-  const { matchId } = useSelector((store: RootState) => store.match.data);
+const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
+  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const dispatch = useDispatch();
 
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
@@ -63,9 +66,12 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
     }, []);
     const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
 
-    // TODO: 매칭 평가 API 요청
-    console.log(matchId, totalSelectedTags);
-    // dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
+    // TODO: 매칭 평가 API 요청, 태그ID, 회원정보 대조해서 리뷰어/대상 체크
+    console.log({
+      matchId,
+      tags: totalSelectedTags,
+    });
+    // postMatchReview();
   };
 
   return (
@@ -81,7 +87,7 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
           <h3>매칭 평가</h3>
         </div>
         <InputCheckBox
-          labelName={`스킬 (${
+          labelName={`SKILL (${
             Object.values(selectedTags.skill).filter((tag) => tag).length
           }/${selectTagsLimit})`}
           options={selectedTags.skill}
@@ -91,10 +97,13 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
             checkBoxBorder: '0.2rem solid #c4c4c4',
             checkBoxMargin: '0.4rem',
             checkBoxBorderRadius: '20rem',
+            unCheckedBoxWidth: 'fit-content',
+            checkedBoxInputBackgroundColor: '#56ad79',
+            checkedBoxFontColor: '#fff',
           }}
         />
         <InputCheckBox
-          labelName={`굿 (${
+          labelName={`GOOD (${
             Object.values(selectedTags.good).filter((tag) => tag).length
           }/${selectTagsLimit})`}
           options={selectedTags.good}
@@ -104,10 +113,13 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
             checkBoxBorder: '0.2rem solid #c4c4c4',
             checkBoxMargin: '0.4rem',
             checkBoxBorderRadius: '20rem',
+            unCheckedBoxWidth: 'fit-content',
+            checkedBoxInputBackgroundColor: '#56ad79',
+            checkedBoxFontColor: '#fff',
           }}
         />
         <InputCheckBox
-          labelName={`배드 (${
+          labelName={`BAD (${
             Object.values(selectedTags.bad).filter((tag) => tag).length
           }/${selectTagsLimit})`}
           options={selectedTags.bad}
@@ -117,6 +129,9 @@ const MatchReviewModal = ({ showMatchReviewModal }: ModalState) => {
             checkBoxBorder: '0.2rem solid #c4c4c4',
             checkBoxMargin: '0.4rem',
             checkBoxBorderRadius: '20rem',
+            unCheckedBoxWidth: 'fit-content',
+            checkedBoxInputBackgroundColor: '#56ad79',
+            checkedBoxFontColor: '#fff',
           }}
         />
         <div className={classNames(buttonBox)}>

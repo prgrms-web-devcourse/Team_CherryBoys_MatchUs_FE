@@ -2,13 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import style from './memberList.module.scss';
 import { MemberListElement } from './MemberListElements';
-
-// TODO: 타입을 어떻게 정리할지에 대해서 이야기 나눈 뒤, 분리 예정.
-interface MemberElementType {
-  userId: number;
-  userName: string;
-  grade: string;
-}
+import { MemberElementType } from '@/types';
 
 interface Props {
   isMember: boolean;
@@ -16,6 +10,8 @@ interface Props {
   hasAuthorization: boolean;
   isEditing: boolean;
   hasCategoryTitle?: boolean;
+  memberIndexLimit?: number;
+  hiredIndexLimit?: number;
   handleAddDeletedMembers?: React.MouseEventHandler<HTMLDivElement>;
   handleChangeMemberGrade?: React.ChangeEventHandler<HTMLSelectElement>;
   handleSubmitDeletedMember?: React.FormEventHandler<HTMLFormElement>;
@@ -30,6 +26,8 @@ const MemberList = ({
   hasAuthorization,
   isEditing,
   hasCategoryTitle,
+  memberIndexLimit = 0,
+  hiredIndexLimit = 0,
   handleAddDeletedMembers,
   handleChangeMemberGrade,
   handleSubmitDeletedMember,
@@ -38,7 +36,7 @@ const MemberList = ({
   const captain = memberInfo.find((member: MemberElementType) => member.grade === '주장');
   const subCaptains = memberInfo.filter((member: MemberElementType) => member.grade === '부주장');
   const generalMemberList = memberInfo.filter(
-    (member: MemberElementType) => member.grade === '회원'
+    (member: MemberElementType) => member.grade === '일반'
   );
   const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
 
@@ -57,7 +55,7 @@ const MemberList = ({
           )}
         </div>
         <div>
-          {isMember && (
+          {isMember && captain && (
             <MemberListElement
               memberId={captain?.userId}
               memberName={captain?.userName}
@@ -69,7 +67,7 @@ const MemberList = ({
               handleAddDeletedMembers={handleAddDeletedMembers}
             />
           )}
-          {isMember && (
+          {isMember && subCaptains && (
             <>
               {subCaptains.map((subCaptain: MemberElementType) => (
                 <MemberListElement
@@ -85,43 +83,52 @@ const MemberList = ({
               ))}
             </>
           )}
-          {isMember ? (
-            <>
-              {generalMemberList.map((generalMember: MemberElementType) => (
-                <MemberListElement
-                  memberId={generalMember.userId}
-                  memberName={generalMember.userName}
-                  memberType="generalMember"
-                  key={`generalMember-${generalMember.userId}`}
-                  isEditing={isEditing}
-                  grade={generalMember.grade}
-                  handleChangeMemberGrade={handleChangeMemberGrade}
-                  handleAddDeletedMembers={handleAddDeletedMembers}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {hiredMemberList.map((hiredMember: MemberElementType) => (
-                <MemberListElement
-                  memberId={hiredMember.userId}
-                  memberName={hiredMember.userName}
-                  memberType="hiredMember"
-                  key={`hiredMember-${hiredMember.userId}`}
-                  isEditing={isEditing}
-                  grade={hiredMember.grade}
-                  handleAddDeletedMembers={handleAddDeletedMembers}
-                  handleChangeMemberGrade={handleChangeMemberGrade}
-                />
-              ))}
-            </>
-          )}
+          {isMember
+            ? generalMemberList.length !== 0 && (
+                <>
+                  {generalMemberList.map((generalMember: MemberElementType, index) => {
+                    if (index < memberIndexLimit && memberIndexLimit !== 0) {
+                      return (
+                        <MemberListElement
+                          memberId={generalMember.userId}
+                          memberName={generalMember.userName}
+                          memberType="generalMember"
+                          key={`generalMember-${generalMember.userId}`}
+                          isEditing={isEditing}
+                          grade={generalMember.grade}
+                          handleChangeMemberGrade={handleChangeMemberGrade}
+                          handleAddDeletedMembers={handleAddDeletedMembers}
+                        />
+                      );
+                    }
+                  })}
+                </>
+              )
+            : hiredMemberList.length !== 0 && (
+                <>
+                  {hiredMemberList.map((hiredMember: MemberElementType, index) => {
+                    if (index < hiredIndexLimit && hiredIndexLimit !== 0) {
+                      return (
+                        <MemberListElement
+                          memberId={hiredMember.userId}
+                          memberName={hiredMember.userName}
+                          memberType="hiredMember"
+                          key={`hiredMember-${hiredMember.userId}`}
+                          isEditing={isEditing}
+                          grade={hiredMember.grade}
+                          handleChangeMemberGrade={handleChangeMemberGrade}
+                          handleAddDeletedMembers={handleAddDeletedMembers}
+                        />
+                      );
+                    }
+                  })}
+                </>
+              )}
         </div>
         {isEditing && (
           <>
             {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
             <button type="submit">방출</button>
-            {isMember && <button type="button">위임</button>}
           </>
         )}
       </form>

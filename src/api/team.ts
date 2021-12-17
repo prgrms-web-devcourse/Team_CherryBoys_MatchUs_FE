@@ -1,6 +1,6 @@
 import { throwErrorMessage } from '@/utils/api';
 import api from '@/api/core';
-import { MemberElement } from '@/types';
+import { MemberElementType } from '@/types';
 
 interface TeamInfoProps {
   image: Record<string, string>;
@@ -39,13 +39,16 @@ export const createTeam = ({
     .catch(throwErrorMessage);
 };
 
-export const checkTeamNameDuplication = (teamName: string) =>
-  api
+export const checkTeamNameDuplication = (teamName: string) => {
+  return api
     .get({
       url: `/teams/name-check`,
-      data: teamName,
+      params: {
+        teamName,
+      },
     })
     .catch(throwErrorMessage);
+};
 
 export const deleteTeam = (teamId: number) =>
   api
@@ -73,14 +76,6 @@ export const editTeamInfo = ({ image, teamBio, teamAgeGroup, teamId }: EditTeamI
   });
 };
 
-export const deleteTeamMembers = (teamId: number, memberInfo: MemberElement[]) =>
-  api
-    .delete({
-      url: `teams/${teamId}`,
-      data: { memberInfo },
-    })
-    .catch(throwErrorMessage);
-
 export const getTeamInfo = (teamId: number) =>
   api
     .get({
@@ -88,10 +83,10 @@ export const getTeamInfo = (teamId: number) =>
     })
     .catch(throwErrorMessage);
 
-export const getMemberInfo = (teamId: number) =>
+export const getTotalMemberInfo = (teamId: number) =>
   api
     .get({
-      url: `/teams/${teamId}/members`,
+      url: `/teams/${teamId}/total-members`,
     })
     .catch(throwErrorMessage);
 
@@ -101,3 +96,38 @@ export const getMatchHistory = (teamId: number) =>
       url: `teams/${teamId}/matches`,
     })
     .catch(throwErrorMessage);
+
+export const getTeamMemberInfo = (teamId: number, memberType: string) =>
+  api
+    .get({
+      url: `/teams/${teamId}/${memberType}`,
+    })
+    .catch(throwErrorMessage);
+
+export const postInviteTeamMember = (teamId: number, memberEmail: string) =>
+  api
+    .post({
+      url: `/teams/${teamId}/members`,
+      data: {
+        email: memberEmail,
+      },
+    })
+    .catch(throwErrorMessage);
+
+export const putChangeMemberGrade = (teamId: number, memberInfo: MemberElementType[]) =>
+  api
+    .put({
+      url: `/teams/${teamId}/members`,
+      data: {
+        members: memberInfo,
+      },
+    })
+    .catch(throwErrorMessage);
+
+export const deleteTeamMembers = (teamId: number, deletedMembrInfo: MemberElementType[]) =>
+  api.delete({
+    url: `/teams/${teamId}/members`,
+    data: {
+      members: deletedMembrInfo,
+    },
+  });

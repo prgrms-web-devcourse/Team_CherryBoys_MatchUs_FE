@@ -13,7 +13,7 @@ interface MemberElementType {
 }
 
 const gradeCollection: Record<string, string> = {
-  subCaptain: '회원',
+  subCaptain: '일반',
   generalMember: '부주장',
 };
 

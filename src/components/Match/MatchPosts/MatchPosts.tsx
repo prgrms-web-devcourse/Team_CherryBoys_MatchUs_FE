@@ -1,18 +1,40 @@
 /* eslint-disable react/jsx-fragments */
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
-import { MatchPostCard } from '@/components';
+import { match } from '@/store/match/match';
+import { MatchPostCard, MatchListFilterModal } from '@/components';
 import style from './MatchPosts.module.scss';
+import { fetchAllMatch } from '@/api';
+import { MatchCard } from '@/types';
 
-const { postsContainer, postTitleBox, postTitle, filterPostButton, postItems, addPostButton } =
-  style;
+const {
+  postsContainer,
+  postTitleBox,
+  postTitle,
+  buttonBox,
+  filterPostButton,
+  postItems,
+  addPostButton,
+} = style;
 
 const MatchPosts = () => {
-  const { matchList } = useSelector((state: RootState) => state.match.data);
+  const { modal, matchListFilter } = useSelector((state: RootState) => state.match.data);
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [matches, setMatches] = useState<MatchCard[]>([]);
+
+  const getMatchList = useCallback(async () => {
+    const matchList = await fetchAllMatch(matchListFilter);
+    setMatches(matchList);
+  }, [matchListFilter]);
+
+  useEffect(() => {
+    getMatchList();
+  }, [matchListFilter]);
 
   // TODO:사용자의 권한을 체크하는 로직 추가 필요
   const handelCheckUserAuthority = (grade: string) => {
@@ -22,16 +44,37 @@ const MatchPosts = () => {
     history.push('/matches/new');
   };
 
+  const handleToggleListFilterModal = () => {
+    dispatch(match.actions.toggleModal({ modalName: 'matchListFilter' }));
+  };
+
+  const handleRemoveAllFilter = () => {
+    dispatch(match.actions.setMatchListFilter({ matchListFilter: { size: 10 } }));
+  };
+
   return (
     <div className={classNames(postsContainer)}>
       <div className={classNames(postTitleBox)}>
         <span className={classNames(postTitle)}>모집중인 매치</span>
-        <button className={classNames(filterPostButton)} type="button">
-          <i className="fas fa-filter" />
-        </button>
+        <div className={classNames(buttonBox)}>
+          <button
+            className={classNames(filterPostButton)}
+            onClick={handleRemoveAllFilter}
+            type="button"
+          >
+            <i className="fas fa-redo" />
+          </button>
+          <button
+            className={classNames(filterPostButton)}
+            onClick={handleToggleListFilterModal}
+            type="button"
+          >
+            <i className="fas fa-filter" />
+          </button>
+        </div>
       </div>
       <ul className={classNames(postItems)}>
-        {matchList.map((matchInfo, index) => (
+        {matches.map((matchInfo, index) => (
           <MatchPostCard matchInfo={matchInfo} key={`matchPost${index}`} />
         ))}
       </ul>
@@ -42,6 +85,7 @@ const MatchPosts = () => {
       >
         <i className="fas fa-plus" />
       </button>
+      <MatchListFilterModal showMatchListFilterModal={modal.matchListFilter} />
     </div>
   );
 };

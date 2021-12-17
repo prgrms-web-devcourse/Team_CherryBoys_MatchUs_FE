@@ -12,8 +12,8 @@ export interface SportsPlayers {
 }
 
 export const SPORTS_PLAYER: SportsPlayers = {
-  축구: 11,
-  풋살: 6,
+  축구: 1,
+  풋살: 1,
 };
 
 export interface CheckboxOptions {
@@ -71,4 +71,123 @@ export const INPUT_DICITIONARY: StringKey = {
   ground: '구장',
   cost: '참가비',
   detail: '상세정보',
+};
+
+// TODO: 백엔드가 보내준 확정 지역 정보. 위의 더미들은 점진적으로 삭제
+
+export const LOCATIONS = {
+  cities: [
+    {
+      cityId: 1,
+      cityName: '서울특별시',
+    },
+    {
+      cityId: 2,
+      cityName: '경기도',
+    },
+  ],
+  regions: [
+    {
+      cityId: 1,
+      regionId: 1,
+      regionName: '강남구',
+    },
+    {
+      cityId: 1,
+      regionId: 2,
+      regionName: '영등포구',
+    },
+    {
+      cityId: 2,
+      regionId: 3,
+      regionName: '남양주시',
+    },
+    {
+      cityId: 2,
+      regionId: 4,
+      regionName: '성남시',
+    },
+  ],
+  grounds: [
+    {
+      regionId: 1,
+      groundId: 1,
+      groundName: '대륭축구장',
+    },
+    {
+      regionId: 1,
+      groundId: 2,
+      groundName: '대륭풋살장',
+    },
+    {
+      regionId: 1,
+      groundId: 3,
+      groundName: '머쓱축구장',
+    },
+    {
+      regionId: 1,
+      groundId: 4,
+      groundName: '머쓱풋살장',
+    },
+    {
+      regionId: 2,
+      groundId: 5,
+      groundName: '쭝축구장',
+    },
+    {
+      regionId: 2,
+      groundId: 6,
+      groundName: '쭝풋살장',
+    },
+    {
+      regionId: 2,
+      groundId: 7,
+      groundName: '시즈축구장',
+    },
+    {
+      regionId: 2,
+      groundId: 8,
+      groundName: '시즈풋살장',
+    },
+    {
+      regionId: 3,
+      groundId: 9,
+      groundName: '체리축구장',
+    },
+    {
+      regionId: 3,
+      groundId: 10,
+      groundName: '체리풋살장',
+    },
+    {
+      regionId: 3,
+      groundId: 11,
+      groundName: '용스톤축구장',
+    },
+    {
+      regionId: 3,
+      groundId: 12,
+      groundName: '용스톤풋살장',
+    },
+    {
+      regionId: 4,
+      groundId: 13,
+      groundName: '호세축구장',
+    },
+    {
+      regionId: 4,
+      groundId: 14,
+      groundName: '호세풋살장',
+    },
+    {
+      regionId: 4,
+      groundId: 15,
+      groundName: '쌈축구장',
+    },
+    {
+      regionId: 4,
+      groundId: 16,
+      groundName: '쌈풋살장',
+    },
+  ],
 };
