@@ -97,25 +97,6 @@ export const deleteMatchById = async (matchDeleteInfo: MatchDeleteInfo) => {
     .catch(throwErrorMessage);
 };
 
-export const fetchAuthorizedTeams = async (token: string) => {
-  const { teamSimpleInfos } = await api
-    .get({
-      url: '/users/me/teams',
-      data: token,
-    })
-    .catch(throwErrorMessage);
-  return teamSimpleInfos;
-};
-
-export const fetchTotalMembers = async (teamId: number) => {
-  const { members } = await api
-    .get({
-      url: `/teams/${teamId}/total-members`,
-    })
-    .catch(throwErrorMessage);
-  return members;
-};
-
 export const applyMatch = async (matchApplyInfo: MatchApplyInfo) => {
   const { matchId, players, teamId } = matchApplyInfo;
   await api
@@ -168,4 +149,32 @@ export const modifyTeamMember = async (editedTeamMemberInfo: TeamMemberEdit) => 
       data: editedTeamMember,
     })
     .catch(throwErrorMessage);
+};
+
+export const fetchAuthorizedTeams = async (token: string) => {
+  const { teamSimpleInfos } = await api
+    .get({
+      url: '/users/me/teams',
+      data: token,
+    })
+    .catch(throwErrorMessage);
+  return teamSimpleInfos;
+};
+
+export const fetchTotalMembers = async (teamId: number) => {
+  const { members } = await api
+    .get({
+      url: `/teams/${teamId}/total-members`,
+    })
+    .catch(throwErrorMessage);
+  return members;
+};
+
+export const fetchLocation = async () => {
+  const data = await api
+    .get({
+      url: '/locations',
+    })
+    .catch(throwErrorMessage);
+  return data;
 };

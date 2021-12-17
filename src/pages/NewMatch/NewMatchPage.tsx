@@ -5,13 +5,15 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { Input, InputCheckBox, InputDetail } from '@/components';
-import { fetchAuthorizedTeams, fetchTotalMembers, createMatch } from '@/api';
+import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
-import { SPORTS, SPORTS_PLAYER, AGE_GROUP, LOCATIONS } from '@/consts';
-import { TeamSimple, TeamMemberInfo } from '@/types';
+import { RootState } from '@/store';
+import { match } from '@/store/match/match';
+import { SPORTS, SPORTS_PLAYER, AGE_GROUP } from '@/consts';
+import { TeamSimple, TeamMemberInfo, Locations } from '@/types';
 
 const { newMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
 
@@ -38,6 +40,20 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
+  const { locations } = useSelector((store: RootState) => store.match.data);
+  const [locationInfo, setLocationInfo] = useState<Locations>(locations);
+
+  const getLocations = useCallback(async () => {
+    const locationData = await fetchLocation();
+    setLocationInfo(locationData);
+    dispatch(match.actions.setLocations({ locations: locationData }));
+  }, []);
+
+  useEffect(() => {
+    if (locationInfo.cities.length < 1) {
+      getLocations();
+    }
+  }, []);
 
   const [nowDate, setNowDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState({
@@ -56,18 +72,24 @@ const NewMatch = () => {
   const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState(placeholder);
   const [team, setTeam] = useState(placeholder);
-  const cityOptions = ['행정구역', ...LOCATIONS.cities.map((cityInfo) => cityInfo.cityName)];
+  const cityOptions = [
+    '행정구역',
+    ...locationInfo.cities.reduce((acc: string[], cityInfo) => {
+      if (cityInfo.cityName) acc.push(cityInfo.cityName || '');
+      return acc;
+    }, []),
+  ];
   const regionOptions = [
     '시/군/구',
-    ...LOCATIONS.regions.reduce((acc: string[], regionInfo) => {
-      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName);
+    ...locationInfo.regions.reduce((acc: string[], regionInfo) => {
+      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName || '');
       return acc;
     }, []),
   ];
   const groundOptions = [
     '구장',
-    ...LOCATIONS.grounds.reduce((acc: string[], groundInfo) => {
-      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName);
+    ...locationInfo.grounds.reduce((acc: string[], groundInfo) => {
+      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName || '');
       return acc;
     }, []),
   ];
@@ -117,27 +139,38 @@ const NewMatch = () => {
       return;
     }
     if (category === 'city') {
-      const selectedCity = LOCATIONS.cities.filter(
+      const selectedCity = locationInfo.cities.filter(
         (cityInfo) => cityInfo.cityName === targetInput
       )[0];
-      setCity(selectedCity || defaultCity);
+      setCity({
+        cityId: selectedCity?.cityId || 0,
+        cityName: selectedCity?.cityName || '',
+      });
       setRegion(defaultRegion);
       setGround(defaultGround);
       return;
     }
     if (category === 'region') {
-      const selectedRegion = LOCATIONS.regions.filter(
+      const selectedRegion = locationInfo.regions.filter(
         (regionInfo) => regionInfo.regionName === targetInput
       )[0];
-      setRegion(selectedRegion || defaultRegion);
+      setRegion({
+        cityId: selectedRegion?.cityId || 0,
+        regionId: selectedRegion?.regionId || 0,
+        regionName: selectedRegion?.regionName || '',
+      });
       setGround(defaultGround);
       return;
     }
     if (category === 'ground') {
-      const selectedGround = LOCATIONS.grounds.filter(
+      const selectedGround = locationInfo.grounds.filter(
         (groundInfo) => groundInfo.groundName === targetInput
       )[0];
-      setGround(selectedGround || defaultGround);
+      setGround({
+        regionId: selectedGround?.regionId || 0,
+        groundId: selectedGround?.groundId || 0,
+        groundName: selectedGround?.groundName || '',
+      });
     }
     if (category === 'cost') {
       const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
