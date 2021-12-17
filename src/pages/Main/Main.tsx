@@ -7,9 +7,6 @@ import style from './main.module.scss';
 
 const Main = () => {
   const history = useHistory();
-  // 로그인이 됬을 때와 그렇지 않았을 때의 뷰의 차이를 둬야한다.
-  const isLogged = useSelector((store: RootState) => store.auth.isLogged);
-  // 어떤 스포츠를 선호하는지 정보를 알아야한다.
   const result = useSelector((store: RootState) => store.auth.userInfo);
 
   useEffect(() => {}, []);
