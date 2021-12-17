@@ -9,7 +9,7 @@ import { getTeamInfo } from '@/api';
 import TeamInfoCard from './TeamInfoCard';
 import { TEAM_CREATE_PAGE } from '@/consts/routes';
 
-const { highlight, addTeamButton } = style;
+const { highlight, titleContainer, mainTitle, cardsContainer, addTeamButton } = style;
 
 const TeamChoice = () => {
   const history = useHistory();
@@ -33,12 +33,16 @@ const TeamChoice = () => {
 
   return (
     <div>
-      {myTeams.length !== 0 ? (
-        <>
+      <div className={classNames(titleContainer)}>
+        <p className={classNames(mainTitle)}>
           <span className={classNames('whiteSpace')}>자신이 속한</span>
           <span className={classNames('whiteSpace')}>
             <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
           </span>
+        </p>
+      </div>
+      {myTeams.length !== 0 ? (
+        <div className={classNames(cardsContainer)}>
           {myTeams.map(({ logo, teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
             return (
               <TeamInfoCard
@@ -59,7 +63,7 @@ const TeamChoice = () => {
           >
             +
           </button>
-        </>
+        </div>
       ) : (
         <>
           <span className={classNames('whiteSpace')}>소속된 팀이 없어요 ❌</span>
