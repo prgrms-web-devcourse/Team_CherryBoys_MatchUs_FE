@@ -19,3 +19,17 @@ export interface MemberElementType {
   userName: string;
   grade: string;
 }
+
+export interface TeamInfo {
+  ageGroup: string;
+  bio: string;
+  captainId: number;
+  captainName: string;
+  mannerTemperature: number;
+  matchCount: number;
+  sportsName: string;
+  tagNames: string[];
+  teamCreatedAt: string;
+  teamId: number;
+  teamName: string;
+}
