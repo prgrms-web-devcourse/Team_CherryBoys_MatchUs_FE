@@ -7,7 +7,7 @@ export const getUserMatchHistory = (userId: number | undefined) =>
       url: `users/${userId}/matches`,
     })
     .catch(throwErrorMessage);
-=======
+
 export const getUserInfo = (userId: number | undefined) =>
   api
     .get({
