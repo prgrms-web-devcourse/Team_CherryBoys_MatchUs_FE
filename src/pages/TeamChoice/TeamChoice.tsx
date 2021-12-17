@@ -7,6 +7,7 @@ import style from './teamChoice.module.scss';
 import { TeamInfo } from '@/types';
 import { getTeamInfo } from '@/api';
 import TeamInfoCard from './TeamInfoCard';
+import { TEAM_CREATE_PAGE } from '@/consts/routes';
 
 const { highlight, addTeamButton } = style;
 
@@ -16,7 +17,7 @@ const TeamChoice = () => {
   const result = useSelector((store: RootState) => store.user.userInfo);
 
   const handleMoveToTeamCreatePage = () => {
-    history.push('/team/new');
+    history.push(TEAM_CREATE_PAGE);
   };
 
   useEffect(() => {
