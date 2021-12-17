@@ -17,6 +17,7 @@ import {
   HiresAccept,
   HiresFilter,
   NotFound,
+  Login,
   TeamMatchDetail,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
@@ -50,6 +51,8 @@ import {
   NOT_FOUND_PAGE,
   HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
+import { UserInfoEdit } from '@/pages/UserInfoEdit/UserInfoEdit';
+import Signup from '@/pages/Signup/Signup';
 
 const Router: React.FC = () => {
   return (
@@ -73,7 +76,6 @@ const Router: React.FC = () => {
       <Route path={TEAM_SELECT_PAGE} exact component={} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={} />
       <Route path={TEAM_MEMBERS_EDIT_PAGE} exact component={} />
-      <Route path={SIGNUP_PAGE} exact component={} />
       {/* <Route path={MATCHES_EDIT_PAGE} exact component={} /> */}
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
       <Route path={HOME_PAGE} exact component={} />
@@ -83,6 +85,7 @@ const Router: React.FC = () => {
       <Route path={HIRES_EDIT_PAGE} exact component={} />
       <Route path={HIRES_CHAT_PAGE} exact component={} />
       <Route path={HIRES_ACCEPT_PAGE} exact component={} /> */}
+      <Route path={SIGNUP_PAGE} exact component={Signup} />
       <Route path={MATCHES_PAGE} exact component={Matches} />
       <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
       <Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
@@ -93,12 +96,12 @@ const Router: React.FC = () => {
       <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
+      <Route path={LOGIN_PAGE} exact component={Login} />
+      <Route path={USER_EDIT_PAGE} exact component={UserInfoEdit} />
       {/* <Route path={TEAM_SELECT_PAGE} exact component={} /> */}
       {/* <Route path={SIGNUP_PAGE} exact component={} />
-      <Route path={LOGIN_PAGE} exact component={} />
       <Route path={SETTING_PAGE} exact component={} />
       <Route path={USER_PAGE} exact component={} />
-      <Route path={USER_EDIT_PAGE} exact component={} />
       <Route path={USER_MATCHING_LIST_PAGE} exact component={} />
       <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
       <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} />  */}

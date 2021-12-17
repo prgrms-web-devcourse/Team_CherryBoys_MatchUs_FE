@@ -2,14 +2,17 @@ import * as React from 'react';
 
 type ValidInputProps = {
   name: string;
+  id: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
   value: string;
   selectOptions?: string[];
   type: 'input' | 'select';
   validMsg: string;
 };
-export const ValidInput = ({
+
+const ValidInput = ({
   name,
+  id,
   onChange,
   value,
   selectOptions,
@@ -19,9 +22,9 @@ export const ValidInput = ({
   return (
     <>
       {type === 'input' ? (
-        <input name={name} onChange={onChange} value={value} />
+        <input id={id} name={name} onChange={onChange} value={value} />
       ) : (
-        <select name={name} onChange={onChange} value={value}>
+        <select id={id} name={name} onChange={onChange} value={value}>
           {selectOptions?.map((option) => {
             return (
               <option key={option} value={option}>

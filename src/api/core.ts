@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
-import { useHistory } from 'react-router-dom';
 import { HTTP_METHODS } from '@/consts';
 import { getItemFromStorage, removeItemFromStorage } from '@/utils/storage';
 
 const axiosInstance: AxiosInstance = axios.create({
-
   baseURL: 'http://ec2-3-34-109-111.ap-northeast-2.compute.amazonaws.com',
   timeout: 5000,
 });
@@ -34,10 +32,10 @@ const createApiMethod =
 
         const nowDate = new Date().getTime();
 
-        if (nowDate - expireTime < 0) {
+        if (expireTime - nowDate < 0) {
           removeItemFromStorage('accessToken');
           removeItemFromStorage('expireTime');
-          window.history.pushState('', '', '/login');
+          window.location.assign('/login');
         }
       }
 

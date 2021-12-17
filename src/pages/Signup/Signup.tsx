@@ -1,22 +1,21 @@
 /* eslint-disable import/no-named-as-default */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-// @flow
 import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ValidInput from './ValidInput';
 import {
-  SIGNUP_VALIDATION_SUCCESS_MSG,
-  validateSignup,
-  SIGNUP_VALIDATION_ERR_MSG,
-} from '@/utils/validation/signupValidation';
+  USER_VALIDATION_SUCCESS_MSG,
+  validateUser,
+  USER_VALIDATION_ERR_MSG,
+} from '@/utils/validation/userValidation';
 import {
   requestCheckDuplicatedEmail,
   requestCheckDuplicatedNickname,
   requestSignup,
-} from '@/api/auth';
-import { isValidFormType, signupFormType, validMsgType } from '@/types/auths';
-import { AGE, GENDER, SPORTS } from '@/consts/signup';
+} from '@/api/user';
+import { isValidFormType, signupFormType, validMsgType } from '@/types/users';
+import { AGE, GENDER, SPORTS } from '@/consts/user';
+import { CustomLabel } from '@/components';
 
 const Signup = () => {
   const [signupForm, setSignupForm] = useState<signupFormType>({
@@ -63,8 +62,8 @@ const Signup = () => {
     const { name, value } = e.target;
     const errMsg =
       name !== 'confirmedPassword'
-        ? validateSignup[name](value)
-        : validateSignup[name](value, password);
+        ? validateUser[name](value)
+        : validateUser[name](value, password);
 
     setValidMsg({
       ...validMsg,
@@ -97,12 +96,12 @@ const Signup = () => {
     if (!isValidForm.nickname) {
       return;
     }
-    
+
     const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
 
     const msg = !isduplicated
-      ? SIGNUP_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
-      : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
+      ? USER_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
+      : USER_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
 
     setValidMsg({
       ...validMsg,
@@ -122,8 +121,8 @@ const Signup = () => {
     const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
     const msg = !isduplicated
-      ? SIGNUP_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
-      : SIGNUP_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
+      ? USER_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
+      : USER_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
 
     setValidMsg({
       ...validMsg,
@@ -135,7 +134,7 @@ const Signup = () => {
       email: isduplicated,
     });
   };
-      
+
   const IsSignupValid = () => {
     return !Object.values(isValidForm).includes(false);
   };
@@ -166,9 +165,10 @@ const Signup = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>사용자명</label>
+      <CustomLabel htmlFor="userName">사용자명</CustomLabel>
       <div>
         <ValidInput
+          id="userName"
           name="userName"
           onChange={handleOnChange}
           value={userName}
@@ -177,9 +177,10 @@ const Signup = () => {
         />
       </div>
 
-      <label>닉네임</label>
+      <CustomLabel htmlFor="nickname">닉네임</CustomLabel>
       <div>
         <ValidInput
+          id="nickname"
           name="nickname"
           onChange={handleOnChange}
           value={nickname}
@@ -190,9 +191,10 @@ const Signup = () => {
           중복확인
         </button>
       </div>
-      <label>이메일</label>
+      <CustomLabel htmlFor="email">이메일</CustomLabel>
       <div>
         <ValidInput
+          id="email"
           name="email"
           onChange={handleOnChange}
           value={email}
@@ -203,9 +205,10 @@ const Signup = () => {
           중복확인
         </button>
       </div>
-      <label>비밀번호</label>
+      <CustomLabel htmlFor="password">비밀번호</CustomLabel>
       <div>
         <ValidInput
+          id="password"
           name="password"
           onChange={handleOnChange}
           value={password}
@@ -213,9 +216,10 @@ const Signup = () => {
           validMsg={validMsg.password}
         />
       </div>
-      <label>비밀번호 확인</label>
+      <CustomLabel htmlFor="confirmedPassword">비밀번호 확인</CustomLabel>
       <div>
         <ValidInput
+          id="confirmedPassword"
           name="confirmedPassword"
           onChange={handleOnChange}
           value={confirmedPassword}
@@ -223,9 +227,10 @@ const Signup = () => {
           validMsg={validMsg.confirmedPassword}
         />
       </div>
-      <label>성별</label>
+      <CustomLabel htmlFor="gender">성별</CustomLabel>
       <div>
         <ValidInput
+          id="gender"
           name="gender"
           onChange={handleOnChange}
           value={gender}
@@ -234,9 +239,10 @@ const Signup = () => {
           selectOptions={GENDER}
         />
       </div>
-      <label>연령대</label>
+      <CustomLabel htmlFor="ageGroup">연령대</CustomLabel>
       <div>
         <ValidInput
+          id="ageGroup"
           name="ageGroup"
           onChange={handleOnChange}
           value={ageGroup}
@@ -245,9 +251,10 @@ const Signup = () => {
           selectOptions={AGE}
         />
       </div>
-      <label>종목</label>
+      <CustomLabel htmlFor="sports">종목</CustomLabel>
       <div>
         <ValidInput
+          id="sports"
           name="sports"
           onChange={handleOnChange}
           value={sports}

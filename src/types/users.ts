@@ -49,15 +49,39 @@ export interface userType {
   isLogged: boolean;
   accessToken: string | null;
   expireTime: number | null;
-  userInfo: null | {
+  userInfo: {
     ageGroup: string;
-    bio: null | string;
+    bio: string;
     gender: string;
-    id: number;
+    id: null | number;
     name: string;
     nickname: string;
     roleGroup: string;
     sports: string;
     userGrade: [] | userGradeType[];
   };
+}
+
+export interface userInfoValueType {
+  value: string;
+  isValid: boolean;
+  validMsg: string;
+}
+
+export interface duplicatedType extends userInfoValueType {
+  isDuplicated: boolean;
+}
+
+export interface userInfoType {
+  nickname: duplicatedType;
+  bio: userInfoValueType;
+  ageGroup: userInfoValueType;
+  sports: userInfoValueType;
+}
+
+export interface reqeustUserInfoType {
+  nickname: string;
+  bio: string;
+  ageGroup: string;
+  sportName: string;
 }

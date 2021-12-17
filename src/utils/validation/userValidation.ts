@@ -1,4 +1,4 @@
-export const SIGNUP_REGEX = {
+export const USER_REGEX = {
   USERNAME: /^[가-힣ㄱ-ㅎ]{0,8}$/,
   NICKNAME: /^[a-zA-Z0-9가-힣ㄱ-ㅎ]{0,8}$/,
   EMAIL: /^\S+@\S+\.(\S{2,})+/,
@@ -8,8 +8,9 @@ export const SIGNUP_REGEX = {
 export const PASSWORD_MIN_LEN = 10;
 export const PASSWORD_MAX_LEN = 16;
 export const NICKNAME_MAX_LEN = 8;
+export const BIO_MAX_LEN = 30;
 
-export const SIGNUP_VALIDATION_ERR_MSG = {
+export const USER_VALIDATION_ERR_MSG = {
   INVALID_USERNAME: '이름은 8자이하의 한글만 가능합니다.',
   INVALID_NICKNAME_FORM: '닉네임에는 특수문자가 들어갈 수 없습니다.',
   INVALID_NICKNAME_LEN: `닉네임은 ${NICKNAME_MAX_LEN}자까지 만들 수 있습니다.`,
@@ -22,54 +23,52 @@ export const SIGNUP_VALIDATION_ERR_MSG = {
   INVALID_SPORTS: '주종목을 선택해주세요.',
   DUPLICATE_EMIAL: '이미 존재하는 이메일입니다.',
   DUPLICATE_NICKNAME: '이미 존재하는 닉네임입니다.',
+  INVALID_BIO_MSG: `자기소개는 ${BIO_MAX_LEN}을 넘길 수 없습니다.`,
 };
 
-export const SIGNUP_VALIDATION_SUCCESS_MSG = {
+export const USER_VALIDATION_SUCCESS_MSG = {
   EMAIL_SUCCESS_MSG: '사용 가능한 이메일입니다.',
   NICKNAME_SUCCESS_MSG: '사용 가능한 닉네임입니다.',
 };
 
-export const validateSignup: { [index: string]: (key: string, state?: string) => string } = {
+export const validateUser: { [index: string]: (key: string, state?: string) => string } = {
   userName: (userName: string): string => {
-    return !SIGNUP_REGEX.USERNAME.test(userName) ? SIGNUP_VALIDATION_ERR_MSG.INVALID_USERNAME : '';
+    return !USER_REGEX.USERNAME.test(userName) ? USER_VALIDATION_ERR_MSG.INVALID_USERNAME : '';
   },
   nickname: (nickname: string): string => {
     const nicknameLength = nickname.length;
 
     if (nicknameLength > NICKNAME_MAX_LEN) {
-      return SIGNUP_VALIDATION_ERR_MSG.INVALID_NICKNAME_LEN;
+      return USER_VALIDATION_ERR_MSG.INVALID_NICKNAME_LEN;
     }
 
-    return !SIGNUP_REGEX.NICKNAME.test(nickname)
-      ? SIGNUP_VALIDATION_ERR_MSG.INVALID_NICKNAME_FORM
-      : '';
+    return !USER_REGEX.NICKNAME.test(nickname) ? USER_VALIDATION_ERR_MSG.INVALID_NICKNAME_FORM : '';
+  },
+  bio: (bio: string): string => {
+    return bio.length > BIO_MAX_LEN ? USER_VALIDATION_ERR_MSG.INVALID_BIO_MSG : '';
   },
   email: (email: string): string => {
-    return !SIGNUP_REGEX.EMAIL.test(email) ? SIGNUP_VALIDATION_ERR_MSG.INVALID_EMAIL : '';
+    return !USER_REGEX.EMAIL.test(email) ? USER_VALIDATION_ERR_MSG.INVALID_EMAIL : '';
   },
   password: (password: string): string => {
     const passwordLength = password.length;
 
     if (passwordLength < 10 || passwordLength > 16) {
-      return SIGNUP_VALIDATION_ERR_MSG.INVALID_PASSWORD_LEN;
+      return USER_VALIDATION_ERR_MSG.INVALID_PASSWORD_LEN;
     }
 
-    return !SIGNUP_REGEX.PASSWORD.test(password)
-      ? SIGNUP_VALIDATION_ERR_MSG.INVALID_PASSWORD_FORM
-      : '';
+    return !USER_REGEX.PASSWORD.test(password) ? USER_VALIDATION_ERR_MSG.INVALID_PASSWORD_FORM : '';
   },
   confirmedPassword: (confirmedPassword: string, password?: string): string => {
-    return password !== confirmedPassword
-      ? SIGNUP_VALIDATION_ERR_MSG.INVALID_CONFIRMED_PASSWORD
-      : '';
+    return password !== confirmedPassword ? USER_VALIDATION_ERR_MSG.INVALID_CONFIRMED_PASSWORD : '';
   },
   gender: (gender: string): string => {
-    return gender === '성별' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_GENDER : '';
+    return gender === '성별' ? USER_VALIDATION_ERR_MSG.INVALID_GENDER : '';
   },
   ageGroup: (age: string): string => {
-    return age === '연령대' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_AGEGROUP : '';
+    return age === '연령대' ? USER_VALIDATION_ERR_MSG.INVALID_AGEGROUP : '';
   },
   sports: (sports: string): string => {
-    return sports === '주종목' ? SIGNUP_VALIDATION_ERR_MSG.INVALID_SPORTS : '';
+    return sports === '주종목' ? USER_VALIDATION_ERR_MSG.INVALID_SPORTS : '';
   },
 };
