@@ -24,6 +24,7 @@ export interface TeamInfo {
   ageGroup: string;
   bio: string;
   captainId: number;
+  logo: string;
   captainName: string;
   mannerTemperature: number;
   matchCount: number;
