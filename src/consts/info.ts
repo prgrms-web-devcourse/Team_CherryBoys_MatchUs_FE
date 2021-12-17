@@ -3,6 +3,12 @@ export const SPORTS_CATEGORY = [
   { id: 'FUTSAL', name: '풋살' },
 ];
 
+export const CITY = ['서울시'];
+
+export const REGION = ['금천구', '강서구'];
+
+export const GROUND_NAME = ['유제두 체육관', '제1 체육관', '제2체육관'];
+
 export const AGE_GROUP = ['10대', '20대', '30대', '40대', '50대', '60대'];
 
 export const SPORTS = ['축구', '풋살'];
