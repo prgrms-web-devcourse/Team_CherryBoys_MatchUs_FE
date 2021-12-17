@@ -28,7 +28,7 @@ export const login = createAsyncThunk('user/login', async (loginForm: loginFormT
   return response;
 });
 
-export const reAuth = createAsyncThunk('user/reAuth', async () => {
+export const initiateAuth = createAsyncThunk('user/reAuth', async () => {
   const response = await requestReAuth();
 
   return response;
@@ -83,7 +83,7 @@ export const userSlice = createSlice({
     [login.rejected.type]: () => {
       console.log('error!');
     },
-    [reAuth.fulfilled.type]: (state, { payload }) => {
+    [initiateAuth.fulfilled.type]: (state, { payload }) => {
       const { userResponse } = payload;
 
       state.isLogged = true;
