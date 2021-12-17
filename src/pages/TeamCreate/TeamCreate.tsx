@@ -174,7 +174,7 @@ const TeamCreate = () => {
             <option>연령대</option>
             {AGE_GROUP.map((group) => (
               <option id={`${group}s`} key={`team-${group}`}>
-                {group}대
+                {group}
               </option>
             ))}
           </select>
