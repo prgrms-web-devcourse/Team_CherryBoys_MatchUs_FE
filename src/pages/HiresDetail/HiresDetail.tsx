@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import MatchDetail from '@/components/Match/MatchDetail/MatchDetail';
 import style from './hiresDetail.module.scss';
-import { RootState } from '@/store';
-import { match as matchReducer, fetchMatchById } from '@/store/match/match';
-import useMount from '@/hooks/useMount';
 import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
+import { InputDetail } from '@/components';
 
 const imageURL =
   'https://unsplash.com/photos/Cjfl8r_eYxY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjM4Njc4Mjg5&force=true&w=80';
+
+const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
 const hireItem = {
   postId: 1,
@@ -40,15 +38,7 @@ const {
 } = style;
 
 const HiresDetail = () => {
-  const dispatch = useDispatch();
-  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
-
-  const { match } = useSelector((store: RootState) => store.match.data);
-
-  useMount(() => {
-    dispatch(fetchMatchById(matchId));
-    dispatch(matchReducer.actions.setMatchId({ matchId }));
-  });
+  const [detail, setDetail] = useState<string>(DETAIL_PLACEHOLDER);
 
   const {
     date,
@@ -79,6 +69,10 @@ const HiresDetail = () => {
 
   const handleClickRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
+  };
+
+  const handleChangeDetail = (input: React.SetStateAction<string>) => {
+    setDetail(input);
   };
 
   return (
@@ -115,7 +109,11 @@ const HiresDetail = () => {
         </div>
       </article>
 
-      {match.length > 0 && <MatchDetail match={match[0]} />}
+      <InputDetail
+        labelName="상세정보"
+        placeholder={DETAIL_PLACEHOLDER}
+        onChange={handleChangeDetail}
+      />
       <button type="button">신청 용병 확인</button>
     </>
   );
