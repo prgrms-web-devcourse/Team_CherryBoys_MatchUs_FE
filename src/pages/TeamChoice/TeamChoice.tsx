@@ -28,7 +28,7 @@ const TeamChoice = () => {
       teamName: '김동현과김동현',
     },
   ]);
-  const result = useSelector((store: RootState) => store.auth.userInfo);
+  const result = useSelector((store: RootState) => store.user.userInfo);
 
   const handleMoveToTeamCreatePage = () => {
     history.push('/team/new');
@@ -57,6 +57,7 @@ const TeamChoice = () => {
           {myTeams.map(({ teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
             return (
               <TeamInfoCard
+                key={`teamInfo-${teamId}`}
                 teamId={teamId}
                 teamName={teamName}
                 teamCreatedAt={teamCreatedAt}

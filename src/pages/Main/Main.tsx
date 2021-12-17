@@ -7,7 +7,7 @@ import style from './main.module.scss';
 
 const Main = () => {
   const history = useHistory();
-  const result = useSelector((store: RootState) => store.auth.userInfo);
+  const result = useSelector((store: RootState) => store.user.userInfo);
 
   useEffect(() => {}, []);
 

@@ -39,7 +39,7 @@ const UserDetail = () => {
     tagNames: [],
   });
 
-  const result = useSelector((store: RootState) => store.auth.userInfo);
+  const result = useSelector((store: RootState) => store.user.userInfo);
 
   const updateUserInfo = useCallback(async () => {
     const apiResult = await getUserInfo(result?.id);
