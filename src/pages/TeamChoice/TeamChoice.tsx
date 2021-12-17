@@ -54,8 +54,7 @@ const TeamChoice = () => {
           <span className={classNames('whiteSpace')}>
             <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
           </span>
-          {myTeams.map((myTeamInfo) => {
-            const { teamId, teamName, teamCreatedAt, tagNames, mannerTemperature } = myTeamInfo;
+          {myTeams.map(({ teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
             return (
               <TeamInfoCard
                 teamId={teamId}
