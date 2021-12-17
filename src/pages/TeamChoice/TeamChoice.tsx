@@ -57,6 +57,7 @@ const TeamChoice = () => {
           {myTeams.map(({ teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
             return (
               <TeamInfoCard
+                key={`teamInfo-${teamId}`}
                 teamId={teamId}
                 teamName={teamName}
                 teamCreatedAt={teamCreatedAt}
