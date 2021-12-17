@@ -10,22 +10,22 @@ import {
 } from '@/types';
 
 export const fetchAllMatch = async (filter: MatchListFilter) => {
-  const data = await api
+  const { matchList } = await api
     .get({
       url: '/matches',
       params: filter,
     })
     .catch(throwErrorMessage);
-  return data.matchList;
+  return matchList;
 };
 
 export const fetchMatchById = async (matchId: number) => {
-  const data = await api
+  const matchInfo = await api
     .get({
       url: `/matches/${matchId}`,
     })
     .catch(throwErrorMessage);
-  return data;
+  return matchInfo;
 };
 
 export const createMatch = async (createMatchInfo: Omit<MatchPostEdit, 'matchId'>) => {
@@ -98,22 +98,22 @@ export const deleteMatchById = async (matchDeleteInfo: MatchDeleteInfo) => {
 };
 
 export const fetchAuthorizedTeams = async (token: string) => {
-  const data = await api
+  const { teamSimpleInfos } = await api
     .get({
       url: '/users/me/teams',
       data: token,
     })
     .catch(throwErrorMessage);
-  return data.teamSimpleInfos;
+  return teamSimpleInfos;
 };
 
 export const fetchTotalMembers = async (teamId: number) => {
-  const data = await api
+  const { members } = await api
     .get({
       url: `/teams/${teamId}/total-members`,
     })
     .catch(throwErrorMessage);
-  return data.members;
+  return members;
 };
 
 export const applyMatch = async (matchApplyInfo: MatchApplyInfo) => {
@@ -127,13 +127,13 @@ export const applyMatch = async (matchApplyInfo: MatchApplyInfo) => {
 };
 
 export const fetchWaitingTeams = async (matchId: number) => {
-  const data = await api
+  const { matchWaitingListRespons } = await api
     .get({
       url: `/matches/${matchId}/waitings`,
     })
     .catch(throwErrorMessage);
 
-  return data.matchWaitingListRespons;
+  return matchWaitingListRespons;
 };
 
 export const approveMatch = async (teamWaitingId: number) => {
