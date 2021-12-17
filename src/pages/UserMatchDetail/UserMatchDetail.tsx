@@ -39,20 +39,30 @@ const UserMatchDetail = () => {
           </div>
         </div>
         <div>
-          {userMatchHistory.map((match) => {
-            return (
-              <MatchListElement
-                key={`userReview-${match.matchId}`}
-                matchId={match.matchId}
-                matchDate={match.matchDate}
-                registerTeamLogo={match.registerTeamLogo}
-                registerTeamName={match.registerTeamName}
-                applyTeamLogo={match.applyTeamLogo}
-                applyTeamName={match.applyTeamName}
-                status={match.status}
-              />
-            );
-          })}
+          {userMatchHistory.map(
+            ({
+              matchId,
+              matchDate,
+              registerTeamLogo,
+              registerTeamName,
+              applyTeamLogo,
+              applyTeamName,
+              status,
+            }) => {
+              return (
+                <MatchListElement
+                  key={`userReview-${matchId}`}
+                  matchId={matchId}
+                  matchDate={matchDate}
+                  registerTeamLogo={registerTeamLogo}
+                  registerTeamName={registerTeamName}
+                  applyTeamLogo={applyTeamLogo}
+                  applyTeamName={applyTeamName}
+                  status={status}
+                />
+              );
+            }
+          )}
         </div>
       </div>
     </>
