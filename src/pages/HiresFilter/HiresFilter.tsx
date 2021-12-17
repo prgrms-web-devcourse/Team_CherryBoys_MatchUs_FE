@@ -2,6 +2,7 @@ import React from 'react';
 
 import { SPORTS_CATEGORY, AGE_GROUP, CITY, REGION, GROUND_NAME } from '@/consts';
 
+// Todo(홍중) : 기능, 기존 구현한 달력 적용하기, input 개선 -> 다른 브랜치에서 작업한 컴포넌트를 이용하여 수정 (2021-12-17)
 const HiresFilter = () => {
   return (
     <>
