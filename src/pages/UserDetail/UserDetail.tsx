@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { MatchListElement } from '@/components';
@@ -45,6 +46,7 @@ const {
   mannerMiddle,
   mannerHigh,
   logoImage,
+  seeMore,
 } = style;
 
 const UserDetail = () => {
@@ -137,7 +139,12 @@ const UserDetail = () => {
         </div>
       </section>
 
-      <span className={classNames(containerTitle)}>최근 경기</span>
+      <div>
+        <span className={classNames(containerTitle)}>최근 경기</span>
+        <Link className={classNames(seeMore)} to="/user/match">
+          더보기
+        </Link>
+      </div>
       <div className={classNames(matchesContainer)}>
         {limitedMatchHistory.map(
           ({
