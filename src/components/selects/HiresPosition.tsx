@@ -5,19 +5,19 @@ import { Input } from '../common';
 const POSITION = ['윙백', '윙포워드'];
 
 interface Props {
+  hiringPosition?: string;
   handleChangePosition: React.ChangeEventHandler<HTMLInputElement> &
     React.ChangeEventHandler<HTMLSelectElement>;
 }
-const HiresPosition = ({ handleChangePosition }: Props) => {
+const HiresPosition = ({ hiringPosition, handleChangePosition }: Props) => {
   return (
     <>
       <section>
-        <div>포지션</div>
         <Input
           inputId="hiresPosition"
           labelName="포지션"
           type="dropbox"
-          options={[...POSITION]}
+          options={[hiringPosition || '', ...POSITION]}
           onChange={handleChangePosition}
         />
       </section>

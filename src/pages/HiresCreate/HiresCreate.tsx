@@ -14,23 +14,52 @@ const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
-const HiresCreate = () => {
-  const [startTime, setStartTime] = useState<Date | null>(new Date());
-  const [endTime, setEndTime] = useState<Date | null>(new Date());
+interface previousHiresInfo {
+  prevHiredNumber?: number;
+  prevDate?: string;
+  prevStartTime?: string;
+  prevEndTime?: string;
+  prevCity?: string;
+  prevRegion?: string;
+  prevGroundName?: string;
+  prevPosition?: string;
+  prevAgeGroup?: string;
+  prevDetail?: string;
+}
+
+interface previousHiresInfoWrapper {
+  initialHiresInfo: previousHiresInfo;
+}
+const HiresCreate = ({ initialHiresInfo }: previousHiresInfoWrapper) => {
+  const {
+    prevHiredNumber = 1,
+    prevDate = '2021-12-28',
+    prevStartTime = '15:20:35',
+    prevEndTime = '21:42:35',
+    prevCity = '행정구역',
+    prevRegion = '시/군/구',
+    prevGroundName = '구장',
+    prevPosition = '윙백',
+    prevAgeGroup = '20대',
+    prevDetail = '즐겁게 합시다',
+  } = initialHiresInfo;
+
+  const [startTime, setStartTime] = useState<Date | null>(new Date(`${prevDate} ${prevStartTime}`));
+  const [endTime, setEndTime] = useState<Date | null>(new Date(`${prevDate} ${prevEndTime}`));
   const [formatedStartTime, setFormatedStartTime] = useState<string>('');
   const [formatedEndTime, setFormatedEndTime] = useState<string>('');
   const [maximumDate, setMaximumDateDate] = useState<any>(new Date());
   const [currentDate, setCurrentDate] = useState<any>(new Date());
   const [currentMonth, setCurrentMonth] = useState<any>(new Date().getMonth());
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(new Date(prevDate));
   const [formattedDate, setFormattedDate] = useState<string>('');
-  const [hirePlayerNumber, sethirePlayerNumber] = useState<number>(1);
-  const [position, setPosition] = useState<string>('윙백');
-  const [ageGroup, setAgeGroup] = useState<string>('20대');
-  const [city, setCity] = useState<string>('');
-  const [region, setRegion] = useState<string>('');
-  const [groundName, setGroundName] = useState<string>('');
-  const [detail, setDetail] = useState<string>(DETAIL_PLACEHOLDER);
+  const [hirePlayerNumber, sethirePlayerNumber] = useState<number>(prevHiredNumber);
+  const [position, setPosition] = useState<string>(prevPosition);
+  const [ageGroup, setAgeGroup] = useState<string>(prevAgeGroup);
+  const [city, setCity] = useState<string>(prevCity);
+  const [region, setRegion] = useState<string>(prevRegion);
+  const [groundName, setGroundName] = useState<string>(prevGroundName);
+  const [detail, setDetail] = useState<string>(prevDetail || DETAIL_PLACEHOLDER);
 
   useEffect(() => {
     const newDate = new Date();
@@ -209,7 +238,7 @@ const HiresCreate = () => {
       <section>
         <div>용병수</div>
         <select id="hiredPlayerNumber" onChange={handleChangeHiredPlayerNumber}>
-          <option>{`${HIRED_NUMBER[0]}명`}</option>
+          <option>{`${hirePlayerNumber}명`}</option>
           {HIRED_NUMBER.map(
             (num, index) =>
               index > 0 && (
@@ -220,8 +249,11 @@ const HiresCreate = () => {
           )}
         </select>
       </section>
-      <HiresPosition handleChangePosition={handleChangePosition} />
-      <AgeGroup handleChangeAge={handleChangeAge} />
+      <HiresPosition hiringPosition={position} handleChangePosition={handleChangePosition} />
+      <AgeGroup
+        ageGroup={parseInt(prevAgeGroup.slice(0, 2), 10)}
+        handleChangeAge={handleChangeAge}
+      />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           value={date}
@@ -250,14 +282,14 @@ const HiresCreate = () => {
         handleChangeRegion={handleChangeRegion}
         handleChangeGroundName={handleChangeGroundName}
       />
-      <InputDetail
-        labelName="상세정보"
-        placeholder={DETAIL_PLACEHOLDER}
-        onChange={handleChangeDetail}
-      />
-      <button type="button" onClick={handleClickSelectDone}>
-        선택 완료
-      </button>
+      <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
+      {prevCity === '행정구역' ? (
+        <button type="button" onClick={handleClickSelectDone}>
+          생성
+        </button>
+      ) : (
+        ''
+      )}
     </>
   );
 };
