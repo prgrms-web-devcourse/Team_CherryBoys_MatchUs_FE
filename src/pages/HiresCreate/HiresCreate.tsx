@@ -28,6 +28,7 @@ interface previousHiresInfo {
 }
 
 const HiresCreate = ({
+  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리
   prevHiredNumber = 1,
   prevDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
   prevStartTime = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
