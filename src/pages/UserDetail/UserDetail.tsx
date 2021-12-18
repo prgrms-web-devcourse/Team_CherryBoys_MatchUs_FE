@@ -83,8 +83,6 @@ const UserDetail = () => {
     updateUserMatchHistory();
   }, [updateUserInfo, updateUserMatchHistory]);
 
-  console.log(userInfo.myTeams);
-
   return (
     <div className={classNames(pageContainer)}>
       <section className={classNames(sectionContainer)}>
@@ -96,6 +94,7 @@ const UserDetail = () => {
                   <span className={classNames(userNickname)}>
                     <span className={classNames(highlight)}>{nickname}</span>님
                   </span>
+                  {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
                   <button type="button">수정</button>
                 </div>
                 <span className={classNames(bioSpace)}>{bio}</span>
