@@ -26,6 +26,25 @@ interface UserInfo {
   tagNames: string[];
 }
 
+const {
+  pageContainer,
+  sectionContainer,
+  elementRowContainer,
+  playTotalInfo,
+  userBaseInfo,
+  userInfoElementsContainer,
+  bioSpace,
+  userNickname,
+  sportsPart,
+  matchesContainer,
+  containerTitle,
+  highlight,
+  matchHighlight,
+  mannerLow,
+  mannerMiddle,
+  mannerHigh,
+} = style;
+
 const UserDetail = () => {
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -40,6 +59,8 @@ const UserDetail = () => {
     sportsName: '',
     tagNames: [],
   });
+
+  const limitedMatchHistory = matchHistory.slice(0, 3);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -59,25 +80,6 @@ const UserDetail = () => {
     updateUserInfo();
     updateUserMatchHistory();
   }, [updateUserInfo, updateUserMatchHistory]);
-
-  const {
-    pageContainer,
-    sectionContainer,
-    elementRowContainer,
-    playTotalInfo,
-    userBaseInfo,
-    userInfoElementsContainer,
-    bioSpace,
-    userNickname,
-    sportsPart,
-    matchesContainer,
-    containerTitle,
-    highlight,
-    matchHighlight,
-    mannerLow,
-    mannerMiddle,
-    mannerHigh,
-  } = style;
 
   return (
     <div className={classNames(pageContainer)}>
@@ -130,7 +132,7 @@ const UserDetail = () => {
 
       <span className={classNames(containerTitle)}>최근 경기</span>
       <div className={classNames(matchesContainer)}>
-        {matchHistory.map(
+        {limitedMatchHistory.map(
           ({
             matchId,
             matchDate,
