@@ -35,6 +35,7 @@ const TeamInfoCard = ({
   mannerTemperature,
 }: TeamCardInfo) => {
   const teamCreatedTime = teamCreatedAt.split('T');
+  // TODO: 예시 코드 삭제 예정
   const taggNames = ['timeKeeper', 'violent', 'fastFoot'];
   return (
     <div className={classNames(cardContainer)}>
