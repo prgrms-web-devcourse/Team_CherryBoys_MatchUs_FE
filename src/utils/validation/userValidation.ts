@@ -23,7 +23,7 @@ export const USER_VALIDATION_ERR_MSG = {
   INVALID_SPORTS: '주종목을 선택해주세요.',
   DUPLICATE_EMIAL: '이미 존재하는 이메일입니다.',
   DUPLICATE_NICKNAME: '이미 존재하는 닉네임입니다.',
-  INVALID_BIO_MSG: `자기소개는 ${BIO_MAX_LEN}을 넘길 수 없습니다.`,
+  INVALID_BIO_MSG: `자기소개는 ${BIO_MAX_LEN} 글자를 넘길 수 없습니다.`,
 };
 
 export const USER_VALIDATION_SUCCESS_MSG = {
