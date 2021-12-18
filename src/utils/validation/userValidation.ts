@@ -1,6 +1,6 @@
 export const USER_REGEX = {
-  USERNAME: /^[가-힣ㄱ-ㅎ]{0,8}$/,
-  NICKNAME: /^[a-zA-Z0-9가-힣ㄱ-ㅎ]{0,8}$/,
+  USERNAME: /^[가-힣ㄱ-ㅎ]{2,8}$/,
+  NICKNAME: /^[a-zA-Z0-9가-힣ㄱ-ㅎ]{2,8}$/,
   EMAIL: /^\S+@\S+\.(\S{2,})+/,
   PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,16}$/,
 };
@@ -8,12 +8,13 @@ export const USER_REGEX = {
 export const PASSWORD_MIN_LEN = 10;
 export const PASSWORD_MAX_LEN = 16;
 export const NICKNAME_MAX_LEN = 8;
+export const NICKNAME_MIN_LEN = 2;
 export const BIO_MAX_LEN = 30;
 
 export const USER_VALIDATION_ERR_MSG = {
-  INVALID_USERNAME: '이름은 8자이하의 한글만 가능합니다.',
+  INVALID_USERNAME: '이름은 2자 이상 8자이하의 한글만 가능합니다.',
   INVALID_NICKNAME_FORM: '닉네임에는 특수문자가 들어갈 수 없습니다.',
-  INVALID_NICKNAME_LEN: `닉네임은 ${NICKNAME_MAX_LEN}자까지 만들 수 있습니다.`,
+  INVALID_NICKNAME_LEN: `닉네임은 2자 이상 ${NICKNAME_MAX_LEN}자 이하여야 합니다.`,
   INVALID_EMAIL: '이메일 형식이 올바르지 않습니다.',
   INVALID_PASSWORD_FORM: '패스워드는 특수문자, 대문자, 소문자를 포함해야 합니다.',
   INVALID_PASSWORD_LEN: `패스워드는 ${PASSWORD_MIN_LEN}자 이상 ${PASSWORD_MAX_LEN}자 이하이어야 합니다.`,
@@ -38,7 +39,7 @@ export const validateUser: { [index: string]: (key: string, state?: string) => s
   nickname: (nickname: string): string => {
     const nicknameLength = nickname.length;
 
-    if (nicknameLength > NICKNAME_MAX_LEN) {
+    if (nicknameLength > NICKNAME_MAX_LEN || nicknameLength < NICKNAME_MIN_LEN) {
       return USER_VALIDATION_ERR_MSG.INVALID_NICKNAME_LEN;
     }
 
