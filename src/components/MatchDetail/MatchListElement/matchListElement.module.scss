@@ -19,9 +19,15 @@
   .teamInfoContainer {
     display: flex;
     flex-direction: column;
+    text-align: center;
   }
 
   .versus {
     font-size: 2.4rem;
   }
+}
+
+.logoImage {
+  width: 6rem;
+  object-fit: cover;
 }

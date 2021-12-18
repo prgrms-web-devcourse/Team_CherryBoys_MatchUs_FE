@@ -12,7 +12,7 @@ interface MatchInfoProps {
   status: string;
 }
 
-const { matchDateSpan, matchContainer, teamInfoContainer, versus } = style;
+const { matchDateSpan, matchContainer, teamInfoContainer, versus, logoImage } = style;
 
 const MatchListElement = ({
   matchId,
@@ -28,13 +28,13 @@ const MatchListElement = ({
       <span className={classNames(matchDateSpan)}>{matchDate}</span>
       <div className={classNames(matchContainer)}>
         <div className={classNames(teamInfoContainer)}>
-          <img src={registerTeamLogo} alt="등록 팀 로고 이미지" />
-          <p>{registerTeamName}</p>
+          <img className={classNames(logoImage)} src={registerTeamLogo} alt="등록 팀 로고 이미지" />
+          <span>{registerTeamName}</span>
         </div>
         <span className={classNames(versus)}>vs</span>
-        <div>
-          <img src={applyTeamLogo} alt="신청 팀 로고 이미지" />
-          <p>{applyTeamName}</p>
+        <div className={classNames(teamInfoContainer)}>
+          <img className={classNames(logoImage)} src={applyTeamLogo} alt="신청 팀 로고 이미지" />
+          <span>{applyTeamName}</span>
         </div>
       </div>
     </>
