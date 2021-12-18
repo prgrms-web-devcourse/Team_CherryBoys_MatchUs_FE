@@ -4,6 +4,7 @@ import {
   MatchDeleteInfo,
   TeamMemberEdit,
   MatchListFilter,
+  MatchPostNew,
   MatchPostEdit,
   MatchReviewInfo,
   MatchApplyInfo,
@@ -28,26 +29,11 @@ export const fetchMatchById = async (matchId: number) => {
   return matchInfo;
 };
 
-export const createMatch = async (createMatchInfo: Omit<MatchPostEdit, 'matchId'>) => {
-  const { sports, ageGroup, city, region, ground, cost, detail, date, startTime, endTime } =
-    createMatchInfo;
-  const matchInfo = {
-    sports,
-    ageGroup,
-    city,
-    region,
-    ground,
-    cost,
-    detail,
-    date,
-    startTime,
-    endTime,
-  };
-
+export const createMatch = async (createMatchInfo: MatchPostNew) => {
   await api
     .post({
       url: '/matches',
-      data: matchInfo,
+      data: createMatchInfo,
     })
     .catch(throwErrorMessage);
 };
@@ -66,23 +52,22 @@ export const modifyMatch = async (editedMatchInfo: MatchPostEdit) => {
     startTime,
     endTime,
   } = editedMatchInfo;
-  const matchInfo = {
-    sports,
-    ageGroup,
-    city,
-    region,
-    ground,
-    cost,
-    detail,
-    date,
-    startTime,
-    endTime,
-  };
 
   await api
     .put({
       url: `/matches/${matchId}`,
-      data: matchInfo,
+      data: {
+        sports,
+        ageGroup,
+        city,
+        region,
+        ground,
+        cost,
+        detail,
+        date,
+        startTime,
+        endTime,
+      },
     })
     .catch(throwErrorMessage);
 };
@@ -92,28 +77,9 @@ export const deleteMatchById = async (matchDeleteInfo: MatchDeleteInfo) => {
   await api
     .delete({
       url: `/matches/${matchId}`,
-      data: token,
+      params: token,
     })
     .catch(throwErrorMessage);
-};
-
-export const fetchAuthorizedTeams = async (token: string) => {
-  const { teamSimpleInfos } = await api
-    .get({
-      url: '/users/me/teams',
-      data: token,
-    })
-    .catch(throwErrorMessage);
-  return teamSimpleInfos;
-};
-
-export const fetchTotalMembers = async (teamId: number) => {
-  const { members } = await api
-    .get({
-      url: `/teams/${teamId}/total-members`,
-    })
-    .catch(throwErrorMessage);
-  return members;
 };
 
 export const applyMatch = async (matchApplyInfo: MatchApplyInfo) => {
@@ -144,28 +110,71 @@ export const approveMatch = async (teamWaitingId: number) => {
     .catch(throwErrorMessage);
 };
 
-// TODO: 태그 아이디 상수화
+export const getTags = async () => {
+  const { tags } = await api
+    .get({
+      url: '/tags',
+    })
+    .catch(throwErrorMessage);
+
+  return tags;
+};
+
 export const postMatchReview = async (matchReviewInfo: MatchReviewInfo) => {
-  const { matchId, tags, reviewerTeamId, reviewedTeamId } = matchReviewInfo;
+  const { matchId, tags, reviewerTeamId, reviewerTeamType, reviewedTeamId } = matchReviewInfo;
+  console.log(matchReviewInfo);
   // await api
   //   .post({
   //     url: `/matches/${matchId}/review`,
-  //     data: { tags, reviewerTeamId, reviewedTeamId },
+  //     data: { tags, reviewerTeamId, reviewerTeamType, reviewedTeamId },
   //   })
   //   .catch(throwErrorMessage);
 };
 
 export const modifyTeamMember = async (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
-  const editedTeamMember = {
-    teamId,
-    players,
-  };
 
   await api
     .put({
       url: `/matches/${matchId}/members`,
-      data: editedTeamMember,
+      data: { teamId, players },
     })
     .catch(throwErrorMessage);
+};
+
+export const fetchAuthorizedTeams = async (token: string) => {
+  const { teamSimpleInfos } = await api
+    .get({
+      url: '/users/me/teams',
+      data: token,
+    })
+    .catch(throwErrorMessage);
+  return teamSimpleInfos;
+};
+
+export const fetchTotalMembers = async (teamId: number) => {
+  const { members } = await api
+    .get({
+      url: `/teams/${teamId}/total-members`,
+    })
+    .catch(throwErrorMessage);
+  return members;
+};
+
+export const fetchLocation = async () => {
+  const data = await api
+    .get({
+      url: '/locations',
+    })
+    .catch(throwErrorMessage);
+  return data;
+};
+
+export const fetchTagInfo = async () => {
+  const { tags } = await api
+    .get({
+      url: '/tags',
+    })
+    .catch(throwErrorMessage);
+  return tags;
 };

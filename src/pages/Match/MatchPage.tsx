@@ -15,26 +15,56 @@ import {
   MatchTeamMemberModal,
 } from '@/components';
 import styles from './Match.module.scss';
-import { fetchMatchById } from '@/api';
-import { Match as MatchType } from '@/types';
+import { fetchMatchById, fetchAuthorizedTeams } from '@/api';
+import { Match as MatchType, TeamSimple } from '@/types';
+import { getItemFromStorage } from '@/utils/storage';
 
 const { awayTeam, versus } = styles;
 
 const Match = () => {
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+  const token = getItemFromStorage('accessToken');
 
   const { modal } = useSelector((store: RootState) => store.match.data);
+  const { userInfo } = useSelector((store: RootState) => store.user);
   const [match, setMatch] = useState<MatchType[]>([]);
+  const [matchTeams, setMatchTeams] = useState<number[]>([]);
+  const [userTeams, setUserTeams] = useState<number[]>([]);
+  const reviewTeam = {
+    matchId: match[0]?.matchId || 0,
+    teams: matchTeams,
+    userTeams,
+  };
+
+  const getMatchTeams = () => {
+    if (match[0] && match[0].applyTeamInfo) {
+      const matchTeamsId = [];
+      matchTeamsId.push(match[0].registerTeamInfo.teamId, match[0].applyTeamInfo.teamId);
+      setMatchTeams(matchTeamsId);
+    }
+  };
 
   const getMatchInfo = useCallback(async () => {
     const matchInfoById = await fetchMatchById(matchId);
     setMatch([matchInfoById]);
   }, [matchId]);
 
-  useEffect(() => {
-    getMatchInfo();
+  const getAuhorizedTeams = useCallback(async () => {
+    if (token) {
+      const authorizedTeams = await fetchAuthorizedTeams(token);
+      const authorizedTeamsId = authorizedTeams.map((team: TeamSimple) => team.teamId);
+      setUserTeams(authorizedTeamsId);
+    }
   }, []);
 
+  useEffect(() => {
+    if (match.length < 1) {
+      getMatchInfo();
+    }
+    getMatchTeams();
+    getAuhorizedTeams();
+  }, [match]);
+  console.log(userTeams);
   const registerTeamInfo = match[0] && {
     teamName: match[0].registerTeamInfo.teamName,
     teamId: match[0].registerTeamInfo.teamId,
@@ -57,11 +87,13 @@ const Match = () => {
           </Fragment>
         ))}
       <MatchButton enable={{ apply: true, approve: true, review: false }} />
-      {match.length > 0 && (
+      {match.length > 0 && userTeams.length > 0 && (
         <MatchApplyModal showMatchApplyModal={modal.matchApply} sports={match[0].sports} />
       )}
-      {match.length > 0 && <MatchApproveModal showMatchApproveModal={modal.matchApprove} />}
-      {match.length > 0 && (
+      {match.length > 0 && userTeams.includes(registerTeamInfo.teamId) && (
+        <MatchApproveModal showMatchApproveModal={modal.matchApprove} />
+      )}
+      {match.length > 0 && userTeams.includes(registerTeamInfo.teamId) && (
         <MatchTeamMemberModal
           showMatchTeamMemberModal={modal.matchTeamMember}
           sports={match[0].sports}
@@ -69,8 +101,8 @@ const Match = () => {
           matchId={match[0].matchId}
         />
       )}
-      {match.length > 0 && (
-        <MatchReviewModal showMatchReviewModal={modal.matchReview} matchInfo={match[0]} />
+      {matchTeams.length > 1 && (
+        <MatchReviewModal showMatchReviewModal={modal.matchReview} teamInfo={reviewTeam} />
       )}
     </div>
   );
