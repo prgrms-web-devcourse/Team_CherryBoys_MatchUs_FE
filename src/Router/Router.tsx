@@ -55,11 +55,11 @@ const Router: React.FC = () => {
   return (
     <Switch>
       <Route path={HIRES_PAGE} exact component={Hires} />
+      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
       <Route path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
       <Route path={HIRES_POST_PAGE} exact component={HiresCreate} />
       <Route path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
       <Route path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
-      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
       {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
       <Route path={HOME_PAGE} exact component={} />
       <Route path={MATCHES_PAGE} exact component={} />
