@@ -7,8 +7,10 @@ export interface MemberElement {
 export interface MatchElement {
   matchId: number;
   matchDate: string;
+  registerTeamId?: number;
   registerTeamName: string;
   registerTeamLogo: string;
+  applyTeamId?: number;
   applyTeamName: string;
   applyTeamLogo: string;
   status: string;
