@@ -16,7 +16,7 @@ const {
   addTeamButton,
   hasNoTeamContainer,
   mainTitle,
-  topSubTitle,
+  subTitle,
   noTeamAddButton,
 } = style;
 
@@ -81,20 +81,24 @@ const TeamChoice = () => {
         </>
       ) : (
         <div className={classNames(hasNoTeamContainer)}>
-          <p>
-            <span className={classNames(mainTitle, 'whiteSpace')}>소속된 팀이 없어요 ❌</span>
-            <span className={classNames(topSubTitle, 'whiteSpace')}>
-              새로운 <span className={classNames(highlight)}>팀</span>을 만들고
-            </span>
-            <span className={classNames('whiteSpace')}>다 함께 땀을 흘려볼까요? 🏃🏻</span>
-          </p>
-          <button
-            type="button"
-            className={classNames(noTeamAddButton)}
-            onClick={handleMoveToTeamCreatePage}
-          >
-            +
-          </button>
+          <article>
+            <div>
+              <span className={classNames(mainTitle, 'whiteSpace')}>소속된 팀이 없어요 ❌</span>
+              <span className={classNames(subTitle, 'whiteSpace')}>
+                새로운 <span className={classNames(highlight)}>팀</span>을 만들고
+              </span>
+              <span className={classNames(subTitle, 'whiteSpace')}>
+                다 함께 땀을 흘려볼까요? 🏃🏻
+              </span>
+            </div>
+            <button
+              type="button"
+              className={classNames(noTeamAddButton)}
+              onClick={handleMoveToTeamCreatePage}
+            >
+              +
+            </button>
+          </article>
         </div>
       )}
     </div>
