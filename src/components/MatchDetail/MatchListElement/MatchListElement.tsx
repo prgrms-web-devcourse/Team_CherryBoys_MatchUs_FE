@@ -23,9 +23,13 @@ const MatchListElement = ({
   applyTeamName,
   status,
 }: MatchInfoProps) => {
+  const yearMonthDay = matchDate.split('-');
+
   return (
     <>
-      <span className={classNames(matchDateSpan)}>{matchDate}</span>
+      <span className={classNames(matchDateSpan)}>
+        {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[1]}일
+      </span>
       <div className={classNames(matchContainer)}>
         <div className={classNames(teamInfoContainer)}>
           <img className={classNames(logoImage)} src={registerTeamLogo} alt="등록 팀 로고 이미지" />
