@@ -2,7 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import style from './teamChoice.module.scss';
-import AttitueTag from '@/components/common/AttitudeTag/AttitudeTag';
+import { AttitueTag } from '@/components';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 export interface TeamCardInfo {
   mannerTemperature: number;
@@ -24,6 +25,7 @@ const {
   mannerLow,
   mannerMiddle,
   mannerHigh,
+  teamLogoImage,
 } = style;
 
 const TeamInfoCard = ({
@@ -42,7 +44,11 @@ const TeamInfoCard = ({
     <div className={classNames(cardContainer)}>
       <div className={classNames(cardLogo)}>
         <Link to={`/team/${teamId}`}>
-          <img src={teamLogo} alt="팀 로고" />
+          <img
+            className={classNames(teamLogoImage)}
+            src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+            alt="팀 로고"
+          />
         </Link>
       </div>
       <div className={classNames(teamSubInfoContainer)}>
