@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MatchListFilter, Locations, TagInfo } from '@/types';
+import { MatchListFilter, Locations, TagInfo, TeamSimple } from '@/types';
 
 interface MatchState {
   data: {
@@ -14,6 +14,7 @@ interface MatchState {
     matchListFilter: MatchListFilter;
     locations: Locations;
     tags: TagInfo[];
+    userTeams: TeamSimple[];
   };
 }
 
@@ -37,6 +38,7 @@ export const match = createSlice({
         grounds: [],
       },
       tags: [],
+      userTeams: [],
     },
   } as MatchState,
   reducers: {
@@ -54,6 +56,9 @@ export const match = createSlice({
     },
     setTags: (state, { payload }: PayloadAction<{ tagData: TagInfo[] }>) => {
       state.data.tags = payload.tagData;
+    },
+    setUserTeams: (state, { payload }: PayloadAction<{ userTeams: TeamSimple[] }>) => {
+      state.data.userTeams = payload.userTeams;
     },
   },
   extraReducers: {},

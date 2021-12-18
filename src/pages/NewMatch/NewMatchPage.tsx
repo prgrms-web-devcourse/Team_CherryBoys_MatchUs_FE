@@ -5,13 +5,16 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { Input, InputCheckBox, InputDetail } from '@/components';
-import { fetchAuthorizedTeams, fetchTotalMembers, createMatch } from '@/api';
+import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
-import { SPORTS, SPORTS_PLAYER, AGE_GROUP, LOCATIONS } from '@/consts';
-import { TeamSimple, TeamMemberInfo } from '@/types';
+import { RootState } from '@/store';
+import { match } from '@/store/match/match';
+import { SPORTS, SPORTS_PLAYER, AGE_GROUP } from '@/consts';
+import { TeamSimple, TeamMemberInfo, Locations } from '@/types';
+import { getItemFromStorage } from '@/utils/storage';
 
 const { newMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
 
@@ -38,8 +41,21 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
+  const { locations } = useSelector((store: RootState) => store.match.data);
+  const [locationInfo, setLocationInfo] = useState<Locations>(locations);
 
-  const [nowDate, setNowDate] = useState<Date>(new Date());
+  const getLocations = useCallback(async () => {
+    const locationData = await fetchLocation();
+    setLocationInfo(locationData);
+    dispatch(match.actions.setLocations({ locations: locationData }));
+  }, []);
+
+  useEffect(() => {
+    if (locationInfo.cities.length < 1) {
+      getLocations();
+    }
+  }, []);
+
   const [formattedDate, setFormattedDate] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -54,32 +70,40 @@ const NewMatch = () => {
   const [region, setRegion] = useState(defaultRegion);
   const [ground, setGround] = useState(defaultGround);
   const [cost, setCost] = useState(0);
-  const [detail, setDetail] = useState(placeholder);
+  const [detail, setDetail] = useState('');
   const [team, setTeam] = useState(placeholder);
-  const cityOptions = ['행정구역', ...LOCATIONS.cities.map((cityInfo) => cityInfo.cityName)];
+  const cityOptions = [
+    '행정구역',
+    ...locationInfo.cities.reduce((acc: string[], cityInfo) => {
+      if (cityInfo.cityName) acc.push(cityInfo.cityName || '');
+      return acc;
+    }, []),
+  ];
   const regionOptions = [
     '시/군/구',
-    ...LOCATIONS.regions.reduce((acc: string[], regionInfo) => {
-      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName);
+    ...locationInfo.regions.reduce((acc: string[], regionInfo) => {
+      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName || '');
       return acc;
     }, []),
   ];
   const groundOptions = [
     '구장',
-    ...LOCATIONS.grounds.reduce((acc: string[], groundInfo) => {
-      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName);
+    ...locationInfo.grounds.reduce((acc: string[], groundInfo) => {
+      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName || '');
       return acc;
     }, []),
   ];
 
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
 
-  // 작성자(유저) 더미 데이터 이용
-  const tokenDummy = '1';
+  const token = getItemFromStorage('accessToken');
 
   const getAuhorizedTeams = useCallback(async () => {
-    const authorizedTeams = await fetchAuthorizedTeams(tokenDummy);
-    setUserTeams(authorizedTeams);
+    if (token) {
+      const authorizedTeams = await fetchAuthorizedTeams();
+      setUserTeams(authorizedTeams);
+      dispatch(match.actions.setUserTeams({ userTeams: authorizedTeams }));
+    }
   }, []);
 
   useEffect(() => {
@@ -117,30 +141,42 @@ const NewMatch = () => {
       return;
     }
     if (category === 'city') {
-      const selectedCity = LOCATIONS.cities.filter(
+      const selectedCity = locationInfo.cities.filter(
         (cityInfo) => cityInfo.cityName === targetInput
       )[0];
-      setCity(selectedCity || defaultCity);
+      setCity({
+        cityId: selectedCity?.cityId || 0,
+        cityName: selectedCity?.cityName || '',
+      });
       setRegion(defaultRegion);
       setGround(defaultGround);
       return;
     }
     if (category === 'region') {
-      const selectedRegion = LOCATIONS.regions.filter(
+      const selectedRegion = locationInfo.regions.filter(
         (regionInfo) => regionInfo.regionName === targetInput
       )[0];
-      setRegion(selectedRegion || defaultRegion);
+      setRegion({
+        cityId: selectedRegion?.cityId || 0,
+        regionId: selectedRegion?.regionId || 0,
+        regionName: selectedRegion?.regionName || '',
+      });
       setGround(defaultGround);
       return;
     }
     if (category === 'ground') {
-      const selectedGround = LOCATIONS.grounds.filter(
+      const selectedGround = locationInfo.grounds.filter(
         (groundInfo) => groundInfo.groundName === targetInput
       )[0];
-      setGround(selectedGround || defaultGround);
+      setGround({
+        regionId: selectedGround?.regionId || 0,
+        groundId: selectedGround?.groundId || 0,
+        groundName: selectedGround?.groundName || '',
+      });
     }
     if (category === 'cost') {
       const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) return;
       setCost(targetInputNumber);
       return;
     }
@@ -163,7 +199,6 @@ const NewMatch = () => {
 
   const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
     const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
-    setNowDate(newDate);
 
     const endTime = new Date(newDate.getTime() + 120 * 60000);
 
@@ -189,7 +224,45 @@ const NewMatch = () => {
     setFormattedDate({ ...formattedDate, endDate: newDate, endTime: newDate });
   };
 
-  const submitDate = () => {
+  const handleSubmitMatchInfo = async () => {
+    if (sports === placeholder) {
+      window.alert('종목을 선택해주세요');
+      return;
+    }
+    if (team === placeholder) {
+      window.alert('올바른 팀을 선택해주세요');
+      return;
+    }
+
+    const selectedTeamWithUsers = {
+      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
+      players: teamMembersInfo
+        .filter((user) => user.userName && teamMembers[user.userName])
+        .map((user) => user.userId),
+    };
+
+    if (selectedTeamWithUsers.players.length < userLimit) {
+      window.alert('인원미달');
+      return;
+    }
+
+    if (ageGroup === placeholder) {
+      window.alert('연령대를 선택해주세요');
+      return;
+    }
+    if (city.cityId === 0) {
+      window.alert('행정구역을 선택해주세요');
+      return;
+    }
+    if (region.regionId === 0) {
+      window.alert('시/군/구를 선택해주세요');
+      return;
+    }
+    if (ground.groundId === 0) {
+      window.alert('구장을 선택해주세요');
+      return;
+    }
+
     const { startDate, endDate, startTime, endTime } = formattedDate;
 
     const dateResult = {
@@ -218,65 +291,26 @@ const NewMatch = () => {
 
     if (dateResult.date < todayString) {
       window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
-      return {};
+      return;
     }
     if (startDate > endDate) {
       window.alert('종료일자가 시작일자보다 빠를 수 없습니다');
-      return {};
+      return;
     }
     if (startTime > endTime) {
       window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
-      return {};
-    }
-
-    return dateResult;
-  };
-
-  const handleSubmitMatchInfo = () => {
-    if (sports === placeholder) {
-      window.alert('종목을 선택해주세요');
-      return;
-    }
-    if (team === placeholder) {
-      window.alert('올바른 팀을 선택해주세요');
       return;
     }
 
-    const selectedTeamWithUsers = {
-      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
-      players: teamMembersInfo
-        .filter((user) => user.userName && teamMembers[user.userName])
-        .map((user) => user.userId),
-    };
-    const matchDate = submitDate();
-    if (selectedTeamWithUsers.players.length < userLimit) {
-      window.alert('인원미달');
-      return;
-    }
-
-    if (ageGroup === placeholder) {
-      window.alert('연령대를 선택해주세요');
-      return;
-    }
-    if (city.cityId === 0) {
-      window.alert('행정구역을 선택해주세요');
-      return;
-    }
-    if (region.regionId === 0) {
-      window.alert('시/군/구를 선택해주세요');
-      return;
-    }
-    if (ground.groundId === 0) {
-      window.alert('구장을 선택해주세요');
-      return;
-    }
     if (Number.isNaN(cost)) {
       window.alert('참가비는 숫자만 입력할 수 있습니다');
       return;
     }
 
     const requestData = {
-      ...matchDate,
+      date: dateResult.date,
+      startTime: dateResult.startTime,
+      endTime: dateResult.endTime,
       registerTeamId: selectedTeamWithUsers.teamId,
       sports,
       ageGroup,
@@ -288,12 +322,8 @@ const NewMatch = () => {
       players: selectedTeamWithUsers.players,
     };
 
-    if (Number.isNaN(cost)) {
-      window.alert('참가비는 숫자만 입력할 수 있습니다');
-    }
-    // TODO: 매칭 등록 api 요청
-    // createMatch(requestData)
-    console.log(requestData);
+    const newMatchId = await createMatch(requestData);
+    window.location.replace(`/matches/post/${newMatchId}`);
   };
 
   useEffect(() => {
@@ -389,7 +419,7 @@ const NewMatch = () => {
         <div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              value={nowDate}
+              value={formattedDate.startDate}
               onChange={handleChangeStartDate}
               renderInput={(params) => <TextField {...params} />}
             />

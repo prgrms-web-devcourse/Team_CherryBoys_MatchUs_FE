@@ -28,7 +28,7 @@ const MatchPosts = () => {
   const [matches, setMatches] = useState<MatchCard[]>([]);
 
   const getMatchList = useCallback(async () => {
-    const matchList = await fetchAllMatch(matchListFilter);
+    const { matchList } = await fetchAllMatch(matchListFilter);
     setMatches(matchList);
   }, [matchListFilter]);
 
