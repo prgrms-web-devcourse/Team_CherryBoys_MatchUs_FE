@@ -1,0 +1,72 @@
+@use '@/styles/color.scss';
+
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin input-btn-size($bgc: color.$primary) {
+    border: 1px solid #EAEBEC;
+    border-radius: 5px;
+    background-color: $bgc;
+    width: 30rem;
+    height: 5rem;
+    padding: 1rem;
+}
+
+.modalMainTitle {
+  font-weight: 700;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+}
+
+.modalSubTitle {
+  color: #7b7474;
+  font-size: 1.2rem;
+}
+
+.logo_img {
+  display: block;
+  position: absolute;
+  width: 70rem;
+  top: -20%;
+  left: 49%;
+  transform: translate(-50%);
+  z-index: -1;
+  background-repeat: repeat;
+}
+
+.form {
+  &__label {
+    display: block;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  &form__label {
+    margin-bottom: 2rem;
+  }
+  &__login {
+    @include input-btn-size();
+    color: #ffffff
+  }
+  &__input {
+    @include input-btn-size($bgc: white);
+    margin-bottom: 3rem;
+    font-size: 2rem;
+  }
+}
+
+.signup {
+  @include input-btn-size($bgc: white);
+  margin-top: 2rem;
+}
+
+.container {
+  @include flexCenter();
+  flex-direction: column;
+  height: calc(100vh - 84px);
+ 
+}
+
