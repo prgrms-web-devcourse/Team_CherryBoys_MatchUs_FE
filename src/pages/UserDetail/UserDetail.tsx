@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import classNames from 'classnames';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { MatchListElement } from '@/components';
 import { MatchElement } from '@/types';
+import style from './userDetail.module.scss';
 
 interface MyTeamElement {
   teamId: number;
@@ -27,75 +29,117 @@ interface UserInfo {
 const UserDetail = () => {
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    ageGroup: '20대',
-    bio: '카운팅 스타~ 밤 하늘의 퍼얼',
-    gender: 'MALE',
-    mannerTemperature: 36.5,
-    matchCount: 20,
+    ageGroup: '',
+    bio: '',
+    gender: '',
+    mannerTemperature: 0,
+    matchCount: 0,
     myTeams: [],
-    name: '김동현',
-    nickname: '무리뉴',
-    sportsName: '축구',
+    name: '',
+    nickname: '',
+    sportsName: '',
     tagNames: [],
   });
 
-  const result = useSelector((store: RootState) => store.user.userInfo);
+  const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
   const updateUserInfo = useCallback(async () => {
-    const apiResult = await getUserInfo(result?.id);
+    const apiResult = await getUserInfo(userId);
 
     setUserInfo(apiResult);
-  }, [result?.id]);
+  }, [userId]);
 
   const updateUserMatchHistory = useCallback(async () => {
-    const newMatchHistory = await getUserMatchHistory(result?.id);
+    const { userMatches } = await getUserMatchHistory(userId);
 
-    setMatchHistory(newMatchHistory);
-  }, [result?.id]);
+    setMatchHistory(userMatches);
+  }, [userId]);
 
   useEffect(() => {
     updateUserInfo();
     updateUserMatchHistory();
   }, [updateUserInfo, updateUserMatchHistory]);
 
+  const {
+    pageContainer,
+    sectionContainer,
+    elementRowContainer,
+    playTotalInfo,
+    userBaseInfo,
+    userInfoElementsContainer,
+    bioSpace,
+    userNickname,
+    sportsPart,
+    matchesContainer,
+    containerTitle,
+    highlight,
+    matchHighlight,
+    mannerLow,
+    mannerMiddle,
+    mannerHigh,
+  } = style;
+
   return (
-    <>
-      <div>
-        <div>
-          <span>{result?.nickname}님</span>
-          <span>{result?.bio}</span>
-          {/* <img>대강 축구공 이미지</img> */}
-        </div>
-        <div>
+    <div className={classNames(pageContainer)}>
+      <section className={classNames(sectionContainer)}>
+        {/* 중앙으로 정렬 */}
+        <div className={classNames(userInfoElementsContainer)}>
           <div>
-            {userInfo.tagNames.map((tag) => {
-              return <span>{tag}</span>;
-            })}
+            <article className={playTotalInfo}>
+              <div className={classNames(userBaseInfo)}>
+                <div>
+                  <span className={classNames(userNickname)}>
+                    <span className={classNames(highlight)}>{nickname}</span>님
+                  </span>
+                  <button type="button">수정</button>
+                </div>
+                <span className={classNames(bioSpace)}>{bio}</span>
+              </div>
+              <div className={classNames(sportsPart)}>⚽️</div>
+            </article>
+
+            <div className={classNames('whiteSpace')}>
+              {userInfo.tagNames.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+            <p>
+              총 <span className={classNames(matchHighlight)}>{userInfo.matchCount}</span>경기 동안
+              <span
+                className={classNames(mannerMiddle, {
+                  [mannerLow]: userInfo.mannerTemperature < 20,
+                  [mannerHigh]: userInfo.mannerTemperature > 40,
+                })}
+              >
+                {userInfo.mannerTemperature}
+              </span>
+              의 매너온도를 가지고 있어요!
+            </p>
           </div>
-          <span>
-            총 {userInfo.matchCount}경기 동안 {userInfo.mannerTemperature}의 매너온도를 가지고
-            있어요!
-          </span>
         </div>
-      </div>
-      소속팀
-      <div>
-        {userInfo.myTeams.map((team) => {
-          return <img src={team.teamLogo} alt="팀 로고" />;
-        })}
-      </div>
-      최근 경기
-      {matchHistory.map(
-        ({
-          matchId,
-          matchDate,
-          registerTeamLogo,
-          registerTeamName,
-          applyTeamLogo,
-          applyTeamName,
-          status,
-        }) => {
-          return (
+      </section>
+
+      <span className={classNames(containerTitle)}>소속 팀</span>
+      <section className={classNames(sectionContainer)}>
+        <div className={classNames(elementRowContainer)}>
+          {userInfo.myTeams.map(({ teamId, teamLogo }) => (
+            <img key={`team-${teamId}`} src={teamLogo} alt="팀 로고" />
+          ))}
+        </div>
+      </section>
+
+      <span className={classNames(containerTitle)}>최근 경기</span>
+      <div className={classNames(matchesContainer)}>
+        {matchHistory.map(
+          ({
+            matchId,
+            matchDate,
+            registerTeamLogo,
+            registerTeamName,
+            applyTeamLogo,
+            applyTeamName,
+            status,
+          }) => (
             <MatchListElement
               key={`userReview-${matchId}`}
               matchId={matchId}
@@ -106,10 +150,10 @@ const UserDetail = () => {
               applyTeamName={applyTeamName}
               status={status}
             />
-          );
-        }
-      )}
-    </>
+          )
+        )}
+      </div>
+    </div>
   );
 };
 

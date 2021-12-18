@@ -1,0 +1,129 @@
+@use '@/styles/color';
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: {
+    right: 1.6rem;
+    left: 1.6rem;
+  }
+}
+
+.userInfoElementsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 16.4rem;
+  margin: 1.6rem 0;
+  padding: 3rem 1.6rem;
+  border: 0.12rem solid color.$disable;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.elementColumnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 7.7rem;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1.6rem;
+  border: 0.12rem solid color.$disable;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.elementRowContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 7.7rem;
+  margin-bottom: 1.5rem;
+  border: 0.12rem solid color.$disable;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.containerTitle {
+  margin-left: 1.6rem;
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
+.playTotalInfo {
+  display: flex;
+}
+
+.userBaseInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 50%;
+
+  .userNickname {
+    font-size: 2.4rem;
+  }
+
+  .bioSpace {
+    min-width: 16.9rem;
+    min-height: 4.3rem;
+  }
+}
+
+.sportsPart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  padding : {
+    bottom: 1rem;
+    left: 3rem;
+  }
+  font-size: 6rem;
+}
+
+.matchesContainer {
+  margin: {
+    right: 3rem;
+    left: 3rem;
+  }
+}
+
+.highlight {
+  font-weight: 700;
+}
+
+.matchHighlight {
+  color: color.$subPrimary;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.mannerLow {
+  color: #8f8f8f;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.mannerMiddle {
+  color: color.$primary;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.mannerHigh {
+  color: #d89e5a;
+  font-weight: 700;
+  font-size: 2rem;
+}
