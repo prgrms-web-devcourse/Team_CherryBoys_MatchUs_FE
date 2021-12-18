@@ -1,0 +1,42 @@
+@use '@/styles/color';
+
+.kindTag {
+  width: 33.3%;
+  height: 1.5rem;
+  margin-right: 0.3rem;
+  padding-top: 0.3rem;
+  overflow: hidden;
+  color: white;
+  font-size: 0.5rem;
+  white-space: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  background-color: color.$primary;
+  border-radius: 1rem;
+}
+
+.badTag {
+  width: 33.3%;
+  height: 1.5rem;
+  padding-top: 0.3rem;
+  overflow: hidden;
+  color: white;
+  white-space: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  background-color: color.$error;
+  border-radius: 1rem;
+}
+
+.excellentTag {
+  width: 33.3%;
+  height: 1.5rem;
+  padding-top: 0.3rem;
+  overflow: hidden;
+  color: white;
+  white-space: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  background-color: color.$subPrimary;
+  border-radius: 1rem;
+}
