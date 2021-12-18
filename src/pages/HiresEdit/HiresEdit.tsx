@@ -41,9 +41,21 @@ const HiresEdit = () => {
     prevAgeGroup: '20대',
     prevDetail: '즐겁게 하실 분!',
   };
+
   return (
     <>
-      <HiresCreate initialHiresInfo={data} />
+      <HiresCreate
+        prevHiredNumber={data.prevHiredNumber}
+        prevDate={data.prevDate}
+        prevStartTime={data.prevStartTime}
+        prevEndTime={data.prevEndTime}
+        prevCity={data.prevCity}
+        prevRegion={data.prevRegion}
+        prevGroundName={data.prevGroundName}
+        prevPosition={data.prevPosition}
+        prevAgeGroup={data.prevAgeGroup}
+        prevDetail={data.prevDetail}
+      />
       <button type="button" onClick={handleClickEditPosting}>
         수정
       </button>

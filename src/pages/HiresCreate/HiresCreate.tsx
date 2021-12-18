@@ -27,23 +27,20 @@ interface previousHiresInfo {
   prevDetail?: string;
 }
 
-interface previousHiresInfoWrapper {
-  initialHiresInfo: previousHiresInfo;
-}
-const HiresCreate = ({ initialHiresInfo }: previousHiresInfoWrapper) => {
-  const {
-    prevHiredNumber = 1,
-    prevDate = '2021-12-28',
-    prevStartTime = '15:20:35',
-    prevEndTime = '21:42:35',
-    prevCity = '행정구역',
-    prevRegion = '시/군/구',
-    prevGroundName = '구장',
-    prevPosition = '윙백',
-    prevAgeGroup = '20대',
-    prevDetail = '즐겁게 합시다',
-  } = initialHiresInfo;
-
+const HiresCreate = ({
+  prevHiredNumber = 1,
+  prevDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+  prevStartTime = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+  prevEndTime = `${
+    new Date().getHours() >= 22 ? new Date().getHours() - 22 + 2 : new Date().getHours() + 2
+  }:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+  prevCity = '행정구역',
+  prevRegion = '시/군/구',
+  prevGroundName = '구장',
+  prevPosition = '윙백',
+  prevAgeGroup = '20대',
+  prevDetail = '즐겁게 합시다',
+}: previousHiresInfo) => {
   const [startTime, setStartTime] = useState<Date | null>(new Date(`${prevDate} ${prevStartTime}`));
   const [endTime, setEndTime] = useState<Date | null>(new Date(`${prevDate} ${prevEndTime}`));
   const [formatedStartTime, setFormatedStartTime] = useState<string>('');
@@ -67,7 +64,8 @@ const HiresCreate = ({ initialHiresInfo }: previousHiresInfoWrapper) => {
     const startHour = newDate.getHours();
     const endHour = startHour >= 22 ? startHour - 22 : startHour;
     const minute = newDate.getMinutes();
-    const seconds = newDate.getSeconds();
+    const initialSeconds = newDate.getSeconds();
+    const seconds = initialSeconds < 10 ? `0${initialSeconds}` : initialSeconds;
 
     const formettedStartTime = `${startHour}:${minute}:${seconds}`;
     const formettedEndTime = `${endHour + 2}:${minute}:${seconds}`;
@@ -178,7 +176,7 @@ const HiresCreate = ({ initialHiresInfo }: previousHiresInfoWrapper) => {
       city,
       region,
       groundName,
-      date: formattedDate,
+      date: formattedDate || prevDate,
       startTime: formatedStartTime,
       endTime: formatedEndTime,
       hirePlayerNumber,
@@ -199,26 +197,18 @@ const HiresCreate = ({ initialHiresInfo }: previousHiresInfoWrapper) => {
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
-    if (!formattedDate) {
-      alert('날짜를 입력해주세요');
-      return;
-    }
-
-    if (!(formatedStartTime && formatedEndTime)) {
-      alert('시간을 입력해주세요');
-      return;
-    }
-
+    // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
       alert('시간을 다시 입력해주세요');
       return;
     }
 
-    if (!city || !region || !groundName) {
+    if (city === '행정구역' || region === '시/군/구' || groundName === '구장') {
       alert('장소를 입력해주세요');
       return;
     }
-    // Todo : 입력된 데이터 서버에 보내기
+
+    // Todo(홍중) : 입력된 데이터 서버에 보내기
     // handleClickCreatePosting(data);
     console.log(data);
   };
