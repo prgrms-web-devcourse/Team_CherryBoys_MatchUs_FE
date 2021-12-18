@@ -82,14 +82,8 @@
 }
 
 .sportsPart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  padding : {
-    bottom: 1rem;
-    left: 3rem;
-  }
+  position: absolute;
+  right: 5rem;
   font-size: 6rem;
 }
 
