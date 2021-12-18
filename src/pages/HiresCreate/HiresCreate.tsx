@@ -6,19 +6,11 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 
-import { AGE_GROUP } from '@/consts';
-import { Input, InputDetail } from '@/components';
+import { InputDetail } from '@/components';
 import { createHiresPosting } from '@/api/hires';
+import { Place, AgeGroup, HiresPosition } from '@/components/selects';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-const CITY = ['서울시'];
-
-const REGION = ['금천구', '강서구'];
-
-const GROUND_NAME = ['유제두 체육관', '제1 체육관', '제2 체육관'];
-
-const POSITION = ['윙백', '윙포워드'];
 
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
@@ -34,7 +26,7 @@ const HiresCreate = () => {
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [hirePlayerNumber, sethirePlayerNumber] = useState<number>(1);
   const [position, setPosition] = useState<string>('윙백');
-  const [ageGroup, setAgeGroup] = useState<string>('20s');
+  const [ageGroup, setAgeGroup] = useState<string>('20대');
   const [city, setCity] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [groundName, setGroundName] = useState<string>('');
@@ -228,29 +220,8 @@ const HiresCreate = () => {
           )}
         </select>
       </section>
-      <section>
-        <div>포지션</div>
-        <Input
-          inputId="hiresPlayerNumber"
-          type="text"
-          placeholder={`${POSITION[0]}`}
-          onChange={handleChangePosition}
-        />
-      </section>
-      <div>
-        <div>연령대</div>
-        <select id="hiresAgeGroup" onChange={handleChangeAge}>
-          <option>{`${AGE_GROUP[0]}`}</option>
-          {AGE_GROUP.map(
-            (group, index) =>
-              index > 0 && (
-                <option id={`${group}s`} key={`age-${group}`}>
-                  {group}
-                </option>
-              )
-          )}
-        </select>
-      </div>
+      <HiresPosition handleChangePosition={handleChangePosition} />
+      <AgeGroup handleChangeAge={handleChangeAge} />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           value={date}
@@ -274,38 +245,11 @@ const HiresCreate = () => {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <div>
-        <section>
-          <div>장소</div>
-          <div>
-            <select id="city" onChange={handleChangeCity}>
-              <option>행정구역</option>
-              {CITY.map((value) => (
-                <option id={`${value}`} key={`city-${value}`}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <select id="region" onChange={handleChangeRegion}>
-              <option>시/군/구</option>
-              {REGION.map((value) => (
-                <option id={`${value}`} key={`region-${value}`}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </div>
-          <select id="groundName" onChange={handleChangeGroundName}>
-            <option>구장</option>
-            {GROUND_NAME.map((value) => (
-              <option id={`${value}`} key={`groundName-${value}`}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </section>
-      </div>
-
+      <Place
+        handleChangeCity={handleChangeCity}
+        handleChangeRegion={handleChangeRegion}
+        handleChangeGroundName={handleChangeGroundName}
+      />
       <InputDetail
         labelName="상세정보"
         placeholder={DETAIL_PLACEHOLDER}
