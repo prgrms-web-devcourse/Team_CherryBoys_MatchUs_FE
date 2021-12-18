@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ interface UserInfo {
   name: string;
   nickname: string;
   sportsName: string;
-  tagNames: string[];
+  tags: string[];
 }
 
 const {
@@ -61,29 +61,29 @@ const UserDetail = () => {
     name: '',
     nickname: '',
     sportsName: '',
-    tagNames: [],
+    tags: [],
   });
 
   const limitedMatchHistory = matchHistory.slice(0, 3);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
-  const updateUserInfo = useCallback(async () => {
-    const apiResult = await getUserInfo(userId);
-
-    setUserInfo(apiResult);
-  }, [userId]);
-
-  const updateUserMatchHistory = useCallback(async () => {
-    const { userMatches } = await getUserMatchHistory(userId);
-
-    setMatchHistory(userMatches);
-  }, [userId]);
-
   useEffect(() => {
+    const updateUserInfo = async () => {
+      const apiResult = await getUserInfo(userId);
+
+      setUserInfo(apiResult);
+    };
+
+    const updateUserMatchHistory = async () => {
+      const { userMatches } = await getUserMatchHistory(userId);
+
+      setMatchHistory(userMatches);
+    };
+
     updateUserInfo();
     updateUserMatchHistory();
-  }, [updateUserInfo, updateUserMatchHistory]);
+  }, [userId]);
 
   return (
     <div className={classNames(pageContainer)}>
@@ -105,8 +105,8 @@ const UserDetail = () => {
             </article>
 
             <div className={classNames('whiteSpace')}>
-              {userInfo.tagNames.map((tag) => (
-                <span>{tag}</span>
+              {userInfo.tags.map((each) => (
+                <span>{each}</span>
               ))}
             </div>
             <p>
