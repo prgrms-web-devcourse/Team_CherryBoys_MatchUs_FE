@@ -6,6 +6,7 @@ import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { MatchListElement } from '@/components';
 import { MatchElement } from '@/types';
 import style from './userDetail.module.scss';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 interface MyTeamElement {
   teamId: number;
@@ -43,6 +44,7 @@ const {
   mannerLow,
   mannerMiddle,
   mannerHigh,
+  logoImage,
 } = style;
 
 const UserDetail = () => {
@@ -81,10 +83,11 @@ const UserDetail = () => {
     updateUserMatchHistory();
   }, [updateUserInfo, updateUserMatchHistory]);
 
+  console.log(userInfo.myTeams);
+
   return (
     <div className={classNames(pageContainer)}>
       <section className={classNames(sectionContainer)}>
-        {/* 중앙으로 정렬 */}
         <div className={classNames(userInfoElementsContainer)}>
           <div>
             <article className={playTotalInfo}>
@@ -125,7 +128,12 @@ const UserDetail = () => {
       <section className={classNames(sectionContainer)}>
         <div className={classNames(elementRowContainer)}>
           {userInfo.myTeams.map(({ teamId, teamLogo }) => (
-            <img key={`team-${teamId}`} src={teamLogo} alt="팀 로고" />
+            <img
+              className={classNames(logoImage)}
+              key={`team-${teamId}`}
+              src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+              alt="팀 로고"
+            />
           ))}
         </div>
       </section>
@@ -146,9 +154,15 @@ const UserDetail = () => {
               key={`userReview-${matchId}`}
               matchId={matchId}
               matchDate={matchDate}
-              registerTeamLogo={registerTeamLogo}
+              registerTeamLogo={
+                registerTeamLogo === '' || registerTeamLogo === '팀로고'
+                  ? baseTeamLogo
+                  : registerTeamLogo
+              }
               registerTeamName={registerTeamName}
-              applyTeamLogo={applyTeamLogo}
+              applyTeamLogo={
+                applyTeamLogo === '' || applyTeamLogo === '팀로고' ? baseTeamLogo : applyTeamLogo
+              }
               applyTeamName={applyTeamName}
               status={status}
             />

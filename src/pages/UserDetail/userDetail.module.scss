@@ -107,6 +107,7 @@
   }
 }
 
+// TODO: 반복 사용이 예상되는 디자인
 .highlight {
   font-weight: 700;
 }
@@ -133,4 +134,13 @@
   color: #d89e5a;
   font-weight: 700;
   font-size: 2rem;
+}
+
+.logoImage {
+  width: 6rem;
+  object-fit: cover;
+}
+
+.teamName {
+  text-align: center;
 }
