@@ -2,6 +2,8 @@
 
 .kindTag {
   width: 33.3%;
+  min-width: 4rem;
+  max-width: 10rem;
   height: 1.5rem;
   margin-right: 0.3rem;
   padding-top: 0.3rem;
@@ -16,27 +18,9 @@
 }
 
 .badTag {
-  width: 33.3%;
-  height: 1.5rem;
-  padding-top: 0.3rem;
-  overflow: hidden;
-  color: white;
-  white-space: nowrap;
-  text-align: center;
-  text-overflow: ellipsis;
   background-color: color.$error;
-  border-radius: 1rem;
 }
 
 .excellentTag {
-  width: 33.3%;
-  height: 1.5rem;
-  padding-top: 0.3rem;
-  overflow: hidden;
-  color: white;
-  white-space: nowrap;
-  text-align: center;
-  text-overflow: ellipsis;
   background-color: color.$subPrimary;
-  border-radius: 1rem;
 }
