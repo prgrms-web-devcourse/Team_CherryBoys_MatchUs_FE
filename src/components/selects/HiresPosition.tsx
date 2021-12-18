@@ -8,16 +8,16 @@ interface Props {
   handleChangePosition: React.ChangeEventHandler<HTMLInputElement> &
     React.ChangeEventHandler<HTMLSelectElement>;
 }
-
 const HiresPosition = ({ handleChangePosition }: Props) => {
   return (
     <>
       <section>
         <div>포지션</div>
         <Input
-          inputId="hiresPlayerNumber"
-          type="text"
-          placeholder={`${POSITION[0]}`}
+          inputId="hiresPosition"
+          labelName="포지션"
+          type="dropbox"
+          options={[...POSITION]}
           onChange={handleChangePosition}
         />
       </section>
