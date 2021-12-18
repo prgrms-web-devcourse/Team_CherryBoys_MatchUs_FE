@@ -1,39 +1,36 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
 import { postMatchReview, fetchTagInfo } from '@/api';
-import { TagInfo, TagCheckList } from '@/types';
+import { TagInfo, TagCheckList, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
 interface ModalState {
   showMatchReviewModal: boolean;
-  teamInfo: {
+  reviewInfo: {
     matchId: number;
-    teams: number[];
-    userTeams: number[];
+    registerTeamId: number;
+    applyTeamId: number;
+    userTeamInfo: TeamSimple[];
   };
 }
 
 const selectTagsLimit = 3;
 
-const MatchReviewModal = ({ showMatchReviewModal, teamInfo }: ModalState) => {
-  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
   const dispatch = useDispatch();
-
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
       dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
     }
   };
-  console.log(teamInfo);
+
   const { tags } = useSelector((store: RootState) => store.match.data);
-  const { userInfo } = useSelector((store: RootState) => store.user);
 
   const [tagInfo, setTagInfo] = useState<TagInfo[]>(tags);
   const [selectedTags, setSelectedTags] = useState<TagCheckList>({
@@ -81,29 +78,43 @@ const MatchReviewModal = ({ showMatchReviewModal, teamInfo }: ModalState) => {
       window.alert('태그는 3개까지만 선택 가능합니다');
       return;
     }
+
     setSelectedTags(newSelectedTags);
   };
 
-  const onSubmit = () => {
+  const handleSubmitReview = () => {
     const totalSelectedTags = tagInfo.reduce((tagArr: number[], tag: TagInfo) => {
       if (selectedTags[tag.tagType][tag.tagName]) tagArr.push(tag.tagId);
       return tagArr;
     }, []);
 
-    const reviewerIndex = teamInfo.teams.findIndex((team) => teamInfo.userTeams.includes(team));
-    const reviewedIndex = teamInfo.teams.length - reviewerIndex;
+    const isRegisterReviewer = reviewInfo.userTeamInfo.reduce((acc, team: TeamSimple) => {
+      if (team.teamId === reviewInfo.registerTeamId) acc = team.teamId;
+      return acc;
+    }, 0);
+    const reviewerTeamId =
+      isRegisterReviewer ||
+      reviewInfo.userTeamInfo.reduce((acc, team: TeamSimple) => {
+        if (team.teamId === reviewInfo.applyTeamId) acc = team.teamId;
+        return acc;
+      }, 0);
+    const reviewedTeamId =
+      reviewInfo.registerTeamId !== reviewerTeamId
+        ? reviewInfo.registerTeamId
+        : reviewInfo.applyTeamId;
     const requestInfo = {
-      matchId: teamInfo.matchId,
-      reviewedTeamId: teamInfo.teams[reviewerIndex],
-      reviewerTeamId: teamInfo.teams[reviewedIndex],
-      reviewerTeamType: reviewerIndex > 0 ? 'apply' : 'register',
+      matchId: reviewInfo.matchId,
+      reviewedTeamId,
+      reviewerTeamId,
+      reviewerTeamType: isRegisterReviewer ? '등록팀' : '신청팀',
       tags: totalSelectedTags,
     };
 
     postMatchReview(requestInfo);
+    dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
+    window.location.replace(`/matches/post/${requestInfo.matchId}`);
   };
-  // console.log('tagInfo', tagInfo);
-  // console.log('selectedTag', selectedTags);
+
   return (
     <div
       className={classNames('modalBackground', modalBackground, {
@@ -165,7 +176,7 @@ const MatchReviewModal = ({ showMatchReviewModal, teamInfo }: ModalState) => {
           }}
         />
         <div className={classNames(buttonBox)}>
-          <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
+          <button className={classNames(submitButton)} type="button" onClick={handleSubmitReview}>
             제출
           </button>
         </div>
