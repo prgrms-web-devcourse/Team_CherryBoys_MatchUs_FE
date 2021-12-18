@@ -9,7 +9,16 @@ import { getTeamInfo } from '@/api';
 import TeamInfoCard from './TeamInfoCard';
 import { TEAM_CREATE_PAGE } from '@/consts/routes';
 
-const { highlight, titleContainer, mainTitle, cardsContainer, addTeamButton } = style;
+const {
+  highlight,
+  titleContainer,
+  cardsContainer,
+  addTeamButton,
+  hasNoTeamContainer,
+  mainTitle,
+  topSubTitle,
+  noTeamAddButton,
+} = style;
 
 const TeamChoice = () => {
   const history = useHistory();
@@ -31,54 +40,62 @@ const TeamChoice = () => {
     updateMyTeamsInfo();
   }, [result.userGradeResponse]);
 
+  const hasThreeTeam = myTeams.length >= 3;
+
   return (
     <div>
-      <div className={classNames(titleContainer)}>
-        <p className={classNames(mainTitle)}>
-          <span className={classNames('whiteSpace')}>자신이 속한</span>
-          <span className={classNames('whiteSpace')}>
-            <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
-          </span>
-        </p>
-      </div>
       {myTeams.length !== 0 ? (
-        <div className={classNames(cardsContainer)}>
-          {myTeams.map(({ logo, teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
-            return (
-              <TeamInfoCard
-                key={`teamCard-${teamId}`}
-                teamId={teamId}
-                teamLogo={logo}
-                teamName={teamName}
-                teamCreatedAt={teamCreatedAt}
-                tagNames={tagNames}
-                mannerTemperature={mannerTemperature}
-              />
-            );
-          })}
+        <>
+          <div className={classNames(titleContainer)}>
+            <p className={classNames(mainTitle)}>
+              <span className={classNames('whiteSpace')}>자신이 속한</span>
+              <span className={classNames('whiteSpace')}>
+                <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
+              </span>
+            </p>
+          </div>
+          <div className={classNames(cardsContainer)}>
+            {myTeams.map(
+              ({ logo, teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
+                return (
+                  <TeamInfoCard
+                    key={`teamCard-${teamId}`}
+                    teamId={teamId}
+                    teamLogo={logo}
+                    teamName={teamName}
+                    teamCreatedAt={teamCreatedAt}
+                    tagNames={tagNames}
+                    mannerTemperature={mannerTemperature}
+                  />
+                );
+              }
+            )}
+            <button
+              type="button"
+              className={classNames(addTeamButton)}
+              onClick={handleMoveToTeamCreatePage}
+            >
+              +
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className={classNames(hasNoTeamContainer)}>
+          <p>
+            <span className={classNames(mainTitle, 'whiteSpace')}>소속된 팀이 없어요 ❌</span>
+            <span className={classNames(topSubTitle, 'whiteSpace')}>
+              새로운 <span className={classNames(highlight)}>팀</span>을 만들고
+            </span>
+            <span className={classNames('whiteSpace')}>다 함께 땀을 흘려볼까요? 🏃🏻</span>
+          </p>
           <button
             type="button"
-            className={classNames(addTeamButton)}
+            className={classNames(noTeamAddButton)}
             onClick={handleMoveToTeamCreatePage}
           >
             +
           </button>
         </div>
-      ) : (
-        <>
-          <span className={classNames('whiteSpace')}>소속된 팀이 없어요 ❌</span>
-          <span className={classNames('whiteSpace')}>
-            새로운 <span className={classNames(highlight)}>팀</span>을 만들고
-          </span>
-          <span className={classNames('whiteSpace')}>다 함께 땀을 흘려볼까요? 🏃🏻</span>
-          <button
-            type="button"
-            className={classNames(addTeamButton)}
-            onClick={handleMoveToTeamCreatePage}
-          >
-            +
-          </button>
-        </>
       )}
     </div>
   );

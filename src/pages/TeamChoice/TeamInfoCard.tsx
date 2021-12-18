@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import style from './teamChoice.module.scss';
+import AttitueTag from '@/components/common/AttitudeTag/AttitudeTag';
 
 export interface TeamCardInfo {
   mannerTemperature: number;
@@ -19,6 +20,7 @@ const {
   teamBaseInfo,
   teamNameSpan,
   ContainerAboutTeamManner,
+  tagContainer,
   mannerLow,
   mannerMiddle,
   mannerHigh,
@@ -33,7 +35,7 @@ const TeamInfoCard = ({
   mannerTemperature,
 }: TeamCardInfo) => {
   const teamCreatedTime = teamCreatedAt.split('T');
-
+  const taggNames = ['timeKeeper', 'violent', 'fastFoot'];
   return (
     <div className={classNames(cardContainer)}>
       <div className={classNames(cardLogo)}>
@@ -47,11 +49,11 @@ const TeamInfoCard = ({
           <span>팀 생성일자: {teamCreatedTime[0]}</span>
         </p>
         <div className={classNames(ContainerAboutTeamManner)}>
-          <article>
-            {tagNames.map((tag) => {
-              return <span key={`tagName-${tag}`}>{tag}</span>;
+          <div className={tagContainer}>
+            {taggNames.map((tag) => {
+              return <AttitueTag tagType={tag} />;
             })}
-          </article>
+          </div>
           <span
             className={classNames(mannerMiddle, {
               [mannerLow]: mannerTemperature < 20,

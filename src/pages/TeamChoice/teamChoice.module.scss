@@ -42,6 +42,10 @@
   text-align: center;
   background: #56ad79;
   border-radius: 2.4rem;
+
+  :disabled {
+    background: #8f8f8f;
+  }
 }
 
 .cardContainer {
@@ -50,7 +54,6 @@
   justify-content: space-around;
   width: 100%;
   height: 11rem;
-  margin-right: 1.6rem;
   margin-right: 1.6rem;
   border: 0.2rem solid #c4c4c4;
   border-radius: 1rem;
@@ -76,7 +79,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 0.5rem;
-    padding-left: 2rem;
+    padding-left: 1.2rem;
     font-weight: 700;
 
     .teamNameSpan {
@@ -86,8 +89,15 @@
 
   .ContainerAboutTeamManner {
     display: flex;
-    padding-left: 2rem;
+    padding-left: 1.2rem;
   }
+}
+
+.tagContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 65%;
+  margin-top: 0.5rem;
 }
 
 .mannerLow {
@@ -97,6 +107,8 @@
 }
 
 .mannerMiddle {
+  position: absolute;
+  right: 3rem;
   color: color.$primary;
   font-weight: 700;
   font-size: 2.4rem;
@@ -106,4 +118,37 @@
   color: #d89e5a;
   font-weight: 700;
   font-size: 2.4rem;
+}
+
+.hasNoTeamContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60%;
+  font-weight: 700;
+  font-size: 2.4rem;
+
+  .mainTitle {
+    margin-bottom: 2rem;
+    padding-left: 3rem;
+  }
+
+  .topSubTitle {
+    padding : {
+      bottom: 0.5rem;
+      left: 4rem;
+    }
+  }
+
+  .noTeamAddButton {
+    width: 30rem;
+    height: 6.4rem;
+    margin-top: 2rem;
+    color: color.$primary;
+    font-size: 3rem;
+    background: white;
+    border: 1px solid color.$primary;
+    outline: none;
+    cursor: pointer;
+  }
 }
