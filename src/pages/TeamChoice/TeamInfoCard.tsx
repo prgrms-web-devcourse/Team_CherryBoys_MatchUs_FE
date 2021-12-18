@@ -35,6 +35,7 @@ const TeamInfoCard = ({
   mannerTemperature,
 }: TeamCardInfo) => {
   const teamCreatedTime = teamCreatedAt.split('T');
+  const yearMonthDay = teamCreatedTime[0].split('-');
   // TODO: 예시 코드 삭제 예정
   const taggNames = ['timeKeeper', 'violent', 'fastFoot'];
   return (
@@ -47,7 +48,9 @@ const TeamInfoCard = ({
       <div className={classNames(teamSubInfoContainer)}>
         <p className={classNames(teamBaseInfo)}>
           <span className={classNames(teamNameSpan)}>{teamName}</span>
-          <span>팀 생성일자: {teamCreatedTime[0]}</span>
+          <span>
+            팀 생성일자: {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
+          </span>
         </p>
         <div className={classNames(ContainerAboutTeamManner)}>
           <div className={tagContainer}>
