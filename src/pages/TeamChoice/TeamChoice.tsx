@@ -70,14 +70,14 @@ const TeamChoice = () => {
                 );
               }
             )}
-            <button
-              type="button"
-              className={classNames(addTeamButton)}
-              onClick={handleMoveToTeamCreatePage}
-            >
-              +
-            </button>
           </div>
+          <button
+            type="button"
+            className={classNames(addTeamButton)}
+            onClick={handleMoveToTeamCreatePage}
+          >
+            +
+          </button>
         </>
       ) : (
         <div className={classNames(hasNoTeamContainer)}>

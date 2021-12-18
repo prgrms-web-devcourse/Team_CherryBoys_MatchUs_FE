@@ -95,12 +95,13 @@
 
 .tagContainer {
   display: flex;
-  justify-content: space-between;
   width: 65%;
   margin-top: 0.5rem;
 }
 
 .mannerLow {
+  position: absolute;
+  right: 3.8rem;
   color: #8f8f8f;
   font-weight: 700;
   font-size: 2.4rem;
@@ -108,13 +109,15 @@
 
 .mannerMiddle {
   position: absolute;
-  right: 3rem;
+  right: 3.8rem;
   color: color.$primary;
   font-weight: 700;
   font-size: 2.4rem;
 }
 
 .mannerHigh {
+  position: absolute;
+  right: 3.8rem;
   color: #d89e5a;
   font-weight: 700;
   font-size: 2.4rem;
@@ -124,7 +127,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60%;
+  margin-top: 38%;
   font-weight: 700;
   font-size: 2.4rem;
 
