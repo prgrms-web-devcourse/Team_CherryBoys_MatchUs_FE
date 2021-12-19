@@ -5,6 +5,140 @@
   font-weight: 700;
 }
 
+.titleContainer {
+  margin: {
+    top: 7.2rem;
+    bottom: 3rem;
+    left: 1.8rem;
+  }
+
+  .mainTitle {
+    font-weight: 700;
+    font-size: 2.4rem;
+    .highlight {
+      color: color.$primary;
+      font-weight: 700;
+    }
+  }
+}
+
+.cardsContainer {
+  margin : {
+    right: 1.6rem;
+    left: 1.6rem;
+  }
+}
+
+.teamLogoImage {
+  width: 98%;
+  height: 90%;
+  margin-top: 0.5rem;
+  object-fit: fill;
+}
+
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 11rem;
+  margin-right: 1.6rem;
+  border: 0.2rem solid #c4c4c4;
+  border-radius: 1rem;
+
+  .cardLogo {
+    width: 20%;
+    height: 80%;
+    object-fit: cover;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 1rem;
+  }
+
+  .teamSubInfoContainer {
+    width: 75%;
+    height: 80%;
+    padding-top: 1.2rem;
+    font-size: 1.2rem;
+    border: 0.2rem solid #c4c4c4;
+    border-radius: 1rem;
+  }
+
+  .teamBaseInfo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    padding-left: 1.2rem;
+    font-weight: 700;
+
+    .teamNameSpan {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .ContainerAboutTeamManner {
+    display: flex;
+    padding-left: 1.2rem;
+
+    .tagContainer {
+      display: flex;
+      width: 65%;
+      margin-top: 0.5rem;
+    }
+
+    .mannerLow {
+      position: absolute;
+      right: 3.8rem;
+      color: #8f8f8f;
+      font-weight: 700;
+      font-size: 2.4rem;
+    }
+
+    .mannerMiddle {
+      position: absolute;
+      right: 3.8rem;
+      color: color.$primary;
+      font-weight: 700;
+      font-size: 2.4rem;
+    }
+
+    .mannerHigh {
+      position: absolute;
+      right: 3.8rem;
+      color: #d89e5a;
+      font-weight: 700;
+      font-size: 2.4rem;
+    }
+  }
+}
+
+.hasNoTeamContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-bottom: 10rem;
+
+  .mainTitle {
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .subTitle {
+    font-size: 1.6rem;
+  }
+
+  .noTeamAddButton {
+    width: 25rem;
+    height: 6.4rem;
+    margin-top: 2rem;
+    color: color.$primary;
+    font-size: 3rem;
+    background-color: white;
+    border: 0.2rem solid color.$primary;
+    border-radius: 1rem;
+  }
+}
+
 .addTeamButton {
   position: fixed;
   right: 2rem;
@@ -18,7 +152,8 @@
   text-align: center;
   background: #56ad79;
   border-radius: 2.4rem;
-}
 
-.cardContainer {
+  :disabled {
+    background: #8f8f8f;
+  }
 }

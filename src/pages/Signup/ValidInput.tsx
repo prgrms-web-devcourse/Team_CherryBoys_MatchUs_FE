@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as React from 'react';
 
 type ValidInputProps = {
@@ -7,7 +8,7 @@ type ValidInputProps = {
   value: string;
   selectOptions?: string[];
   type: 'input' | 'select';
-  validMsg: string;
+  className?: string;
 };
 
 const ValidInput = ({
@@ -17,14 +18,26 @@ const ValidInput = ({
   value,
   selectOptions,
   type,
-  validMsg,
+  className,
 }: ValidInputProps) => {
   return (
     <>
       {type === 'input' ? (
-        <input id={id} name={name} onChange={onChange} value={value} />
+        <input
+          id={id}
+          name={name}
+          onChange={onChange}
+          value={value}
+          className={classNames(className)}
+        />
       ) : (
-        <select id={id} name={name} onChange={onChange} value={value}>
+        <select
+          id={id}
+          name={name}
+          onChange={onChange}
+          value={value}
+          className={classNames(className)}
+        >
           {selectOptions?.map((option) => {
             return (
               <option key={option} value={option}>
@@ -34,7 +47,6 @@ const ValidInput = ({
           })}
         </select>
       )}
-      <div>{validMsg && <small>{validMsg}</small>}</div>
     </>
   );
 };

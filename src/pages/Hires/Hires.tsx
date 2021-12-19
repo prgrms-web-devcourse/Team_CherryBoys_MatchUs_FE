@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchAllPost } from '@/store/posts';
+import { fetchAllPost, HiresResponseType } from '@/store/posts';
 import { Posts } from '@/components';
 import { getHiresInfo } from '@/api/hires';
 // Todo(홍중) : 임시 데이터, 팀 정보 관리하는곳에서 가져오기(12/13)
-const selectedTeam = { teamId: 3, grade: 'GENERAL' };
+const selectedTeam = { teamId: 3, grade: 'CAPTAIN' };
 
 const Hires = () => {
   const dispatch = useDispatch();
+  const [data, setData] = useState<Array<HiresResponseType>>([]);
 
   useEffect(() => {
     dispatch(fetchAllPost());
@@ -19,12 +20,14 @@ const Hires = () => {
       const params = {
         size: defaultSize,
       };
-      const res = await getHiresInfo(params);
+
+      const { hirePosts } = await getHiresInfo(params);
+      setData(hirePosts);
     };
 
     getCurrentHiresInfo();
   }, []);
-  return <Posts isMatch={false} selectedTeam={selectedTeam} />;
+  return <Posts isMatch={false} selectedTeam={selectedTeam} data={data} />;
 };
 
 export default Hires;

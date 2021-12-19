@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { setItemFromStorage } from '@/utils/storage';
 import { getMyHireRequestInfo, requestLogin, requestReAuth } from '../api/user';
+import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
 import { loginFormType, reqeustUserInfoType, userType } from '@/types/users';
 import { requestEditUser } from '@/api/user';
 import { cancelHireRequest } from '@/api/hires';
@@ -19,7 +19,7 @@ const initialState: userType = {
     nickname: '',
     roleGroup: '',
     sports: '',
-    userGrade: [],
+    userGradeResponse: [],
   },
   hireRequestList: [],
   teamInvitaionList: [],
@@ -76,10 +76,13 @@ export const userSlice = createSlice({
         nickname: '',
         roleGroup: '',
         sports: '',
-        userGrade: [],
+        userGradeResponse: [],
       };
+
       state.hireRequestList = [];
       state.teamInvitaionList = [];
+      removeItemFromStorage('accessToken');
+      removeItemFromStorage('expireTime');
     },
     editEditabelUserState: (state, { payload }) => {
       const { nickname, bio, ageGroup, sportName } = payload;

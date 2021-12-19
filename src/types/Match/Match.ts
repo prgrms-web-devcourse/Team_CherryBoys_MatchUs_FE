@@ -140,6 +140,21 @@ export interface Locations {
   }[];
 }
 
+export interface MatchPostNew {
+  registerTeamId: number;
+  sports: string;
+  ageGroup: string;
+  city: number;
+  region: number;
+  ground: number;
+  cost: number;
+  detail: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  players: number[];
+}
+
 export interface MatchPostEdit {
   matchId: number;
   sports: string;
