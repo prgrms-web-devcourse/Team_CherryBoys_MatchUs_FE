@@ -55,6 +55,7 @@ const {
   seeMore,
   tagContainer,
   titleContainer,
+  historyButtonContainer,
   historyButton,
 } = style;
 
@@ -96,7 +97,7 @@ const UserDetail = () => {
     updateUserMatchHistory();
   }, [userId]);
 
-  const { tags, matchCount, mannerTemperature, myTeams } = userInfo;
+  const { matchCount, mannerTemperature, myTeams } = userInfo;
 
   return (
     <div className={classNames(pageContainer)}>
@@ -110,7 +111,7 @@ const UserDetail = () => {
                     <span className={classNames(highlight)}>{nickname}</span>님
                   </span>
                   {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
-                  <div>
+                  <div className={classNames(historyButtonContainer)}>
                     <button
                       type="button"
                       className={classNames(historyButton)}
