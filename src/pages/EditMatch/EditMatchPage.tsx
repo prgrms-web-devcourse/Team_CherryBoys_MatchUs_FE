@@ -51,8 +51,8 @@ const EditMatch = () => {
   const [prevMatchInfo, setPrevMatchInfo] = useState<MatchType>();
 
   const getMatchInfo = useCallback(async () => {
-    const matchInfoById = await fetchMatchById(matchId);
-    setPrevMatchInfo(matchInfoById);
+    const { teamSimpleInfos } = await fetchMatchById(matchId);
+    setPrevMatchInfo(teamSimpleInfos);
   }, [matchId]);
 
   useEffect(() => {
@@ -66,11 +66,6 @@ const EditMatch = () => {
     startDate: new Date(),
     startTime: new Date(),
     endTime: new Date(),
-  });
-  const [date, setDate] = useState({
-    date: '',
-    startTime: '',
-    endTime: '',
   });
 
   const placeholder = '선택';

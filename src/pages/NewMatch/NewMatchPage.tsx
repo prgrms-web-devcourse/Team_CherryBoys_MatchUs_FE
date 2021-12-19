@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef, ReactHTMLElement } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
@@ -63,11 +63,6 @@ const NewMatch = () => {
     startTime: new Date(),
     endTime: new Date(),
   });
-  const [date, setDate] = useState({
-    date: '',
-    startTime: '',
-    endTime: '',
-  });
 
   const placeholder = '선택';
   const [sports, setSports] = useState(placeholder);
@@ -106,9 +101,9 @@ const NewMatch = () => {
 
   const getAuhorizedTeams = useCallback(async () => {
     if (token) {
-      const authorizedTeams = await fetchAuthorizedTeams();
-      setUserTeams(authorizedTeams);
-      dispatch(match.actions.setUserTeams({ userTeams: authorizedTeams }));
+      const { teamSimpleInfos } = await fetchAuthorizedTeams();
+      setUserTeams(teamSimpleInfos);
+      dispatch(match.actions.setUserTeams({ userTeams: teamSimpleInfos }));
     }
   }, []);
 
@@ -117,6 +112,7 @@ const NewMatch = () => {
   }, []);
 
   const userLimit = SPORTS_PLAYER[sports] || 0;
+
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
   const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMemberInfo[]>([]);
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
@@ -358,6 +354,13 @@ const NewMatch = () => {
     getSelectedTeamMembers();
   }, [setTeamMembers, getSelectedTeamMembers, setFormattedDate]);
 
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  const checkRef = () => {
+    console.log(detailRef);
+    console.log(detailRef.current?.innerHTML);
+  };
+
   return (
     <div className={classNames(newMatchContainer)}>
       <Input
@@ -446,6 +449,15 @@ const NewMatch = () => {
           </LocalizationProvider>
         </div>
       </div>
+      <div>
+        <div
+          style={{ border: '1px solid #000', minHeight: '250px' }}
+          contentEditable
+          dangerouslySetInnerHTML={{ __html: detail || '' }}
+          ref={detailRef}
+          className={classNames()}
+        />
+      </div>
       <Input
         inputId="inputCost"
         labelName="참가비"
@@ -459,8 +471,11 @@ const NewMatch = () => {
         onChange={(e) => handleDetail(e)}
       />
       <div className={classNames(buttonBox)}>
-        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
+        {/* <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
           매칭 등록
+        </button> */}
+        <button className={classNames(submitButton)} type="button" onClick={checkRef}>
+          체크
         </button>
       </div>
     </div>
