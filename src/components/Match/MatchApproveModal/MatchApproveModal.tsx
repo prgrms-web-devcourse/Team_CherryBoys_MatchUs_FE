@@ -79,8 +79,6 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
   };
 
   const handleOnChangeTeamCard = (e: React.ChangeEvent<HTMLElement>) => {
-    console.log(e);
-    console.log(waitingTeams[parseInt((e.target as HTMLInputElement).value, 10)]);
     setSelectedTeam(waitingTeams[parseInt((e.target as HTMLInputElement).value, 10)]);
   };
 

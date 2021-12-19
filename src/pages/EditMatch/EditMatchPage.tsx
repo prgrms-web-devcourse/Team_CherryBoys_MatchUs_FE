@@ -110,7 +110,7 @@ const EditMatch = () => {
       return acc;
     }, []),
   ];
-  console.log(prevMatchInfo);
+
   const setInitialValue = useCallback(() => {
     if (prevMatchInfo) {
       setSports(prevMatchInfo.sportName || placeholder);
@@ -311,7 +311,6 @@ const EditMatch = () => {
 
     if (window.confirm('매칭글을 수정하시겠습니까?')) {
       const result = await modifyMatch(requestData);
-      console.log(result);
       if (result) {
         window.alert(`수정완료!`);
         history.push(`/matches/post/${matchId}`);
