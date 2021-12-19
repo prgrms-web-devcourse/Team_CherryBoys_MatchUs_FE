@@ -64,3 +64,10 @@ export const getUserInfo = (userId: number | null) =>
       url: `/users/${userId}`,
     })
     .catch(throwErrorMessage);
+
+export const getMyHireRequestInfo = () =>
+  api
+    .get({
+      url: `/hires/me`,
+    })
+    .catch(throwErrorMessage);
