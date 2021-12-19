@@ -7,6 +7,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import { Input, InputCheckBox, InputDetail } from '@/components';
 import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
@@ -61,6 +62,11 @@ const NewMatch = () => {
     endDate: new Date(),
     startTime: new Date(),
     endTime: new Date(),
+  });
+  const [date, setDate] = useState({
+    date: '',
+    startTime: '',
+    endTime: '',
   });
 
   const placeholder = '선택';

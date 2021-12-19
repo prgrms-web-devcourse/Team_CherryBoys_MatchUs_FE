@@ -67,6 +67,11 @@ const EditMatch = () => {
     startTime: new Date(),
     endTime: new Date(),
   });
+  const [date, setDate] = useState({
+    date: '',
+    startTime: '',
+    endTime: '',
+  });
 
   const placeholder = '선택';
   const [sports, setSports] = useState(placeholder);
