@@ -75,20 +75,30 @@ const TeamMatchDetail = () => {
                     })}
                   >
                     {hasWatingMatchState ? (
-                      watingMatch.map((match) => {
-                        return (
-                          <MatchListElement
-                            key={`beforeMatch-${match.matchId}`}
-                            matchId={match.matchId}
-                            matchDate={match.matchDate}
-                            registerTeamLogo={match.registerTeamLogo}
-                            registerTeamName={match.registerTeamName}
-                            applyTeamLogo={match.applyTeamLogo}
-                            applyTeamName={match.applyTeamName}
-                            status={match.status}
-                          />
-                        );
-                      })
+                      watingMatch.map(
+                        ({
+                          matchId,
+                          matchDate,
+                          registerTeamLogo,
+                          registerTeamName,
+                          applyTeamLogo,
+                          applyTeamName,
+                          status,
+                        }) => {
+                          return (
+                            <MatchListElement
+                              key={`beforeMatch-${matchId}`}
+                              matchId={matchId}
+                              matchDate={matchDate}
+                              registerTeamLogo={registerTeamLogo}
+                              registerTeamName={registerTeamName}
+                              applyTeamLogo={applyTeamLogo}
+                              applyTeamName={applyTeamName}
+                              status={status}
+                            />
+                          );
+                        }
+                      )
                     ) : (
                       <div className={classNames(hasNoMatchContainer)}>
                         <article>
@@ -120,18 +130,28 @@ const TeamMatchDetail = () => {
                 render: () => (
                   <div className={classNames(matchContainer)}>
                     {hasCompletedMatchState ? (
-                      completedMatch.map((match) => (
-                        <MatchListElement
-                          key={`beforeReview-${match.matchId}`}
-                          matchId={match.matchId}
-                          matchDate={match.matchDate}
-                          registerTeamLogo={match.registerTeamLogo}
-                          registerTeamName={match.registerTeamName}
-                          applyTeamLogo={match.applyTeamLogo}
-                          applyTeamName={match.applyTeamName}
-                          status={match.status}
-                        />
-                      ))
+                      completedMatch.map(
+                        ({
+                          matchId,
+                          matchDate,
+                          registerTeamLogo,
+                          registerTeamName,
+                          applyTeamLogo,
+                          applyTeamName,
+                          status,
+                        }) => (
+                          <MatchListElement
+                            key={`beforeReview-${matchId}`}
+                            matchId={matchId}
+                            matchDate={matchDate}
+                            registerTeamLogo={registerTeamLogo}
+                            registerTeamName={registerTeamName}
+                            applyTeamLogo={applyTeamLogo}
+                            applyTeamName={applyTeamName}
+                            status={status}
+                          />
+                        )
+                      )
                     ) : (
                       <div className={classNames(hasNoMatchContainer)}>
                         <span className={classNames(noTeamMainTitle, 'whiteSpace')}>
@@ -148,20 +168,30 @@ const TeamMatchDetail = () => {
                 render: () => (
                   <div className={classNames(matchContainer)}>
                     {hasReviewdMatchState ? (
-                      reviewdMatch.map((match) => {
-                        return (
-                          <MatchListElement
-                            key={`afterReview-${match.matchId}`}
-                            matchId={match.matchId}
-                            matchDate={match.matchDate}
-                            registerTeamLogo={match.registerTeamLogo}
-                            registerTeamName={match.registerTeamName}
-                            applyTeamLogo={match.applyTeamLogo}
-                            applyTeamName={match.applyTeamName}
-                            status={match.status}
-                          />
-                        );
-                      })
+                      reviewdMatch.map(
+                        ({
+                          matchId,
+                          matchDate,
+                          registerTeamLogo,
+                          registerTeamName,
+                          applyTeamLogo,
+                          applyTeamName,
+                          status,
+                        }) => {
+                          return (
+                            <MatchListElement
+                              key={`afterReview-${matchId}`}
+                              matchId={matchId}
+                              matchDate={matchDate}
+                              registerTeamLogo={registerTeamLogo}
+                              registerTeamName={registerTeamName}
+                              applyTeamLogo={applyTeamLogo}
+                              applyTeamName={applyTeamName}
+                              status={status}
+                            />
+                          );
+                        }
+                      )
                     ) : (
                       <div className={classNames(hasNoMatchContainer)}>
                         <span className={classNames(noTeamMainTitle, 'whiteSpace')}>
