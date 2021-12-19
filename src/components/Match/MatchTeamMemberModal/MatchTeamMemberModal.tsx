@@ -41,7 +41,6 @@ const MatchTeamMemberModal = ({
     }
   };
 
-  // TODO: team 회원정보를 받아오는 API콜 추가필요
   const userLimit = sports ? SPORTS_PLAYER[sports] : 0;
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
   const [teamAllMembers, setTeamAllMembers] = useState<TeamMemberInfo[]>([]);
@@ -88,11 +87,9 @@ const MatchTeamMemberModal = ({
       ...selectedTeamWithUsers,
     };
 
-    // TODO: 백엔드에서 유저이름 -> 닉네임 변경. 재배포 대기중
-    console.log(requestBody);
-    // modifyTeamMember(requestBody);
-    // dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
-    // history.go(0);
+    modifyTeamMember(requestBody);
+    dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
+    history.go(0);
   };
 
   return (

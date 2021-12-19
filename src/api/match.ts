@@ -112,19 +112,18 @@ export const getTags = () => {
 
 export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewerTeamType, reviewedTeamId } = matchReviewInfo;
-  console.log(matchReviewInfo);
-  const data = api
+  
+  api
     .post({
       url: `/matches/${matchId}/review`,
       data: { tags, reviewerTeamId, reviewerTeamType, reviewedTeamId },
     })
     .catch(throwErrorMessage);
-  console.log(data);
 };
 
 export const modifyTeamMember = (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
-  console.log(editedTeamMemberInfo);
+  
   api
     .put({
       url: `/matches/${matchId}/members`,
