@@ -22,6 +22,12 @@ export interface MemberElementType {
   grade: string;
 }
 
+export type TagType = {
+  tagId: number;
+  tagName: string;
+  tagType: string;
+};
+
 export interface TeamInfo {
   ageGroup: string;
   bio: string;
@@ -31,7 +37,7 @@ export interface TeamInfo {
   mannerTemperature: number;
   matchCount: number;
   sportsName: string;
-  tagNames: string[];
+  tags: TagType[];
   teamCreatedAt: string;
   teamId: number;
   teamName: string;
