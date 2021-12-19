@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import style from './hiresDetail.module.scss';
 import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
 import { InputDetail } from '@/components';
-import { hireItemType } from '../HiresEdit/HiresEdit';
+import { hireItemType } from '@/types';
 
 const {
   card__teamInfos,

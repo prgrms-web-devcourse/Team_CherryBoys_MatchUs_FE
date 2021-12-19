@@ -1,8 +1,9 @@
 export { default as Matches } from './Matches/MatchesPage';
 export { default as Hires } from './Hires/Hires';
-// export { default as HiresDetail } from './HiresDetail/HiresDetail';
+export { default as HiresDetail } from './HiresDetail/HiresDetail';
 export { default as HiresCreate } from './HiresCreate/HiresCreate';
-// export { default as HiresEdit } from './HiresEdit/HiresEdit';
+// eslint-disable-next-line import/no-cycle
+export { default as HiresEdit } from './HiresEdit/HiresEdit';
 export { default as HiresAccept } from './HiresAccept/HiresAccept';
 export { default as HiresFilter } from './HiresFilter/HiresFilter';
 export { default as Teams } from './Teams/Teams';

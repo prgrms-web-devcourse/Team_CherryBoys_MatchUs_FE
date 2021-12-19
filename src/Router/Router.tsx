@@ -13,9 +13,9 @@ import {
   NewMatch,
   EditMatch,
   Hires,
-  // HiresDetail,
+  HiresDetail,
   HiresCreate,
-  // HiresEdit,
+  HiresEdit,
   HiresAccept,
   HiresFilter,
   NotFound,
@@ -74,9 +74,9 @@ const Router = () => {
       {/* 용병 페이지 */}
       <AuthorizedRouter path={HIRES_PAGE} exact component={Hires} />
       <AuthorizedRouter path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
-      {/* <AuthorizedRouter path={HIRES_DETAIL_PAGE} exact component={HiresDetail} /> */}
+      <AuthorizedRouter path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
       <AuthorizedRouter path={HIRES_POST_PAGE} exact component={HiresCreate} />
-      {/* <AuthorizedRouter path={HIRES_EDIT_PAGE} exact component={HiresEdit} /> */}
+      <AuthorizedRouter path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
       <AuthorizedRouter path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
 
       {/* 매치 페이지 */}
