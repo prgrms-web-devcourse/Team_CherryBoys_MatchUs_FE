@@ -41,6 +41,7 @@ const ApplicationElement = ({ currentPostId, applicationCheckList }: element) =>
     const res = await allowApplications({ postId: currentPostId, data });
   };
 
+  // Todo(홍중) : label누르면 드랍박스로 focus되도록 수정예정(2021-12-19)
   return (
     <>
       <InputCheckBox
