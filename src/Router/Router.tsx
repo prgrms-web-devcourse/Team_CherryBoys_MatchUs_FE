@@ -24,6 +24,9 @@ import {
   TeamMatchDetail,
   UserDetail,
   UserMatchDetail,
+  UserHireRequest,
+  UserInfoEdit,
+  UserTeamInvitation,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -52,11 +55,10 @@ import {
   USER_EDIT_PAGE,
   USER_MATCHING_LIST_PAGE,
   USER_TEAM_INVITAION_LIST_PAGE,
-  USER_MERCENARY_INVITAION_LIST_PAGE,
+  USER_HIRE_REQUEST_LIST_PAGE,
   NOT_FOUND_PAGE,
   HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
-import { UserInfoEdit } from '@/pages/UserInfoEdit/UserInfoEdit';
 
 const Router: React.FC = () => {
   return (
@@ -88,14 +90,14 @@ const Router: React.FC = () => {
       <Route path={TEAM_MATCHING_LIST_PAGE} exact component={TeamMatchDetail} />
       <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
-      <Route path={TEAM_PAGE} exact component={TeamDetail} />
       <Route path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
+      <Route path={TEAM_PAGE} exact component={TeamDetail} />
 
       {/* 유저 페이지 */}
       <Route path={USER_PAGE} exact component={UserDetail} />
       <Route path={USER_MATCHING_LIST_PAGE} exact component={UserMatchDetail} />
-      {/* <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
-      <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} /> */}
+      <Route path={USER_HIRE_REQUEST_LIST_PAGE} exact component={UserHireRequest} />
+      <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={UserTeamInvitation} />
 
       {/* 기타 페이지 */}
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
