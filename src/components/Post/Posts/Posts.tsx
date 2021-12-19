@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import { useHistory } from 'react-router-dom';
 import { PostItem } from '..';
 import style from './posts.module.scss';
 import { PostWrapper } from '@/store/posts';
@@ -10,6 +11,11 @@ const { postTitle } = style;
 const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
   const { grade } = selectedTeam;
   const hasAuthority = grade.includes('CAPTAIN');
+  const history = useHistory();
+
+  const handleClickAddPosting = () => {
+    history.push(`/hires/post/new`);
+  };
 
   return (
     <>
@@ -27,7 +33,11 @@ const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
           />
         ))}
       </ul>
-      {hasAuthority && <button type="button">추가</button>}
+      {hasAuthority && (
+        <button type="button" onClick={handleClickAddPosting}>
+          추가
+        </button>
+      )}
     </>
   );
 };

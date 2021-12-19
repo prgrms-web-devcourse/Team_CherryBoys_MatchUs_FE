@@ -37,7 +37,7 @@ const PostItem = ({ item }: Post) => {
   const history = useHistory();
 
   const handleClickPostItme = () => {
-    history.push(`hires/${postId}`);
+    history.push(`/hires/${postId}`);
   };
 
   return (
