@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import * as React from 'react';
-import style from './validInput.module.scss';
 
 type ValidInputProps = {
   name: string;
@@ -9,7 +8,6 @@ type ValidInputProps = {
   value: string;
   selectOptions?: string[];
   type: 'input' | 'select';
-  validMsg?: string;
   className?: string;
 };
 
@@ -20,10 +18,8 @@ const ValidInput = ({
   value,
   selectOptions,
   type,
-  validMsg,
   className,
 }: ValidInputProps) => {
-  // const { valid_msg } = style;
   return (
     <>
       {type === 'input' ? (
@@ -51,7 +47,6 @@ const ValidInput = ({
           })}
         </select>
       )}
-      {/* <div>{validMsg && <span className={classNames(valid_msg)}>{validMsg}</span>}</div> */}
     </>
   );
 };
