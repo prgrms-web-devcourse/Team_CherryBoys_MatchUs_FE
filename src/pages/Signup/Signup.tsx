@@ -17,7 +17,7 @@ import {
 import { isValidFormType, signupFormType, validMsgType } from '@/types/users';
 import { AGE, GENDER, SPORTS } from '@/consts/user';
 import { CustomLabel, CustomModalDialog } from '@/components';
-import style from './Signup.module.scss';
+import style from './signup.module.scss';
 
 const Signup = () => {
   const [signupForm, setSignupForm] = useState<signupFormType>({
