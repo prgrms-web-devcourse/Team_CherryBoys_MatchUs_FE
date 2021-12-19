@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
-import { MatchListElement } from '@/components';
-import { MatchElement } from '@/types';
+import { AttitueTag, MatchListElement } from '@/components';
+import { MatchElement, TagType } from '@/types';
 import style from './userDetail.module.scss';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 import { USER_MATCHING_LIST_PAGE } from '@/consts/routes';
@@ -26,7 +26,7 @@ interface UserInfo {
   name: string;
   nickname: string;
   sportsName: string;
-  tags: string[];
+  tags: TagType[];
 }
 
 const {
@@ -108,8 +108,10 @@ const UserDetail = () => {
             </article>
 
             <div className={classNames('whiteSpace')}>
-              {tags.map((each) => (
-                <span>{each}</span>
+              {tags.map(({ tagId, tagType, tagName }) => (
+                <>
+                  <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+                </>
               ))}
             </div>
             <p>
@@ -163,15 +165,9 @@ const UserDetail = () => {
               key={`userReview-${matchId}`}
               matchId={matchId}
               matchDate={matchDate}
-              registerTeamLogo={
-                registerTeamLogo === '' || registerTeamLogo === '팀로고'
-                  ? baseTeamLogo
-                  : registerTeamLogo
-              }
+              registerTeamLogo={registerTeamLogo}
               registerTeamName={registerTeamName}
-              applyTeamLogo={
-                applyTeamLogo === '' || applyTeamLogo === '팀로고' ? baseTeamLogo : applyTeamLogo
-              }
+              applyTeamLogo={applyTeamLogo}
               applyTeamName={applyTeamName}
               status={status}
             />
