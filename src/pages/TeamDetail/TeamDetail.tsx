@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import classNames from 'classnames';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
