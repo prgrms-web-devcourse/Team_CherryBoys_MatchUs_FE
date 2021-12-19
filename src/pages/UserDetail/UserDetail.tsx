@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { AttitueTag, MatchListElement } from '@/components';
 import { MatchElement, TagType } from '@/types';
 import style from './userDetail.module.scss';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
-import { USER_MATCHING_LIST_PAGE } from '@/consts/routes';
+import {
+  USER_MATCHING_LIST_PAGE,
+  USER_TEAM_INVITAION_LIST_PAGE,
+  USER_HIRE_REQUEST_LIST_PAGE,
+  USER_EDIT_PAGE,
+} from '@/consts/routes';
 
 interface MyTeamElement {
   teamId: number;
@@ -50,9 +55,11 @@ const {
   seeMore,
   tagContainer,
   titleContainer,
+  historyButton,
 } = style;
 
 const UserDetail = () => {
+  const history = useHistory();
   const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     ageGroup: '',
@@ -103,7 +110,29 @@ const UserDetail = () => {
                     <span className={classNames(highlight)}>{nickname}</span>님
                   </span>
                   {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
-                  <button type="button">수정</button>
+                  <div>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_EDIT_PAGE)}
+                    >
+                      수정
+                    </button>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
+                    >
+                      팀 초대
+                    </button>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
+                    >
+                      용병
+                    </button>
+                  </div>
                 </div>
                 <span className={classNames(bioSpace)}>{bio}</span>
               </div>
