@@ -22,7 +22,7 @@ const Place = ({ handleChangeCity, handleChangeRegion, handleChangeGroundName }:
             <select id="city" onChange={handleChangeCity}>
               <option>행정구역</option>
               {CITY.map((value) => (
-                <option id={`${value}`} key={`city-${value}`}>
+                <option id={value} key={`city-${value}`}>
                   {value}
                 </option>
               ))}
@@ -30,7 +30,7 @@ const Place = ({ handleChangeCity, handleChangeRegion, handleChangeGroundName }:
             <select id="region" onChange={handleChangeRegion}>
               <option>시/군/구</option>
               {REGION.map((value) => (
-                <option id={`${value}`} key={`region-${value}`}>
+                <option id={value} key={`region-${value}`}>
                   {value}
                 </option>
               ))}
@@ -39,7 +39,7 @@ const Place = ({ handleChangeCity, handleChangeRegion, handleChangeGroundName }:
           <select id="groundName" onChange={handleChangeGroundName}>
             <option>구장</option>
             {GROUND_NAME.map((value) => (
-              <option id={`${value}`} key={`groundName-${value}`}>
+              <option id={value} key={`groundName-${value}`}>
                 {value}
               </option>
             ))}
