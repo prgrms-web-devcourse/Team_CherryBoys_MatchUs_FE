@@ -191,20 +191,30 @@ const TeamDetail = () => {
           <Link to={`/team/${teamId}/match`}>더보기</Link>
         </div>
         {hasPreviousMatchHistory ? (
-          previousMatchHistory.map((match) => {
-            return (
-              <MatchListElement
-                key={`beforeMatch-${match.matchId}`}
-                matchId={match.matchId}
-                matchDate={match.matchDate}
-                registerTeamLogo={match.registerTeamLogo}
-                registerTeamName={match.registerTeamName}
-                applyTeamLogo={match.applyTeamLogo}
-                applyTeamName={match.applyTeamName}
-                status={match.status}
-              />
-            );
-          })
+          previousMatchHistory.map(
+            ({
+              matchId,
+              matchDate,
+              registerTeamLogo,
+              registerTeamName,
+              applyTeamLogo,
+              applyTeamName,
+              status,
+            }) => {
+              return (
+                <MatchListElement
+                  key={`beforeMatch-${matchId}`}
+                  matchId={matchId}
+                  matchDate={matchDate}
+                  registerTeamLogo={registerTeamLogo}
+                  registerTeamName={registerTeamName}
+                  applyTeamLogo={applyTeamLogo}
+                  applyTeamName={applyTeamName}
+                  status={status}
+                />
+              );
+            }
+          )
         ) : (
           <p>
             <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
