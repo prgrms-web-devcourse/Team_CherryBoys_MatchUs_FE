@@ -3,8 +3,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
-import style from './postItem.module.scss';
-
+// import style from './postItem.module.scss';
+import style from '@/components/Match/MatchPostCard/MatchPostCard.module.scss';
 import { Post } from '@/store/posts';
 
 const { card, gameInfos, tags, gameSchedule } = style;
@@ -40,21 +40,23 @@ const PostItem = ({ item }: Post) => {
     history.push(`/hires/${postId}`);
   };
 
+  const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
+
   return (
     <>
-      <li onClick={handleClickPostItme}>
-        <article className={classNames(card)}>
-          <section className={classNames(gameInfos)}>
+      <li onClick={handleClickPostItme} className={classNames(postCard)}>
+        <article className={classNames(postBox)}>
+          <section className={classNames(postTeamLogo)}>
             <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />
-            <div className={classNames(gameSchedule)}>
-              <div>{`${date} ${startTime}`}</div>
-              <div>{`${city} ${region} ${groundName}`}</div>
-            </div>
           </section>
-          <section className={classNames(tags)}>
-            <span>{isMatching ? `${cost}원` : position}</span>
-            <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
-            <span>{`${teamMannerTemperature}도`}</span>
+          <section className={classNames(postInfos)}>
+            <div>{`${date} ${startTime}`}</div>
+            <div>{`${city} ${region} ${groundName}`}</div>
+            <div className={classNames(postTags)}>
+              <span>{isMatching ? `${cost}원` : position}</span>
+              <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
+              <span>{`${teamMannerTemperature}도`}</span>
+            </div>
           </section>
         </article>
       </li>
