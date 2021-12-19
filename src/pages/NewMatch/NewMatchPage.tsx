@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState, useCallback, useRef, ReactHTMLElement } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
@@ -8,7 +8,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
-import { Input, InputCheckBox, InputDetail } from '@/components';
+import { Input, InputCheckBox } from '@/components';
 import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
 import { RootState } from '@/store';
@@ -17,7 +17,18 @@ import { SPORTS, SPORTS_PLAYER, AGE_GROUP } from '@/consts';
 import { TeamSimple, TeamMemberInfo, Locations } from '@/types';
 import { getItemFromStorage } from '@/utils/storage';
 
-const { newMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
+const {
+  newMatchContainer,
+  inputLocationBox,
+  inputDateBox,
+  matchDetailInputBox,
+  inputName,
+  inputContent,
+  inputText,
+  inputTextContent,
+  buttonBox,
+  submitButton,
+} = style;
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -72,6 +83,7 @@ const NewMatch = () => {
   const [ground, setGround] = useState(defaultGround);
   const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState('');
+  const detailRef = useRef<HTMLDivElement>(null);
   const [team, setTeam] = useState(placeholder);
   const cityOptions = [
     '행정구역',
@@ -177,8 +189,10 @@ const NewMatch = () => {
       });
     }
     if (category === 'cost') {
-      const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
-      if (Number.isNaN(targetInputNumber)) return;
+      let targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) {
+        targetInputNumber = 0;
+      }
       setCost(targetInputNumber);
       return;
     }
@@ -192,11 +206,6 @@ const NewMatch = () => {
     const newTeamMembers: CheckboxOptions = { ...teamMembers };
     newTeamMembers[target] = !newTeamMembers[target];
     setTeamMembers({ ...newTeamMembers });
-  };
-
-  const handleDetail = (e: React.SetStateAction<string>) => {
-    const targetInput = e;
-    setDetail(targetInput);
   };
 
   const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
@@ -227,6 +236,8 @@ const NewMatch = () => {
   };
 
   const handleSubmitMatchInfo = async () => {
+    setDetail(detailRef.current ? detailRef.current.innerHTML : '');
+
     if (sports === placeholder) {
       window.alert('종목을 선택해주세요');
       return;
@@ -309,6 +320,11 @@ const NewMatch = () => {
       return;
     }
 
+    if (cost <= 10) {
+      window.alert('참가비는 10원 이하로 책정될 수 없습니다');
+      return;
+    }
+
     const requestData = {
       date: dateResult.date,
       startTime: dateResult.startTime,
@@ -320,12 +336,19 @@ const NewMatch = () => {
       region: region.regionId,
       ground: ground.groundId,
       cost,
-      detail,
+      detail: detailRef.current?.innerHTML || '',
       players: selectedTeamWithUsers.players,
     };
 
-    const newMatchId = await createMatch(requestData);
-    window.location.replace(`/matches/post/${newMatchId}`);
+    if (window.confirm('매칭을 등록하시겠습니까?')) {
+      const newMatchId = await createMatch(requestData);
+      if (newMatchId) {
+        window.alert('등록완료!');
+        window.location.replace(`/matches/post/${newMatchId.matchId}`);
+      } else {
+        window.alert('등록에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
   };
 
   useEffect(() => {
@@ -353,13 +376,6 @@ const NewMatch = () => {
 
     getSelectedTeamMembers();
   }, [setTeamMembers, getSelectedTeamMembers, setFormattedDate]);
-
-  const detailRef = useRef<HTMLDivElement>(null);
-
-  const checkRef = () => {
-    console.log(detailRef);
-    console.log(detailRef.current?.innerHTML);
-  };
 
   return (
     <div className={classNames(newMatchContainer)}>
@@ -449,15 +465,7 @@ const NewMatch = () => {
           </LocalizationProvider>
         </div>
       </div>
-      <div>
-        <div
-          style={{ border: '1px solid #000', minHeight: '250px' }}
-          contentEditable
-          dangerouslySetInnerHTML={{ __html: detail || '' }}
-          ref={detailRef}
-          className={classNames()}
-        />
-      </div>
+
       <Input
         inputId="inputCost"
         labelName="참가비"
@@ -465,17 +473,24 @@ const NewMatch = () => {
         value={cost}
         onChange={(e) => handleInput(e, 'cost')}
       />
-      <InputDetail
-        labelName="상세정보"
-        placeholder="텍스트를 입력하세요"
-        onChange={(e) => handleDetail(e)}
-      />
+      <div className={classNames(matchDetailInputBox)}>
+        <div className={classNames(inputName)}>
+          <h3>상세 정보</h3>
+        </div>
+        <div className={classNames(inputContent)}>
+          <div className={classNames(inputText)}>
+            <div
+              contentEditable
+              dangerouslySetInnerHTML={{ __html: detail || '' }}
+              ref={detailRef}
+              className={classNames(inputTextContent)}
+            />
+          </div>
+        </div>
+      </div>
       <div className={classNames(buttonBox)}>
-        {/* <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
+        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
           매칭 등록
-        </button> */}
-        <button className={classNames(submitButton)} type="button" onClick={checkRef}>
-          체크
         </button>
       </div>
     </div>

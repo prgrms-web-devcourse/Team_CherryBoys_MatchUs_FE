@@ -53,7 +53,7 @@ export const modifyMatch = (editedMatchInfo: MatchPostEdit) => {
     .put({
       url: `/matches/${matchId}`,
       data: {
-        sports,
+        sprotName: sports,
         ageGroup,
         city,
         region,

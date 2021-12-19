@@ -111,7 +111,7 @@ const TeamCard = ({ team, status }: Props) => {
               [teamUser_extra]: index > showPlayersLimit - 1,
               [showTeamUser_extra]: index > showPlayersLimit - 1 && showTeamUser,
             })}
-            key={`teamUser${index}`}
+            key={`teamUser${user.userId}-${index}`}
           >
             {user.userNickname || user.userName}
           </div>

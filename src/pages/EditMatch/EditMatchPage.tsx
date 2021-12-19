@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
@@ -7,8 +7,8 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { useParams } from 'react-router-dom';
-import { Input, InputDetail } from '@/components';
+import { useHistory, useParams } from 'react-router-dom';
+import { Input } from '@/components';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { fetchMatchById, modifyMatch, fetchLocation } from '@/api';
@@ -16,7 +16,18 @@ import style from './EditMatch.module.scss';
 import { SPORTS, AGE_GROUP } from '@/consts';
 import { Match as MatchType, Locations } from '@/types';
 
-const { editMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
+const {
+  editMatchContainer,
+  inputLocationBox,
+  inputDateBox,
+  matchDetailInputBox,
+  inputName,
+  inputContent,
+  inputText,
+  inputTextContent,
+  buttonBox,
+  submitButton,
+} = style;
 
 const defaultCity = {
   cityId: 0,
@@ -37,6 +48,7 @@ const defaultGround = {
 
 const EditMatch = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const { locations } = useSelector((store: RootState) => store.match.data);
@@ -51,8 +63,8 @@ const EditMatch = () => {
   const [prevMatchInfo, setPrevMatchInfo] = useState<MatchType>();
 
   const getMatchInfo = useCallback(async () => {
-    const { teamSimpleInfos } = await fetchMatchById(matchId);
-    setPrevMatchInfo(teamSimpleInfos);
+    const teamSimpleInfo = await fetchMatchById(matchId);
+    setPrevMatchInfo(teamSimpleInfo);
   }, [matchId]);
 
   useEffect(() => {
@@ -76,6 +88,7 @@ const EditMatch = () => {
   const [ground, setGround] = useState(defaultGround);
   const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState(placeholder);
+  const detailRef = useRef<HTMLDivElement>(null);
   const cityOptions = [
     '행정구역',
     ...locationInfo.cities.reduce((acc: string[], cityInfo) => {
@@ -97,7 +110,7 @@ const EditMatch = () => {
       return acc;
     }, []),
   ];
-
+  console.log(prevMatchInfo);
   const setInitialValue = useCallback(() => {
     if (prevMatchInfo) {
       setSports(prevMatchInfo.sportName || placeholder);
@@ -173,15 +186,12 @@ const EditMatch = () => {
       return;
     }
     if (category === 'cost') {
-      const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
-      if (Number.isNaN(targetInputNumber)) return;
+      let targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) {
+        targetInputNumber = 0;
+      }
       setCost(targetInputNumber);
     }
-  };
-
-  const handleDetail = (e: React.SetStateAction<string>) => {
-    const targetInput = e;
-    setDetail(targetInput);
   };
 
   const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
@@ -211,6 +221,8 @@ const EditMatch = () => {
   };
 
   const handleSubmitMatchInfo = async () => {
+    setDetail(detailRef.current ? detailRef.current.innerHTML : '');
+
     const { startDate, startTime, endTime } = formattedDate;
 
     const dateResult = {
@@ -270,7 +282,7 @@ const EditMatch = () => {
       window.alert('구장을 선택해주세요');
       return;
     }
-    if (dateResult.date < todayResult.date) {
+    if (new Date(`${dateResult.date} ${dateResult.startTime}`) < today) {
       window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
       return;
     }
@@ -297,8 +309,16 @@ const EditMatch = () => {
       detail,
     };
 
-    modifyMatch(requestData);
-    await window.location.replace(`/matches/post/${matchId}`);
+    if (window.confirm('매칭글을 수정하시겠습니까?')) {
+      const result = await modifyMatch(requestData);
+      console.log(result);
+      if (result) {
+        window.alert(`수정완료!`);
+        history.push(`/matches/post/${matchId}`);
+      } else {
+        window.alert('수정에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
   };
 
   useEffect(() => {
@@ -385,7 +405,21 @@ const EditMatch = () => {
         value={cost}
         onChange={(e) => handleInput(e, 'cost')}
       />
-      <InputDetail labelName="상세정보" placeholder={detail} onChange={(e) => handleDetail(e)} />
+      <div className={classNames(matchDetailInputBox)}>
+        <div className={classNames(inputName)}>
+          <h3>상세 정보</h3>
+        </div>
+        <div className={classNames(inputContent)}>
+          <div className={classNames(inputText)}>
+            <div
+              contentEditable
+              dangerouslySetInnerHTML={{ __html: detail || '' }}
+              ref={detailRef}
+              className={classNames(inputTextContent)}
+            />
+          </div>
+        </div>
+      </div>
       <div className={classNames(buttonBox)}>
         <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
           매칭 수정
