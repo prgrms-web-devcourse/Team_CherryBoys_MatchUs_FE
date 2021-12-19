@@ -173,7 +173,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={userName}
           type="input"
-          validMsg={validMsg.name}
         />
       </div>
 
@@ -185,7 +184,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={nickname}
           type="input"
-          validMsg={validMsg.nickname}
         />
         <button type="button" onClick={handleClickNicknameDuplicate}>
           중복확인
@@ -193,14 +191,7 @@ const Signup = () => {
       </div>
       <CustomLabel htmlFor="email">이메일</CustomLabel>
       <div>
-        <ValidInput
-          id="email"
-          name="email"
-          onChange={handleOnChange}
-          value={email}
-          type="input"
-          validMsg={validMsg.email}
-        />
+        <ValidInput id="email" name="email" onChange={handleOnChange} value={email} type="input" />
         <button type="button" onClick={handleClickCheckDuplicatedEmail}>
           중복확인
         </button>
@@ -213,7 +204,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={password}
           type="input"
-          validMsg={validMsg.password}
         />
       </div>
       <CustomLabel htmlFor="confirmedPassword">비밀번호 확인</CustomLabel>
@@ -224,7 +214,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={confirmedPassword}
           type="input"
-          validMsg={validMsg.confirmedPassword}
         />
       </div>
       <CustomLabel htmlFor="gender">성별</CustomLabel>
@@ -235,7 +224,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={gender}
           type="select"
-          validMsg={validMsg.gender}
           selectOptions={GENDER}
         />
       </div>
@@ -247,7 +235,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={ageGroup}
           type="select"
-          validMsg={validMsg.ageGroup}
           selectOptions={AGE}
         />
       </div>
@@ -259,7 +246,6 @@ const Signup = () => {
           onChange={handleOnChange}
           value={sports}
           type="select"
-          validMsg={validMsg.sports}
           selectOptions={SPORTS}
         />
       </div>
