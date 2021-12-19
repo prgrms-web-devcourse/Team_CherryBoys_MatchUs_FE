@@ -85,6 +85,8 @@ const UserDetail = () => {
     updateUserMatchHistory();
   }, [userId]);
 
+  const { tags, matchCount, mannerTemperature, myTeams } = userInfo;
+
   return (
     <div className={classNames(pageContainer)}>
       <section className={classNames(sectionContainer)}>
@@ -105,19 +107,19 @@ const UserDetail = () => {
             </article>
 
             <div className={classNames('whiteSpace')}>
-              {userInfo.tags.map((each) => (
+              {tags.map((each) => (
                 <span>{each}</span>
               ))}
             </div>
             <p>
-              총 <span className={classNames(matchHighlight)}>{userInfo.matchCount}</span>경기 동안
+              총 <span className={classNames(matchHighlight)}>{matchCount}</span>경기 동안
               <span
                 className={classNames(mannerMiddle, {
-                  [mannerLow]: userInfo.mannerTemperature < 20,
-                  [mannerHigh]: userInfo.mannerTemperature > 40,
+                  [mannerLow]: mannerTemperature < 20,
+                  [mannerHigh]: mannerTemperature > 40,
                 })}
               >
-                {userInfo.mannerTemperature}
+                {mannerTemperature}
               </span>
               의 매너온도를 가지고 있어요!
             </p>
@@ -128,7 +130,7 @@ const UserDetail = () => {
       <span className={classNames(containerTitle)}>소속 팀</span>
       <section className={classNames(sectionContainer)}>
         <div className={classNames(elementRowContainer)}>
-          {userInfo.myTeams.map(({ teamId, teamLogo }) => (
+          {myTeams.map(({ teamId, teamLogo }) => (
             <img
               className={classNames(logoImage)}
               key={`team-${teamId}`}
