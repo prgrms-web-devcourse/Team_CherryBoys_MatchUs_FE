@@ -5,40 +5,65 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
+import { useHistory } from 'react-router-dom';
 
-import { AGE_GROUP } from '@/consts';
-import { Input, InputDetail } from '@/components';
-import { createHiresPosting } from '@/api/hires';
+import { editHiresPosting, createHiresPosting } from '@/api/hires';
+
+import { InputDetail } from '@/components';
+import { Place, AgeGroup, HiresPosition } from '@/components/selects';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const CITY = ['서울시'];
-
-const REGION = ['금천구', '강서구'];
-
-const GROUND_NAME = ['유제두 체육관', '제1 체육관', '제2 체육관'];
-
-const POSITION = ['윙백', '윙포워드'];
-
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
-const HiresCreate = () => {
-  const [startTime, setStartTime] = useState<Date | null>(new Date());
-  const [endTime, setEndTime] = useState<Date | null>(new Date());
+export interface previousHiresInfo {
+  prevHiredNumber?: number;
+  prevDate?: string;
+  prevStartTime?: string;
+  prevEndTime?: string;
+  prevCity?: string;
+  prevRegion?: string;
+  prevGroundName?: string;
+  prevPosition?: string;
+  prevAgeGroup?: string;
+  prevDetail?: string;
+  postId?: number;
+}
+
+const HiresCreate = ({
+  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리
+  prevHiredNumber = 1,
+  prevDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+  prevStartTime = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+  prevEndTime = `${
+    new Date().getHours() >= 22 ? new Date().getHours() - 22 + 2 : new Date().getHours() + 2
+  }:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+  prevCity = '행정구역',
+  prevRegion = '시/군/구',
+  prevGroundName = '구장',
+  prevPosition = '포지션 선택',
+  prevAgeGroup = '20대',
+  prevDetail = '즐겁게 합시다',
+  postId,
+}: previousHiresInfo) => {
+  const [startTime, setStartTime] = useState<Date | null>(new Date(`${prevDate} ${prevStartTime}`));
+  const [endTime, setEndTime] = useState<Date | null>(new Date(`${prevDate} ${prevEndTime}`));
   const [formatedStartTime, setFormatedStartTime] = useState<string>('');
   const [formatedEndTime, setFormatedEndTime] = useState<string>('');
-  const [maximumDate, setMaximumDateDate] = useState<any>(new Date());
-  const [currentDate, setCurrentDate] = useState<any>(new Date());
-  const [currentMonth, setCurrentMonth] = useState<any>(new Date().getMonth());
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [maximumDate, setMaximumDateDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
+  const [date, setDate] = useState<Date | null>(new Date(prevDate));
   const [formattedDate, setFormattedDate] = useState<string>('');
-  const [hirePlayerNumber, sethirePlayerNumber] = useState<number>(1);
-  const [position, setPosition] = useState<string>('윙백');
-  const [ageGroup, setAgeGroup] = useState<string>('20s');
-  const [city, setCity] = useState<string>('');
-  const [region, setRegion] = useState<string>('');
-  const [groundName, setGroundName] = useState<string>('');
-  const [detail, setDetail] = useState<string>(DETAIL_PLACEHOLDER);
+  const [hirePlayerNumber, sethirePlayerNumber] = useState<number>(prevHiredNumber);
+  const [position, setPosition] = useState<string>(prevPosition);
+  const [ageGroup, setAgeGroup] = useState<string>(prevAgeGroup);
+  const [city, setCity] = useState<string>(prevCity);
+  const [region, setRegion] = useState<string>(prevRegion);
+  const [groundName, setGroundName] = useState<string>(prevGroundName);
+  const [detail, setDetail] = useState<string>(prevDetail || DETAIL_PLACEHOLDER);
+
+  const history = useHistory();
 
   useEffect(() => {
     const newDate = new Date();
@@ -46,7 +71,8 @@ const HiresCreate = () => {
     const startHour = newDate.getHours();
     const endHour = startHour >= 22 ? startHour - 22 : startHour;
     const minute = newDate.getMinutes();
-    const seconds = newDate.getSeconds();
+    const initialSeconds = newDate.getSeconds();
+    const seconds = initialSeconds < 10 ? `0${initialSeconds}` : initialSeconds;
 
     const formettedStartTime = `${startHour}:${minute}:${seconds}`;
     const formettedEndTime = `${endHour + 2}:${minute}:${seconds}`;
@@ -92,8 +118,7 @@ const HiresCreate = () => {
   const handleChangEndDate = (selectedDate: React.SetStateAction<Date | null>) => {
     const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
 
-    const startHour = newDate.getHours();
-    const endHour = startHour >= 22 ? startHour - 22 : startHour;
+    const endHour = newDate.getHours();
     const minute = newDate.getMinutes();
     const seconds = newDate.getSeconds();
 
@@ -112,7 +137,7 @@ const HiresCreate = () => {
     const { value } = event.target;
     const ageNumber = value.slice(0, 2);
 
-    setAgeGroup(`${ageNumber}s`);
+    setAgeGroup(`${ageNumber}대`);
   };
 
   const handleChangeCity = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -157,7 +182,7 @@ const HiresCreate = () => {
       city,
       region,
       groundName,
-      date: formattedDate,
+      date: formattedDate || prevDate,
       startTime: formatedStartTime,
       endTime: formatedEndTime,
       hirePlayerNumber,
@@ -178,26 +203,22 @@ const HiresCreate = () => {
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
-    if (!formattedDate) {
-      alert('날짜를 입력해주세요');
+    if (position === '포지션 선택') {
+      alert('포지션을 선택해주세요');
       return;
     }
-
-    if (!(formatedStartTime && formatedEndTime)) {
-      alert('시간을 입력해주세요');
-      return;
-    }
-
+    // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
       alert('시간을 다시 입력해주세요');
       return;
     }
 
-    if (!city || !region || !groundName) {
+    if (city === '행정구역' || region === '시/군/구' || groundName === '구장') {
       alert('장소를 입력해주세요');
       return;
     }
-    // Todo : 입력된 데이터 서버에 보내기
+
+    // Todo(홍중) : 입력된 데이터 서버에 보내기
     // handleClickCreatePosting(data);
     console.log(data);
   };
@@ -212,12 +233,34 @@ const HiresCreate = () => {
     setDetail(input);
   };
 
+  const handleClickEditPosting = async () => {
+    const editHires = async () => {
+      const data = {
+        ageGroup: '30대',
+        cityId: 1,
+        date: '2021-12-15',
+        detail: '수정내용입니다~',
+        endTime: '19:30:00',
+        groundId: 1,
+        hirePlayerNumber: 3,
+        position: '윙백',
+        regionId: 1,
+        startTime: '17:30:00',
+        teamId: 1,
+      };
+      await editHiresPosting({ postId, data });
+      history.push(`/hires/${postId}`);
+    };
+
+    editHires();
+  };
+
   return (
     <>
       <section>
         <div>용병수</div>
         <select id="hiredPlayerNumber" onChange={handleChangeHiredPlayerNumber}>
-          <option>{`${HIRED_NUMBER[0]}명`}</option>
+          <option>{`${hirePlayerNumber}명`}</option>
           {HIRED_NUMBER.map(
             (num, index) =>
               index > 0 && (
@@ -228,29 +271,11 @@ const HiresCreate = () => {
           )}
         </select>
       </section>
-      <section>
-        <div>포지션</div>
-        <Input
-          inputId="hiresPlayerNumber"
-          type="text"
-          placeholder={`${POSITION[0]}`}
-          onChange={handleChangePosition}
-        />
-      </section>
-      <div>
-        <div>연령대</div>
-        <select id="hiresAgeGroup" onChange={handleChangeAge}>
-          <option>{`${AGE_GROUP[0]}`}</option>
-          {AGE_GROUP.map(
-            (group, index) =>
-              index > 0 && (
-                <option id={`${group}s`} key={`age-${group}`}>
-                  {group}
-                </option>
-              )
-          )}
-        </select>
-      </div>
+      <HiresPosition hiringPosition={position} handleChangePosition={handleChangePosition} />
+      <AgeGroup
+        ageGroup={parseInt(prevAgeGroup.slice(0, 2), 10)}
+        handleChangeAge={handleChangeAge}
+      />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           value={date}
@@ -274,46 +299,21 @@ const HiresCreate = () => {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <div>
-        <section>
-          <div>장소</div>
-          <div>
-            <select id="city" onChange={handleChangeCity}>
-              <option>행정구역</option>
-              {CITY.map((value) => (
-                <option id={`${value}`} key={`city-${value}`}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <select id="region" onChange={handleChangeRegion}>
-              <option>시/군/구</option>
-              {REGION.map((value) => (
-                <option id={`${value}`} key={`region-${value}`}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </div>
-          <select id="groundName" onChange={handleChangeGroundName}>
-            <option>구장</option>
-            {GROUND_NAME.map((value) => (
-              <option id={`${value}`} key={`groundName-${value}`}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </section>
-      </div>
-
-      <InputDetail
-        labelName="상세정보"
-        placeholder={DETAIL_PLACEHOLDER}
-        onChange={handleChangeDetail}
+      <Place
+        handleChangeCity={handleChangeCity}
+        handleChangeRegion={handleChangeRegion}
+        handleChangeGroundName={handleChangeGroundName}
       />
-      <button type="button" onClick={handleClickSelectDone}>
-        선택 완료
-      </button>
+      <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
+      {prevCity === '행정구역' ? (
+        <button type="button" onClick={handleClickSelectDone}>
+          생성
+        </button>
+      ) : (
+        <button type="button" onClick={handleClickEditPosting}>
+          수정
+        </button>
+      )}
     </>
   );
 };
