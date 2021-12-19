@@ -118,8 +118,7 @@ const HiresCreate = ({
   const handleChangEndDate = (selectedDate: React.SetStateAction<Date | null>) => {
     const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
 
-    const startHour = newDate.getHours();
-    const endHour = startHour >= 22 ? startHour - 22 : startHour;
+    const endHour = newDate.getHours();
     const minute = newDate.getMinutes();
     const seconds = newDate.getSeconds();
 
@@ -138,7 +137,7 @@ const HiresCreate = ({
     const { value } = event.target;
     const ageNumber = value.slice(0, 2);
 
-    setAgeGroup(`${ageNumber}s`);
+    setAgeGroup(`${ageNumber}대`);
   };
 
   const handleChangeCity = (event: React.ChangeEvent<HTMLSelectElement>) => {

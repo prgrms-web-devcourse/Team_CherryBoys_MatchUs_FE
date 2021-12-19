@@ -12,14 +12,11 @@ const AgeGroup = ({ ageGroup, handleChangeAge }: Props) => {
       <div>연령대</div>
       <select id="hiresAgeGroup" onChange={handleChangeAge}>
         <option>{`${ageGroup}대`}</option>
-        {AGE_GROUP.map(
-          (group, index) =>
-            index > 0 && (
-              <option id={`${group}s`} key={`age-${group}`}>
-                {group}
-              </option>
-            )
-        )}
+        {AGE_GROUP.map((group) => (
+          <option id={`${group}s`} key={`age-${group}`}>
+            {group}
+          </option>
+        ))}
       </select>
     </div>
   );
