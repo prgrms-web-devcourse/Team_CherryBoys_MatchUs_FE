@@ -101,3 +101,10 @@ export const allowApplications = ({ postId, data }: allowedApplications) => {
     })
     .catch(throwErrorMessage);
 };
+
+export const cancelHireRequest = (applicationId: number) =>
+  api
+    .delete({
+      url: `hire-applications/${applicationId}`,
+    })
+    .catch(throwErrorMessage);
