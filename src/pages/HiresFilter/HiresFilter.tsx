@@ -12,8 +12,8 @@ const HiresFilter = () => {
   const [city, setCity] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [groundName, setGroundName] = useState<string>('');
-  const [maximumDate, setMaximumDateDate] = useState<any>(new Date());
-  const [currentDate, setCurrentDate] = useState<any>(new Date());
+  const [maximumDate, setMaximumDateDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | null>(new Date());
   const [formattedDate, setFormattedDate] = useState<string>('');
 
@@ -59,7 +59,7 @@ const HiresFilter = () => {
     setFormattedDate(formedDate);
   };
 
-  // Todo(홍중) : 모달 추가후 작성(2021-12-18)
+  // Todo(홍중) : 모달 추가후 작성(2021-12-18), Date는 추후 컴포넌트화 된것을 적용(현재 maxDate적용 안되는것도 등록페이지는 가능하여서 추후 그것을 컴포넌트화할 예정)
   const handleClickSelectDone = () => {};
 
   return (
