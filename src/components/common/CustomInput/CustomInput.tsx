@@ -8,9 +8,19 @@ interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
+  isDisabled?: boolean;
 }
 
-const CustomInput = ({ id, type, name, value, placeholder, onChange, className }: Props) => {
+const CustomInput = ({
+  id,
+  type,
+  name,
+  value,
+  placeholder,
+  onChange,
+  className,
+  isDisabled,
+}: Props) => {
   return (
     <input
       id={id}
@@ -20,6 +30,7 @@ const CustomInput = ({ id, type, name, value, placeholder, onChange, className }
       className={className}
       onChange={onChange}
       placeholder={placeholder}
+      disabled={isDisabled}
     />
   );
 };
