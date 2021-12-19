@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import style from './postItem.module.scss';
 
 import { Post } from '@/store/posts';
@@ -31,9 +34,15 @@ const PostItem = ({ item }: Post) => {
    * (2021-12-14)
    */
 
+  const history = useHistory();
+
+  const handleClickPostItme = () => {
+    history.push(`hires/${postId}`);
+  };
+
   return (
     <>
-      <li>
+      <li onClick={handleClickPostItme}>
         <article className={classNames(card)}>
           <section className={classNames(gameInfos)}>
             <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />
