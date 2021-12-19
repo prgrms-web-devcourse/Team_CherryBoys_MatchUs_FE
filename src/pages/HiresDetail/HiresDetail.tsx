@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
-import style from './hiresDetail.module.scss';
+// import style from './hiresDetail.module.scss';
 import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
 import { InputDetail } from '@/components';
 import { hireItemType } from '../HiresEdit/HiresEdit';
+import styles from '@/components/Match/MatchPostCard/MatchPostCard.module.scss';
+import style from '@/components/Match/MatchInfo/MatchInfo.module.scss';
+import hiresDetailStyle from '@/pages/HiresDetail/hiresDetail.module.scss';
 
-const {
-  card__teamInfos,
-  card__leaderInfo,
-  card__tags,
-  card__gameInfos__gameSchedule,
-  card__gameInfos__gameSchedule__upper,
-} = style;
+const { buttonWrapper, infoCard, removePostButton, editPostButton, buttonConent, checkButton } =
+  hiresDetailStyle;
+
+const { matchInfo } = style;
 
 const HiresDetail = () => {
   const history = useHistory();
@@ -45,52 +45,73 @@ const HiresDetail = () => {
     });
   };
 
+  const { postInfos, postTags } = styles;
+
   return (
     <>
       {hireItem && (
         <>
-          <button type="button" onClick={handleClickRemove}>
-            삭제
-          </button>
-          <button type="button" onClick={handleClickEdit}>
-            수정
-          </button>
-          <article>
+          <div className={classNames(buttonConent)}>
+            <div className={classNames(buttonWrapper)}>
+              <button
+                type="button"
+                onClick={handleClickRemove}
+                className={classNames(removePostButton)}
+              >
+                <i className="fas fa-times" />
+              </button>
+              <button
+                type="button"
+                onClick={handleClickEdit}
+                className={classNames(editPostButton)}
+              >
+                <i className="fas fa-pen" />
+              </button>
+            </div>
+          </div>
+          <article className={classNames(infoCard)}>
             <section>
-              <div className={classNames(card__gameInfos__gameSchedule)}>
-                <section className={classNames(card__gameInfos__gameSchedule__upper)}>
+              <div>
+                <div className={classNames(matchInfo)}>
                   <div>{`${hireItem.date} ${hireItem.startTime}`}</div>
                   <div>{`${hireItem.hirePlayerNumber}명`}</div>
-                </section>
+                </div>
                 <div>{`${hireItem.city} ${hireItem.region} ${hireItem.groundName}`}</div>
               </div>
             </section>
-            <section className={classNames(card__tags)}>
-              <span>{hireItem.position}</span>
-              <span>{`${hireItem.ageGroup?.slice(0, hireItem.ageGroup.length - 1)}대`}</span>
-              <span>{`${hireItem.teamMannerTemperature}도`}</span>
+            <section className={classNames(postInfos)}>
+              <div className={classNames(postTags)}>
+                <span>{hireItem.position}</span>
+                <span>{`${hireItem.ageGroup?.slice(0, hireItem.ageGroup.length - 1)}대`}</span>
+                <span>{`${hireItem.teamMannerTemperature}도`}</span>
+              </div>
             </section>
           </article>
-          <div>팀 정보</div>
-          <article className={classNames(card__teamInfos)}>
-            <img src={hireItem.teamLogo} alt="team logo" />
-            <div>
-              <div>{hireItem.teamName}</div>
-              <section className={classNames(card__leaderInfo)}>
-                <span>{hireItem.teamManagerName}</span>
-                <button type="button">채팅</button>
-              </section>
-            </div>
-          </article>
-
+          <div className={classNames(infoCard)}>
+            <h3>팀 정보</h3>
+            <article>
+              <article>
+                <img src={hireItem.teamLogo} alt="team logo" />
+                <div>
+                  <div>{hireItem.teamName}</div>
+                  <section>
+                    <span>{hireItem.teamManagerName}</span>
+                    <button type="button">채팅</button>
+                  </section>
+                </div>
+              </article>
+            </article>
+          </div>
           <InputDetail
             labelName="상세정보"
             placeholder={hireItem.detail}
             onChange={handleChangeDetail}
           />
-          <button type="button">신청 용병 확인</button>
         </>
       )}
+      <div className={classNames(checkButton)}>
+        <button type="button">신청 용병 확인</button>
+      </div>
     </>
   );
 };

@@ -10,12 +10,51 @@
   display: flex;
 }
 
-.card__tags {
-}
-
-.card__gameInfos__gameSchedule {
-}
-
 .card__gameInfos__gameSchedule__upper {
   display: flex;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.buttonConent {
+  margin: 0 1.6rem;
+  padding: 0 1.6rem;
+}
+
+.removePostButton {
+  height: 100%;
+  color: #f52003;
+  font-size: 1.6rem;
+  background: none;
+}
+
+.editPostButton {
+  height: 100%;
+  color: #0c0c0c;
+  font-size: 1.6rem;
+  background: none;
+}
+
+.infoCard {
+  box-sizing: border-box;
+  margin: 0 1.6rem;
+  padding: 0 1.6rem;
+  border: 2px solid #c4c4c4;
+  border-radius: 1rem;
+}
+
+.checkButton {
+  box-sizing: border-box;
+  margin: 0 1.6rem;
+  padding: 0 1.6rem;
+  border: 0.1rem solid #56ad79;
+  border-radius: 1rem;
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
