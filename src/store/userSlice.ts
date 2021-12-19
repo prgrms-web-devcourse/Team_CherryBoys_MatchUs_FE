@@ -1,6 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getMyHireRequestInfo, requestLogin, requestReAuth } from '../api/user';
+import { setItemFromStorage } from '@/utils/storage';
+import {
+  acceptTeamInvitation,
+  getMyHireRequestInfo,
+  getMyTeamInvitationInfo,
+  requestLogin,
+  requestReAuth,
+  rejectTeamInvitaion,
+} from '../api/user';
 import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
 import { loginFormType, reqeustUserInfoType, userType } from '@/types/users';
 import { requestEditUser } from '@/api/user';
@@ -56,6 +64,30 @@ export const hireRequestCancel = createAsyncThunk(
   'user/hireRequestCancel',
   async (applcationId: number) => {
     const response = await cancelHireRequest(applcationId);
+
+    return response;
+  }
+);
+
+export const getTeamInvitation = createAsyncThunk('user/getTeamInvitation', async () => {
+  const response = await getMyTeamInvitationInfo();
+
+  return response;
+});
+
+export const acceptTeamInvitationAction = createAsyncThunk(
+  'user/acceptTeamInvitation',
+  async (invitaionId: number) => {
+    const response = await acceptTeamInvitation(invitaionId);
+
+    return response;
+  }
+);
+
+export const rejectTeamInvitationAction = createAsyncThunk(
+  'user/acceptTeamInvitation',
+  async (invitaionId: number) => {
+    const response = await rejectTeamInvitaion(invitaionId);
 
     return response;
   }
@@ -117,8 +149,9 @@ export const userSlice = createSlice({
       const { hireRequestTeams } = payload;
       state.hireRequestList = hireRequestTeams;
     },
-    [hireRequestCancel.fulfilled.type]: (state) => {
-      console.log(state.hireRequestList);
+    [getTeamInvitation.fulfilled.type]: (state, { payload }) => {
+      const { teamInvitationInfos } = payload;
+      state.teamInvitaionList = teamInvitationInfos;
     },
   },
 });

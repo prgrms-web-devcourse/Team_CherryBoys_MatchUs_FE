@@ -71,3 +71,25 @@ export const getMyHireRequestInfo = () =>
       url: `/hires/me`,
     })
     .catch(throwErrorMessage);
+
+export const getMyTeamInvitationInfo = () =>
+  api
+    .get({
+      url: `invitations/me`,
+    })
+    .catch(throwErrorMessage);
+
+export const rejectTeamInvitaion = (invitaionId: number) =>
+  api
+    .delete({
+      url: `invitations/${invitaionId}`,
+    })
+    .catch(throwErrorMessage);
+
+export const acceptTeamInvitation = (invitaionId: number) =>
+  api
+    .post({
+      url: `invitations/${invitaionId}`,
+    })
+    .catch(throwErrorMessage);
+
