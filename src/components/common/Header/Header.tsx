@@ -1,7 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import styles from './Header.module.scss';
+import { RootState, useAppDispatch } from '@/store';
+import { logout } from '@/store/userSlice';
 
 const {
   header,
@@ -14,6 +17,8 @@ const {
 
 const Header = () => {
   const history = useHistory();
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLogged);
+  const dispatch = useAppDispatch();
 
   const handleHistory = (destination: string) => {
     if (destination === 'back') {
@@ -21,6 +26,16 @@ const Header = () => {
     } else {
       history.push(`/${destination}`);
     }
+  };
+
+  const handleClick = () => {
+    if (isLoggedIn) {
+      dispatch(logout());
+      handleHistory('login');
+      return;
+    }
+
+    handleHistory('');
   };
 
   return (
@@ -35,13 +50,9 @@ const Header = () => {
         </button>
       </div>
       <div className={classNames(rightButtonBox)}>
-        <button
-          type="button"
-          className={classNames(goLoginPageButton)}
-          onClick={() => handleHistory('login')}
-        >
+        <button type="button" className={classNames(goLoginPageButton)} onClick={handleClick}>
           {/* 로그인 상태 생기면 토글로 로그인/로그아웃 구분 */}
-          로그인
+          {isLoggedIn ? '로그아웃' : '로그인'}
         </button>
         <button
           type="button"

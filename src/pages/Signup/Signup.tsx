@@ -167,7 +167,7 @@ const Signup = () => {
 
     signup();
   };
-
+  
   const handleClickModal = () => {
     if (isSignupSuccess) {
       history.push('/login');

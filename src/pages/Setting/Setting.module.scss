@@ -1,0 +1,76 @@
+.SettingContainer {
+  font-size: 1.6rem;
+  .categoryWrap {
+    padding: 1.6rem;
+    .category {
+      margin: 1.2rem 0;
+
+      .categoryName {
+        display: block;
+        padding: 0.8rem 0;
+        font-weight: 700;
+        font-size: 1.8rem;
+      }
+
+      .categoryContent {
+        > div {
+          border-bottom: 0.1rem solid #c4c4c4;
+
+          a {
+            display: block;
+            width: fit-content;
+            padding: 1.6rem 0.8rem;
+            color: #000;
+          }
+        }
+
+        .subListWrap {
+          display: block;
+          height: fit-content;
+          padding: 0.8rem 0;
+          padding-left: 0.8rem;
+          border-bottom: 0.1rem solid #c4c4c4;
+
+          .subListName {
+            display: block;
+            padding: 0.8rem 0;
+            cursor: pointer;
+          }
+          .subListContent {
+            padding: 0.8rem 0;
+            -moz-user-select: text;
+            -webkit-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+
+            p,
+            span {
+              -moz-user-select: text;
+              -webkit-user-select: text;
+              -ms-user-select: text;
+              user-select: text;
+            }
+            a {
+              color: #000;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loginButtonBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      padding: 0.8rem;
+      color: #fff;
+      font-size: 1.8rem;
+      letter-spacing: 0.1rem;
+      background-color: #56ad79;
+      border-radius: 0.5rem;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import TextField from '@mui/material/TextField';
@@ -11,8 +11,9 @@ import { Input } from '@/components';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import useMount from '@/hooks/useMount';
-import { MatchListFilter } from '@/types';
-import { SPORTS, LOCATIONS, AGE_GROUP } from '@/consts';
+import { MatchListFilter, Locations } from '@/types';
+import { SPORTS, AGE_GROUP } from '@/consts';
+import { fetchLocation } from '@/api';
 
 const {
   modalBackground,
@@ -48,7 +49,21 @@ const defaultGround = {
 
 const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
   const dispatch = useDispatch();
-  const { matchListFilter } = useSelector((store: RootState) => store.match.data);
+  const { matchListFilter, locations } = useSelector((store: RootState) => store.match.data);
+
+  const [locationInfo, setLocationInfo] = useState<Locations>(locations);
+
+  const getLocations = useCallback(async () => {
+    const locationData = await fetchLocation();
+    setLocationInfo(locationData);
+    dispatch(match.actions.setLocations({ locations: locationData }));
+  }, []);
+
+  useEffect(() => {
+    if (locationInfo.cities.length < 1) {
+      getLocations();
+    }
+  }, []);
 
   const placeholder = '선택';
   const [ageGroup, setAgeGroup] = useState(placeholder);
@@ -61,18 +76,24 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
     isSetted: false,
   });
   const [size, setSize] = useState(10);
-  const cityOptions = ['행정구역', ...LOCATIONS.cities.map((cityInfo) => cityInfo.cityName)];
+  const cityOptions = [
+    '행정구역',
+    ...locationInfo.cities.reduce((acc: string[], cityInfo) => {
+      if (cityInfo.cityName) acc.push(cityInfo.cityName || '');
+      return acc;
+    }, []),
+  ];
   const regionOptions = [
     '시/군/구',
-    ...LOCATIONS.regions.reduce((acc: string[], regionInfo) => {
-      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName);
+    ...locationInfo.regions.reduce((acc: string[], regionInfo) => {
+      if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName || '');
       return acc;
     }, []),
   ];
   const groundOptions = [
     '구장',
-    ...LOCATIONS.grounds.reduce((acc: string[], groundInfo) => {
-      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName);
+    ...locationInfo.grounds.reduce((acc: string[], groundInfo) => {
+      if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName || '');
       return acc;
     }, []),
   ];
@@ -88,18 +109,29 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
       setSports(matchListFilter.sports || placeholder);
       setAgeGroup(matchListFilter.ageGroup || placeholder);
 
-      const prevCity = LOCATIONS.cities.filter(
+      const prevCity = locationInfo.cities.filter(
         (cityInfo) => cityInfo.cityId === matchListFilter.cityId
       )[0];
-      setCity(prevCity || defaultCity);
-      const prevRegion = LOCATIONS.regions.filter(
+      setCity({
+        cityId: prevCity?.cityId || 0,
+        cityName: prevCity?.cityName || '',
+      });
+      const prevRegion = locationInfo.regions.filter(
         (regionInfo) => regionInfo.regionId === matchListFilter.regionId
       )[0];
-      setRegion(prevRegion || defaultRegion);
-      const prevGround = LOCATIONS.grounds.filter(
+      setRegion({
+        cityId: prevRegion?.cityId || 0,
+        regionId: prevRegion?.regionId || 0,
+        regionName: prevRegion?.regionName || '',
+      });
+      const prevGround = locationInfo.grounds.filter(
         (groundInfo) => groundInfo.groundId === matchListFilter.groundId
       )[0];
-      setGround(prevGround || defaultGround);
+      setGround({
+        regionId: prevGround?.regionId || 0,
+        groundId: prevGround?.groundId || 0,
+        groundName: prevGround?.groundName || '',
+      });
       setSize(matchListFilter.size || 10);
       setDate(
         matchListFilter.date
@@ -130,27 +162,38 @@ const MatchListFilterModal = ({ showMatchListFilterModal }: ModalState) => {
       return;
     }
     if (category === 'city') {
-      const selectedCity = LOCATIONS.cities.filter(
+      const selectedCity = locationInfo.cities.filter(
         (cityInfo) => cityInfo.cityName === targetInput
       )[0];
-      setCity(selectedCity || defaultCity);
+      setCity({
+        cityId: selectedCity?.cityId || 0,
+        cityName: selectedCity?.cityName || '',
+      });
       setRegion(defaultRegion);
       setGround(defaultGround);
       return;
     }
     if (category === 'region') {
-      const selectedRegion = LOCATIONS.regions.filter(
+      const selectedRegion = locationInfo.regions.filter(
         (regionInfo) => regionInfo.regionName === targetInput
       )[0];
-      setRegion(selectedRegion || defaultRegion);
+      setRegion({
+        cityId: selectedRegion?.cityId || 0,
+        regionId: selectedRegion?.regionId || 0,
+        regionName: selectedRegion?.regionName || '',
+      });
       setGround(defaultGround);
       return;
     }
     if (category === 'ground') {
-      const selectedGround = LOCATIONS.grounds.filter(
+      const selectedGround = locationInfo.grounds.filter(
         (groundInfo) => groundInfo.groundName === targetInput
       )[0];
-      setGround(selectedGround || defaultGround);
+      setGround({
+        regionId: selectedGround?.regionId || 0,
+        groundId: selectedGround?.groundId || 0,
+        groundName: selectedGround?.groundName || '',
+      });
     }
   };
 
