@@ -10,6 +10,7 @@ import { CustomLabel, CustomInput, CustomModalDialog } from '@/components';
 import style from './login.module.scss';
 import logo from '@/assets/images/logo.png';
 
+
 const Login = () => {
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
   const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
@@ -49,8 +50,12 @@ const Login = () => {
 
     dispatch(login(loginForm))
       .unwrap()
-      .then(() => history.push('/main'))
+      .then(() => history.push('/'))
       .catch(() => setIsModalDialogOpen(true));
+
+    if (isLogged) {
+      history.push('/');
+    }
   };
 
   return (
