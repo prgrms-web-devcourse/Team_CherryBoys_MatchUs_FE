@@ -8,6 +8,7 @@ import { MatchListElement } from '@/components';
 import { MatchElement } from '@/types';
 import style from './userDetail.module.scss';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+import { USER_MATCHING_LIST_PAGE } from '@/consts/routes';
 
 interface MyTeamElement {
   teamId: number;
@@ -143,7 +144,7 @@ const UserDetail = () => {
 
       <div>
         <span className={classNames(containerTitle)}>최근 경기</span>
-        <Link className={classNames(seeMore)} to="/user/match">
+        <Link className={classNames(seeMore)} to={USER_MATCHING_LIST_PAGE}>
           더보기
         </Link>
       </div>
