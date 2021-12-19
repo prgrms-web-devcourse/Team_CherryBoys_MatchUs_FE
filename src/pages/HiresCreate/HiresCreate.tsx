@@ -41,7 +41,7 @@ const HiresCreate = ({
   prevCity = '행정구역',
   prevRegion = '시/군/구',
   prevGroundName = '구장',
-  prevPosition = '윙백',
+  prevPosition = '포지션 선택',
   prevAgeGroup = '20대',
   prevDetail = '즐겁게 합시다',
   postId,
@@ -203,6 +203,10 @@ const HiresCreate = ({
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
+    if (position === '포지션 선택') {
+      alert('포지션을 선택해주세요');
+      return;
+    }
     // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
       alert('시간을 다시 입력해주세요');
