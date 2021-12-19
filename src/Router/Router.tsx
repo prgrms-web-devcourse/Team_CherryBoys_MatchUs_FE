@@ -70,6 +70,7 @@ const Router = () => {
 
       {/* 용병 페이지 */}
       <Route path={HIRES_PAGE} exact component={Hires} />
+      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
       <Route path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
       <Route path={HIRES_POST_PAGE} exact component={HiresCreate} />
       <Route path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
