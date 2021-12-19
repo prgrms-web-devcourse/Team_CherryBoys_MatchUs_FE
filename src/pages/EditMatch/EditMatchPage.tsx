@@ -100,7 +100,7 @@ const EditMatch = () => {
 
   const setInitialValue = useCallback(() => {
     if (prevMatchInfo) {
-      setSports(prevMatchInfo.sports || placeholder);
+      setSports(prevMatchInfo.sportName || placeholder);
       setAgeGroup(prevMatchInfo.ageGroup);
 
       const prevCity = locationInfo.cities.filter(

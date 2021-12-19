@@ -105,7 +105,7 @@ const Match = () => {
         <MatchButton matchInfo={match[0]} enable={{ apply: true, approve: true, review: false }} />
       )}
       {match.length > 0 && modal.matchApply && (
-        <MatchApplyModal showMatchApplyModal={modal.matchApply} sports={match[0].sports} />
+        <MatchApplyModal showMatchApplyModal={modal.matchApply} sports={match[0].sportName} />
       )}
       {match.length > 0 && modal.matchApprove && (
         <MatchApproveModal showMatchApproveModal={modal.matchApprove} />
@@ -113,7 +113,7 @@ const Match = () => {
       {match.length > 0 && modal.matchTeamMember && (
         <MatchTeamMemberModal
           showMatchTeamMemberModal={modal.matchTeamMember}
-          sports={match[0].sports}
+          sports={match[0].sportName}
           teamInfo={registerTeamInfo}
           matchId={match[0].matchId}
         />

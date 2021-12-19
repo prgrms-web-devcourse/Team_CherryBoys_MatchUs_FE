@@ -49,7 +49,7 @@ export const modifyMatch = (editedMatchInfo: MatchPostEdit) => {
     startTime,
     endTime,
   } = editedMatchInfo;
-  api
+  return api
     .put({
       url: `/matches/${matchId}`,
       data: {
@@ -69,7 +69,7 @@ export const modifyMatch = (editedMatchInfo: MatchPostEdit) => {
 };
 
 export const deleteMatchById = (matchId: number) => {
-  api
+ return api
     .delete({
       url: `/matches/${matchId}`,
     })
@@ -78,9 +78,9 @@ export const deleteMatchById = (matchId: number) => {
 
 export const applyMatch = (matchApplyInfo: MatchApplyInfo) => {
   const { matchId, players, teamId } = matchApplyInfo;
-  api
+  return api
     .post({
-      url: `/matchs/${matchId}/waitings`,
+      url: `/matches/${matchId}/waitings`,
       data: { players, teamId },
     })
     .catch(throwErrorMessage);
@@ -95,7 +95,7 @@ export const fetchWaitingTeams = (matchId: number) => {
 };
 
 export const approveMatch = (teamWaitingId: number) => {
-  api
+  return api
     .post({
       url: `/match-waitings/${teamWaitingId}`,
     })
@@ -113,7 +113,7 @@ export const getTags = () => {
 export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewerTeamType, reviewedTeamId } = matchReviewInfo;
   
-  api
+  return api
     .post({
       url: `/matches/${matchId}/review`,
       data: { tags, reviewerTeamId, reviewerTeamType, reviewedTeamId },
@@ -124,7 +124,7 @@ export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
 export const modifyTeamMember = (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
   
-  api
+  return api
     .put({
       url: `/matches/${matchId}/members`,
       data: { teamId, players },

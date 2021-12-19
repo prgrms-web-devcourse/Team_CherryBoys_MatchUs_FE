@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styles from './MatchApplyModal.module.scss';
 import { Input, InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
@@ -22,6 +22,7 @@ interface ModalState {
 }
 
 const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
+  const history = useHistory();
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const dispatch = useDispatch();
 
@@ -69,7 +70,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     getSelectedTeamMembers();
   }, [getSelectedTeamMembers]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!selectedTeam || selectedTeam === placeholder) {
       window.alert('올바른 팀을 선택해주세요');
       return;
@@ -88,8 +89,16 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
 
     const requestData = { matchId, ...selectedTeamWithUsers };
 
-    applyMatch(requestData);
-    dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
+    if (window.confirm('매칭을 신청하시겠습니까?')) {
+      const result = await applyMatch(requestData);
+      if (result) {
+        window.alert('신청완료!');
+        dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
+        history.go(0);
+      } else {
+        window.alert('신청에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
   };
 
   return (

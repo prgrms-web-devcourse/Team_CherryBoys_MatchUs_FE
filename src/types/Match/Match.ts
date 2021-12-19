@@ -62,7 +62,7 @@ export interface Match {
   status: string;
   cost: number;
   ageGroup: string;
-  sports: string;
+  sportName: string;
   detail: string;
   registerTeamInfo: {
     captainId: number;

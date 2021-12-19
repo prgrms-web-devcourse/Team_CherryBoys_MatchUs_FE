@@ -7,6 +7,7 @@ import { match } from '@/store/match/match';
 import { postMatchReview, fetchTagInfo } from '@/api';
 import { TagInfo, TagCheckList, TeamSimple } from '@/types';
 import { RootState } from '@/store';
+import { useHistory } from 'react-router-dom';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
@@ -23,6 +24,7 @@ interface ModalState {
 const selectTagsLimit = 3;
 
 const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
@@ -41,7 +43,7 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
 
   const getTagInfo = useCallback(async () => {
     const tagData = await fetchTagInfo();
-    setTagInfo(tagData);
+    setTagInfo(tagData.tags);
   }, []);
 
   const sortTagByType = useCallback(() => {
@@ -82,7 +84,7 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
     setSelectedTags(newSelectedTags);
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     const totalSelectedTags = tagInfo.reduce((tagArr: number[], tag: TagInfo) => {
       if (selectedTags[tag.tagType][tag.tagName]) tagArr.push(tag.tagId);
       return tagArr;
@@ -110,9 +112,14 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
       tags: totalSelectedTags,
     };
 
-    postMatchReview(requestInfo);
-    dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
-    window.location.replace(`/matches/post/${requestInfo.matchId}`);
+    const result = await postMatchReview(requestInfo);
+    if (result) {
+      window.alert('평가가 성공적으로 반영되었습니다!');
+      dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
+      history.go(0);
+    } else {
+      window.alert('평가에 실패했습니다. 다시 시도해 주세요.');
+    }
   };
 
   return (

@@ -68,8 +68,7 @@ const MatchTeamMemberModal = ({
     setMembers();
   }, [setMembers]);
 
-  console.log(teamMembers, teamAllMembers);
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const selectedTeamWithUsers = {
       teamId: teamInfo.teamId,
       players: teamAllMembers
@@ -87,9 +86,16 @@ const MatchTeamMemberModal = ({
       ...selectedTeamWithUsers,
     };
 
-    modifyTeamMember(requestBody);
-    dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
-    history.go(0);
+    if (window.confirm('멤버를 교체하시겠습니까?')) {
+      const result = await modifyTeamMember(requestBody);
+      if (result) {
+        window.alert('멤버가 교체되었습니다!');
+        dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
+        history.go(0);
+      } else {
+        window.alert('멤버 교체에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
   };
 
   return (
@@ -102,7 +108,7 @@ const MatchTeamMemberModal = ({
     >
       <div className={classNames(modalContainer)}>
         <div className={classNames(modalName)}>
-          <h3>{`팀원 변경(${teamName})`}</h3>
+          <h3>{`멤버 교체(${teamName})`}</h3>
         </div>
         {Object.keys(teamMembers).length > 0 && (
           <InputCheckBox
@@ -116,7 +122,7 @@ const MatchTeamMemberModal = ({
         )}
         <div className={classNames(buttonBox)}>
           <button className={classNames(submitButton)} type="button" onClick={handleSubmit}>
-            변경
+            교체
           </button>
         </div>
       </div>

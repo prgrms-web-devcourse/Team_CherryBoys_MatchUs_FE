@@ -117,13 +117,15 @@ const TeamCard = ({ team, status }: Props) => {
           </div>
         ))}
         <div>
-          <button
-            type="button"
-            onClick={handleShowTeamUser}
-            className={classNames(showTeamUserButton)}
-          >
-            {!showTeamUser ? '더보기' : '숨기기'}
-          </button>
+          {teamMembers.length > showPlayersLimit && (
+            <button
+              type="button"
+              onClick={handleShowTeamUser}
+              className={classNames(showTeamUserButton)}
+            >
+              {!showTeamUser ? '더보기' : '숨기기'}
+            </button>
+          )}
           {status === 'WAITING' && isEditable && (
             <button
               type="button"

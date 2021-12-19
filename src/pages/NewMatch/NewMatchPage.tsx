@@ -121,11 +121,11 @@ const NewMatch = () => {
     const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
     if (selectedTeamInfo) {
       const selectedTeamId = selectedTeamInfo.teamId;
-      const selectedTeamUsers = await fetchTotalMembers(selectedTeamId);
-      setTeamMembersInfo(selectedTeamUsers);
+      const { members } = await fetchTotalMembers(selectedTeamId);
+      setTeamMembersInfo(members);
 
       const teamUsersOptions: CheckboxOptions = {};
-      selectedTeamUsers.forEach((user: TeamMemberInfo) => {
+      members.forEach((user: TeamMemberInfo) => {
         if (user.userName) teamUsersOptions[user.userName] = false;
       });
       setTeamMembers(teamUsersOptions);
