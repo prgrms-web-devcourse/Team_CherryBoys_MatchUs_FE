@@ -52,7 +52,7 @@ const MatchTeamMemberModal = ({
 
     const teamUsersOptions: CheckboxOptions = {};
     members.forEach((user: TeamMemberInfo) => {
-      teamUsersOptions[user.userName] = false;
+      teamUsersOptions[user.userNickname] = false;
     });
 
     setTeamMembers(teamUsersOptions);
@@ -74,7 +74,7 @@ const MatchTeamMemberModal = ({
     const selectedTeamWithUsers = {
       teamId: teamInfo.teamId,
       players: teamAllMembers
-        .filter((user) => user.userName && teamMembers[user.userName])
+        .filter((user) => user.userNickname && teamMembers[user.userNickname])
         .map((user) => user.userId),
     };
 

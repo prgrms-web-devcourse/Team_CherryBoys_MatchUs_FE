@@ -17,7 +17,7 @@ interface Props {
     teamMannerTemperature?: number;
     matchMembers?: {
       userId: number;
-      userName: string;
+      userNickname: string;
     }[];
   };
   status?: string;
@@ -112,7 +112,7 @@ const TeamCard = ({ team, status }: Props) => {
             })}
             key={`teamUser${index}`}
           >
-            {user.userName}
+            {user.userNickname}
           </div>
         ))}
         <div>
