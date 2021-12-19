@@ -50,7 +50,7 @@ const {
 } = style;
 
 const UserDetail = () => {
-  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
+  const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     ageGroup: '',
     bio: '',
@@ -64,7 +64,7 @@ const UserDetail = () => {
     tags: [],
   });
 
-  const limitedMatchHistory = matchHistory.slice(0, 3);
+  const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -78,7 +78,7 @@ const UserDetail = () => {
     const updateUserMatchHistory = async () => {
       const { userMatches } = await getUserMatchHistory(userId);
 
-      setMatchHistory(userMatches);
+      setUserMatchHistory(userMatches);
     };
 
     updateUserInfo();
@@ -146,7 +146,7 @@ const UserDetail = () => {
         </Link>
       </div>
       <div className={classNames(matchesContainer)}>
-        {limitedMatchHistory.map(
+        {limitedUserMatchHistory.map(
           ({
             matchId,
             matchDate,
