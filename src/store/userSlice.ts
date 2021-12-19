@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { setItemFromStorage } from '@/utils/storage';
+import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
 import {
   acceptTeamInvitation,
   getMyHireRequestInfo,
@@ -9,7 +9,6 @@ import {
   requestReAuth,
   rejectTeamInvitaion,
 } from '../api/user';
-import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
 import { loginFormType, reqeustUserInfoType, userType } from '@/types/users';
 import { requestEditUser } from '@/api/user';
 import { cancelHireRequest } from '@/api/hires';

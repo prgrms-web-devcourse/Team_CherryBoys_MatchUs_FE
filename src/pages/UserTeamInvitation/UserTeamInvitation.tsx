@@ -28,7 +28,7 @@ export const UserTeamInvitation = () => {
   const [invitationListState, setInvitationListState] = useState<hireRequestType[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
   const invitationList = useSelector((state: RootState) => state.user.teamInvitaionList);
-  const myTeam = useSelector((state: RootState) => state.user.userInfo.userGrade);
+  const myTeam = useSelector((state: RootState) => state.user.userInfo.userGradeResponse);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
