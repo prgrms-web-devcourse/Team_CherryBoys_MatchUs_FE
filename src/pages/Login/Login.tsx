@@ -55,7 +55,7 @@ const Login = () => {
 
   return (
     <div className={classNames(container)}>
-      <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} />
+      {/* <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} /> */}
       <h1 className={classNames('a11yHidden')}>회원 가입 페이지</h1>
       {isModalDialogOpen && (
         <CustomModalDialog
