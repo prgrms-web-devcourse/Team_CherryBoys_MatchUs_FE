@@ -21,6 +21,5 @@ export { default as TeamChoice } from './TeamChoice/TeamChoice';
 export { default as NotFound } from './NotFound/NotFound';
 export { default as Signup } from './Signup/Signup';
 export { default as Main } from './Main/Main';
-
 export { default as UserDetail } from './UserDetail/UserDetail';
 export { default as UserMatchDetail } from './UserMatchDetail/UserMatchDetail';

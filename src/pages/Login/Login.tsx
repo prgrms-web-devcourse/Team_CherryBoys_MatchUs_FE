@@ -6,6 +6,7 @@ import { loginFormType } from '@/types/users';
 import { login } from '@/store/userSlice';
 import { RootState, useAppDispatch } from '@/store';
 import { CustomLabel, CustomInput } from '@/components';
+import { HOME_PAGE } from '@/consts/routes';
 
 const Login = () => {
   const isLogged = useSelector((state: RootState) => state.user.isLogged);
@@ -31,10 +32,10 @@ const Login = () => {
 
     dispatch(login(loginForm))
       .unwrap()
-      .then(() => history.push('/main'));
+      .then(() => history.push(HOME_PAGE));
 
     if (isLogged) {
-      history.push('/main');
+      history.push(HOME_PAGE);
     }
   };
 
