@@ -1,35 +1,45 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs } from '@karrotframe/tabs';
-import { Link, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import style from './teamMatchDetail.module.scss';
 import { Header, MatchListElement } from '@/components';
 import '@karrotframe/tabs/index.css';
 import { getMatchHistory } from '@/api';
 import { MatchElement } from '@/types';
+import { MATCHES_POST_PAGE } from '@/consts/routes';
 
-const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
+const {
+  matchComponentContainer,
+  mainTitle,
+  highlight,
+  titleContainer,
+  matchContainer,
+  hasNoMatchContainer,
+  noTeamMainTitle,
+  noTeamSubTitle,
+  noTeamAddButton,
+} = style;
 
 const TeamMatchDetail = () => {
+  const history = useHistory();
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
-  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
-
-  const previousMatch = matchHistory.filter((match) => match.status === 'previousMatch');
-  const previousReview = matchHistory.filter((match) => match.status === 'previousReview');
-  const endReview = matchHistory.filter((match) => match.status === 'endReview');
-
   const [activeTabKey, setActiveTabKey] = useState<string>('beforeMatch');
+  const [teamMatchHistory, setTeamMatchHistory] = useState<MatchElement[]>([]);
 
-  const hasPreviousMatchState = previousMatch.length !== 0;
-  const hasPreviousReviewState = previousReview.length !== 0;
-  const hasEndReviewState = endReview.length !== 0;
+  const watingMatch = teamMatchHistory.filter((match) => match.status === 'WAITING');
+  const completedMatch = teamMatchHistory.filter((match) => match.status === 'COMPLETION');
+  const reviewdMatch = teamMatchHistory.filter((match) => match.status === 'REVIEWED');
+
+  const hasWatingMatchState = watingMatch.length !== 0;
+  const hasCompletedMatchState = completedMatch.length !== 0;
+  const hasReviewdMatchState = reviewdMatch.length !== 0;
 
   const updateTeamMatchHistory = useCallback(async () => {
-    const { matchesSummary } = await getMatchHistory(teamId);
+    const { teamMatches } = await getMatchHistory(teamId);
 
-    // TODO: 객체 배열을 검사해서, 다른 경우에만 업데이트 하는 로직으로 개선*
-    if (matchesSummary) {
-      setMatchHistory(matchesSummary);
+    if (teamMatches) {
+      setTeamMatchHistory(teamMatches);
     }
   }, [teamId]);
 
@@ -59,9 +69,13 @@ const TeamMatchDetail = () => {
                 key: 'beforeMatch',
                 buttonLabel: '매칭 전',
                 render: () => (
-                  <div>
-                    {hasPreviousMatchState ? (
-                      previousMatch.map((match) => {
+                  <div
+                    className={classNames(matchContainer, {
+                      [matchContainer]: hasWatingMatchState,
+                    })}
+                  >
+                    {hasWatingMatchState ? (
+                      watingMatch.map((match) => {
                         return (
                           <MatchListElement
                             key={`beforeMatch-${match.matchId}`}
@@ -76,13 +90,26 @@ const TeamMatchDetail = () => {
                         );
                       })
                     ) : (
-                      <p>
-                        <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
-                        <span className={classNames('whiteSpace')}>
-                          경기 모집 글을 올리러 가볼까요?
-                        </span>
-                        <Link to="/matches/new">경기 등록</Link>
-                      </p>
+                      <div className={classNames(hasNoMatchContainer)}>
+                        <article>
+                          <div>
+                            <span className={classNames(noTeamMainTitle, 'whiteSpace')}>
+                              경기일정이 없습니다. ❌
+                            </span>
+
+                            <span className={classNames(noTeamSubTitle, 'whiteSpace')}>
+                              경기 모집 글을 올리러 가볼까요?
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            className={classNames(noTeamAddButton)}
+                            onClick={() => history.push(MATCHES_POST_PAGE)}
+                          >
+                            +
+                          </button>
+                        </article>
+                      </div>
                     )}
                   </div>
                 ),
@@ -91,24 +118,26 @@ const TeamMatchDetail = () => {
                 key: 'BeforeReview',
                 buttonLabel: '평가 전',
                 render: () => (
-                  <div>
-                    {hasPreviousReviewState ? (
-                      previousReview.map((match) => {
-                        return (
-                          <MatchListElement
-                            key={`beforeReview-${match.matchId}`}
-                            matchId={match.matchId}
-                            matchDate={match.matchDate}
-                            registerTeamLogo={match.registerTeamLogo}
-                            registerTeamName={match.registerTeamName}
-                            applyTeamLogo={match.applyTeamLogo}
-                            applyTeamName={match.applyTeamName}
-                            status={match.status}
-                          />
-                        );
-                      })
+                  <div className={classNames(matchContainer)}>
+                    {hasCompletedMatchState ? (
+                      completedMatch.map((match) => (
+                        <MatchListElement
+                          key={`beforeReview-${match.matchId}`}
+                          matchId={match.matchId}
+                          matchDate={match.matchDate}
+                          registerTeamLogo={match.registerTeamLogo}
+                          registerTeamName={match.registerTeamName}
+                          applyTeamLogo={match.applyTeamLogo}
+                          applyTeamName={match.applyTeamName}
+                          status={match.status}
+                        />
+                      ))
                     ) : (
-                      <div>모든 평가가 완료되었습니다🥳</div>
+                      <div className={classNames(hasNoMatchContainer)}>
+                        <span className={classNames(noTeamMainTitle, 'whiteSpace')}>
+                          모든 평가가 완료되었습니다🥳
+                        </span>
+                      </div>
                     )}
                   </div>
                 ),
@@ -117,9 +146,9 @@ const TeamMatchDetail = () => {
                 key: 'AfterReview',
                 buttonLabel: '평가 후',
                 render: () => (
-                  <div>
-                    {hasEndReviewState ? (
-                      endReview.map((match) => {
+                  <div className={classNames(matchContainer)}>
+                    {hasReviewdMatchState ? (
+                      reviewdMatch.map((match) => {
                         return (
                           <MatchListElement
                             key={`afterReview-${match.matchId}`}
@@ -134,7 +163,11 @@ const TeamMatchDetail = () => {
                         );
                       })
                     ) : (
-                      <div>평가 완료된 경기가 없습니다 🥵</div>
+                      <div className={classNames(hasNoMatchContainer)}>
+                        <span className={classNames(noTeamMainTitle, 'whiteSpace')}>
+                          평가 완료된 경기가 없습니다 👻
+                        </span>
+                      </div>
                     )}
                   </div>
                 ),
