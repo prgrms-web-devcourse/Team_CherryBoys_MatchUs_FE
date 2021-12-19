@@ -14,7 +14,7 @@ const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
-interface previousHiresInfo {
+export interface previousHiresInfo {
   prevHiredNumber?: number;
   prevDate?: string;
   prevStartTime?: string;

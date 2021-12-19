@@ -1,12 +1,50 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { editHiresPosting, getHiresDetail } from '@/api/hires';
 import { HiresCreate } from '..';
+import { previousHiresInfo } from '../HiresCreate/HiresCreate';
+
+export interface hireItemType {
+  postId?: number | undefined;
+  teamLogo: string | undefined;
+  date: string | undefined;
+  startTime: string | undefined;
+  endTime: string | undefined;
+  city: string | undefined;
+  region: string | undefined;
+  groundName: string | undefined;
+  position: string | undefined;
+  ageGroup: string | undefined;
+  teamMannerTemperature: number | undefined;
+  hiredPlayerNumber?: number | undefined;
+  hirePlayerNumber: number | undefined;
+  teamName: string | undefined;
+  teamManagerName: string | undefined;
+  detail: string | undefined;
+}
+
+interface hireItemWrapperType {
+  hireItem: hireItemType;
+}
 
 const HiresEdit = () => {
   const { postId } = useParams<{ postId: string }>();
   const currentPostId = parseInt(postId, 10);
+  const location = useLocation<hireItemWrapperType>();
+  const { state } = location;
+  const [prevData, setPrevData] = useState<previousHiresInfo>({
+    prevHiredNumber: state.hireItem.hirePlayerNumber,
+    prevDate: state.hireItem.date,
+    prevStartTime: state.hireItem.startTime,
+    prevEndTime: state.hireItem.endTime,
+    prevCity: state.hireItem.city,
+    prevRegion: state.hireItem.region,
+    prevGroundName: state.hireItem.groundName,
+    prevPosition: state.hireItem.position,
+    prevAgeGroup: state.hireItem.ageGroup,
+    prevDetail: state.hireItem.detail,
+  });
 
   const handleClickEditPosting = async () => {
     const data = {
@@ -29,33 +67,24 @@ const HiresEdit = () => {
     editHires();
   };
 
-  const data = {
-    prevHiredNumber: 3,
-    prevDate: '2021-12-27',
-    prevStartTime: '16:20:35',
-    prevEndTime: '22:42:35',
-    prevCity: '서울시',
-    prevRegion: '강서구',
-    prevGroundName: '제2 체육관',
-    prevPosition: '윙포워드',
-    prevAgeGroup: '20대',
-    prevDetail: '즐겁게 하실 분!',
-  };
-
   return (
     <>
-      <HiresCreate
-        prevHiredNumber={data.prevHiredNumber}
-        prevDate={data.prevDate}
-        prevStartTime={data.prevStartTime}
-        prevEndTime={data.prevEndTime}
-        prevCity={data.prevCity}
-        prevRegion={data.prevRegion}
-        prevGroundName={data.prevGroundName}
-        prevPosition={data.prevPosition}
-        prevAgeGroup={data.prevAgeGroup}
-        prevDetail={data.prevDetail}
-      />
+      {Object.keys(prevData).length > 0 ? (
+        <HiresCreate
+          prevHiredNumber={prevData.prevHiredNumber}
+          prevDate={prevData.prevDate}
+          prevStartTime={prevData.prevStartTime}
+          prevEndTime={prevData.prevEndTime}
+          prevCity={prevData.prevCity}
+          prevRegion={prevData.prevRegion}
+          prevGroundName={prevData.prevGroundName}
+          prevPosition={prevData.prevPosition}
+          prevAgeGroup={prevData.prevAgeGroup}
+          prevDetail={prevData.prevDetail}
+        />
+      ) : (
+        <HiresCreate />
+      )}
       <button type="button" onClick={handleClickEditPosting}>
         수정
       </button>
