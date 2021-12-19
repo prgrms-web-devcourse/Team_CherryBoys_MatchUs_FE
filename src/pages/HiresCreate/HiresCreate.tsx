@@ -11,24 +11,11 @@ import { editHiresPosting, createHiresPosting } from '@/api/hires';
 
 import { InputDetail } from '@/components';
 import { Place, AgeGroup, HiresPosition } from '@/components/selects';
+import { previousHiresInfo } from '@/types';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
-
-export interface previousHiresInfo {
-  prevHiredNumber?: number;
-  prevDate?: string;
-  prevStartTime?: string;
-  prevEndTime?: string;
-  prevCity?: string;
-  prevRegion?: string;
-  prevGroundName?: string;
-  prevPosition?: string;
-  prevAgeGroup?: string;
-  prevDetail?: string;
-  postId?: number;
-}
 
 const HiresCreate = ({
   // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리

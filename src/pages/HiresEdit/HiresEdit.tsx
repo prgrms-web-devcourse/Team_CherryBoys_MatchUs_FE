@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 
 import { HiresCreate } from '..';
-import { previousHiresInfo } from '../HiresCreate/HiresCreate';
-import { hireItemType } from '@/types';
+import { previousHiresInfo, hireItemType } from '@/types';
 
 interface hireItemWrapperType {
   hireItem: hireItemType;

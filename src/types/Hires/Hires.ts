@@ -16,3 +16,17 @@ export interface hireItemType {
   teamManagerName: string | undefined;
   detail: string | undefined;
 }
+
+export interface previousHiresInfo {
+  prevHiredNumber?: number;
+  prevDate?: string;
+  prevStartTime?: string;
+  prevEndTime?: string;
+  prevCity?: string;
+  prevRegion?: string;
+  prevGroundName?: string;
+  prevPosition?: string;
+  prevAgeGroup?: string;
+  prevDetail?: string;
+  postId?: number;
+}
