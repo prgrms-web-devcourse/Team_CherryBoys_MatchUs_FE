@@ -5,9 +5,11 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
+import { useHistory } from 'react-router-dom';
+
+import { editHiresPosting, createHiresPosting } from '@/api/hires';
 
 import { InputDetail } from '@/components';
-import { createHiresPosting } from '@/api/hires';
 import { Place, AgeGroup, HiresPosition } from '@/components/selects';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -25,6 +27,7 @@ export interface previousHiresInfo {
   prevPosition?: string;
   prevAgeGroup?: string;
   prevDetail?: string;
+  postId?: number;
 }
 
 const HiresCreate = ({
@@ -41,6 +44,7 @@ const HiresCreate = ({
   prevPosition = '윙백',
   prevAgeGroup = '20대',
   prevDetail = '즐겁게 합시다',
+  postId,
 }: previousHiresInfo) => {
   const [startTime, setStartTime] = useState<Date | null>(new Date(`${prevDate} ${prevStartTime}`));
   const [endTime, setEndTime] = useState<Date | null>(new Date(`${prevDate} ${prevEndTime}`));
@@ -58,6 +62,8 @@ const HiresCreate = ({
   const [region, setRegion] = useState<string>(prevRegion);
   const [groundName, setGroundName] = useState<string>(prevGroundName);
   const [detail, setDetail] = useState<string>(prevDetail || DETAIL_PLACEHOLDER);
+
+  const history = useHistory();
 
   useEffect(() => {
     const newDate = new Date();
@@ -224,6 +230,28 @@ const HiresCreate = ({
     setDetail(input);
   };
 
+  const handleClickEditPosting = async () => {
+    const editHires = async () => {
+      const data = {
+        ageGroup: '30대',
+        cityId: 1,
+        date: '2021-12-15',
+        detail: '수정내용입니다~',
+        endTime: '19:30:00',
+        groundId: 1,
+        hirePlayerNumber: 3,
+        position: '윙백',
+        regionId: 1,
+        startTime: '17:30:00',
+        teamId: 1,
+      };
+      await editHiresPosting({ postId, data });
+      history.push(`/hires/${postId}`);
+    };
+
+    editHires();
+  };
+
   return (
     <>
       <section>
@@ -279,7 +307,9 @@ const HiresCreate = ({
           생성
         </button>
       ) : (
-        ''
+        <button type="button" onClick={handleClickEditPosting}>
+          수정
+        </button>
       )}
     </>
   );

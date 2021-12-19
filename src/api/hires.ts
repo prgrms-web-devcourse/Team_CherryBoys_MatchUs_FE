@@ -1,7 +1,7 @@
 import api from '@/api/core';
 import { throwErrorMessage } from '@/utils';
 
-export interface hiresPosting {
+interface hiresPosting {
   ageGroup: string;
   cityId: number;
   date: string;
@@ -16,7 +16,7 @@ export interface hiresPosting {
 }
 
 interface editedHiresPosting {
-  postId: number;
+  postId: number | undefined;
   data: hiresPosting;
 }
 

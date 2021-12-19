@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { editHiresPosting, getHiresDetail } from '@/api/hires';
 import { HiresCreate } from '..';
 import { previousHiresInfo } from '../HiresCreate/HiresCreate';
 
@@ -46,27 +45,6 @@ const HiresEdit = () => {
     prevDetail: state.hireItem.detail,
   });
 
-  const handleClickEditPosting = async () => {
-    const data = {
-      ageGroup: '30대',
-      cityId: 1,
-      date: '2021-12-15',
-      detail: '수정내용입니다~',
-      endTime: '19:30:00',
-      groundId: 1,
-      hirePlayerNumber: 3,
-      position: '윙백',
-      regionId: 1,
-      startTime: '17:30:00',
-      teamId: 1,
-    };
-    const editHires = async () => {
-      const res = await editHiresPosting({ postId: currentPostId, data });
-    };
-
-    editHires();
-  };
-
   return (
     <>
       {Object.keys(prevData).length > 0 ? (
@@ -81,13 +59,11 @@ const HiresEdit = () => {
           prevPosition={prevData.prevPosition}
           prevAgeGroup={prevData.prevAgeGroup}
           prevDetail={prevData.prevDetail}
+          postId={currentPostId}
         />
       ) : (
         <HiresCreate />
       )}
-      <button type="button" onClick={handleClickEditPosting}>
-        수정
-      </button>
     </>
   );
 };
