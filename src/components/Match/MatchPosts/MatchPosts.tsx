@@ -22,10 +22,14 @@ const {
 
 const MatchPosts = () => {
   const { modal, matchListFilter } = useSelector((state: RootState) => state.match.data);
+  const { userInfo } = useSelector((state: RootState) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [matches, setMatches] = useState<MatchCard[]>([]);
+  const isCaptain = userInfo.userGradeResponse.filter((gradeInfo) =>
+    ['CAPTAIN', 'SUBCAPTAIN'].includes(gradeInfo.grade)
+  )[0];
 
   const getMatchList = useCallback(async () => {
     const { matchList } = await fetchAllMatch(matchListFilter);
@@ -36,9 +40,9 @@ const MatchPosts = () => {
     getMatchList();
   }, [matchListFilter]);
 
-  // TODO:사용자의 권한을 체크하는 로직 추가 필요
-  const handelCheckUserAuthority = (grade: string) => {
-    if (!['주장', '부주장'].includes(grade)) {
+  const handelCheckUserAuthority = () => {
+    if (!isCaptain) {
+      window.alert('부주장 이상의 권한이 있어야 글을 작성할 수 있습니다');
       return;
     }
     history.push('/matches/new');
@@ -80,7 +84,7 @@ const MatchPosts = () => {
       </ul>
       <button
         className={classNames(addPostButton)}
-        onClick={() => handelCheckUserAuthority('주장')}
+        onClick={() => handelCheckUserAuthority()}
         type="button"
       >
         <i className="fas fa-plus" />
