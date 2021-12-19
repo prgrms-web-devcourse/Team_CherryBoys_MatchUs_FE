@@ -24,6 +24,7 @@ import {
   TeamMatchDetail,
   UserDetail,
   UserMatchDetail,
+  Setting,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -99,7 +100,7 @@ const Router = () => {
 
       {/* 기타 페이지 */}
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
-      {/* <Route path={SETTING_PAGE} exact component={} /> */}
+      <Route path={SETTING_PAGE} exact component={Setting} />
     </Switch>
   );
 };
