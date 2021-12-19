@@ -48,7 +48,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
 
       const teamUsersOptions: CheckboxOptions = {};
       members.forEach((user: TeamMemberInfo) => {
-        if (user.userNickname) teamUsersOptions[user.userNickname] = false;
+        if (user.userName) teamUsersOptions[user.userName] = false;
       });
       setTeamMembers(teamUsersOptions);
     }
@@ -78,7 +78,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((userTeam) => userTeam.teamName === selectedTeam)[0].teamId,
       players: teamMembersInfo
-        .filter((user) => user.userNickname && teamMembers[user.userNickname])
+        .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
     if (selectedTeamWithUsers.players.length < userLimit) {

@@ -124,7 +124,7 @@ const NewMatch = () => {
 
       const teamUsersOptions: CheckboxOptions = {};
       selectedTeamUsers.forEach((user: TeamMemberInfo) => {
-        if (user.userNickname) teamUsersOptions[user.userNickname] = false;
+        if (user.userName) teamUsersOptions[user.userName] = false;
       });
       setTeamMembers(teamUsersOptions);
     }
@@ -237,7 +237,7 @@ const NewMatch = () => {
     const selectedTeamWithUsers = {
       teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
       players: teamMembersInfo
-        .filter((user) => user.userNickname && teamMembers[user.userNickname])
+        .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
 

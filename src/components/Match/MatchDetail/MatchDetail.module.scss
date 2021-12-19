@@ -1,7 +1,7 @@
-.matchDetail {
+.matchDetailContainer {
   margin-bottom: 8.4rem;
   padding: 1.6rem;
-  &_menu {
+  .matchDetailMenu {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,7 +42,7 @@
     }
   }
 
-  &_content {
+  .matchDetailContent {
     min-height: 40rem;
     padding: 1.6rem;
     font-size: 1.2rem;
