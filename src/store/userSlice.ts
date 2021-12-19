@@ -18,7 +18,7 @@ const initialState: userType = {
     nickname: '',
     roleGroup: '',
     sports: '',
-    userGrade: [],
+    userGradeResponse: [],
   },
 };
 
@@ -58,7 +58,7 @@ export const userSlice = createSlice({
         nickname: '',
         roleGroup: '',
         sports: '',
-        userGrade: [],
+        userGradeResponse: [],
       };
     },
     editEditabelUserState: (state, { payload }) => {

@@ -58,7 +58,7 @@ import {
 } from '../consts/routes';
 import { UserInfoEdit } from '@/pages/UserInfoEdit/UserInfoEdit';
 
-const Router: React.FC = () => {
+const Router = () => {
   return (
     <Switch>
       <Route path={HOME_PAGE} exact component={Main} />
