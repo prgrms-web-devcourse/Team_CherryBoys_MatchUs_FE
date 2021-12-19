@@ -20,7 +20,7 @@ import { editEditabelUserState, editUser } from '@/store/userSlice';
 import { CustomLabel, CustomModalDialog } from '@/components';
 import style from './userInfoEdit.module.scss';
 
-export const UserInfoEdit = () => {
+const UserInfoEdit = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const nicknameState = useSelector((state: RootState) => state.user.userInfo.nickname);
@@ -284,3 +284,5 @@ export const UserInfoEdit = () => {
     </div>
   );
 };
+
+export default UserInfoEdit;

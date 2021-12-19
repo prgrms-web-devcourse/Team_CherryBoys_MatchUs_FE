@@ -92,4 +92,3 @@ export const acceptTeamInvitation = (invitaionId: number) =>
       url: `invitations/${invitaionId}`,
     })
     .catch(throwErrorMessage);
-
