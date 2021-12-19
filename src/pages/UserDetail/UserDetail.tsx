@@ -48,6 +48,8 @@ const {
   mannerHigh,
   logoImage,
   seeMore,
+  tagContainer,
+  titleContainer,
 } = style;
 
 const UserDetail = () => {
@@ -66,6 +68,7 @@ const UserDetail = () => {
   });
 
   const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
+  const limitedTag = userInfo.tags.slice(0, 4);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -107,14 +110,14 @@ const UserDetail = () => {
               <div className={classNames(sportsPart)}>⚽️</div>
             </article>
 
-            <div className={classNames('whiteSpace')}>
-              {tags.map(({ tagId, tagType, tagName }) => (
+            <div className={classNames(tagContainer)}>
+              {limitedTag.map(({ tagId, tagType, tagName }) => (
                 <>
                   <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
                 </>
               ))}
             </div>
-            <p>
+            <p className={classNames(titleContainer)}>
               총 <span className={classNames(matchHighlight)}>{matchCount}</span>경기 동안
               <span
                 className={classNames(mannerMiddle, {
