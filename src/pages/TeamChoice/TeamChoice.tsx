@@ -40,8 +40,6 @@ const TeamChoice = () => {
     updateMyTeamsInfo();
   }, [result.userGradeResponse]);
 
-  const hasThreeTeam = myTeams.length >= 3;
-
   return (
     <div>
       {myTeams.length !== 0 ? (
@@ -55,21 +53,19 @@ const TeamChoice = () => {
             </p>
           </div>
           <div className={classNames(cardsContainer)}>
-            {myTeams.map(
-              ({ logo, teamId, teamName, teamCreatedAt, tagNames, mannerTemperature }) => {
-                return (
-                  <TeamInfoCard
-                    key={`teamCard-${teamId}`}
-                    teamId={teamId}
-                    teamLogo={logo}
-                    teamName={teamName}
-                    teamCreatedAt={teamCreatedAt}
-                    tagNames={tagNames}
-                    mannerTemperature={mannerTemperature}
-                  />
-                );
-              }
-            )}
+            {myTeams.map(({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }) => {
+              return (
+                <TeamInfoCard
+                  key={`teamCard-${teamId}`}
+                  teamId={teamId}
+                  teamLogo={logo}
+                  teamName={teamName}
+                  teamCreatedAt={teamCreatedAt}
+                  tags={tags}
+                  mannerTemperature={mannerTemperature}
+                />
+              );
+            })}
           </div>
           <button
             type="button"

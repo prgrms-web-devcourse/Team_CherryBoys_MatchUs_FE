@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import style from './teamChoice.module.scss';
 import { AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+import { TagType } from '@/types/Team/Team';
 
-export interface TeamCardInfo {
+interface TeamCardInfo {
   mannerTemperature: number;
   teamLogo: string;
-  tagNames: string[];
+  tags: TagType[];
   teamCreatedAt: string;
   teamId: number;
   teamName: string;
@@ -33,13 +34,13 @@ const TeamInfoCard = ({
   teamLogo,
   teamName,
   teamCreatedAt,
-  tagNames,
+  tags,
   mannerTemperature,
 }: TeamCardInfo) => {
   const teamCreatedTime = teamCreatedAt.split('T');
   const yearMonthDay = teamCreatedTime[0].split('-');
-  // TODO: 예시 코드 삭제 예정
-  const taggNames = ['timeKeeper', 'violent', 'fastFoot'];
+  const limitedTags = tags.slice(0, 3);
+
   return (
     <div className={classNames(cardContainer)}>
       <div className={classNames(cardLogo)}>
@@ -60,9 +61,9 @@ const TeamInfoCard = ({
         </p>
         <div className={classNames(ContainerAboutTeamManner)}>
           <div className={tagContainer}>
-            {taggNames.map((tag) => {
-              return <AttitueTag tagType={tag} />;
-            })}
+            {limitedTags.map(({ tagId, tagName, tagType }) => (
+              <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+            ))}
           </div>
           <span
             className={classNames(mannerMiddle, {
