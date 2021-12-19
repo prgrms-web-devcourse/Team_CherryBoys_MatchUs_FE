@@ -1,0 +1,35 @@
+@use '@/styles/color';
+
+.matchDateSpan {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.matchContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 7.7rem;
+  margin-bottom: 1.5rem;
+  border: 0.12rem solid color.$disable;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  .teamInfoContainer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .versus {
+    font-size: 2.4rem;
+  }
+}
+
+.logoImage {
+  width: 6rem;
+  margin-bottom: 0.2rem;
+  object-fit: cover;
+}

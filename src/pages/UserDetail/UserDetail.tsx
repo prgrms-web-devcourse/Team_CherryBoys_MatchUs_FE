@@ -1,9 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { MatchListElement } from '@/components';
 import { MatchElement } from '@/types';
+import style from './userDetail.module.scss';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 interface MyTeamElement {
   teamId: number;
@@ -21,95 +25,157 @@ interface UserInfo {
   name: string;
   nickname: string;
   sportsName: string;
-  tagNames: string[];
+  tags: string[];
 }
+
+const {
+  pageContainer,
+  sectionContainer,
+  elementRowContainer,
+  playTotalInfo,
+  userBaseInfo,
+  userInfoElementsContainer,
+  bioSpace,
+  userNickname,
+  sportsPart,
+  matchesContainer,
+  containerTitle,
+  highlight,
+  matchHighlight,
+  mannerLow,
+  mannerMiddle,
+  mannerHigh,
+  logoImage,
+  seeMore,
+} = style;
 
 const UserDetail = () => {
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    ageGroup: '20대',
-    bio: '카운팅 스타~ 밤 하늘의 퍼얼',
-    gender: 'MALE',
-    mannerTemperature: 36.5,
-    matchCount: 20,
+    ageGroup: '',
+    bio: '',
+    gender: '',
+    mannerTemperature: 0,
+    matchCount: 0,
     myTeams: [],
-    name: '김동현',
-    nickname: '무리뉴',
-    sportsName: '축구',
-    tagNames: [],
+    name: '',
+    nickname: '',
+    sportsName: '',
+    tags: [],
   });
 
-  const result = useSelector((store: RootState) => store.auth.userInfo);
+  const limitedMatchHistory = matchHistory.slice(0, 3);
 
-  const updateUserInfo = useCallback(async () => {
-    const apiResult = await getUserInfo(result?.id);
-
-    setUserInfo(apiResult);
-  }, [result?.id]);
-
-  const updateUserMatchHistory = useCallback(async () => {
-    const newMatchHistory = await getUserMatchHistory(result?.id);
-
-    setMatchHistory(newMatchHistory);
-  }, [result?.id]);
+  const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
   useEffect(() => {
+    const updateUserInfo = async () => {
+      const apiResult = await getUserInfo(userId);
+
+      setUserInfo(apiResult);
+    };
+
+    const updateUserMatchHistory = async () => {
+      const { userMatches } = await getUserMatchHistory(userId);
+
+      setMatchHistory(userMatches);
+    };
+
     updateUserInfo();
     updateUserMatchHistory();
-  }, [updateUserInfo, updateUserMatchHistory]);
+  }, [userId]);
 
   return (
-    <>
-      <div>
-        <div>
-          <span>{result?.nickname}님</span>
-          <span>{result?.bio}</span>
-          {/* <img>대강 축구공 이미지</img> */}
-        </div>
-        <div>
+    <div className={classNames(pageContainer)}>
+      <section className={classNames(sectionContainer)}>
+        <div className={classNames(userInfoElementsContainer)}>
           <div>
-            {userInfo.tagNames.map((tag) => {
-              return <span>{tag}</span>;
-            })}
+            <article className={playTotalInfo}>
+              <div className={classNames(userBaseInfo)}>
+                <div>
+                  <span className={classNames(userNickname)}>
+                    <span className={classNames(highlight)}>{nickname}</span>님
+                  </span>
+                  {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
+                  <button type="button">수정</button>
+                </div>
+                <span className={classNames(bioSpace)}>{bio}</span>
+              </div>
+              <div className={classNames(sportsPart)}>⚽️</div>
+            </article>
+
+            <div className={classNames('whiteSpace')}>
+              {userInfo.tags.map((each) => (
+                <span>{each}</span>
+              ))}
+            </div>
+            <p>
+              총 <span className={classNames(matchHighlight)}>{userInfo.matchCount}</span>경기 동안
+              <span
+                className={classNames(mannerMiddle, {
+                  [mannerLow]: userInfo.mannerTemperature < 20,
+                  [mannerHigh]: userInfo.mannerTemperature > 40,
+                })}
+              >
+                {userInfo.mannerTemperature}
+              </span>
+              의 매너온도를 가지고 있어요!
+            </p>
           </div>
-          <span>
-            총 {userInfo.matchCount}경기 동안 {userInfo.mannerTemperature}의 매너온도를 가지고
-            있어요!
-          </span>
         </div>
-      </div>
-      소속팀
+      </section>
+
+      <span className={classNames(containerTitle)}>소속 팀</span>
+      <section className={classNames(sectionContainer)}>
+        <div className={classNames(elementRowContainer)}>
+          {userInfo.myTeams.map(({ teamId, teamLogo }) => (
+            <img
+              className={classNames(logoImage)}
+              key={`team-${teamId}`}
+              src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+              alt="팀 로고"
+            />
+          ))}
+        </div>
+      </section>
+
       <div>
-        {userInfo.myTeams.map((team) => {
-          return <img src={team.teamLogo} alt="팀 로고" />;
-        })}
+        <span className={classNames(containerTitle)}>최근 경기</span>
+        <Link className={classNames(seeMore)} to="/user/match">
+          더보기
+        </Link>
       </div>
-      최근 경기
-      {matchHistory.map(
-        ({
-          matchId,
-          matchDate,
-          registerTeamLogo,
-          registerTeamName,
-          applyTeamLogo,
-          applyTeamName,
-          status,
-        }) => {
-          return (
+      <div className={classNames(matchesContainer)}>
+        {limitedMatchHistory.map(
+          ({
+            matchId,
+            matchDate,
+            registerTeamLogo,
+            registerTeamName,
+            applyTeamLogo,
+            applyTeamName,
+            status,
+          }) => (
             <MatchListElement
               key={`userReview-${matchId}`}
               matchId={matchId}
               matchDate={matchDate}
-              registerTeamLogo={registerTeamLogo}
+              registerTeamLogo={
+                registerTeamLogo === '' || registerTeamLogo === '팀로고'
+                  ? baseTeamLogo
+                  : registerTeamLogo
+              }
               registerTeamName={registerTeamName}
-              applyTeamLogo={applyTeamLogo}
+              applyTeamLogo={
+                applyTeamLogo === '' || applyTeamLogo === '팀로고' ? baseTeamLogo : applyTeamLogo
+              }
               applyTeamName={applyTeamName}
               status={status}
             />
-          );
-        }
-      )}
-    </>
+          )
+        )}
+      </div>
+    </div>
   );
 };
 

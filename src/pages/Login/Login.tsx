@@ -1,19 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { loginFormType } from '@/types/auth';
-import { login } from '@/store/authSlice';
-import { RootState } from '@/store';
+import { loginFormType } from '@/types/users';
+import { login } from '@/store/userSlice';
+import { RootState, useAppDispatch } from '@/store';
+import { CustomLabel, CustomInput } from '@/components';
+import { HOME_PAGE } from '@/consts/routes';
 
 const Login = () => {
-  const isLogged = useSelector((state: RootState) => state.auth.isLogged);
+  const isLogged = useSelector((state: RootState) => state.user.isLogged);
   const [loginForm, setLoginForm] = useState<loginFormType>({
     email: '',
     password: '',
   });
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,19 +30,27 @@ const Login = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(login(loginForm));
+    dispatch(login(loginForm))
+      .unwrap()
+      .then(() => history.push(HOME_PAGE));
 
     if (isLogged) {
-      history.push('/main');
+      history.push(HOME_PAGE);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="email">아이디</label>
-      <input name="email" id="email" value={email} onChange={handleChange} />
-      <label htmlFor="password">패스워드</label>
-      <input name="password" id="password" value={password} onChange={handleChange} />
+      <CustomLabel htmlFor="email">아이디</CustomLabel>
+      <CustomInput type="text" name="email" id="email" value={email} onChange={handleChange} />
+      <CustomLabel htmlFor="password">패스워드</CustomLabel>
+      <CustomInput
+        name="password"
+        id="password"
+        value={password}
+        type="password"
+        onChange={handleChange}
+      />
       <button type="submit">로그인</button>
     </form>
   );
