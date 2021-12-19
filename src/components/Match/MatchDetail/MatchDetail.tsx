@@ -1,52 +1,57 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './MatchDetail.module.scss';
 import { deleteMatchById } from '@/api';
-import { Match } from '@/types';
+import { getItemFromStorage } from '@/utils/storage';
 
 interface Props {
-  match: Match;
+  matchId: number;
+  matchDetail: string;
+  editable: boolean;
 }
 
 const {
-  matchDetail,
-  matchDetail_menu,
+  matchDetailContainer,
+  matchDetailMenu,
   menuName,
   buttonBox,
   editButton,
   removeButton,
-  matchDetail_content,
+  matchDetailContent,
 } = styles;
 
-const MatchDetail = ({ match }: Props) => {
-  const history = useHistory();
-  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
-  // TODO: 유저 토큰
-  const token = '1';
+const MatchDetail = ({ matchId, matchDetail, editable }: Props) => {
+  const token = getItemFromStorage('accessToken');
+
   const handleRemoveMatch = () => {
-    if (window.confirm(`remove match${matchId}?`)) {
-      deleteMatchById({ matchId, token });
-      history.push('/matches');
+    if (token && window.confirm(`작성글을 삭제하시겠습니까?`)) {
+      deleteMatchById(matchId);
+      window.location.replace('/matches');
     }
   };
 
   return (
-    <div className={classNames(matchDetail)}>
-      <div className={classNames(matchDetail_menu)}>
+    <div className={classNames(matchDetailContainer)}>
+      <div className={classNames(matchDetailMenu)}>
         <h3 className={classNames(menuName)}>상세정보</h3>
-        <div className={classNames(buttonBox)}>
-          <button className={classNames(editButton)} type="button">
-            <Link to={`/matches/edit/${match.matchId}`}>
-              <i className="fas fa-pen" />
-            </Link>
-          </button>
-          <button className={classNames(removeButton)} type="button" onClick={handleRemoveMatch}>
-            <i className="fas fa-times" />
-          </button>
-        </div>
+        {editable && (
+          <div className={classNames(buttonBox)}>
+            <button className={classNames(editButton)} type="button">
+              <Link to={`/matches/edit/${matchId}`}>
+                <i className="fas fa-pen" />
+              </Link>
+            </button>
+            <button className={classNames(removeButton)} type="button" onClick={handleRemoveMatch}>
+              <i className="fas fa-times" />
+            </button>
+          </div>
+        )}
       </div>
-      <div className={classNames(matchDetail_content)}>{match.detail}</div>
+      <div
+        dangerouslySetInnerHTML={{ __html: matchDetail }}
+        className={classNames(matchDetailContent)}
+      />
     </div>
   );
 };
