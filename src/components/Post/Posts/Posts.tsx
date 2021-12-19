@@ -1,16 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 
-import { RootState } from '@/store/index';
 import { PostItem } from '..';
 import style from './posts.module.scss';
 import { PostWrapper } from '@/store/posts';
 
 const { postTitle } = style;
 
-const Posts = ({ isMatch, selectedTeam }: PostWrapper) => {
-  const { data } = useSelector((state: RootState) => state.posts);
+const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
   const { grade } = selectedTeam;
   const hasAuthority = grade.includes('CAPTAIN');
 

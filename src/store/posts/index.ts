@@ -10,9 +10,29 @@ export interface TeamInfo {
   grade: string;
 }
 
+export interface HiresResponseType {
+  ageGroup: string;
+  city: string;
+  date: string;
+  detail: string;
+  endTime: string;
+  groundName: string;
+  hirePlayerNumber: number;
+  position: string;
+  postId: number;
+  matchId?: number;
+  region: string;
+  startTime: string;
+  teamId: number;
+  teamLogo: string;
+  teamMannerTemperature: number;
+  teamName: string;
+}
+
 export interface PostWrapper {
   isMatch: boolean;
   selectedTeam: TeamInfo;
+  data: HiresResponseType[];
 }
 
 export interface Post {
