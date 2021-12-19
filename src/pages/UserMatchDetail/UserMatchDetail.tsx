@@ -11,7 +11,7 @@ const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
 
 const UserMatchDetail = () => {
   const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
-  const result = useSelector((store: RootState) => store.auth.userInfo);
+  const result = useSelector((store: RootState) => store.user.userInfo);
 
   const updateUserMatchHistory = useCallback(async () => {
     const newMatchHistory = await getUserMatchHistory(result?.id);

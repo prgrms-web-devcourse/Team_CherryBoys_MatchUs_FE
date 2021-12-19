@@ -2,10 +2,12 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import {
+  Main,
   TeamMemberManage,
   TeamDetail,
   TeamCreate,
   TeamInfoEdit,
+  TeamChoice,
   Match,
   Matches,
   NewMatch,
@@ -17,7 +19,11 @@ import {
   HiresAccept,
   HiresFilter,
   NotFound,
+  Login,
+  Signup,
   TeamMatchDetail,
+  UserDetail,
+  UserMatchDetail,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -50,58 +56,50 @@ import {
   NOT_FOUND_PAGE,
   HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
+import { UserInfoEdit } from '@/pages/UserInfoEdit/UserInfoEdit';
 
-const Router: React.FC = () => {
+const Router = () => {
   return (
     <Switch>
+      <Route path={HOME_PAGE} exact component={Main} />
+
+      {/* 로그인 페이지 */}
+      <Route path={LOGIN_PAGE} exact component={Login} />
+      <Route path={USER_EDIT_PAGE} exact component={UserInfoEdit} />
+      <Route path={SIGNUP_PAGE} exact component={Signup} />
+
+      {/* 용병 페이지 */}
       <Route path={HIRES_PAGE} exact component={Hires} />
       <Route path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
       <Route path={HIRES_POST_PAGE} exact component={HiresCreate} />
       <Route path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
       <Route path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
       <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
-      {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
-      <Route path={HOME_PAGE} exact component={} />
-      <Route path={MATCHES_PAGE} exact component={} />
-      <Route path={MATCHES_POST_PAGE} exact component={} />
-      <Route path={MATCHES_DETAIL_PAGE} exact component={} />
-      <Route path={MATCHES_EDIT_PAGE} exact component={} />
-      <Route path={TEAM_PAGE} exact component={} />
-      <Route path={TEAM_CREATE_PAGE} exact component={} />
-      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={} />
-      <Route path={TEAM_EDIT_PAGE} exact component={} />
-      <Route path={TEAM_SELECT_PAGE} exact component={} />
-      <Route path={TEAM_MEMBERS_PAGE} exact component={} />
-      <Route path={TEAM_MEMBERS_EDIT_PAGE} exact component={} />
-      <Route path={SIGNUP_PAGE} exact component={} />
-      {/* <Route path={MATCHES_EDIT_PAGE} exact component={} /> */}
-      {/* <AuthorizedRouter path={MERCENARY_PAGE} exact component={} redirectPath="" />
-      <Route path={HOME_PAGE} exact component={} />
-      <Route path={HIRES_PAGE} exact component={} />
-      <Route path={HIRES_DETAIL_PAGE} exact component={} />
-      <Route path={HIRES_POST_PAGE} exact component={} />
-      <Route path={HIRES_EDIT_PAGE} exact component={} />
-      <Route path={HIRES_CHAT_PAGE} exact component={} />
-      <Route path={HIRES_ACCEPT_PAGE} exact component={} /> */}
+
+      {/* 매치 페이지 */}
       <Route path={MATCHES_PAGE} exact component={Matches} />
       <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
       <Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
       <Route path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
-      <Route path={TEAM_PAGE} exact component={TeamDetail} />
+
+      {/* 팀 페이지 */}
+      <Route path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
       <Route path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
       <Route path={TEAM_MATCHING_LIST_PAGE} exact component={TeamMatchDetail} />
       <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
       <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
+      <Route path={TEAM_PAGE} exact component={TeamDetail} />
+      <Route path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
+
+      {/* 유저 페이지 */}
+      <Route path={USER_PAGE} exact component={UserDetail} />
+      <Route path={USER_MATCHING_LIST_PAGE} exact component={UserMatchDetail} />
+      {/* <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
+      <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} /> */}
+
+      {/* 기타 페이지 */}
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
-      {/* <Route path={TEAM_SELECT_PAGE} exact component={} /> */}
-      {/* <Route path={SIGNUP_PAGE} exact component={} />
-      <Route path={LOGIN_PAGE} exact component={} />
-      <Route path={SETTING_PAGE} exact component={} />
-      <Route path={USER_PAGE} exact component={} />
-      <Route path={USER_EDIT_PAGE} exact component={} />
-      <Route path={USER_MATCHING_LIST_PAGE} exact component={} />
-      <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
-      <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} />  */}
+      {/* <Route path={SETTING_PAGE} exact component={} /> */}
     </Switch>
   );
 };

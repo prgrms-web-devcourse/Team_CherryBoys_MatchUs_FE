@@ -10,7 +10,7 @@ import { MatchElement } from '@/types';
 
 const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
 
-const MatchDetail = () => {
+const TeamMatchDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
 
@@ -150,4 +150,4 @@ const MatchDetail = () => {
   );
 };
 
-export default MatchDetail;
+export default TeamMatchDetail;

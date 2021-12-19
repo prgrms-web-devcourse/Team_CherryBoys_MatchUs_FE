@@ -1,1 +1,1 @@
-export { default as MatchListElement } from './MatchElement';
+export { default as MatchListElement } from './MatchListElement';

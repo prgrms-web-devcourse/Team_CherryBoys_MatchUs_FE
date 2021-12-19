@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import Router from './Router/Router';
 import { DefaultTemplate } from '@/components';
+import { useAppDispatch } from './store';
 import { getItemFromStorage } from '@/utils/storage';
-import { login, reAuth } from './store/authSlice';
-import { requestReAuth } from './api/auth';
+import { initiateAuth } from './store/userSlice';
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const accessToken = getItemFromStorage('accessToken');
@@ -17,8 +16,8 @@ const App = () => {
       return;
     }
 
-    dispatch(reAuth());
-  });
+    dispatch(initiateAuth());
+  }, [dispatch]);
 
   return (
     <BrowserRouter>
