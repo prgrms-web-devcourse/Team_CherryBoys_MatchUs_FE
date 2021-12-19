@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
 import { postMatchReview, fetchTagInfo } from '@/api';
 import { TagInfo, TagCheckList, TeamSimple } from '@/types';
 import { RootState } from '@/store';
-import { useHistory } from 'react-router-dom';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 

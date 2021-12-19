@@ -69,7 +69,7 @@ export const modifyMatch = (editedMatchInfo: MatchPostEdit) => {
 };
 
 export const deleteMatchById = (matchId: number) => {
- return api
+  return api
     .delete({
       url: `/matches/${matchId}`,
     })
@@ -112,7 +112,7 @@ export const getTags = () => {
 
 export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewerTeamType, reviewedTeamId } = matchReviewInfo;
-  
+
   return api
     .post({
       url: `/matches/${matchId}/review`,
@@ -123,7 +123,7 @@ export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
 
 export const modifyTeamMember = (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
-  
+
   return api
     .put({
       url: `/matches/${matchId}/members`,

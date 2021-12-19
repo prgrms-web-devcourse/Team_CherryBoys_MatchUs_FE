@@ -244,23 +244,6 @@ const EditMatch = () => {
     };
 
     const today = new Date();
-    const todayResult = {
-      date: today.toLocaleDateString('fr-CA', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }),
-      startTime: today.toLocaleTimeString('fr-BE', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-      endTime: today.toLocaleTimeString('fr-BE', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-    };
 
     if (sports === '선택') {
       window.alert('종목을 선택해주세요');
