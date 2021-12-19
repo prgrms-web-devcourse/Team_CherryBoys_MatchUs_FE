@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   if (isLogged) {
-    history.push('/main');
+    history.push('/');
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -55,7 +55,7 @@ const Login = () => {
 
   return (
     <div className={classNames(container)}>
-      <img src={logo} alt="로고" className={classNames('whiteSpcae', logo_img)} />
+      <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} />
       <h1 className={classNames('a11yHidden')}>회원 가입 페이지</h1>
       {isModalDialogOpen && (
         <CustomModalDialog
@@ -72,12 +72,12 @@ const Login = () => {
         </CustomModalDialog>
       )}
       <div>
-        <img src={logo} alt="로고" className={classNames('whiteSpcae', logo_img)} />
+        <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} />
       </div>
       {/* 로그인 폼 */}
       <div>
         <form onSubmit={handleSubmit}>
-          <CustomLabel htmlFor="email" className={classNames('whiteSpcae', form__label)}>
+          <CustomLabel htmlFor="email" className={classNames('whiteSpace', form__label)}>
             아이디
           </CustomLabel>
           <CustomInput
@@ -89,7 +89,7 @@ const Login = () => {
             onChange={handleChange}
             className={classNames('whiteSpace', form__input)}
           />
-          <CustomLabel htmlFor="password" className={classNames('whiteSpcae', form__label)}>
+          <CustomLabel htmlFor="password" className={classNames('whiteSpace', form__label)}>
             패스워드
           </CustomLabel>
           <CustomInput
@@ -109,7 +109,7 @@ const Login = () => {
       </div>
       <button
         type="button"
-        onClick={() => history.push('signup')}
+        onClick={() => history.push('/signup')}
         className={classNames('whiteSpace', signup)}
       >
         회원가입
