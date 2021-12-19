@@ -6,8 +6,9 @@ import { getUserMatchHistory } from '@/api/user';
 import { MatchElement } from '@/types';
 import style from './userMatchDetail.module.scss';
 import { MatchListElement } from '@/components';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
-const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
+const { matchComponentContainer, mainTitle, highlight, titleContainer, matchesContainer } = style;
 
 const UserMatchDetail = () => {
   const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
@@ -38,7 +39,7 @@ const UserMatchDetail = () => {
             </p>
           </div>
         </div>
-        <div>
+        <div className={classNames(matchesContainer)}>
           {userMatchHistory.map(
             ({
               matchId,
@@ -48,20 +49,18 @@ const UserMatchDetail = () => {
               applyTeamLogo,
               applyTeamName,
               status,
-            }) => {
-              return (
-                <MatchListElement
-                  key={`userReview-${matchId}`}
-                  matchId={matchId}
-                  matchDate={matchDate}
-                  registerTeamLogo={registerTeamLogo}
-                  registerTeamName={registerTeamName}
-                  applyTeamLogo={applyTeamLogo}
-                  applyTeamName={applyTeamName}
-                  status={status}
-                />
-              );
-            }
+            }) => (
+              <MatchListElement
+                key={`userReview-${matchId}`}
+                matchId={matchId}
+                matchDate={matchDate}
+                registerTeamLogo={registerTeamLogo}
+                registerTeamName={registerTeamName}
+                applyTeamLogo={applyTeamLogo}
+                applyTeamName={applyTeamName}
+                status={status}
+              />
+            )
           )}
         </div>
       </div>
