@@ -1,41 +1,74 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './MatchReviewModal.module.scss';
 import { InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
-import { TAG_OPTIONS, TagOptions } from '@/consts';
-import { postMatchReview } from '@/api';
-import { Match } from '@/types';
+import { postMatchReview, fetchTagInfo } from '@/api';
+import { TagInfo, TagCheckList, TeamSimple } from '@/types';
+import { RootState } from '@/store';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
 interface ModalState {
   showMatchReviewModal: boolean;
-  matchInfo: Match;
+  reviewInfo: {
+    matchId: number;
+    registerTeamId: number;
+    applyTeamId: number;
+    userTeamInfo: TeamSimple[];
+  };
 }
 
 const selectTagsLimit = 3;
 
-const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
-  const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
+const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
   const dispatch = useDispatch();
-
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
       dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
     }
   };
 
-  const [selectedTags, setSelectedTags] = useState(TAG_OPTIONS);
+  const { tags } = useSelector((store: RootState) => store.match.data);
+
+  const [tagInfo, setTagInfo] = useState<TagInfo[]>(tags);
+  const [selectedTags, setSelectedTags] = useState<TagCheckList>({
+    GOOD: {},
+    BAD: {},
+    NONE: {},
+  });
+
+  const getTagInfo = useCallback(async () => {
+    const tagData = await fetchTagInfo();
+    setTagInfo(tagData);
+  }, []);
+
+  const sortTagByType = useCallback(() => {
+    const newSelectedTags: TagCheckList = {
+      GOOD: {},
+      BAD: {},
+      NONE: {},
+    };
+    tagInfo.forEach((tag) => {
+      newSelectedTags[tag.tagType][tag.tagName] = false;
+    });
+    setSelectedTags(newSelectedTags);
+  }, [tagInfo]);
+
+  useEffect(() => {
+    if (tagInfo.length < 1) {
+      getTagInfo();
+    }
+    sortTagByType();
+  }, [tagInfo]);
 
   const handleOnChangeSelectedTags = (e: React.ChangeEvent<HTMLElement>, tagCategory: string) => {
     const targetTag: string = (e.target as HTMLInputElement).value;
-    const newSelectedTags: TagOptions = {
-      skill: { ...selectedTags.skill },
-      good: { ...selectedTags.good },
-      bad: { ...selectedTags.bad },
+    const newSelectedTags: TagCheckList = {
+      NONE: { ...selectedTags.NONE },
+      GOOD: { ...selectedTags.GOOD },
+      BAD: { ...selectedTags.BAD },
     };
     newSelectedTags[tagCategory][targetTag] = !newSelectedTags[tagCategory][targetTag];
     const selectedTagNumber = Object.values(newSelectedTags[tagCategory]).filter(
@@ -45,33 +78,41 @@ const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
       window.alert('태그는 3개까지만 선택 가능합니다');
       return;
     }
+
     setSelectedTags(newSelectedTags);
   };
 
-  const onSubmit = () => {
-    const skillTags = Object.entries(selectedTags.skill);
-    const selectedSkillTags = skillTags.reduce((selected: string[], tag) => {
-      if (tag[1]) selected.push(tag[0]);
-      return selected;
+  const handleSubmitReview = () => {
+    const totalSelectedTags = tagInfo.reduce((tagArr: number[], tag: TagInfo) => {
+      if (selectedTags[tag.tagType][tag.tagName]) tagArr.push(tag.tagId);
+      return tagArr;
     }, []);
-    const goodTags = Object.entries(selectedTags.good);
-    const selectedGoodTags = goodTags.reduce((selected: string[], tag) => {
-      if (tag[1]) selected.push(tag[0]);
-      return selected;
-    }, []);
-    const badTags = Object.entries(selectedTags.bad);
-    const selectedBadTags = badTags.reduce((selected: string[], tag) => {
-      if (tag[1]) selected.push(tag[0]);
-      return selected;
-    }, []);
-    const totalSelectedTags = [...selectedSkillTags, ...selectedGoodTags, ...selectedBadTags];
 
-    // TODO: 매칭 평가 API 요청, 태그ID, 회원정보 대조해서 리뷰어/대상 체크
-    console.log({
-      matchId,
+    const isRegisterReviewer = reviewInfo.userTeamInfo.reduce((acc, team: TeamSimple) => {
+      if (team.teamId === reviewInfo.registerTeamId) acc = team.teamId;
+      return acc;
+    }, 0);
+    const reviewerTeamId =
+      isRegisterReviewer ||
+      reviewInfo.userTeamInfo.reduce((acc, team: TeamSimple) => {
+        if (team.teamId === reviewInfo.applyTeamId) acc = team.teamId;
+        return acc;
+      }, 0);
+    const reviewedTeamId =
+      reviewInfo.registerTeamId !== reviewerTeamId
+        ? reviewInfo.registerTeamId
+        : reviewInfo.applyTeamId;
+    const requestInfo = {
+      matchId: reviewInfo.matchId,
+      reviewedTeamId,
+      reviewerTeamId,
+      reviewerTeamType: isRegisterReviewer ? '등록팀' : '신청팀',
       tags: totalSelectedTags,
-    });
-    // postMatchReview();
+    };
+
+    postMatchReview(requestInfo);
+    dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
+    window.location.replace(`/matches/post/${requestInfo.matchId}`);
   };
 
   return (
@@ -88,10 +129,10 @@ const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
         </div>
         <InputCheckBox
           labelName={`SKILL (${
-            Object.values(selectedTags.skill).filter((tag) => tag).length
+            Object.values(selectedTags.NONE).filter((tag) => tag).length
           }/${selectTagsLimit})`}
-          options={selectedTags.skill}
-          onChange={(e) => handleOnChangeSelectedTags(e, 'skill')}
+          options={selectedTags.NONE}
+          onChange={(e) => handleOnChangeSelectedTags(e, 'NONE')}
           styleProps={{
             checkBoxWidth: 'fit-content',
             checkBoxBorder: '0.2rem solid #c4c4c4',
@@ -104,10 +145,10 @@ const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
         />
         <InputCheckBox
           labelName={`GOOD (${
-            Object.values(selectedTags.good).filter((tag) => tag).length
+            Object.values(selectedTags.GOOD).filter((tag) => tag).length
           }/${selectTagsLimit})`}
-          options={selectedTags.good}
-          onChange={(e) => handleOnChangeSelectedTags(e, 'good')}
+          options={selectedTags.GOOD}
+          onChange={(e) => handleOnChangeSelectedTags(e, 'GOOD')}
           styleProps={{
             checkBoxWidth: 'fit-content',
             checkBoxBorder: '0.2rem solid #c4c4c4',
@@ -120,10 +161,10 @@ const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
         />
         <InputCheckBox
           labelName={`BAD (${
-            Object.values(selectedTags.bad).filter((tag) => tag).length
+            Object.values(selectedTags.BAD).filter((tag) => tag).length
           }/${selectTagsLimit})`}
-          options={selectedTags.bad}
-          onChange={(e) => handleOnChangeSelectedTags(e, 'bad')}
+          options={selectedTags.BAD}
+          onChange={(e) => handleOnChangeSelectedTags(e, 'BAD')}
           styleProps={{
             checkBoxWidth: 'fit-content',
             checkBoxBorder: '0.2rem solid #c4c4c4',
@@ -135,7 +176,7 @@ const MatchReviewModal = ({ showMatchReviewModal, matchInfo }: ModalState) => {
           }}
         />
         <div className={classNames(buttonBox)}>
-          <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
+          <button className={classNames(submitButton)} type="button" onClick={handleSubmitReview}>
             제출
           </button>
         </div>

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
 import { AGE, SPORTS } from '@/consts/user';
 import ValidInput from '../Signup/ValidInput';
 import {
@@ -16,7 +17,8 @@ import { requestCheckDuplicatedNickname } from '@/api/user';
 import { userInfoType } from '@/types/users';
 import { RootState, useAppDispatch } from '@/store';
 import { editEditabelUserState, editUser } from '@/store/userSlice';
-import { CustomLabel } from '@/components';
+import { CustomLabel, CustomModalDialog } from '@/components';
+import style from './userInfoEdit.module.scss';
 
 export const UserInfoEdit = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +28,7 @@ export const UserInfoEdit = () => {
   const ageGroupState = useSelector((state: RootState) => state.user.userInfo.ageGroup);
   const sportsState = useSelector((state: RootState) => state.user.userInfo.sports);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
-
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<userInfoType>({
     nickname: {
       value: '',
@@ -50,7 +52,20 @@ export const UserInfoEdit = () => {
       validMsg: '',
     },
   });
-
+  const [isEditSuccess, setIsEditSuccess] = useState(false);
+  const {
+    inValid_form,
+    valid_msg,
+    title,
+    modalMainTitle,
+    modalSubTitle,
+    container,
+    form__label,
+    form__input,
+    edit_info__btn,
+    duplicate_check__btn,
+    flex_container,
+  } = style;
   const { nickname, bio, ageGroup, sports } = userInfo;
 
   useEffect(() => {
@@ -89,9 +104,18 @@ export const UserInfoEdit = () => {
     dispatch(editUser(userEditForm))
       .unwrap()
       .then(() => {
+        setIsEditSuccess(true);
+        setIsModalDialogOpen(true);
         dispatch(editEditabelUserState(userEditForm));
-        history.push('/main');
-      });
+      })
+      .catch(() => setIsEditSuccess(false));
+  };
+  const handleClickModal = () => {
+    setIsModalDialogOpen(false);
+
+    if (isEditSuccess) {
+      history.push('/main');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -147,64 +171,116 @@ export const UserInfoEdit = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CustomLabel htmlFor="nickname">닉네임</CustomLabel>
-      <div>
-        <ValidInput
-          id="nickname"
-          name="nickname"
-          onChange={handleOnChange}
-          value={nickname.value}
-          type="input"
-          validMsg={nickname.validMsg}
-        />
-        <button type="button" onClick={handleClickNicknameDuplicate}>
-          중복확인
-        </button>
-      </div>
-      <CustomLabel htmlFor="bio">자기 소개</CustomLabel>
-      <div>
-        <ValidInput
-          id="bio"
-          name="bio"
-          onChange={handleOnChange}
-          value={bio.value}
-          type="input"
-          validMsg={bio.validMsg}
-        />
-      </div>
-      <small>
-        {bio.value ? bio.value.length : 0}/{BIO_MAX_LEN}
-      </small>
-      <div>
-        <small>{!bio.isValid && <small>{bio.validMsg}</small>}</small>
-      </div>
+    <div className={classNames(container)}>
+      <h1 className={classNames(title)}>내 정보 수정</h1>
+      {isModalDialogOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModalDialogOpen(false)}
+          handleApprove={handleClickModal}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            {isEditSuccess ? '정보 수정 완료!' : '에러가 발생했어요!'}
+          </span>
+          <span className={classNames('whiteSpace', modalSubTitle)}>
+            {isEditSuccess
+              ? '회원 정보가 정상적으로 수정되었습니다!'
+              : '잠시 후에 다시 시도해주세요!'}
+          </span>
+        </CustomModalDialog>
+      )}
+      <form onSubmit={handleSubmit}>
+        <CustomLabel htmlFor="nickname" className={classNames('whiteSpace', form__label)}>
+          닉네임
+        </CustomLabel>
+        <div className={classNames(flex_container)}>
+          <ValidInput
+            id="nickname"
+            name="nickname"
+            onChange={handleOnChange}
+            value={nickname.value}
+            type="input"
+            className={classNames(
+              'whiteSpace',
+              form__input,
+              !userInfo.nickname.isValid && inValid_form
+            )}
+          />
+          <button
+            type="button"
+            onClick={handleClickNicknameDuplicate}
+            className={classNames(duplicate_check__btn)}
+          >
+            중복확인
+          </button>
+        </div>
+        <div>
+          {nickname.validMsg && <span className={classNames(valid_msg)}>{nickname.validMsg}</span>}
+        </div>
+        <CustomLabel htmlFor="bio" className={classNames('whiteSpace', form__label)}>
+          자기 소개
+        </CustomLabel>
+        <div>
+          <ValidInput
+            id="bio"
+            name="bio"
+            onChange={handleOnChange}
+            value={bio.value}
+            type="input"
+            className={classNames('whiteSpace', form__input, !userInfo.bio.isValid && inValid_form)}
+          />
+        </div>
+        <div>{bio.validMsg && <span className={classNames(valid_msg)}>{bio.validMsg}</span>}</div>
+        <span className={classNames(valid_msg)}>
+          {bio.value ? bio.value.length : 0}/{BIO_MAX_LEN}
+        </span>
 
-      <CustomLabel htmlFor="ageGroup">연령대</CustomLabel>
-      <div>
-        <ValidInput
-          id="ageGroup"
-          name="ageGroup"
-          onChange={handleOnChange}
-          value={ageGroup.value}
-          type="select"
-          validMsg={ageGroup.validMsg}
-          selectOptions={AGE}
-        />
-      </div>
-      <CustomLabel htmlFor="sports">종목</CustomLabel>
-      <div>
-        <ValidInput
-          id="sports"
-          name="sports"
-          onChange={handleOnChange}
-          value={sports.value}
-          type="select"
-          validMsg={sports.validMsg}
-          selectOptions={SPORTS}
-        />
-      </div>
-      <button type="submit">회원가입</button>
-    </form>
+        <CustomLabel htmlFor="ageGroup" className={classNames('whiteSpace', form__label)}>
+          연령대
+        </CustomLabel>
+        <div>
+          <ValidInput
+            id="ageGroup"
+            name="ageGroup"
+            onChange={handleOnChange}
+            value={ageGroup.value}
+            type="select"
+            selectOptions={AGE}
+            className={classNames(
+              'whiteSpace',
+              form__input,
+              !userInfo.ageGroup.isValid && inValid_form
+            )}
+          />
+        </div>
+        <div>
+          {ageGroup.validMsg && <span className={classNames(valid_msg)}>{ageGroup.validMsg}</span>}
+        </div>
+        <CustomLabel htmlFor="sports" className={classNames('whiteSpace', form__label)}>
+          종목
+        </CustomLabel>
+        <div>
+          <ValidInput
+            id="sports"
+            name="sports"
+            onChange={handleOnChange}
+            value={sports.value}
+            type="select"
+            selectOptions={SPORTS}
+            className={classNames(
+              'whiteSpace',
+              form__input,
+              !userInfo.sports.isValid && inValid_form
+            )}
+          />
+        </div>
+        <div>
+          {sports.validMsg && <span className={classNames(valid_msg)}>{sports.validMsg}</span>}
+        </div>
+        <button type="submit" className={classNames(edit_info__btn)}>
+          정보 수정
+        </button>
+      </form>
+    </div>
   );
 };

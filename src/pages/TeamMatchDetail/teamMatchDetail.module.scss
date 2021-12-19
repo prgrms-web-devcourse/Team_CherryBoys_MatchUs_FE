@@ -19,3 +19,41 @@
     font-weight: 700;
   }
 }
+
+.matchContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 2.4rem;
+  padding: 3.2rem 1.6rem;
+}
+
+.hasNoMatchContainer {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin-top: 35%;
+
+  .noTeamMainTitle {
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .noTeamSubTitle {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    font-size: 1.6rem;
+  }
+
+  .noTeamAddButton {
+    width: 25rem;
+    height: 6.4rem;
+    margin-top: 2rem;
+    color: color.$primary;
+    font-size: 3rem;
+    background-color: white;
+    border: 0.2rem solid color.$primary;
+    border-radius: 1rem;
+  }
+}

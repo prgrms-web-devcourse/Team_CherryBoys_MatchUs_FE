@@ -16,7 +16,7 @@ export interface hiresPosting {
 }
 
 interface editedHiresPosting {
-  postId: number;
+  postId: number | undefined;
   data: hiresPosting;
 }
 

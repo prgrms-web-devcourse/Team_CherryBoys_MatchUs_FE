@@ -58,7 +58,7 @@ export interface userType {
     nickname: string;
     roleGroup: string;
     sports: string;
-    userGrade: [] | userGradeType[];
+    userGradeResponse: [] | userGradeType[];
   };
   hireRequestList: [];
   teamInvitaionList: [];

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styles from './MatchApplyModal.module.scss';
 import { Input, InputCheckBox } from '@/components';
 import { match } from '@/store/match/match';
 import { SPORTS_PLAYER } from '@/consts';
-import { fetchAuthorizedTeams, fetchTotalMembers, applyMatch } from '@/api';
-import { TeamSimple, TeamMemberInfo } from '@/types';
+import { fetchTotalMembers, applyMatch } from '@/api';
+import { TeamMemberInfo } from '@/types';
+import { RootState } from '@/store';
 
 const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
 
@@ -29,20 +30,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
       dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
     }
   };
-
-  const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
-
-  // 작성자(유저) 더미 데이터 이용
-  const tokenDummy = '1';
-
-  const getAuhorizedTeams = useCallback(async () => {
-    const authorizedTeams = await fetchAuthorizedTeams(tokenDummy);
-    setUserTeams(authorizedTeams);
-  }, []);
-
-  useEffect(() => {
-    getAuhorizedTeams();
-  }, []);
+  const { userTeams } = useSelector((store: RootState) => store.match.data);
 
   const placeholder = '팀을 선택해주세요';
   const userLimit = sports ? SPORTS_PLAYER[sports] : 0;
@@ -55,11 +43,11 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === selectedTeam)[0];
     if (selectedTeamInfo) {
       const selectedTeamId = selectedTeamInfo.teamId;
-      const selectedTeamUsers = await fetchTotalMembers(selectedTeamId);
-      setTeamMembersInfo(selectedTeamUsers);
+      const { members } = await fetchTotalMembers(selectedTeamId);
+      setTeamMembersInfo(members);
 
       const teamUsersOptions: CheckboxOptions = {};
-      selectedTeamUsers.forEach((user: TeamMemberInfo) => {
+      members.forEach((user: TeamMemberInfo) => {
         if (user.userName) teamUsersOptions[user.userName] = false;
       });
       setTeamMembers(teamUsersOptions);
@@ -93,7 +81,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
         .filter((user) => user.userName && teamMembers[user.userName])
         .map((user) => user.userId),
     };
-    if (selectedTeamWithUsers.players.length !== userLimit) {
+    if (selectedTeamWithUsers.players.length < userLimit) {
       window.alert('인원미달');
       return;
     }
@@ -101,6 +89,7 @@ const MatchApplyModal = ({ showMatchApplyModal, sports }: ModalState) => {
     const requestData = { matchId, ...selectedTeamWithUsers };
 
     applyMatch(requestData);
+    dispatch(match.actions.toggleModal({ modalName: 'matchApply' }));
   };
 
   return (

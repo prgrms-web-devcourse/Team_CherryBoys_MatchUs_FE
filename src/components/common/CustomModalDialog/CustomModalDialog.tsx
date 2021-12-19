@@ -4,7 +4,7 @@ import { Modal } from '@/components';
 import style from './customModalDialog.module.scss';
 
 interface Props {
-  modalType: string;
+  modalType?: string;
   buttonLabel?: string;
   handleApprove: React.MouseEventHandler<HTMLButtonElement>;
   handleCancel?: React.MouseEventHandler<HTMLButtonElement>;

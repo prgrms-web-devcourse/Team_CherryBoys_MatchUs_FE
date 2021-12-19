@@ -41,18 +41,17 @@ const MatchTeamMemberModal = ({
     }
   };
 
-  // TODO: team 회원정보를 받아오는 API콜 추가필요
   const userLimit = sports ? SPORTS_PLAYER[sports] : 0;
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
   const [teamAllMembers, setTeamAllMembers] = useState<TeamMemberInfo[]>([]);
 
   const setMembers = useCallback(async () => {
-    const members = await fetchTotalMembers(teamId);
+    const { members } = await fetchTotalMembers(teamId);
     setTeamAllMembers(members);
 
     const teamUsersOptions: CheckboxOptions = {};
     members.forEach((user: TeamMemberInfo) => {
-      if (user.userName) teamUsersOptions[user.userName] = false;
+      teamUsersOptions[user.userName] = false;
     });
 
     setTeamMembers(teamUsersOptions);
@@ -69,7 +68,8 @@ const MatchTeamMemberModal = ({
     setMembers();
   }, [setMembers]);
 
-  const onSubmit = () => {
+  console.log(teamMembers, teamAllMembers);
+  const handleSubmit = () => {
     const selectedTeamWithUsers = {
       teamId: teamInfo.teamId,
       players: teamAllMembers
@@ -87,7 +87,6 @@ const MatchTeamMemberModal = ({
       ...selectedTeamWithUsers,
     };
 
-    // TODO: 매칭 신청 API 요청
     modifyTeamMember(requestBody);
     dispatch(match.actions.toggleModal({ modalName: 'matchTeamMember' }));
     history.go(0);
@@ -116,7 +115,7 @@ const MatchTeamMemberModal = ({
           />
         )}
         <div className={classNames(buttonBox)}>
-          <button className={classNames(submitButton)} type="button" onClick={onSubmit}>
+          <button className={classNames(submitButton)} type="button" onClick={handleSubmit}>
             변경
           </button>
         </div>
