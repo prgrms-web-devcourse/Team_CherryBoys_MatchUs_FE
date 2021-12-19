@@ -24,6 +24,7 @@ import {
   TeamMatchDetail,
   UserDetail,
   UserMatchDetail,
+  Setting,
 } from '@/pages';
 // TODO: Router관련 const 객체로 변경해 보기
 import {
@@ -57,6 +58,7 @@ import {
   HIRES_FILTER_PAGE, // Todo(홍중) : 임시, 추후 모달로 변경하면서 삭제 예정 (2021.12.14)
 } from '../consts/routes';
 import { UserInfoEdit } from '@/pages/UserInfoEdit/UserInfoEdit';
+import AuthorizedRouter from './AuthorizedRoute';
 
 const Router = () => {
   return (
@@ -65,42 +67,41 @@ const Router = () => {
 
       {/* 로그인 페이지 */}
       <Route path={LOGIN_PAGE} exact component={Login} />
-      <Route path={USER_EDIT_PAGE} exact component={UserInfoEdit} />
       <Route path={SIGNUP_PAGE} exact component={Signup} />
 
       {/* 용병 페이지 */}
-      <Route path={HIRES_PAGE} exact component={Hires} />
-      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
-      <Route path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
-      <Route path={HIRES_POST_PAGE} exact component={HiresCreate} />
-      <Route path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
-      <Route path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
-      <Route path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
+      <AuthorizedRouter path={HIRES_PAGE} exact component={Hires} />
+      <AuthorizedRouter path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
+      <AuthorizedRouter path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
+      <AuthorizedRouter path={HIRES_POST_PAGE} exact component={HiresCreate} />
+      <AuthorizedRouter path={HIRES_EDIT_PAGE} exact component={HiresEdit} />
+      <AuthorizedRouter path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
 
       {/* 매치 페이지 */}
-      <Route path={MATCHES_PAGE} exact component={Matches} />
-      <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
-      <Route path={MATCHES_POST_PAGE} exact component={NewMatch} />
-      <Route path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
+      <AuthorizedRouter path={MATCHES_PAGE} exact component={Matches} />
+      <AuthorizedRouter path={MATCHES_POST_PAGE} exact component={NewMatch} />
+      <AuthorizedRouter path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      <AuthorizedRouter path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
 
       {/* 팀 페이지 */}
-      <Route path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
-      <Route path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
-      <Route path={TEAM_MATCHING_LIST_PAGE} exact component={TeamMatchDetail} />
-      <Route path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
-      <Route path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
-      <Route path={TEAM_PAGE} exact component={TeamDetail} />
-      <Route path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
+      <AuthorizedRouter path={TEAM_CREATE_PAGE} exact component={TeamCreate} />
+      <AuthorizedRouter path={TEAM_SELECT_PAGE} exact component={TeamChoice} />
+      <AuthorizedRouter path={TEAM_PAGE} exact component={TeamDetail} />
+      <AuthorizedRouter path={TEAM_MATCHING_LIST_PAGE} exact component={TeamMatchDetail} />
+      <AuthorizedRouter path={TEAM_EDIT_PAGE} exact component={TeamInfoEdit} />
+      <AuthorizedRouter path={TEAM_MEMBERS_PAGE} exact component={TeamMemberManage} />
 
       {/* 유저 페이지 */}
-      <Route path={USER_PAGE} exact component={UserDetail} />
-      <Route path={USER_MATCHING_LIST_PAGE} exact component={UserMatchDetail} />
+
+      <AuthorizedRouter path={USER_PAGE} exact component={UserDetail} />
+      <AuthorizedRouter path={USER_EDIT_PAGE} exact component={UserInfoEdit} />
+      <AuthorizedRouter path={USER_MATCHING_LIST_PAGE} exact component={UserMatchDetail} />
       {/* <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
       <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} /> */}
 
       {/* 기타 페이지 */}
       <Route path={NOT_FOUND_PAGE} exact component={NotFound} />
-      {/* <Route path={SETTING_PAGE} exact component={} /> */}
+      <Route path={SETTING_PAGE} exact component={Setting} />
     </Switch>
   );
 };

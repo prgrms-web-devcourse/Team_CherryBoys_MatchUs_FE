@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
-import { MatchListElement } from '@/components';
-import { MatchElement } from '@/types';
+import { AttitueTag, MatchListElement } from '@/components';
+import { MatchElement, TagType } from '@/types';
 import style from './userDetail.module.scss';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+import { USER_MATCHING_LIST_PAGE } from '@/consts/routes';
 
 interface MyTeamElement {
   teamId: number;
@@ -25,7 +26,7 @@ interface UserInfo {
   name: string;
   nickname: string;
   sportsName: string;
-  tags: string[];
+  tags: TagType[];
 }
 
 const {
@@ -50,7 +51,7 @@ const {
 } = style;
 
 const UserDetail = () => {
-  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
+  const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     ageGroup: '',
     bio: '',
@@ -64,7 +65,7 @@ const UserDetail = () => {
     tags: [],
   });
 
-  const limitedMatchHistory = matchHistory.slice(0, 3);
+  const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -78,12 +79,14 @@ const UserDetail = () => {
     const updateUserMatchHistory = async () => {
       const { userMatches } = await getUserMatchHistory(userId);
 
-      setMatchHistory(userMatches);
+      setUserMatchHistory(userMatches);
     };
 
     updateUserInfo();
     updateUserMatchHistory();
   }, [userId]);
+
+  const { tags, matchCount, mannerTemperature, myTeams } = userInfo;
 
   return (
     <div className={classNames(pageContainer)}>
@@ -105,19 +108,21 @@ const UserDetail = () => {
             </article>
 
             <div className={classNames('whiteSpace')}>
-              {userInfo.tags.map((each) => (
-                <span>{each}</span>
+              {tags.map(({ tagId, tagType, tagName }) => (
+                <>
+                  <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+                </>
               ))}
             </div>
             <p>
-              총 <span className={classNames(matchHighlight)}>{userInfo.matchCount}</span>경기 동안
+              총 <span className={classNames(matchHighlight)}>{matchCount}</span>경기 동안
               <span
                 className={classNames(mannerMiddle, {
-                  [mannerLow]: userInfo.mannerTemperature < 20,
-                  [mannerHigh]: userInfo.mannerTemperature > 40,
+                  [mannerLow]: mannerTemperature < 20,
+                  [mannerHigh]: mannerTemperature > 40,
                 })}
               >
-                {userInfo.mannerTemperature}
+                {mannerTemperature}
               </span>
               의 매너온도를 가지고 있어요!
             </p>
@@ -128,7 +133,7 @@ const UserDetail = () => {
       <span className={classNames(containerTitle)}>소속 팀</span>
       <section className={classNames(sectionContainer)}>
         <div className={classNames(elementRowContainer)}>
-          {userInfo.myTeams.map(({ teamId, teamLogo }) => (
+          {myTeams.map(({ teamId, teamLogo }) => (
             <img
               className={classNames(logoImage)}
               key={`team-${teamId}`}
@@ -141,12 +146,12 @@ const UserDetail = () => {
 
       <div>
         <span className={classNames(containerTitle)}>최근 경기</span>
-        <Link className={classNames(seeMore)} to="/user/match">
+        <Link className={classNames(seeMore)} to={USER_MATCHING_LIST_PAGE}>
           더보기
         </Link>
       </div>
       <div className={classNames(matchesContainer)}>
-        {limitedMatchHistory.map(
+        {limitedUserMatchHistory.map(
           ({
             matchId,
             matchDate,
@@ -160,15 +165,9 @@ const UserDetail = () => {
               key={`userReview-${matchId}`}
               matchId={matchId}
               matchDate={matchDate}
-              registerTeamLogo={
-                registerTeamLogo === '' || registerTeamLogo === '팀로고'
-                  ? baseTeamLogo
-                  : registerTeamLogo
-              }
+              registerTeamLogo={registerTeamLogo}
               registerTeamName={registerTeamName}
-              applyTeamLogo={
-                applyTeamLogo === '' || applyTeamLogo === '팀로고' ? baseTeamLogo : applyTeamLogo
-              }
+              applyTeamLogo={applyTeamLogo}
               applyTeamName={applyTeamName}
               status={status}
             />

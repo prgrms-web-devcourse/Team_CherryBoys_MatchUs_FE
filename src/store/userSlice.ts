@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { setItemFromStorage } from '@/utils/storage';
+import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
 import { requestLogin, requestReAuth } from '../api/user';
 import { loginFormType, reqeustUserInfoType, userType } from '@/types/users';
 import { requestEditUser } from '@/api/user';
@@ -60,6 +60,9 @@ export const userSlice = createSlice({
         sports: '',
         userGradeResponse: [],
       };
+
+      removeItemFromStorage('accessToken');
+      removeItemFromStorage('expireTime');
     },
     editEditabelUserState: (state, { payload }) => {
       const { nickname, bio, ageGroup, sportName } = payload;

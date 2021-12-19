@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
 import ValidInput from './ValidInput';
 import {
   USER_VALIDATION_SUCCESS_MSG,
@@ -15,7 +16,8 @@ import {
 } from '@/api/user';
 import { isValidFormType, signupFormType, validMsgType } from '@/types/users';
 import { AGE, GENDER, SPORTS } from '@/consts/user';
-import { CustomLabel } from '@/components';
+import { CustomLabel, CustomModalDialog } from '@/components';
+import style from './signup.module.scss';
 
 const Signup = () => {
   const [signupForm, setSignupForm] = useState<signupFormType>({
@@ -50,6 +52,8 @@ const Signup = () => {
     ageGroup: '',
     sports: '',
   });
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
   const { userName, nickname, email, password, confirmedPassword, gender, ageGroup, sports } =
     signupForm;
@@ -59,7 +63,8 @@ const Signup = () => {
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+    const value = e.target.value.trim();
     const errMsg =
       name !== 'confirmedPassword'
         ? validateUser[name](value)
@@ -85,10 +90,11 @@ const Signup = () => {
     const isSignup = await requestSignup({ ...signupForm, name: userName });
 
     if (isSignup) {
-      history.push('/login');
+      setIsSignupSuccess(true);
+      setIsModalDialogOpen(true);
+      return;
     }
-
-    // TODO: 모달 예외처리
+    setIsModalDialogOpen(false);
   };
 
   // 닉네임 중복 확인
@@ -110,7 +116,7 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      nickname: isduplicated,
+      nickname: !isduplicated,
     });
   };
 
@@ -131,7 +137,7 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      email: isduplicated,
+      email: !isduplicated,
     });
   };
 
@@ -156,115 +162,205 @@ const Signup = () => {
 
     if (!IsSignupValid()) {
       changeUnvalidateMsg();
-
       return;
     }
 
     signup();
   };
+  
+  const handleClickModal = () => {
+    if (isSignupSuccess) {
+      history.push('/login');
+    }
+  };
+
+  const {
+    flex,
+    duplicate_check__btn,
+    valid_msg,
+    container,
+    form__label,
+    form__input,
+    flex_container,
+    edit_info__btn,
+    inValid_form,
+    valid_form,
+    modalMainTitle,
+    modalSubTitle,
+  } = style;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CustomLabel htmlFor="userName">사용자명</CustomLabel>
-      <div>
-        <ValidInput
-          id="userName"
-          name="userName"
-          onChange={handleOnChange}
-          value={userName}
-          type="input"
-          validMsg={validMsg.name}
-        />
+    <div className={classNames(container)}>
+      {isModalDialogOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModalDialogOpen(false)}
+          handleApprove={handleClickModal}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            {isSignupSuccess ? '회원 가입 완료!' : '에러가 발생했어요!'}
+          </span>
+          <span className={classNames('whiteSpace', modalSubTitle)}>
+            {isSignupSuccess ? '로그인 하러 가볼까요?' : '잠시 후에 다시 시도해주세요!'}
+          </span>
+        </CustomModalDialog>
+      )}
+      <div className={classNames(flex_container)}>
+        <form onSubmit={handleSubmit}>
+          <CustomLabel htmlFor="userName" className={classNames(form__label)}>
+            사용자명
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="userName"
+              name="userName"
+              className={classNames(form__input, !isValidForm.userName ? inValid_form : valid_form)}
+              onChange={handleOnChange}
+              value={userName}
+              type="input"
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.userName}</span>
+          </div>
+          <CustomLabel htmlFor="nickname" className={classNames(form__label)}>
+            닉네임
+          </CustomLabel>
+          <div className={classNames(flex)}>
+            <ValidInput
+              id="nickname"
+              name="nickname"
+              className={classNames(form__input, !isValidForm.nickname ? inValid_form : valid_form)}
+              onChange={handleOnChange}
+              value={nickname}
+              type="input"
+            />
+            <button
+              type="button"
+              onClick={handleClickNicknameDuplicate}
+              className={classNames(duplicate_check__btn)}
+            >
+              중복확인
+            </button>
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.nickname}</span>
+          </div>
+          <CustomLabel htmlFor="email" className={classNames(form__label)}>
+            이메일
+          </CustomLabel>
+          <div className={classNames(flex)}>
+            <ValidInput
+              id="email"
+              className={classNames(form__input, !isValidForm.email ? inValid_form : valid_form)}
+              name="email"
+              onChange={handleOnChange}
+              value={email}
+              type="input"
+            />
+            <button
+              type="button"
+              onClick={handleClickCheckDuplicatedEmail}
+              className={classNames(duplicate_check__btn)}
+            >
+              중복확인
+            </button>
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.email}</span>
+          </div>
+          <CustomLabel htmlFor="password" className={classNames(form__label)}>
+            비밀번호
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="password"
+              name="password"
+              className={classNames(form__input, !isValidForm.password ? inValid_form : valid_form)}
+              onChange={handleOnChange}
+              value={password}
+              type="input"
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.password}</span>
+          </div>
+          <CustomLabel htmlFor="confirmedPassword" className={classNames(form__label)}>
+            비밀번호 확인
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="confirmedPassword"
+              className={classNames(
+                form__input,
+                !isValidForm.confirmedPassword ? inValid_form : valid_form
+              )}
+              name="confirmedPassword"
+              onChange={handleOnChange}
+              value={confirmedPassword}
+              type="input"
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.confirmedPassword}</span>
+          </div>
+          <CustomLabel htmlFor="gender" className={classNames(form__label)}>
+            성별
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="gender"
+              name="gender"
+              onChange={handleOnChange}
+              value={gender}
+              className={classNames(form__input, !isValidForm.gender ? inValid_form : valid_form)}
+              type="select"
+              selectOptions={GENDER}
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.gender}</span>
+          </div>
+          <CustomLabel htmlFor="ageGroup" className={classNames(form__label)}>
+            연령대
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="ageGroup"
+              className={classNames(form__input, !isValidForm.ageGroup ? inValid_form : valid_form)}
+              name="ageGroup"
+              onChange={handleOnChange}
+              value={ageGroup}
+              type="select"
+              selectOptions={AGE}
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.ageGroup}</span>
+          </div>
+          <CustomLabel htmlFor="sports" className={classNames(form__label)}>
+            종목
+          </CustomLabel>
+          <div>
+            <ValidInput
+              id="sports"
+              name="sports"
+              className={classNames(form__input, !isValidForm.sports ? inValid_form : valid_form)}
+              onChange={handleOnChange}
+              value={sports}
+              type="select"
+              selectOptions={SPORTS}
+            />
+          </div>
+          <div>
+            <span className={classNames(valid_msg)}>{validMsg.sports}</span>
+          </div>
+          <button type="submit" className={classNames(edit_info__btn)}>
+            회원가입
+          </button>
+        </form>
       </div>
-
-      <CustomLabel htmlFor="nickname">닉네임</CustomLabel>
-      <div>
-        <ValidInput
-          id="nickname"
-          name="nickname"
-          onChange={handleOnChange}
-          value={nickname}
-          type="input"
-          validMsg={validMsg.nickname}
-        />
-        <button type="button" onClick={handleClickNicknameDuplicate}>
-          중복확인
-        </button>
-      </div>
-      <CustomLabel htmlFor="email">이메일</CustomLabel>
-      <div>
-        <ValidInput
-          id="email"
-          name="email"
-          onChange={handleOnChange}
-          value={email}
-          type="input"
-          validMsg={validMsg.email}
-        />
-        <button type="button" onClick={handleClickCheckDuplicatedEmail}>
-          중복확인
-        </button>
-      </div>
-      <CustomLabel htmlFor="password">비밀번호</CustomLabel>
-      <div>
-        <ValidInput
-          id="password"
-          name="password"
-          onChange={handleOnChange}
-          value={password}
-          type="input"
-          validMsg={validMsg.password}
-        />
-      </div>
-      <CustomLabel htmlFor="confirmedPassword">비밀번호 확인</CustomLabel>
-      <div>
-        <ValidInput
-          id="confirmedPassword"
-          name="confirmedPassword"
-          onChange={handleOnChange}
-          value={confirmedPassword}
-          type="input"
-          validMsg={validMsg.confirmedPassword}
-        />
-      </div>
-      <CustomLabel htmlFor="gender">성별</CustomLabel>
-      <div>
-        <ValidInput
-          id="gender"
-          name="gender"
-          onChange={handleOnChange}
-          value={gender}
-          type="select"
-          validMsg={validMsg.gender}
-          selectOptions={GENDER}
-        />
-      </div>
-      <CustomLabel htmlFor="ageGroup">연령대</CustomLabel>
-      <div>
-        <ValidInput
-          id="ageGroup"
-          name="ageGroup"
-          onChange={handleOnChange}
-          value={ageGroup}
-          type="select"
-          validMsg={validMsg.ageGroup}
-          selectOptions={AGE}
-        />
-      </div>
-      <CustomLabel htmlFor="sports">종목</CustomLabel>
-      <div>
-        <ValidInput
-          id="sports"
-          name="sports"
-          onChange={handleOnChange}
-          value={sports}
-          type="select"
-          validMsg={validMsg.sports}
-          selectOptions={SPORTS}
-        />
-      </div>
-      <button type="submit">회원가입</button>
-    </form>
+    </div>
   );
 };
 

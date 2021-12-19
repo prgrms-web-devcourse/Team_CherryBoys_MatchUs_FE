@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
@@ -6,22 +6,23 @@ import { getUserMatchHistory } from '@/api/user';
 import { MatchElement } from '@/types';
 import style from './userMatchDetail.module.scss';
 import { MatchListElement } from '@/components';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
-const { matchComponentContainer, mainTitle, highlight, titleContainer } = style;
+const { matchComponentContainer, mainTitle, highlight, titleContainer, matchesContainer } = style;
 
 const UserMatchDetail = () => {
   const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
-  const result = useSelector((store: RootState) => store.user.userInfo);
-
-  const updateUserMatchHistory = useCallback(async () => {
-    const newMatchHistory = await getUserMatchHistory(result?.id);
-
-    setUserMatchHistory(newMatchHistory);
-  }, [result?.id]);
+  const { nickname, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
   useEffect(() => {
+    const updateUserMatchHistory = async () => {
+      const { userMatches } = await getUserMatchHistory(userId);
+
+      setUserMatchHistory(userMatches);
+    };
+
     updateUserMatchHistory();
-  }, [updateUserMatchHistory]);
+  }, [userId]);
 
   return (
     <>
@@ -30,7 +31,7 @@ const UserMatchDetail = () => {
         <div className={classNames(matchComponentContainer)}>
           <div className={classNames(titleContainer)}>
             <p className={classNames(mainTitle)}>
-              <span className={classNames('whiteSpace')}>{result?.nickname}님의</span>
+              <span className={classNames('whiteSpace')}>{nickname}님의</span>
               <span>
                 멋진 <span className={classNames(highlight)}>경기 이력</span>
               </span>
@@ -38,7 +39,7 @@ const UserMatchDetail = () => {
             </p>
           </div>
         </div>
-        <div>
+        <div className={classNames(matchesContainer)}>
           {userMatchHistory.map(
             ({
               matchId,
@@ -48,20 +49,18 @@ const UserMatchDetail = () => {
               applyTeamLogo,
               applyTeamName,
               status,
-            }) => {
-              return (
-                <MatchListElement
-                  key={`userReview-${matchId}`}
-                  matchId={matchId}
-                  matchDate={matchDate}
-                  registerTeamLogo={registerTeamLogo}
-                  registerTeamName={registerTeamName}
-                  applyTeamLogo={applyTeamLogo}
-                  applyTeamName={applyTeamName}
-                  status={status}
-                />
-              );
-            }
+            }) => (
+              <MatchListElement
+                key={`userReview-${matchId}`}
+                matchId={matchId}
+                matchDate={matchDate}
+                registerTeamLogo={registerTeamLogo}
+                registerTeamName={registerTeamName}
+                applyTeamLogo={applyTeamLogo}
+                applyTeamName={applyTeamName}
+                status={status}
+              />
+            )
           )}
         </div>
       </div>
