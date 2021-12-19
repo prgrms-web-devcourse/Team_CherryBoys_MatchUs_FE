@@ -7,7 +7,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Input, InputDetail } from '@/components';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
@@ -37,7 +37,6 @@ const defaultGround = {
 
 const EditMatch = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const { locations } = useSelector((store: RootState) => store.match.data);
@@ -63,7 +62,6 @@ const EditMatch = () => {
     }
   }, []);
 
-  const [nowDate, setNowDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState({
     startDate: new Date(),
     startTime: new Date(),
@@ -181,6 +179,7 @@ const EditMatch = () => {
     }
     if (category === 'cost') {
       const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) return;
       setCost(targetInputNumber);
     }
   };
@@ -192,7 +191,6 @@ const EditMatch = () => {
 
   const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
     const newDate = selectedDate ? new Date(selectedDate.toString()) : new Date();
-    setNowDate(newDate);
 
     const endTime = new Date(newDate.getTime() + 120 * 60000);
 
@@ -217,7 +215,7 @@ const EditMatch = () => {
     setFormattedDate({ ...formattedDate, endTime: newDate });
   };
 
-  const submitDate = () => {
+  const handleSubmitMatchInfo = async () => {
     const { startDate, startTime, endTime } = formattedDate;
 
     const dateResult = {
@@ -257,26 +255,10 @@ const EditMatch = () => {
       }),
     };
 
-    if (dateResult.date < todayResult.date) {
-      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
-      return todayResult;
-    }
-    if (startTime > endTime) {
-      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
-      return todayResult;
-    }
-
-    setDate(dateResult);
-  };
-
-  const handleSubmitMatchInfo = () => {
     if (sports === '선택') {
       window.alert('종목을 선택해주세요');
       return;
     }
-
-    submitDate();
-
     if (ageGroup === placeholder) {
       window.alert('연령대를 선택해주세요');
       return;
@@ -293,13 +275,23 @@ const EditMatch = () => {
       window.alert('구장을 선택해주세요');
       return;
     }
+    if (dateResult.date < todayResult.date) {
+      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
+      return;
+    }
+    if (startTime > endTime) {
+      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
+      return;
+    }
     if (Number.isNaN(cost)) {
       window.alert('참가비는 숫자만 입력할 수 있습니다');
       return;
     }
 
     const requestData = {
-      ...date,
+      date: dateResult.date,
+      startTime: dateResult.startTime,
+      endTime: dateResult.endTime,
       matchId,
       sports,
       ageGroup,
@@ -311,7 +303,7 @@ const EditMatch = () => {
     };
 
     modifyMatch(requestData);
-    history.push('/matches/');
+    await window.location.replace(`/matches/post/${matchId}`);
   };
 
   useEffect(() => {

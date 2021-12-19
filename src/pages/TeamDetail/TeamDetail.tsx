@@ -1,33 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import classNames from 'classnames';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
-import { MemberElement, MatchElement } from '@/types';
-import { MemberList, MatchListElement, CustomModalDialog } from '@/components';
+import { MemberElement, MatchElement, TeamInfo } from '@/types';
+import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
   style;
 const TeamDetail = () => {
-  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('LEAVE');
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
-  const [teamInfo, setTeamInfo] = useState({
+  const [teamInfo, setTeamInfo] = useState<TeamInfo>({
+    ageGroup: '',
+    bio: '',
+    captainId: 0,
+    logo: '',
+    captainName: '',
+    mannerTemperature: 0,
+    matchCount: 0,
+    sportsName: '',
+    tags: [],
+    teamCreatedAt: '',
     teamId: 0,
     teamName: '',
-    bio: '',
-    sportsName: '',
-    tagNames: [],
-    matchCount: 0,
-    mannerTemperature: 0,
-    captainId: 0,
-    captainName: '',
-    ageGroup: '',
-    teamCreatedAt: '',
   });
   const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
@@ -54,7 +55,7 @@ const TeamDetail = () => {
     teamName,
     bio,
     sportsName,
-    tagNames,
+    tags,
     matchCount,
     mannerTemperature,
     captainId,
@@ -63,35 +64,35 @@ const TeamDetail = () => {
     teamCreatedAt,
   } = teamInfo;
 
-  const updateTeamInfo = useCallback(async () => {
-    const result = await getTeamInfo(teamId);
-
-    setTeamInfo(result);
-  }, [teamId]);
-
-  const updateMemberInfo = useCallback(async () => {
-    const { members } = await getTotalMemberInfo(teamId);
-
-    if (members) {
-      setMemberInfo(members);
-    }
-  }, [teamId]);
-
-  const updateTeamMatchHistory = useCallback(async () => {
-    const { teamMatches } = await getMatchHistory(teamId);
-
-    if (teamMatches) {
-      setMatchHistory(teamMatches);
-    }
-  }, [teamId]);
-
   const { modalMainTitle, modalSubTitle } = style;
 
   useEffect(() => {
+    const updateTeamMatchHistory = async () => {
+      const { teamMatches } = await getMatchHistory(teamId);
+
+      if (teamMatches) {
+        setMatchHistory(teamMatches);
+      }
+    };
+
+    const updateMemberInfo = async () => {
+      const { members } = await getTotalMemberInfo(teamId);
+
+      if (members) {
+        setMemberInfo(members);
+      }
+    };
+
+    const updateTeamInfo = async () => {
+      const result = await getTeamInfo(teamId);
+
+      setTeamInfo(result);
+    };
+
     updateTeamInfo();
     updateTeamMatchHistory();
     updateMemberInfo();
-  }, [updateTeamInfo, updateMemberInfo, updateTeamMatchHistory]);
+  }, [teamId]);
 
   return (
     <div>
@@ -119,8 +120,10 @@ const TeamDetail = () => {
         <img className={classNames(logImage)} alt="팀 로고 이미지" />
         <p key={`team-${teamId}`}>{teamName}</p>
         <div>팀 세부설명{bio}</div>
-        {tagNames.map((tagName) => (
-          <span key={`tagName-${tagName}`}>{tagName}</span>
+        {tags.map(({ tagId, tagName, tagType }) => (
+          <>
+            <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+          </>
         ))}
       </article>
       <article className={classNames(teamCoreInfo)}>
@@ -188,20 +191,30 @@ const TeamDetail = () => {
           <Link to={`/team/${teamId}/match`}>더보기</Link>
         </div>
         {hasPreviousMatchHistory ? (
-          previousMatchHistory.map((match) => {
-            return (
-              <MatchListElement
-                key={`beforeMatch-${match.matchId}`}
-                matchId={match.matchId}
-                matchDate={match.matchDate}
-                registerTeamLogo={match.registerTeamLogo}
-                registerTeamName={match.registerTeamName}
-                applyTeamLogo={match.applyTeamLogo}
-                applyTeamName={match.applyTeamName}
-                status={match.status}
-              />
-            );
-          })
+          previousMatchHistory.map(
+            ({
+              matchId,
+              matchDate,
+              registerTeamLogo,
+              registerTeamName,
+              applyTeamLogo,
+              applyTeamName,
+              status,
+            }) => {
+              return (
+                <MatchListElement
+                  key={`beforeMatch-${matchId}`}
+                  matchId={matchId}
+                  matchDate={matchDate}
+                  registerTeamLogo={registerTeamLogo}
+                  registerTeamName={registerTeamName}
+                  applyTeamLogo={applyTeamLogo}
+                  applyTeamName={applyTeamName}
+                  status={status}
+                />
+              );
+            }
+          )
         ) : (
           <p>
             <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>

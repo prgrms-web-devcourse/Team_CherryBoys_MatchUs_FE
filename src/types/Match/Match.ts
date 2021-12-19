@@ -27,7 +27,7 @@ export interface MatchCard {
 
 export interface TeamUser {
   userId: number;
-  userName: string;
+  userName:string;
 }
 
 export interface Team {
@@ -178,13 +178,14 @@ export interface TeamMemberEdit {
 export interface TeamMemberInfo {
   grade: string;
   userId: number;
-  userName: string;
+  userName:string;
 }
 
 export interface MatchReviewInfo {
   matchId?: number;
   tags: number[];
   reviewerTeamId: number;
+  reviewerTeamType: string;
   reviewedTeamId: number;
 }
 
@@ -197,4 +198,19 @@ export interface MatchApplyInfo {
   matchId: number;
   players: number[];
   teamId: number;
+}
+
+export interface TagInfo {
+  tagId: number;
+  tagName: string;
+  tagType: string;
+}
+export interface CheckboxOptions {
+  [key: string]: boolean;
+}
+
+export interface TagCheckList {
+  [GOOD: string]: CheckboxOptions;
+  BAD: CheckboxOptions;
+  NONE: CheckboxOptions;
 }

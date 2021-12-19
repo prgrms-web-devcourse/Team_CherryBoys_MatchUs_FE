@@ -19,3 +19,20 @@
     font-weight: 700;
   }
 }
+
+.matchesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin : {
+    top: 1rem;
+    bottom: 6rem;
+  }
+  padding: 1.8rem 1.6rem;
+  border-radius: 1rem;
+
+  margin: {
+    right: 1.6rem;
+    left: 1.6rem;
+  }
+}

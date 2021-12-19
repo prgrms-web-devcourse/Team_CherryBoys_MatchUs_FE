@@ -60,6 +60,8 @@ export interface userType {
     sports: string;
     userGradeResponse: [] | userGradeType[];
   };
+  hireRequestList: [];
+  teamInvitaionList: [];
 }
 
 export interface userInfoValueType {

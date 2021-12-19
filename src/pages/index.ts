@@ -1,8 +1,8 @@
 export { default as Matches } from './Matches/MatchesPage';
 export { default as Hires } from './Hires/Hires';
-export { default as HiresDetail } from './HiresDetail/HiresDetail';
+// export { default as HiresDetail } from './HiresDetail/HiresDetail';
 export { default as HiresCreate } from './HiresCreate/HiresCreate';
-export { default as HiresEdit } from './HiresEdit/HiresEdit';
+// export { default as HiresEdit } from './HiresEdit/HiresEdit';
 export { default as HiresAccept } from './HiresAccept/HiresAccept';
 export { default as HiresFilter } from './HiresFilter/HiresFilter';
 export { default as Teams } from './Teams/Teams';
@@ -23,3 +23,6 @@ export { default as Signup } from './Signup/Signup';
 export { default as Main } from './Main/Main';
 export { default as UserDetail } from './UserDetail/UserDetail';
 export { default as UserMatchDetail } from './UserMatchDetail/UserMatchDetail';
+export { default as UserHireRequest } from './UserHireRequest/UserHireRequest';
+export { default as UserInfoEdit } from './UserInfoEdit/UserInfoEdit';
+export { default as UserTeamInvitation } from './UserTeamInvitation/UserTeamInvitation';

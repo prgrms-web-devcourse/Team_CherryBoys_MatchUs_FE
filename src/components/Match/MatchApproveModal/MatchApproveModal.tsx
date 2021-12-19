@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styles from './MatchApproveModal.module.scss';
 import { TeamCard } from '@/components';
 import { match } from '@/store/match/match';
@@ -25,6 +25,7 @@ interface ModalState {
 }
 
 const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
+  const history = useHistory();
   const [waitingTeams, setWaitingTeams] = useState<WaitingTeam[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<WaitingTeam>({
     teamInfo: {
@@ -42,8 +43,8 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
 
   const dispatch = useDispatch();
   const getWaitingTeams = useCallback(async () => {
-    const waitingTeamList = await fetchWaitingTeams(matchId);
-    setWaitingTeams(waitingTeamList);
+    const { matchWaitingListRespons } = await fetchWaitingTeams(matchId);
+    setWaitingTeams(matchWaitingListRespons);
   }, [matchId]);
   useEffect(() => {
     getWaitingTeams();
@@ -62,6 +63,8 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     }
 
     approveMatch(selectedTeam.teamWaitingId);
+    dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
+    history.go(0);
   };
 
   const handleOnChangeTeamCard = (e: React.ChangeEvent<HTMLElement>) => {

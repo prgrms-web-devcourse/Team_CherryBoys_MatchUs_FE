@@ -1,9 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { removeItemFromStorage, setItemFromStorage } from '@/utils/storage';
-import { requestLogin, requestReAuth } from '../api/user';
+import {
+  acceptTeamInvitation,
+  getMyHireRequestInfo,
+  getMyTeamInvitationInfo,
+  requestLogin,
+  requestReAuth,
+  rejectTeamInvitaion,
+} from '../api/user';
 import { loginFormType, reqeustUserInfoType, userType } from '@/types/users';
 import { requestEditUser } from '@/api/user';
+import { cancelHireRequest } from '@/api/hires';
 
 const initialState: userType = {
   isLogged: false,
@@ -20,6 +28,8 @@ const initialState: userType = {
     sports: '',
     userGradeResponse: [],
   },
+  hireRequestList: [],
+  teamInvitaionList: [],
 };
 
 export const login = createAsyncThunk('user/login', async (loginForm: loginFormType) => {
@@ -43,6 +53,45 @@ export const editUser = createAsyncThunk(
   }
 );
 
+export const getHireRequest = createAsyncThunk('user/getHireRequest', async () => {
+  const response = await getMyHireRequestInfo();
+
+  return response;
+});
+
+export const hireRequestCancel = createAsyncThunk(
+  'user/hireRequestCancel',
+  async (applcationId: number) => {
+    const response = await cancelHireRequest(applcationId);
+
+    return response;
+  }
+);
+
+export const getTeamInvitation = createAsyncThunk('user/getTeamInvitation', async () => {
+  const response = await getMyTeamInvitationInfo();
+
+  return response;
+});
+
+export const acceptTeamInvitationAction = createAsyncThunk(
+  'user/acceptTeamInvitation',
+  async (invitaionId: number) => {
+    const response = await acceptTeamInvitation(invitaionId);
+
+    return response;
+  }
+);
+
+export const rejectTeamInvitationAction = createAsyncThunk(
+  'user/acceptTeamInvitation',
+  async (invitaionId: number) => {
+    const response = await rejectTeamInvitaion(invitaionId);
+
+    return response;
+  }
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -61,6 +110,8 @@ export const userSlice = createSlice({
         userGradeResponse: [],
       };
 
+      state.hireRequestList = [];
+      state.teamInvitaionList = [];
       removeItemFromStorage('accessToken');
       removeItemFromStorage('expireTime');
     },
@@ -71,6 +122,10 @@ export const userSlice = createSlice({
       state.userInfo.bio = bio;
       state.userInfo.ageGroup = ageGroup;
       state.userInfo.sports = sportName;
+    },
+    sethireRequestListState: (state, { payload }) => {
+      const { newHireRequestList } = payload;
+      state.hireRequestList = newHireRequestList;
     },
   },
   extraReducers: {
@@ -83,18 +138,22 @@ export const userSlice = createSlice({
       setItemFromStorage('expireTime', expireTime + 3000000);
       state.userInfo = userResponse;
     },
-    [login.rejected.type]: () => {
-      console.log('error!');
-    },
     [initiateAuth.fulfilled.type]: (state, { payload }) => {
       const { userResponse } = payload;
 
       state.isLogged = true;
       state.userInfo = userResponse;
     },
-    [editUser.fulfilled.type]: (state) => {},
+    [getHireRequest.fulfilled.type]: (state, { payload }) => {
+      const { hireRequestTeams } = payload;
+      state.hireRequestList = hireRequestTeams;
+    },
+    [getTeamInvitation.fulfilled.type]: (state, { payload }) => {
+      const { teamInvitationInfos } = payload;
+      state.teamInvitaionList = teamInvitationInfos;
+    },
   },
 });
 
-export const { logout, editEditabelUserState } = userSlice.actions;
+export const { logout, editEditabelUserState, sethireRequestListState } = userSlice.actions;
 export default userSlice.reducer;

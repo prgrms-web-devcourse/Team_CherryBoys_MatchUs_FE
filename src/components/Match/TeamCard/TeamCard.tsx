@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styles from './TeamCard.module.scss';
 import { match } from '@/store/match/match';
+import { RootState } from '@/store';
 
 interface Props {
   team: {
@@ -16,13 +17,11 @@ interface Props {
     teamMannerTemperature?: number;
     matchMembers?: {
       userId: number;
-      userName: string;
-    }[];
-    teamUsers?: {
-      userId: number;
-      userName: string;
+      userName?: string;
+      userNickname?: string;
     }[];
   };
+  status?: string;
 }
 
 const {
@@ -46,11 +45,14 @@ const {
 
 const showPlayersLimit = 5;
 
-const TeamCard = ({ team }: Props) => {
+const TeamCard = ({ team, status }: Props) => {
   const [showTeamUser, setShowTeamUser] = useState(false);
-  const teamMembers = team.matchMembers || team.teamUsers || [];
+  const teamMembers = team.matchMembers || [];
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const { userTeams } = useSelector((store: RootState) => store.match.data);
+  const isEditable = userTeams.filter((teamInfo) => teamInfo.teamId === team.teamId)[0];
 
   const handleShowTeamUser = () => {
     setShowTeamUser(!showTeamUser);
@@ -111,7 +113,7 @@ const TeamCard = ({ team }: Props) => {
             })}
             key={`teamUser${index}`}
           >
-            {user.userName}
+            {user.userNickname || user.userName}
           </div>
         ))}
         <div>
@@ -122,13 +124,15 @@ const TeamCard = ({ team }: Props) => {
           >
             {!showTeamUser ? '더보기' : '숨기기'}
           </button>
-          <button
-            type="button"
-            onClick={handleShowTeamMemberModal}
-            className={classNames(showTeamMemberModalButton)}
-          >
-            교체
-          </button>
+          {status === 'WAITING' && isEditable && (
+            <button
+              type="button"
+              onClick={handleShowTeamMemberModal}
+              className={classNames(showTeamMemberModalButton)}
+            >
+              교체
+            </button>
+          )}
         </div>
       </div>
     </div>
