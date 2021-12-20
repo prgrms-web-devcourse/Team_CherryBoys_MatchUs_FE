@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { getApplications } from '@/api/hires';
-import { ApplicationElement } from '@/components/Applications';
+import { ApplicationElement } from '@/components';
 import { application } from '@/types';
 
 interface CheckboxOptions {
