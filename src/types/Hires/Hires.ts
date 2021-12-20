@@ -30,3 +30,9 @@ export interface previousHiresInfo {
   prevDetail?: string;
   postId?: number;
 }
+
+export interface application {
+  applicationId: number;
+  userId: number;
+  userNickName: string;
+}

@@ -226,7 +226,6 @@ const HiresCreate = ({
     setAgeGroup(`${ageNumber}대`);
   };
 
-  // Todo(홍중) : api 통신 추후 추가 (2021-12-17)
   const handleClickCreatePosting = async (data: hiresPosting) => {
     await createHiresPosting(data);
     history.push(`/hires`);

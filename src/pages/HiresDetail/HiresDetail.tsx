@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
 import style from './hiresDetail.module.scss';
-import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
+import { getHiresDetail, deleteHiresPosting, applyHires, cancelHireRequest } from '@/api/hires';
 import { InputDetail } from '@/components';
 import { hireItemType } from '@/types';
 
@@ -33,6 +33,7 @@ const HiresDetail = () => {
 
   const handleClickRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
+    history.push(`/hires`);
   };
 
   // Todo(홍중) : 팀원이 onChange함수를 필수로 하는것이 이해되는데 input말고 다른 형태로 세부설명을 다시 구현할지 고민하기(2021-12-19)
@@ -43,6 +44,20 @@ const HiresDetail = () => {
       pathname: `/hires/edit/${postId}`,
       state: { hireItem },
     });
+  };
+
+  const handleClickApplyHires = async () => {
+    const res = await applyHires(currentPostId);
+    console.log(res);
+  };
+
+  const handleClickCancelHires = async () => {
+    const res = await cancelHireRequest(7);
+    console.log(res);
+  };
+
+  const handleClickShowApplications = () => {
+    history.push(`/hires/accept/${currentPostId}`);
   };
 
   return (
@@ -78,17 +93,23 @@ const HiresDetail = () => {
               <div>{hireItem.teamName}</div>
               <section className={classNames(card__leaderInfo)}>
                 <span>{hireItem.teamManagerName}</span>
-                <button type="button">채팅</button>
               </section>
             </div>
           </article>
-
           <InputDetail
             labelName="상세정보"
             placeholder={hireItem.detail}
             onChange={handleChangeDetail}
           />
-          <button type="button">신청 용병 확인</button>
+          <button type="button" onClick={handleClickShowApplications}>
+            신청 용병 확인
+          </button>
+          <button type="button" onClick={handleClickApplyHires}>
+            용병 신청
+          </button>
+          <button type="button" onClick={handleClickCancelHires}>
+            용병 취소
+          </button>
         </>
       )}
     </>

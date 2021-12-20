@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-empty */
+import React, { useState } from 'react';
 
 import InputCheckBox from '@/components/common/Inputs/InputCheckBox/InputCheckBox';
 import { getApplications, allowApplications } from '@/api/hires';
+import { application } from '@/types';
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -10,8 +13,13 @@ interface CheckboxOptions {
 interface element {
   currentPostId: number;
   applicationCheckList: CheckboxOptions;
+  originApplications: application[];
 }
-const ApplicationElement = ({ currentPostId, applicationCheckList }: element) => {
+const ApplicationElement = ({
+  currentPostId,
+  applicationCheckList,
+  originApplications,
+}: element) => {
   const [hiresApplications, setHiresApplications] = useState<CheckboxOptions>(applicationCheckList);
 
   const handleOnChangeApplications = (e: React.ChangeEvent<HTMLElement>) => {
@@ -23,22 +31,28 @@ const ApplicationElement = ({ currentPostId, applicationCheckList }: element) =>
   };
 
   const handleClickAllowApplications = async () => {
-    const data = {
-      applications: [
-        {
-          applicationId: 2,
-          userId: 2,
-          userNickName: '머쓱머쓱1',
-        },
-        {
-          applicationId: 3,
-          userId: 3,
-          userNickName: '머쓱머쓱2',
-        },
-      ],
-    };
+    const allowedName = [];
 
-    const res = await allowApplications({ postId: currentPostId, data });
+    for (const [key, value] of Object.entries(hiresApplications)) {
+      if (value === true) {
+        allowedName.push(key);
+      }
+    }
+
+    const allowdApplications = [];
+    for (const applications of originApplications) {
+      const { applicationId, userId, userNickName } = applications;
+      for (const targetApplication of allowedName) {
+        if (userNickName === targetApplication) {
+          allowdApplications.push(applications);
+        }
+      }
+    }
+
+    const request = {
+      applications: allowdApplications,
+    };
+    await allowApplications({ postId: currentPostId, data: request });
   };
 
   // Todo(홍중) : label누르면 드랍박스로 focus되도록 수정예정(2021-12-19)

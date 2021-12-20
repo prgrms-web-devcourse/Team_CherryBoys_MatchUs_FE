@@ -27,13 +27,14 @@ interface applicationElement {
 }
 
 interface allApplications {
-  applications: Array<applicationElement>;
+  applications: applicationElement[];
 }
 
 interface allowedApplications {
   postId: number;
   data: allApplications;
 }
+
 interface conditions {
   ageGroup?: string;
   cityId?: number;
@@ -81,7 +82,7 @@ export const editHiresPosting = ({ postId, data }: editedHiresPosting) => {
 export const deleteHiresPosting = (postId: number) =>
   api
     .delete({
-      url: `hires/${postId}`,
+      url: `/hires/${postId}`,
     })
     .catch(throwErrorMessage);
 
@@ -105,6 +106,15 @@ export const allowApplications = ({ postId, data }: allowedApplications) => {
 export const cancelHireRequest = (applicationId: number) =>
   api
     .delete({
-      url: `hire-applications/${applicationId}`,
+      url: `/hire-applications/${applicationId}`,
     })
     .catch(throwErrorMessage);
+
+export const applyHires = (postId: number) => {
+  return api
+    .post({
+      url: `/hire-applications`,
+      data: { postId },
+    })
+    .catch(throwErrorMessage);
+};

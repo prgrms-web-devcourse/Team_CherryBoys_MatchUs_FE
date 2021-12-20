@@ -3,15 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import { getApplications } from '@/api/hires';
 import { ApplicationElement } from '@/components/Applications';
+import { application } from '@/types';
 
 interface CheckboxOptions {
   [key: string]: boolean;
-}
-
-interface application {
-  applicationId: number;
-  userId: number;
-  userNickName: string;
 }
 
 const HiresAccept = () => {
@@ -48,6 +43,7 @@ const HiresAccept = () => {
         <ApplicationElement
           currentPostId={currentPostId}
           applicationCheckList={applicationCheckList}
+          originApplications={originApplications}
         />
       )}
     </>
