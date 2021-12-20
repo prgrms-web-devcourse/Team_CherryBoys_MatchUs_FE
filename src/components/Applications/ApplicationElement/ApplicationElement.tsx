@@ -5,11 +5,15 @@ import { useHistory } from 'react-router-dom';
 
 import classNames from 'classnames';
 import { InputCheckBox, CustomModalDialog } from '@/components';
+import InputCheckBox from '@/components/common/Inputs/InputCheckBox/InputCheckBox';
 import { getApplications, allowApplications } from '@/api/hires';
+import styles from './ApplicationElement.module.scss';
+const { applicationContainer, buttonBox, submitButton } = styles;
 import { application } from '@/types';
 import style from './ApplicationElement.module.scss';
 
 const { modalMainTitle } = style;
+
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -90,9 +94,9 @@ const ApplicationElement = ({
 
   // Todo(홍중) : label누르면 드랍박스로 focus되도록 수정예정(2021-12-19)
   return (
-    <>
+    <div className={classNames(applicationContainer)}>
       <InputCheckBox
-        labelName="용병 신청자"
+        labelName="신청한 용병 목록"
         options={hiresApplications}
         onChange={handleOnChangeApplications}
         icon="far fa-check-square"

@@ -1,4 +1,5 @@
 .postCard {
+  min-width: fit-content;
   margin: 0.8rem 0;
   padding: 0.4rem;
   border: 0.2rem solid #56ad79;
@@ -35,6 +36,7 @@
       > div {
         width: 100%;
         margin: 0.4rem 0;
+        overflow: hidden;
         font-size: 1.6rem;
       }
     }
