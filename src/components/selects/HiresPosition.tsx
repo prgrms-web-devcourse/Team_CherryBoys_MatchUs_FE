@@ -17,7 +17,7 @@ const HiresPosition = ({ hiringPosition, handleChangePosition }: Props) => {
           inputId="hiresPosition"
           labelName="포지션"
           type="dropbox"
-          options={[hiringPosition || '', ...POSITION]}
+          options={[hiringPosition || '선택', ...POSITION]}
           onChange={handleChangePosition}
         />
       </section>

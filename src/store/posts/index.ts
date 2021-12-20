@@ -33,6 +33,7 @@ export interface PostWrapper {
   isMatch: boolean;
   selectedTeam: TeamInfo;
   data: HiresResponseType[];
+  isCaptain: boolean;
 }
 
 export interface Post {

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
 import style from './hiresDetail.module.scss';
-import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
+import { getHiresDetail, deleteHiresPosting, applyHires, cancelHireRequest } from '@/api/hires';
 import { InputDetail } from '@/components';
 import { hireItemType } from '@/types';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
-
 const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
+import { RootState } from '@/store';
 
 const {
   hires_container,
@@ -32,21 +33,33 @@ const {
 const HiresDetail = () => {
   const history = useHistory();
   const [hireItem, setHireItem] = useState<hireItemType>();
-
   const { postId } = useParams<{ postId: string }>();
   const currentPostId = parseInt(postId, 10);
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const [isCaptain, setIsCaptain] = useState(false);
 
   useEffect(() => {
     const getHiresDetailInfo = async () => {
       const res = await getHiresDetail(currentPostId);
       setHireItem(res);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const gradeInfo of userInfo.userGradeResponse) {
+        const { grade, teamId } = gradeInfo;
+        if (teamId === res.teamId && (grade === 'CAPTAIN' || grade === 'SUBCAPTAIN')) {
+          setIsCaptain(true);
+        }
+      }
     };
 
     getHiresDetailInfo();
-  }, [currentPostId]);
+  }, [currentPostId, userInfo, isCaptain]);
 
+  useEffect(() => {
+    console.error(isCaptain);
+  }, []);
   const handleClickRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
+    history.push(`/hires`);
   };
 
   // Todo(홍중) : 팀원이 onChange함수를 필수로 하는것이 이해되는데 input말고 다른 형태로 세부설명을 다시 구현할지 고민하기(2021-12-19)
@@ -63,6 +76,20 @@ const HiresDetail = () => {
     history.push(url);
   };
 
+  const handleClickApplyHires = async () => {
+    const res = await applyHires(currentPostId);
+  };
+
+  const handleClickCancelHires = async () => {
+    const id = 7;
+    const res = await cancelHireRequest(7);
+  };
+
+  const handleClickShowApplications = () => {
+    history.push(`/hires/accept/${currentPostId}`);
+  };
+
+  // Todo(홍중) : 용병 취소 추후 완성(2021-12-21)
   return (
     <div className={classNames(hires_container)}>
       {hireItem && (
