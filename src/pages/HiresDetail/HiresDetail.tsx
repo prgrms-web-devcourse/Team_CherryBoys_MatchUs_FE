@@ -8,8 +8,9 @@ import { getHiresDetail, deleteHiresPosting, applyHires, cancelHireRequest } fro
 import { InputDetail, CustomModalDialog } from '@/components';
 import { hireItemType } from '@/types';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
-const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 import { RootState } from '@/store';
+
+const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 
 const {
   hires_container,
@@ -199,20 +200,6 @@ const HiresDetail = () => {
           <article className={classNames(hires_buttonBox)}>
             <button type="button">신청 용병 확인</button>
           </article>
-          <InputDetail
-            labelName="상세정보"
-            placeholder={hireItem.detail}
-            onChange={handleChangeDetail}
-          />
-          <button type="button" onClick={handleClickShowApplications}>
-            신청 용병 확인
-          </button>
-          <button type="button" onClick={() => setIsModal1Open(true)}>
-            용병 신청
-          </button>
-          <button type="button" onClick={handleClickCancelHires}>
-            용병 취소
-          </button>
         </>
       )}
 
@@ -276,7 +263,7 @@ const HiresDetail = () => {
           <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
         </CustomModalDialog>
       )}
-    </>
+    </div>
   );
 };
 
