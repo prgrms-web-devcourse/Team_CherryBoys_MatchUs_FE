@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import React from 'react';
 import classNames from 'classnames';
 import style from './memberList.module.scss';
