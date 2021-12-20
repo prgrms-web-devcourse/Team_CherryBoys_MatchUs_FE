@@ -1,5 +1,33 @@
-.categoryTitle {
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 4rem;
 }
 
-.playerDetailInfo {
+.membersContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+// element style
+
+.memberInfoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.6rem;
+  padding : {
+    right: 4.8rem;
+    left: 4.8rem;
+  }
+
+  .gradeContainer {
+    width: 7rem;
+    height: 3.4rem;
+    margin-bottom: 1rem;
+    padding-top: 0.8rem;
+    text-align: center;
+    border: 1px solid #eaebec;
+    border-radius: 1rem;
+  }
 }

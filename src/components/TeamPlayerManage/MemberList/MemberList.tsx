@@ -20,7 +20,7 @@ interface Props {
   handleChangeEditButtonStatus?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const { categoryTitle, playerDetailInfo } = style;
+const { buttonContainer, playerDetailInfo, membersContainer } = style;
 
 const MemberList = ({
   isMember,
@@ -46,17 +46,14 @@ const MemberList = ({
     <>
       <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
         {/* article Header */}
-        <div>
-          {hasCategoryTitle && (
-            <p className={classNames(categoryTitle)}>{isMember ? '팀원' : '용병'} 정보</p>
-          )}
+        <div className={classNames(buttonContainer)}>
           {hasAuthorization && (
             <button type="button" onClick={handleChangeEditButtonStatus}>
               {isEditing ? '완료' : '수정'}
             </button>
           )}
         </div>
-        <div>
+        <div className={membersContainer}>
           {isMember && captain && (
             <MemberListElement
               memberId={captain?.userId}
@@ -151,12 +148,13 @@ const MemberList = ({
                 </>
               )}
         </div>
-        {isEditing && (
-          <>
-            {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
-            <button type="submit">방출</button>
-          </>
-        )}
+        <div className={classNames(buttonContainer)}>
+          {isEditing && (
+            <>
+              <button type="submit">방출</button>
+            </>
+          )}
+        </div>
       </form>
     </>
   );
