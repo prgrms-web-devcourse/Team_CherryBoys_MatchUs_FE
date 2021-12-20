@@ -333,7 +333,7 @@ const HiresCreate = ({
         handleChangeAge={handleChangeAge}
       />
       <div className={classNames(inputDateBox)}>
-        <h3>날짜*</h3>
+        <h3>날짜</h3>
         <div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
