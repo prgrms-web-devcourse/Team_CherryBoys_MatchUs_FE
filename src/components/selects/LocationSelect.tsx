@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { Locations } from '@/types';
-import { Input } from '..';
+import { Input } from '@/components';
 
 interface cityType {
   cityId: number;
