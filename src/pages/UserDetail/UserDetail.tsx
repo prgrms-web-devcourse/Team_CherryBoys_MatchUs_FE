@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { AttitueTag, MatchListElement } from '@/components';
 import { MatchElement, TagType } from '@/types';
 import style from './userDetail.module.scss';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
-import { USER_MATCHING_LIST_PAGE } from '@/consts/routes';
+import {
+  USER_MATCHING_LIST_PAGE,
+  USER_TEAM_INVITAION_LIST_PAGE,
+  USER_HIRE_REQUEST_LIST_PAGE,
+  USER_EDIT_PAGE,
+} from '@/consts/routes';
 
 interface MyTeamElement {
   teamId: number;
@@ -48,9 +53,14 @@ const {
   mannerHigh,
   logoImage,
   seeMore,
+  tagContainer,
+  titleContainer,
+  historyButtonContainer,
+  historyButton,
 } = style;
 
 const UserDetail = () => {
+  const history = useHistory();
   const [userMatchHistory, setUserMatchHistory] = useState<MatchElement[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     ageGroup: '',
@@ -66,6 +76,7 @@ const UserDetail = () => {
   });
 
   const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
+  const limitedTag = userInfo.tags.slice(0, 4);
 
   const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -86,7 +97,7 @@ const UserDetail = () => {
     updateUserMatchHistory();
   }, [userId]);
 
-  const { tags, matchCount, mannerTemperature, myTeams } = userInfo;
+  const { matchCount, mannerTemperature, myTeams } = userInfo;
 
   return (
     <div className={classNames(pageContainer)}>
@@ -100,21 +111,43 @@ const UserDetail = () => {
                     <span className={classNames(highlight)}>{nickname}</span>님
                   </span>
                   {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
-                  <button type="button">수정</button>
+                  <div className={classNames(historyButtonContainer)}>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_EDIT_PAGE)}
+                    >
+                      수정
+                    </button>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
+                    >
+                      팀 초대
+                    </button>
+                    <button
+                      type="button"
+                      className={classNames(historyButton)}
+                      onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
+                    >
+                      용병
+                    </button>
+                  </div>
                 </div>
                 <span className={classNames(bioSpace)}>{bio}</span>
               </div>
               <div className={classNames(sportsPart)}>⚽️</div>
             </article>
 
-            <div className={classNames('whiteSpace')}>
-              {tags.map(({ tagId, tagType, tagName }) => (
+            <div className={classNames(tagContainer)}>
+              {limitedTag.map(({ tagId, tagType, tagName }) => (
                 <>
                   <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
                 </>
               ))}
             </div>
-            <p>
+            <p className={classNames(titleContainer)}>
               총 <span className={classNames(matchHighlight)}>{matchCount}</span>경기 동안
               <span
                 className={classNames(mannerMiddle, {

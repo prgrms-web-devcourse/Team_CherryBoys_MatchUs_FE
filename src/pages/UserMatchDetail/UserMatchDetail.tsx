@@ -6,7 +6,6 @@ import { getUserMatchHistory } from '@/api/user';
 import { MatchElement } from '@/types';
 import style from './userMatchDetail.module.scss';
 import { MatchListElement } from '@/components';
-import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 const { matchComponentContainer, mainTitle, highlight, titleContainer, matchesContainer } = style;
 
