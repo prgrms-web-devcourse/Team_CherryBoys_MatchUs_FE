@@ -1,14 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styles from './MatchReviewModal.module.scss';
-import { InputCheckBox } from '@/components';
+import { InputCheckBox, CustomModalDialog } from '@/components';
 import { match } from '@/store/match/match';
 import { postMatchReview, fetchTagInfo } from '@/api';
-import { TagInfo, TagCheckList, TeamSimple } from '@/types';
+import { MatchReviewInfo, TagInfo, TagCheckList, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 
-const { modalBackground, modalContainer, showModal, modalName, buttonBox, submitButton } = styles;
+const {
+  modalBackground,
+  modalContainer,
+  showModal,
+  modalName,
+  buttonBox,
+  submitButton,
+  modalMainTitle,
+} = styles;
 
 interface ModalState {
   showMatchReviewModal: boolean;
@@ -23,12 +32,26 @@ interface ModalState {
 const selectTagsLimit = 3;
 
 const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
     if ((e.target as Element).classList.contains('modalBackground')) {
       dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
     }
   };
+  const [requestData, setRequestData] = useState<MatchReviewInfo>({
+    matchId: 0,
+    tags: [],
+    reviewerTeamId: 0,
+    reviewerTeamType: '',
+    reviewedTeamId: 0,
+  });
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
+  const [isModal3Open, setIsModal3Open] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    '예상치 못한 에러가 발생했습니다! 다시 시도해주세요'
+  );
 
   const { tags } = useSelector((store: RootState) => store.match.data);
 
@@ -41,7 +64,7 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
 
   const getTagInfo = useCallback(async () => {
     const tagData = await fetchTagInfo();
-    setTagInfo(tagData);
+    setTagInfo(tagData.tags);
   }, []);
 
   const sortTagByType = useCallback(() => {
@@ -75,14 +98,15 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
       (value) => value
     ).length;
     if (selectedTagNumber > 3) {
-      window.alert('태그는 3개까지만 선택 가능합니다');
+      setErrorMessage('태그는 3개까지만 선택 가능합니다');
+      setIsModal3Open(true);
       return;
     }
 
     setSelectedTags(newSelectedTags);
   };
 
-  const handleSubmitReview = () => {
+  const handleSetReviewInfo = async () => {
     const totalSelectedTags = tagInfo.reduce((tagArr: number[], tag: TagInfo) => {
       if (selectedTags[tag.tagType][tag.tagName]) tagArr.push(tag.tagId);
       return tagArr;
@@ -102,17 +126,28 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
       reviewInfo.registerTeamId !== reviewerTeamId
         ? reviewInfo.registerTeamId
         : reviewInfo.applyTeamId;
-    const requestInfo = {
+
+    setRequestData({
       matchId: reviewInfo.matchId,
       reviewedTeamId,
       reviewerTeamId,
       reviewerTeamType: isRegisterReviewer ? '등록팀' : '신청팀',
       tags: totalSelectedTags,
-    };
+    });
 
-    postMatchReview(requestInfo);
-    dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
-    window.location.replace(`/matches/post/${requestInfo.matchId}`);
+    setIsModal1Open(true);
+  };
+
+  const handleSubmit = async () => {
+    const result = await postMatchReview(requestData);
+    if (result) {
+      setIsModal2Open(true);
+    } else {
+      setErrorMessage(
+        '매칭 평가에 실패했습니다. 일시적인 네트워크 오류일 수 있으니, 다시 한 번 시도해주세요.'
+      );
+      setIsModal3Open(true);
+    }
   };
 
   return (
@@ -176,11 +211,56 @@ const MatchReviewModal = ({ showMatchReviewModal, reviewInfo }: ModalState) => {
           }}
         />
         <div className={classNames(buttonBox)}>
-          <button className={classNames(submitButton)} type="button" onClick={handleSubmitReview}>
+          <button className={classNames(submitButton)} type="button" onClick={handleSetReviewInfo}>
             제출
           </button>
         </div>
       </div>
+      {isModal1Open && (
+        <CustomModalDialog
+          modalType="confirm"
+          buttonLabel="확인"
+          handleCancel={() => setIsModal1Open(false)}
+          handleApprove={() => {
+            setIsModal1Open(false);
+            handleSubmit();
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            평가 내용을 제출하시겠습니까?
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal2Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => {
+            setIsModal2Open(false);
+            dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
+            history.go(0);
+          }}
+          handleApprove={() => {
+            setIsModal2Open(false);
+            dispatch(match.actions.toggleModal({ modalName: 'matchReview' }));
+            history.go(0);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            성공적으로 평가 내용을 제출하였습니다!
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal3Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModal3Open(false)}
+          handleApprove={() => {
+            setIsModal3Open(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };

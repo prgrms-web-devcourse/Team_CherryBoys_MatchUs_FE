@@ -27,12 +27,12 @@ export interface MatchCard {
 
 export interface TeamUser {
   userId: number;
-  userName:string;
+  userName: string;
 }
 
 export interface Team {
   captainId?: number;
-  captainName?: string;
+  captainNickname?: string;
   teamId: number;
   teamLogo: string;
   teamName: string;
@@ -62,11 +62,11 @@ export interface Match {
   status: string;
   cost: number;
   ageGroup: string;
-  sports: string;
+  sportName: string;
   detail: string;
   registerTeamInfo: {
     captainId: number;
-    captainName: string;
+    captainNickname: string;
     teamId: number;
     teamLogo: string;
     teamName: string;
@@ -75,7 +75,7 @@ export interface Match {
   };
   applyTeamInfo?: {
     captainId: number;
-    captainName: string;
+    captainNickname: string;
     teamId: number;
     teamLogo: string;
     teamName: string;
@@ -99,10 +99,29 @@ export interface TeamWithUser {
   };
 }
 
+export interface MatchTeamInfo {
+  ageGroup: string;
+  bio: string;
+  captainId: number;
+  logo: string;
+  captainNickname: string;
+  mannerTemperature: number;
+  matchCount: number;
+  sportsName: string;
+  tags: {
+    tagId: number;
+    tagName: string;
+    tagType: string;
+  }[];
+  teamCreatedAt: string;
+  teamId: number;
+  teamName: string;
+}
+
 export interface WaitingTeam {
   teamInfo: {
     captainId: number;
-    captainName: string;
+    captainNickname: string;
     mannerTemperature: number;
     matchMembers: TeamUser[];
     teamId: number;
@@ -178,7 +197,7 @@ export interface TeamMemberEdit {
 export interface TeamMemberInfo {
   grade: string;
   userId: number;
-  userName:string;
+  userName: string;
 }
 
 export interface MatchReviewInfo {

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TimePicker from '@mui/lab/TimePicker';
@@ -7,17 +7,28 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { useHistory } from 'react-router-dom';
-import { Input, InputCheckBox, InputDetail } from '@/components';
+import { Input, InputCheckBox, CustomModalDialog } from '@/components';
 import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { SPORTS, SPORTS_PLAYER, AGE_GROUP } from '@/consts';
-import { TeamSimple, TeamMemberInfo, Locations } from '@/types';
+import { TeamSimple, TeamMemberInfo, Locations, MatchPostNew } from '@/types';
 import { getItemFromStorage } from '@/utils/storage';
 
-const { newMatchContainer, inputLocationBox, inputDateBox, buttonBox, submitButton } = style;
+const {
+  newMatchContainer,
+  inputLocationBox,
+  inputDateBox,
+  matchDetailInputBox,
+  inputName,
+  inputContent,
+  inputText,
+  inputTextContent,
+  buttonBox,
+  submitButton,
+  modalMainTitle,
+} = style;
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -42,6 +53,27 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
+  const [newMatchId, setNewMatchId] = useState(0);
+  const [requestData, setRequestData] = useState<MatchPostNew>({
+    date: '',
+    startTime: '',
+    endTime: '',
+    registerTeamId: 0,
+    sports: '',
+    ageGroup: '',
+    city: 0,
+    region: 0,
+    ground: 0,
+    cost: 0,
+    detail: '',
+    players: [],
+  });
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
+  const [isModal3Open, setIsModal3Open] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    '예상치 못한 에러가 발생했습니다! 다시 시도해주세요'
+  );
   const { locations } = useSelector((store: RootState) => store.match.data);
   const [locationInfo, setLocationInfo] = useState<Locations>(locations);
 
@@ -63,11 +95,6 @@ const NewMatch = () => {
     startTime: new Date(),
     endTime: new Date(),
   });
-  const [date, setDate] = useState({
-    date: '',
-    startTime: '',
-    endTime: '',
-  });
 
   const placeholder = '선택';
   const [sports, setSports] = useState(placeholder);
@@ -77,6 +104,7 @@ const NewMatch = () => {
   const [ground, setGround] = useState(defaultGround);
   const [cost, setCost] = useState(0);
   const [detail, setDetail] = useState('');
+  const detailRef = useRef<HTMLDivElement>(null);
   const [team, setTeam] = useState(placeholder);
   const cityOptions = [
     '행정구역',
@@ -106,9 +134,9 @@ const NewMatch = () => {
 
   const getAuhorizedTeams = useCallback(async () => {
     if (token) {
-      const authorizedTeams = await fetchAuthorizedTeams();
-      setUserTeams(authorizedTeams);
-      dispatch(match.actions.setUserTeams({ userTeams: authorizedTeams }));
+      const { teamSimpleInfos } = await fetchAuthorizedTeams();
+      setUserTeams(teamSimpleInfos);
+      dispatch(match.actions.setUserTeams({ userTeams: teamSimpleInfos }));
     }
   }, []);
 
@@ -117,6 +145,7 @@ const NewMatch = () => {
   }, []);
 
   const userLimit = SPORTS_PLAYER[sports] || 0;
+
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
   const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMemberInfo[]>([]);
   const [teamMembers, setTeamMembers] = useState<CheckboxOptions>({});
@@ -125,11 +154,11 @@ const NewMatch = () => {
     const selectedTeamInfo = userTeams.filter((userTeam) => userTeam.teamName === team)[0];
     if (selectedTeamInfo) {
       const selectedTeamId = selectedTeamInfo.teamId;
-      const selectedTeamUsers = await fetchTotalMembers(selectedTeamId);
-      setTeamMembersInfo(selectedTeamUsers);
+      const { members } = await fetchTotalMembers(selectedTeamId);
+      setTeamMembersInfo(members);
 
       const teamUsersOptions: CheckboxOptions = {};
-      selectedTeamUsers.forEach((user: TeamMemberInfo) => {
+      members.forEach((user: TeamMemberInfo) => {
         if (user.userName) teamUsersOptions[user.userName] = false;
       });
       setTeamMembers(teamUsersOptions);
@@ -181,8 +210,10 @@ const NewMatch = () => {
       });
     }
     if (category === 'cost') {
-      const targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
-      if (Number.isNaN(targetInputNumber)) return;
+      let targetInputNumber: number = parseInt((e.target as HTMLInputElement).value, 10);
+      if (Number.isNaN(targetInputNumber)) {
+        targetInputNumber = 0;
+      }
       setCost(targetInputNumber);
       return;
     }
@@ -196,11 +227,6 @@ const NewMatch = () => {
     const newTeamMembers: CheckboxOptions = { ...teamMembers };
     newTeamMembers[target] = !newTeamMembers[target];
     setTeamMembers({ ...newTeamMembers });
-  };
-
-  const handleDetail = (e: React.SetStateAction<string>) => {
-    const targetInput = e;
-    setDetail(targetInput);
   };
 
   const handleChangeStartDate = (selectedDate: React.SetStateAction<Date | null>) => {
@@ -230,13 +256,17 @@ const NewMatch = () => {
     setFormattedDate({ ...formattedDate, endDate: newDate, endTime: newDate });
   };
 
-  const handleSubmitMatchInfo = async () => {
+  const handleValidation = async () => {
+    setDetail(detailRef.current ? detailRef.current.innerHTML : '');
+
     if (sports === placeholder) {
-      window.alert('종목을 선택해주세요');
+      setErrorMessage('종목을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (team === placeholder) {
-      window.alert('올바른 팀을 선택해주세요');
+      setErrorMessage('올바른 팀을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
 
@@ -248,24 +278,29 @@ const NewMatch = () => {
     };
 
     if (selectedTeamWithUsers.players.length < userLimit) {
-      window.alert('인원미달');
+      setErrorMessage('인원미달');
+      setIsModal3Open(true);
       return;
     }
 
     if (ageGroup === placeholder) {
-      window.alert('연령대를 선택해주세요');
+      setErrorMessage('연령대를 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (city.cityId === 0) {
-      window.alert('행정구역을 선택해주세요');
+      setErrorMessage('행정구역을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (region.regionId === 0) {
-      window.alert('시/군/구를 선택해주세요');
+      setErrorMessage('시/군/구를 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (ground.groundId === 0) {
-      window.alert('구장을 선택해주세요');
+      setErrorMessage('구장을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
 
@@ -295,25 +330,35 @@ const NewMatch = () => {
       day: '2-digit',
     });
 
-    if (dateResult.date < todayString) {
-      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
+    if (dateResult.date <= todayString) {
+      setErrorMessage('경기 날짜는 오늘 이후부터 선택할 수 있습니다');
+      setIsModal3Open(true);
       return;
     }
     if (startDate > endDate) {
-      window.alert('종료일자가 시작일자보다 빠를 수 없습니다');
+      setErrorMessage('종료일자가 시작일자보다 빠를 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
     if (startTime > endTime) {
-      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
+      setErrorMessage('시작시간이 종료시간보다 빠를 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
 
     if (Number.isNaN(cost)) {
-      window.alert('참가비는 숫자만 입력할 수 있습니다');
+      setErrorMessage('참가비는 숫자만 입력할 수 있습니다');
+      setIsModal3Open(true);
       return;
     }
 
-    const requestData = {
+    if (cost <= 10) {
+      setErrorMessage('참가비는 10원 이하로 책정될 수 없습니다');
+      setIsModal3Open(true);
+      return;
+    }
+
+    setRequestData({
       date: dateResult.date,
       startTime: dateResult.startTime,
       endTime: dateResult.endTime,
@@ -324,21 +369,31 @@ const NewMatch = () => {
       region: region.regionId,
       ground: ground.groundId,
       cost,
-      detail,
+      detail: detailRef.current?.innerHTML || '',
       players: selectedTeamWithUsers.players,
-    };
+    });
 
-    const newMatchId = await createMatch(requestData);
-    window.location.replace(`/matches/post/${newMatchId}`);
+    setIsModal1Open(true);
+  };
+
+  const handleSubmit = async () => {
+    const cretedMatchId = await createMatch(requestData);
+    if (cretedMatchId) {
+      setNewMatchId(cretedMatchId.matchId);
+      setIsModal2Open(true);
+    } else {
+      setErrorMessage(
+        '매칭 등록에 실패했습니다. 일시적인 네트워크 오류일 수 있으니, 다시 한 번 시도해주세요.'
+      );
+      setIsModal3Open(true);
+    }
   };
 
   useEffect(() => {
     const today = new Date();
-    const defaultStartDate = today;
-    const defaultStartTime = today;
-
-    const nextDayTime = new Date(new Date().getTime() + 120 * 60000);
-    const defaultEndTime = nextDayTime;
+    const defaultStartDate = new Date(today.setDate(today.getDate() + 1));
+    const defaultStartTime = new Date(new Date().getTime() + 120 * 60000);
+    const defaultEndTime = new Date(new Date().getTime() + 240 * 60000);
 
     let defaultEndDate = defaultStartDate;
     const startHour = defaultStartTime.getHours();
@@ -446,6 +501,7 @@ const NewMatch = () => {
           </LocalizationProvider>
         </div>
       </div>
+
       <Input
         inputId="inputCost"
         labelName="참가비"
@@ -453,16 +509,67 @@ const NewMatch = () => {
         value={cost}
         onChange={(e) => handleInput(e, 'cost')}
       />
-      <InputDetail
-        labelName="상세정보"
-        placeholder="텍스트를 입력하세요"
-        onChange={(e) => handleDetail(e)}
-      />
+      <div className={classNames(matchDetailInputBox)}>
+        <div className={classNames(inputName)}>
+          <h3>상세 정보</h3>
+        </div>
+        <div className={classNames(inputContent)}>
+          <div className={classNames(inputText)}>
+            <div
+              contentEditable
+              dangerouslySetInnerHTML={{ __html: detail || '' }}
+              ref={detailRef}
+              className={classNames(inputTextContent)}
+            />
+          </div>
+        </div>
+      </div>
       <div className={classNames(buttonBox)}>
-        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
+        <button className={classNames(submitButton)} type="button" onClick={handleValidation}>
           매칭 등록
         </button>
       </div>
+      {isModal1Open && (
+        <CustomModalDialog
+          modalType="confirm"
+          buttonLabel="확인"
+          handleCancel={() => setIsModal1Open(false)}
+          handleApprove={() => {
+            setIsModal1Open(false);
+            handleSubmit();
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>매칭을 등록하시겠습니까?</span>
+        </CustomModalDialog>
+      )}
+      {isModal2Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => {
+            setIsModal2Open(false);
+            window.location.replace(`/matches/post/${newMatchId}`);
+          }}
+          handleApprove={() => {
+            setIsModal2Open(false);
+            window.location.replace(`/matches/post/${newMatchId}`);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            성공적으로 매칭을 등록했습니다!
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal3Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModal3Open(false)}
+          handleApprove={() => {
+            setIsModal3Open(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };
