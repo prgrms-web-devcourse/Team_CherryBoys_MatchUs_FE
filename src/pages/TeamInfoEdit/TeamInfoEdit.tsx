@@ -6,6 +6,23 @@ import { CustomButton, CustomInput, CustomLabel } from '@/components';
 import useForm from '@/hooks/useForm';
 import { validateTeamBioLength, TEAM_VALID_ERROR_MSG } from '@/utils/validation/validation';
 import { editTeamInfo } from '@/api';
+import style from '../TeamCreate/teamCreate.module.scss';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+
+const {
+  titleContainer,
+  highlight,
+  mainTitle,
+  inputsContainer,
+  userInput,
+  userBioinput,
+  inputLabel,
+  submitButton,
+  logoImage,
+  logoImageInput,
+  logoImageContainer,
+  errorMessage,
+} = style;
 
 const TeamInfoEdit = () => {
   const history = useHistory();
@@ -26,7 +43,7 @@ const TeamInfoEdit = () => {
       const result = await editTeamInfo({ image, teamBio, teamAgeGroup, teamId });
 
       if (result.teamId) {
-        history.push(`/team/${result.teamId}`);
+        history.push('/team/select');
       }
     },
     validate: ({ image, teamBio, teamAgeGroup }) => {
@@ -74,43 +91,65 @@ const TeamInfoEdit = () => {
 
   return (
     <>
-      <header />
       <form onSubmit={handleSubmit}>
-        <h1 className={classNames('s_a11yHidden')}>팀 수정 페이지</h1>
-        <img src={values.image.url} alt="이미지" />
-        <input
-          id="upload"
-          type="file"
-          name="image"
-          autoComplete="off"
-          onChange={handleImageUpload}
-          accept="image/*"
-        />
-        <div>
-          <CustomLabel htmlFor="teamBio">팀 설명</CustomLabel>
-          <CustomInput
-            id="teamBio"
-            type="text"
-            placeholder="세부 설명을 작성해 주세요"
-            onChange={handleChange}
-          />
+        <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
+        <p className={classNames(titleContainer)}>
+          <span className={classNames(mainTitle, 'whiteSpace')}>
+            우리 <span className={classNames(highlight)}>팀</span>의
+          </span>
+          <span className={classNames(mainTitle, 'whiteSpace')}>간판을 바꿔봐요 👀</span>
+        </p>
+
+        <div className={classNames(inputsContainer)}>
+          <div className={classNames(logoImageContainer)}>
+            <img
+              src={values.image.url ? values.image.url : baseTeamLogo}
+              className={classNames(logoImage)}
+              alt="이미지"
+            />
+
+            <input
+              id="upload"
+              type="file"
+              name="image"
+              autoComplete="off"
+              onChange={handleImageUpload}
+              accept="image/*"
+              className={classNames(logoImageInput)}
+            />
+          </div>
+
+          <div>
+            <CustomLabel htmlFor="teamBio" className={classNames(inputLabel, 'whiteSpace')}>
+              팀 설명
+            </CustomLabel>
+            <textarea
+              id="teamBio"
+              placeholder="세부 설명을 200자 이하로 작성해 주세요"
+              onChange={handleChange}
+              className={classNames(userBioinput)}
+            />
+          </div>
+          {errors.teamBio ? <p className={classNames(errorMessage)}>{errors.teamBio}</p> : ''}
+
+          <div>
+            <CustomLabel htmlFor="teamAgeGroup" className={classNames(inputLabel, 'whiteSpace')}>
+              연령대
+            </CustomLabel>
+            <select id="teamAgeGroup" onChange={handleChange} className={classNames(userInput)}>
+              <option>연령대</option>
+              {AGE_GROUP.map((group) => (
+                <option id={`${group}s`} key={`team-${group}`}>
+                  {group}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button type="submit" disabled={isDisabled} className={classNames(submitButton)}>
+            변경
+          </button>
         </div>
-        {isDisabled ? <p>{errors.teamBio}</p> : ''}
-        <div>
-          <CustomLabel htmlFor="teamAgeGroup">연령대</CustomLabel>
-          <select id="teamAgeGroup" onChange={handleChange}>
-            <option>연령대</option>
-            {AGE_GROUP.map((group) => (
-              <option id={`${group}s`} key={`team-${group}`}>
-                {group}대
-              </option>
-            ))}
-          </select>
-        </div>
-        {values.teamAgeGroup && errors.teamAgeGroup ? <p>{errors.teamAgeGroup}</p> : ''}
-        <CustomButton buttonType="submit" isDisabled={isDisabled}>
-          팀 정보 수정
-        </CustomButton>
       </form>
     </>
   );

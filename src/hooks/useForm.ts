@@ -17,7 +17,9 @@ const useForm = <T>({ initialValues, onSubmit, validate }: UseFormArgs<T>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { id, value } = e.target;
     setValues({ ...values, [id]: value });
   };
