@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { RootState, useAppDispatch } from '@/store';
 import style from './main.module.scss';
 import { getMatchList } from '@/store/match/match';
 import { fetchAllPost, HiresResponseType } from '@/store/posts';
 import { hiresPosting } from '@/api/hires';
 import { MatchCard } from '@/types';
+import { MatchListElement, MatchPostCard, PostItem } from '@/components';
 
 const {
   container,
@@ -20,6 +21,9 @@ const {
   w45,
   bgc_white,
   mtb50,
+  teamMemberTitle,
+  categoryTitle,
+  seeMore,
 } = style;
 
 const Main = () => {
@@ -107,27 +111,28 @@ const Main = () => {
         </section>
 
         <div>
-          <div>
-            <span>모집 중인 경기</span>
-            <button type="button">더보기</button>
+          <div className={classNames(teamMemberTitle)}>
+            <span className={classNames(categoryTitle)}>모집 중인 경기</span>
+            <Link className={classNames(seeMore)} to="/matches">
+              더보기
+            </Link>
           </div>
           <section>
-            {matchList &&
-              matchList.map((match: MatchCard) => {
-                return <div key={match.matchId}>{match.teamName}</div>;
-              })}
+            {matchList && matchList.map((match: MatchCard) => <MatchPostCard matchInfo={match} />)}
           </section>
         </div>
 
         <div>
-          <div>
-            <span>용병 모집</span>
-            <button type="button">더보기</button>
+          <div className={classNames(teamMemberTitle)}>
+            <span className={classNames(categoryTitle)}>용병 모집</span>
+            <Link className={classNames(seeMore)} to="/hires">
+              더보기
+            </Link>
           </div>
           <section>
             {hireList &&
               hireList.map((hire: HiresResponseType) => {
-                return <div key={hire.postId}>{hire.detail}</div>;
+                return <PostItem key={hire.postId} item={hire} />;
               })}
           </section>
         </div>

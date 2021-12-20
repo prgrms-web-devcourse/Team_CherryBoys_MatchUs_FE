@@ -11,7 +11,7 @@ button {
 
 .flex_space_between {
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .text_left {
@@ -19,15 +19,15 @@ button {
 }
 
 .text_title {
-  font-size: 2.4rem;
-  font-weight: 700;
   margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 2.4rem;
 }
 
 .text_user {
-  font-size: 2.4rem;
+  color: color.$primary;
   font-weight: 700;
-  color: color.$primary
+  font-size: 2.4rem;
 }
 
 .text_subtitle {
@@ -37,14 +37,14 @@ button {
 
 .card {
   min-height: 15vh;
-  border: 0.1rem solid #F7F7F7;
+  border: 0.1rem solid #f7f7f7;
   border-radius: 1.2rem;
 }
 
 .menu_card {
-  border: 0.1rem solid #F7F7F7;
-  filter: drop-shadow(0px 0.4rem 0.4rem rgba(0, 0, 0, 0.25));
+  border: 0.1rem solid #f7f7f7;
   border-radius: 1.2rem;
+  filter: drop-shadow(0px 0.4rem 0.4rem rgba(0, 0, 0, 0.25));
 }
 
 .mt18 {
@@ -64,9 +64,27 @@ button {
 }
 
 .emergency {
-  color: #B92828;
+  color: #b92828;
 }
 
 .bgc_white {
   background-color: #ffffff;
+}
+
+.teamMemberTitle {
+  display: flex;
+  margin-top: 3rem;
+}
+
+.seeMore {
+  position: absolute;
+  right: 3rem;
+  margin-top: 1rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+}
+
+.categoryTitle {
+  font-weight: 700;
+  font-size: 2.4rem;
 }
