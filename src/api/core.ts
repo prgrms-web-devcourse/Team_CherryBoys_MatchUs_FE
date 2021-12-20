@@ -11,8 +11,8 @@ const axiosInstance: AxiosInstance = axios.create({
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
   (config: AxiosRequestConfig): Promise<any> => {
-    const token = getItemFromStorage('accessToken');
-    axiosInstance.defaults.headers.common.token = token ?? '';
+    const accessToken = getItemFromStorage('accessToken');
+    axiosInstance.defaults.headers.common.token = accessToken ?? '';
 
     _axiosInstance.interceptors.response.use((response) => {
       if (!response.data) return response;
@@ -20,6 +20,7 @@ const createApiMethod =
     });
 
     _axiosInstance.interceptors.request.use((requestConfig: AxiosRequestConfig) => {
+      const token = getItemFromStorage('accessToken');
       if (token) {
         const expireTime: number = getItemFromStorage('expireTime');
 
