@@ -1,7 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
+
+import classNames from 'classnames';
 import { Locations } from '@/types';
 import { Input } from '@/components';
+import style from './select.module.scss';
+
+const { inputLocationBox } = style;
 
 interface cityType {
   cityId: number;
@@ -26,7 +31,7 @@ interface locationInfoTypeWrapper {
   region: regionType;
   ground: groundType;
   handleInput: (e: React.ChangeEvent, category: string) => void;
-  firstLabelName: string;
+  firstLabelName?: string;
 }
 
 const LocationSelect = ({
@@ -60,32 +65,35 @@ const LocationSelect = ({
   ];
 
   return (
-    <div>
-      <Input
-        labelName={firstLabelName}
-        inputId="inputCity"
-        type="dropbox"
-        options={cityOptions}
-        onChange={(e) => handleInput(e, 'city')}
-        styleProps={{ inputContentHeight: 'fit-content' }}
-        value={city.cityName}
-      />
-      <Input
-        inputId="inputRegion"
-        type="dropbox"
-        options={regionOptions}
-        onChange={(e) => handleInput(e, 'region')}
-        styleProps={{ inputContentHeight: 'fit-content' }}
-        value={region.regionName}
-      />
-      <Input
-        inputId="inputGround"
-        type="dropbox"
-        options={groundOptions}
-        onChange={(e) => handleInput(e, 'ground')}
-        styleProps={{ inputContentHeight: 'fit-content' }}
-        value={ground.groundName}
-      />
+    <div className={classNames(inputLocationBox)}>
+      <h3>장소</h3>
+      <div>
+        <Input
+          labelName={firstLabelName}
+          inputId="inputCity"
+          type="dropbox"
+          options={cityOptions}
+          onChange={(e) => handleInput(e, 'city')}
+          styleProps={{ inputContentHeight: 'fit-content' }}
+          value={city.cityName}
+        />
+        <Input
+          inputId="inputRegion"
+          type="dropbox"
+          options={regionOptions}
+          onChange={(e) => handleInput(e, 'region')}
+          styleProps={{ inputContentHeight: 'fit-content' }}
+          value={region.regionName}
+        />
+        <Input
+          inputId="inputGround"
+          type="dropbox"
+          options={groundOptions}
+          onChange={(e) => handleInput(e, 'ground')}
+          styleProps={{ inputContentHeight: 'fit-content' }}
+          value={ground.groundName}
+        />
+      </div>
     </div>
   );
 };
