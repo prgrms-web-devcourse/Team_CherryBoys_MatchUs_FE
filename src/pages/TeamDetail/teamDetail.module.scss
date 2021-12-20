@@ -129,7 +129,14 @@
 .teamMemberInfo {
   .teamMemberTitle {
     display: flex;
-    justify-content: space-between;
+  }
+
+  .seeMore {
+    position: absolute;
+    right: 3rem;
+    margin-top: 1rem;
+    font-weight: 500;
+    font-size: 1.6rem;
   }
 }
 

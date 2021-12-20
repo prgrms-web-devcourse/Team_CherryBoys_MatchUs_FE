@@ -24,8 +24,7 @@ const {
   teamCoreSportType,
   teamMemberInfo,
   teamMemberTitle,
-  hiredMemberInfo,
-  teamMathchesInfo,
+  seeMore,
   mannerLow,
   mannerMiddle,
   mannerHigh,
@@ -231,7 +230,9 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div className={classNames(teamMemberTitle)}>
           <span className={classNames(categoryTitle)}>팀원 목록</span>
-          <Link to={`/team/${teamId}/members`}>더보기</Link>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/members`}>
+            더보기
+          </Link>
         </div>
         <div>
           {hasMember ? (
@@ -257,7 +258,9 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div className={classNames(teamMemberTitle)}>
           <span className={classNames(categoryTitle)}>용병 목록</span>
-          <Link to={`/team/${teamId}/hires-member`}>더보기</Link>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/hires-member`}>
+            더보기
+          </Link>
         </div>
         <div>
           {hasMember ? (
@@ -282,7 +285,9 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div className={classNames(teamMemberTitle)}>
           <span className={classNames(categoryTitle)}>매칭 목록</span>
-          <Link to={`/team/${teamId}/match`}>더보기</Link>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/match`}>
+            더보기
+          </Link>
         </div>
         <div className={classNames(teamMathchesContainer)}>
           {hasPreviousMatchHistory ? (
