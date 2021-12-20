@@ -51,7 +51,6 @@
   }
   .matchDetailInputBox {
     min-width: fit-content;
-
     padding: 1.6rem;
 
     .inputName > h3 {
@@ -108,4 +107,5 @@
   margin-bottom: 2rem;
   font-weight: 700;
   font-size: 2.4rem;
+  word-break: keep-all;
 }

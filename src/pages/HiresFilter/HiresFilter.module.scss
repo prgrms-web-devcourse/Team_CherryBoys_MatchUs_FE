@@ -1,0 +1,58 @@
+.inputLocationBox {
+  > h3 {
+    padding: 1.6rem;
+    padding-bottom: 0;
+    font-size: 1.6rem;
+  }
+
+  > div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    > div:last-child {
+      grid-column: 1/3;
+    }
+  }
+}
+
+.inputDateBox {
+  > h3 {
+    padding: 1.6rem;
+    padding-bottom: 0;
+    font-size: 1.6rem;
+  }
+
+  > div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    > div {
+      padding: 1.6rem;
+      &:first-child {
+        grid-column: 1/3;
+        padding-bottom: 0;
+      }
+
+      input {
+        font-size: 1.2rem;
+      }
+
+      fieldset {
+        border: 0.2rem solid #c4c4c4;
+      }
+    }
+  }
+}
+
+.buttonBox {
+  width: 100%;
+  padding: 1.6rem;
+  background: rgba(255, 255, 255, 0.2);
+
+  .submitButton {
+    width: 100%;
+    height: 4.2rem;
+    color: #fff;
+    font-size: 1.6rem;
+    background: #56ad79;
+    border-radius: 0.5rem;
+  }
+}

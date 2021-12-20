@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 
+import classNames from 'classnames';
 import { LocationSelect, HiresPosition, AgeGroup, Place } from '@/components/selects';
 import { fetchAuthorizedTeams, fetchLocation } from '@/api';
 import { Locations, TeamSimple } from '@/types';
@@ -14,6 +15,9 @@ import { match } from '@/store/match/match';
 import { getItemFromStorage } from '@/utils/storage';
 import { Input } from '@/components';
 import { SPORTS } from '@/consts';
+import styles from './HiresFilter.module.scss';
+
+const { inputLocationBox, inputDateBox, buttonBox, submitButton } = styles;
 
 const defaultCity = {
   cityId: 0,
@@ -159,27 +163,38 @@ const HiresFilter = () => {
         value={sports}
       />
       <AgeGroup handleChangeAge={handleChangeAge} />
-      <LocationSelect
-        locationInfo={locationInfo}
-        city={city}
-        region={region}
-        ground={ground}
-        handleInput={handleInput}
-        firstLabelName="장소"
-      />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          value={date}
-          maxDate={maximumDate}
-          minDate={currentDate}
-          onChange={hanldeChangeDate}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <button type="button" onClick={handleClickSelectDone}>
-        선택 완료
-      </button>
+      <div className={classNames(inputLocationBox)}>
+        <h3>위치</h3>
+        <div>
+          <LocationSelect
+            locationInfo={locationInfo}
+            city={city}
+            region={region}
+            ground={ground}
+            handleInput={handleInput}
+          />
+        </div>
+      </div>
+      <div className={classNames(inputDateBox)}>
+        <h3>날짜</h3>
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              value={date}
+              maxDate={maximumDate}
+              minDate={currentDate}
+              onChange={hanldeChangeDate}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
+      <div className={classNames(buttonBox)}>
+        <button type="button" className={classNames(submitButton)} onClick={handleClickSelectDone}>
+          선택 완료
+        </button>
+      </div>
     </div>
   );
 };
