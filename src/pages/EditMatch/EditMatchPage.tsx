@@ -289,7 +289,7 @@ const EditMatch = () => {
       region: region.regionId,
       ground: ground.groundId,
       cost,
-      detail,
+      detail: detailRef.current?.innerHTML || '',
     };
 
     if (window.confirm('매칭글을 수정하시겠습니까?')) {
