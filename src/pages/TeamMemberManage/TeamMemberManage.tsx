@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { CustomModalDialog, Header, MemberList } from '@/components';
 import style from './teamMemberManage.module.scss';
 import {
@@ -11,6 +12,7 @@ import {
 } from '@/api';
 
 import { MemberElementType } from '@/types';
+import { RootState } from '@/store';
 
 const {
   playerManange,
@@ -18,17 +20,19 @@ const {
   modalInputContainer,
   inputSupportMessage,
   addTeamMemberButton,
+  titleContainer,
+  highlight,
 } = style;
 
 const TeamMemberManage = () => {
+  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   const { memberType } = useParams<{ memberType: string }>();
   const [modalInput, setModalInput] = useState('');
   const [isModalDialogOpen, setIsModalDialogOpen] = useState<boolean>(false);
   const [deletedMembers, setDeletedMembers] = useState<Array<number>>([]);
   const [isEnterEditPage, setIsEnterEditPage] = useState<boolean>(false);
-  // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
-  const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberElementType[]>([]);
   const isAddTeamMember = hasAuthorization && isEnterEditPage === false;
 
@@ -102,18 +106,25 @@ const TeamMemberManage = () => {
   };
 
   useEffect(() => {
-    // TODO: 로그인 페이지 머지된 이후에, 리덕스에서 정보를 받아올 예정.
-    // if (userGrade[`${teamName}`] === '팀장') {
-    //   setHasAuthorization(true);
-    // }
+    const authorizationMap = userGradeResponse.map((team) => {
+      if (team.teamId === teamId && team.grade === 'CAPTAIN') {
+        return true;
+      }
+      return false;
+    });
+
+    const authorization = authorizationMap.includes(true);
+
+    setHasAuthorization(authorization);
 
     const updateMemberInfo = async () => {
       const { members } = await getTeamMemberInfo(teamId, memberType);
 
       setMemberInfo(members);
     };
+
     updateMemberInfo();
-  }, [teamId, memberType]);
+  }, [teamId, memberType, userGradeResponse]);
 
   return (
     <>
@@ -138,6 +149,12 @@ const TeamMemberManage = () => {
             </span>
           </CustomModalDialog>
         )}
+        <div className={classNames(titleContainer)}>
+          <span className={classNames('whiteSpace')}>
+            소속된 <span className={classNames(highlight)}>팀원</span>을
+          </span>
+          <span className={classNames('whiteSpace')}>확인해볼까요? 👀</span>
+        </div>
         <MemberList
           isEditing={isEnterEditPage}
           isMember={memberType === 'members'}

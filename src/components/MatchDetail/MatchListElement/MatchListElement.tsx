@@ -33,7 +33,11 @@ const MatchListElement = ({
       <span className={classNames(matchDateSpan)}>
         {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[1]}일
       </span>
-      <button type="button" className={classNames(matchButton)} onClick={() => history.push(``)}>
+      <button
+        type="button"
+        className={classNames(matchButton)}
+        onClick={() => history.push(`/matches/post/${matchId}`)}
+      >
         <div className={classNames(matchContainer)}>
           <div className={classNames(teamInfoContainer)}>
             <img

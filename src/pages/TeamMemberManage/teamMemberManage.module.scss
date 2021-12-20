@@ -7,6 +7,21 @@
     left: 1.6rem;
   }
 }
+
+.titleContainer {
+  margin: {
+    top: 7.2rem;
+    bottom: 5rem;
+  }
+  font-weight: 700;
+  font-size: 2.4rem;
+
+  .highlight {
+    color: color.$primary;
+    font-weight: 700;
+  }
+}
+
 .categoryTitle {
   margin-left: 1.2rem;
   font-weight: 700;
