@@ -27,7 +27,6 @@ const {
 const TeamMemberManage = () => {
   const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
-
   const { memberType } = useParams<{ memberType: string }>();
   const [modalInput, setModalInput] = useState('');
   const [isModalDialogOpen, setIsModalDialogOpen] = useState<boolean>(false);
