@@ -1,0 +1,90 @@
+@use '@/styles/color.scss';
+
+button {
+  background-color: transparent;
+}
+
+.container {
+  width: 100vw;
+  padding: 2rem 2rem 10rem 2rem;
+}
+
+.flex_space_between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text_left {
+  text-align: left;
+}
+
+.text_title {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
+.text_user {
+  color: color.$primary;
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
+.text_subtitle {
+  font-weight: normal;
+  font-size: 1.2rem;
+}
+
+.card {
+  min-height: 15vh;
+  border: 0.1rem solid #f7f7f7;
+  border-radius: 1.2rem;
+}
+
+.menu_card {
+  border: 0.1rem solid #f7f7f7;
+  border-radius: 1.2rem;
+  filter: drop-shadow(0px 0.4rem 0.4rem rgba(0, 0, 0, 0.25));
+}
+
+.mt18 {
+  margin-top: 1.8rem;
+}
+
+.mt12 {
+  margin-top: 1.8rem;
+}
+
+.w45 {
+  width: 45%;
+}
+
+.mtb50 {
+  margin: 5rem 0;
+}
+
+.emergency {
+  color: #b92828;
+}
+
+.bgc_white {
+  background-color: #ffffff;
+}
+
+.teamMemberTitle {
+  display: flex;
+  margin-top: 3rem;
+}
+
+.seeMore {
+  position: absolute;
+  right: 3rem;
+  margin-top: 1rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+}
+
+.categoryTitle {
+  font-weight: 700;
+  font-size: 2.4rem;
+}
