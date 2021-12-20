@@ -172,7 +172,7 @@ const TeamDetail = () => {
 
       <article className={classNames(teamBaseInfo)}>
         <img
-          src={logo === '팀로고' || logo === '' ? baseTeamLogo : logo}
+          src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
           className={classNames(teamLogoImage)}
           alt="팀 로고 이미지"
         />
