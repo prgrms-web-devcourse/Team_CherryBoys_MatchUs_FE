@@ -26,7 +26,7 @@ const TeamInfoEdit = () => {
       const result = await editTeamInfo({ image, teamBio, teamAgeGroup, teamId });
 
       if (result.teamId) {
-        history.push(`/teams/${result.teamId}`);
+        history.push(`/team/${result.teamId}`);
       }
     },
     validate: ({ image, teamBio, teamAgeGroup }) => {
