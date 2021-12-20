@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
-import { MemberElement, MatchElement, TeamInfo } from '@/types';
+import { MemberElement, MatchElement, MatchTeamInfo } from '@/types';
 import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
 
 const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
@@ -16,12 +16,12 @@ const TeamDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
-  const [teamInfo, setTeamInfo] = useState<TeamInfo>({
+  const [teamInfo, setTeamInfo] = useState<MatchTeamInfo>({
     ageGroup: '',
     bio: '',
     captainId: 0,
     logo: '',
-    captainName: '',
+    captainNickname: '',
     mannerTemperature: 0,
     matchCount: 0,
     sportsName: '',
@@ -59,7 +59,7 @@ const TeamDetail = () => {
     matchCount,
     mannerTemperature,
     captainId,
-    captainName,
+    captainNickname,
     ageGroup,
     teamCreatedAt,
   } = teamInfo;
@@ -129,7 +129,7 @@ const TeamDetail = () => {
       <article className={classNames(teamCoreInfo)}>
         <section>총 경기 수{matchCount}</section>
         <section>매너온도 {mannerTemperature}</section>
-        <section id={`captain-${captainId}`}>{`운영진 ${captainName}`}</section>
+        <section id={`captain-${captainId}`}>{`운영진 ${captainNickname}`}</section>
         <section>주요 종목 {sportsName}</section>
         <section>연령대 {ageGroup}</section>
         <section>생성일자 {teamCreatedAt}</section>

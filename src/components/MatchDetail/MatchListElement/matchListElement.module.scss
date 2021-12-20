@@ -1,5 +1,10 @@
 @use '@/styles/color';
 
+.matchButton {
+  background-color: white;
+  outline: none;
+}
+
 .matchDateSpan {
   margin-bottom: 0.5rem;
   font-weight: 700;

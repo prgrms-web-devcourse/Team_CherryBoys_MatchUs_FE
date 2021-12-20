@@ -1,7 +1,10 @@
 .editMatchContainer {
+  min-width: fit-content;
   margin-bottom: 4.2rem;
 
   .inputLocationBox {
+    min-width: fit-content;
+
     > h3 {
       padding: 1.6rem;
       padding-bottom: 0;
@@ -18,6 +21,8 @@
   }
 
   .inputDateBox {
+    min-width: fit-content;
+
     > h3 {
       padding: 1.6rem;
       padding-bottom: 0;
@@ -44,6 +49,43 @@
       }
     }
   }
+  .matchDetailInputBox {
+    min-width: fit-content;
+
+    padding: 1.6rem;
+
+    .inputName > h3 {
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+
+    .inputContent {
+      position: relative;
+      height: fit-content;
+      font-size: 1.2rem;
+      border: 0.2rem solid #c4c4c4;
+      border-radius: 0.5rem;
+
+      .inputText {
+        width: 100%;
+        padding: 0.8rem;
+
+        &Content {
+          width: 100%;
+          min-height: 4rem;
+          overflow: auto;
+          border: none;
+          outline: none;
+          &:empty::before {
+            color: #c4c4c4;
+            cursor: text;
+            content: attr(placeholder);
+          }
+        }
+      }
+    }
+  }
 
   .buttonBox {
     width: 100%;
@@ -60,4 +102,10 @@
       border-radius: 0.5rem;
     }
   }
+}
+
+.modalMainTitle {
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 2.4rem;
 }

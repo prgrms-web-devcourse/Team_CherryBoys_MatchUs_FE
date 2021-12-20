@@ -1,6 +1,8 @@
 .matchDetailContainer {
+  min-width: fit-content;
   margin-bottom: 8.4rem;
   padding: 1.6rem;
+
   .matchDetailMenu {
     display: flex;
     align-items: center;
@@ -43,11 +45,19 @@
   }
 
   .matchDetailContent {
+    width: 100%;
     min-height: 40rem;
     padding: 1.6rem;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     line-height: 1.6rem;
+    letter-spacing: 0.1rem;
     border: 0.2rem solid #c4c4c4;
     border-radius: 0.5rem;
   }
+}
+
+.modalMainTitle {
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 2.4rem;
 }

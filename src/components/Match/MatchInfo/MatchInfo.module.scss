@@ -1,5 +1,6 @@
 .matchInfoCard {
   box-sizing: border-box;
+  min-width: fit-content;
   margin: 0 1.6rem;
   padding: 0 1.6rem;
   border: 2px solid #c4c4c4;
@@ -14,7 +15,7 @@
 
     &.importantInfo {
       .matchInfo {
-        font-size: 1.6rem;
+        font-size: 2.4rem;
         letter-spacing: 0.1rem;
       }
     }
@@ -43,6 +44,7 @@
 
       &_content {
         padding: 0.8rem 0;
+        word-break: keep-all;
       }
     }
   }

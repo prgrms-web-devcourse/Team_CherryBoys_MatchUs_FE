@@ -5,11 +5,12 @@ import { useHistory } from 'react-router-dom';
 import styles from './TeamCard.module.scss';
 import { match } from '@/store/match/match';
 import { RootState } from '@/store';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 interface Props {
   team: {
     captainId: number;
-    captainName: string;
+    captainNickname: string;
     teamId: number;
     teamLogo: string;
     teamName: string;
@@ -31,7 +32,7 @@ const {
   teamName,
   linkButton,
   captainInfo,
-  captainName,
+  captainNickname,
   buttonBox,
   tags,
   tag,
@@ -44,6 +45,8 @@ const {
 } = styles;
 
 const showPlayersLimit = 5;
+
+const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 
 const TeamCard = ({ team, status }: Props) => {
   const [showTeamUser, setShowTeamUser] = useState(false);
@@ -75,7 +78,14 @@ const TeamCard = ({ team, status }: Props) => {
             className={classNames(linkButton)}
             onClick={() => handleGoPage(`/team/${team.teamId}`)}
           >
-            <img src={team.teamLogo} alt="team_logo" />
+            <img
+              src={
+                regex.test(team.teamLogo) || team.teamLogo === '' || team.teamLogo === null
+                  ? baseTeamLogo
+                  : team.teamLogo
+              }
+              alt="team_logo"
+            />
           </button>
         </div>
         <div className={classNames(teamName)}>
@@ -88,7 +98,7 @@ const TeamCard = ({ team, status }: Props) => {
           </button>
         </div>
         <div className={classNames(captainInfo)}>
-          <div className={classNames(captainName)}>{team.captainName}</div>
+          <div className={classNames(captainNickname)}>{team.captainNickname}</div>
           <div className={classNames(buttonBox)}>
             <button type="button" onClick={() => handleGoPage(`/user/${team.captainId}`)}>
               <i className="fas fa-user" />
@@ -111,26 +121,32 @@ const TeamCard = ({ team, status }: Props) => {
               [teamUser_extra]: index > showPlayersLimit - 1,
               [showTeamUser_extra]: index > showPlayersLimit - 1 && showTeamUser,
             })}
-            key={`teamUser${index}`}
+            key={`teamUser${user.userId}-${index}`}
           >
             {user.userNickname || user.userName}
           </div>
         ))}
         <div>
-          <button
-            type="button"
-            onClick={handleShowTeamUser}
-            className={classNames(showTeamUserButton)}
-          >
-            {!showTeamUser ? '더보기' : '숨기기'}
-          </button>
+          {teamMembers.length > showPlayersLimit && (
+            <button
+              type="button"
+              onClick={handleShowTeamUser}
+              className={classNames(showTeamUserButton)}
+            >
+              {!showTeamUser ? (
+                <i className="fas fa-chevron-down" />
+              ) : (
+                <i className="fas fa-chevron-up" />
+              )}
+            </button>
+          )}
           {status === 'WAITING' && isEditable && (
             <button
               type="button"
               onClick={handleShowTeamMemberModal}
               className={classNames(showTeamMemberModalButton)}
             >
-              교체
+              <i className="fas fa-exchange-alt" />
             </button>
           )}
         </div>
