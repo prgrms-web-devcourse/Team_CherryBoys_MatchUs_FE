@@ -22,12 +22,28 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 16.4rem;
+  height: 18.4rem;
   margin: 1.6rem 0;
-  padding: 3rem 1.6rem;
+  padding: 2.1rem 1.6rem;
   border: 0.12rem solid color.$disable;
   border-radius: 1rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.historyButtonContainer {
+  display: flex;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.historyButton {
+  padding-right: 0.6rem;
+  color: black;
+  font-weight: 700;
+  background: white;
+  border: 0.1rem solid color.$disable;
+  border-radius: 1rem;
+  cursor: pointer;
 }
 
 .elementColumnContainer {
@@ -97,7 +113,7 @@
   justify-content: space-around;
   margin : {
     top: 1rem;
-    bottom: 6rem;
+    bottom: 4rem;
   }
   padding: 1.8rem 1.6rem;
   border: 0.12rem solid color.$disable;
@@ -154,4 +170,12 @@
 
 .teamName {
   text-align: center;
+}
+
+.tagContainer {
+  display: flex;
+}
+
+.titleContainer {
+  margin-top: 1rem;
 }

@@ -18,8 +18,8 @@ export interface SportsPlayers {
 }
 
 export const SPORTS_PLAYER: SportsPlayers = {
-  축구: 1,
-  풋살: 1,
+  축구: 11,
+  풋살: 5,
 };
 
 export interface CheckboxOptions {
