@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styles from './MatchApproveModal.module.scss';
-import { TeamCard } from '@/components';
+import { TeamCard, CustomModalDialog } from '@/components';
 import { match } from '@/store/match/match';
 import { WaitingTeam } from '@/types';
 import { fetchWaitingTeams, approveMatch } from '@/api';
@@ -18,6 +18,7 @@ const {
   selectedTeamCard,
   buttonBox,
   submitButton,
+  modalMainTitle,
 } = styles;
 
 interface ModalState {
@@ -26,11 +27,18 @@ interface ModalState {
 
 const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
   const history = useHistory();
+  const [requestData, setRequestData] = useState(0);
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
+  const [isModal3Open, setIsModal3Open] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    '예상치 못한 에러가 발생했습니다! 다시 시도해주세요'
+  );
   const [waitingTeams, setWaitingTeams] = useState<WaitingTeam[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<WaitingTeam>({
     teamInfo: {
       captainId: 0,
-      captainName: '',
+      captainNickname: '',
       mannerTemperature: 0,
       matchMembers: [],
       teamId: 0,
@@ -60,21 +68,25 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
     }
   };
 
-  const handleSubmitTeam = async () => {
+  const handleValidation = async () => {
     if (selectedTeam.teamWaitingId < 1) {
-      window.alert('팀을 선택해주세요');
+      setErrorMessage('상대팀을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
 
-    if (window.confirm('매칭 신청을 수락하시겠습니까?')) {
-      const result = await approveMatch(selectedTeam.teamWaitingId);
-      if (result) {
-        window.alert('매칭 완료!');
-        dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
-        history.go(0);
-      } else {
-        window.alert('매칭 수락에 실패했습니다. 다시 시도해 주세요.');
-      }
+    setIsModal1Open(true);
+  };
+
+  const handleSubmit = async () => {
+    const result = await approveMatch(selectedTeam.teamWaitingId);
+    if (result) {
+      setIsModal2Open(true);
+    } else {
+      setErrorMessage(
+        '매칭 수락에 실패했습니다. 일시적인 네트워크 오류일 수 있으니, 다시 한 번 시도해주세요.'
+      );
+      setIsModal3Open(true);
     }
   };
 
@@ -133,12 +145,57 @@ const MatchApproveModal = ({ showMatchApproveModal }: ModalState) => {
             </button>
           )}
           {waitingTeams.length > 0 && (
-            <button className={classNames(submitButton)} type="button" onClick={handleSubmitTeam}>
+            <button className={classNames(submitButton)} type="button" onClick={handleValidation}>
               선택
             </button>
           )}
         </div>
       </div>
+      {isModal1Open && (
+        <CustomModalDialog
+          modalType="confirm"
+          buttonLabel="확인"
+          handleCancel={() => setIsModal1Open(false)}
+          handleApprove={() => {
+            setIsModal1Open(false);
+            handleSubmit();
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            매칭 신청을 받아들이시겠습니까?
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal2Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => {
+            setIsModal2Open(false);
+            dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
+            history.go(0);
+          }}
+          handleApprove={() => {
+            setIsModal2Open(false);
+            dispatch(match.actions.toggleModal({ modalName: 'matchApprove' }));
+            history.go(0);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            성공적으로 매칭이 성사되었습니다!
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal3Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModal3Open(false)}
+          handleApprove={() => {
+            setIsModal3Open(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };

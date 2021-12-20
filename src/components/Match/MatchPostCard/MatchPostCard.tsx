@@ -4,12 +4,15 @@ import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import style from './MatchPostCard.module.scss';
 import { MatchCard } from '@/types';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 const { postCard, postBox, postTeamLogo, postInfos, postTags } = style;
 
 interface Props {
   matchInfo: MatchCard;
 }
+
+const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 
 const MatchPostCard = ({ matchInfo }: Props) => {
   const history = useHistory();
@@ -36,7 +39,7 @@ const MatchPostCard = ({ matchInfo }: Props) => {
     >
       <article className={classNames(postBox)}>
         <section className={classNames(postTeamLogo)}>
-          <img src={teamLogo} alt="team logo" />
+          <img src={regex.test(teamLogo) ? baseTeamLogo : teamLogo} alt="team logo" />
         </section>
         <section className={classNames(postInfos)}>
           <div>{`${date} ${startTime}`}</div>

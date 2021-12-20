@@ -7,13 +7,13 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { Input, InputCheckBox } from '@/components';
+import { Input, InputCheckBox, CustomModalDialog } from '@/components';
 import { fetchAuthorizedTeams, fetchTotalMembers, createMatch, fetchLocation } from '@/api';
 import style from './NewMatch.module.scss';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { SPORTS, SPORTS_PLAYER, AGE_GROUP } from '@/consts';
-import { TeamSimple, TeamMemberInfo, Locations } from '@/types';
+import { TeamSimple, TeamMemberInfo, Locations, MatchPostNew } from '@/types';
 import { getItemFromStorage } from '@/utils/storage';
 
 const {
@@ -27,6 +27,7 @@ const {
   inputTextContent,
   buttonBox,
   submitButton,
+  modalMainTitle,
 } = style;
 
 interface CheckboxOptions {
@@ -52,6 +53,27 @@ const defaultGround = {
 
 const NewMatch = () => {
   const dispatch = useDispatch();
+  const [newMatchId, setNewMatchId] = useState(0);
+  const [requestData, setRequestData] = useState<MatchPostNew>({
+    date: '',
+    startTime: '',
+    endTime: '',
+    registerTeamId: 0,
+    sports: '',
+    ageGroup: '',
+    city: 0,
+    region: 0,
+    ground: 0,
+    cost: 0,
+    detail: '',
+    players: [],
+  });
+  const [isModal1Open, setIsModal1Open] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
+  const [isModal3Open, setIsModal3Open] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    '예상치 못한 에러가 발생했습니다! 다시 시도해주세요'
+  );
   const { locations } = useSelector((store: RootState) => store.match.data);
   const [locationInfo, setLocationInfo] = useState<Locations>(locations);
 
@@ -234,15 +256,17 @@ const NewMatch = () => {
     setFormattedDate({ ...formattedDate, endDate: newDate, endTime: newDate });
   };
 
-  const handleSubmitMatchInfo = async () => {
+  const handleValidation = async () => {
     setDetail(detailRef.current ? detailRef.current.innerHTML : '');
 
     if (sports === placeholder) {
-      window.alert('종목을 선택해주세요');
+      setErrorMessage('종목을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (team === placeholder) {
-      window.alert('올바른 팀을 선택해주세요');
+      setErrorMessage('올바른 팀을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
 
@@ -254,24 +278,29 @@ const NewMatch = () => {
     };
 
     if (selectedTeamWithUsers.players.length < userLimit) {
-      window.alert('인원미달');
+      setErrorMessage('인원미달');
+      setIsModal3Open(true);
       return;
     }
 
     if (ageGroup === placeholder) {
-      window.alert('연령대를 선택해주세요');
+      setErrorMessage('연령대를 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (city.cityId === 0) {
-      window.alert('행정구역을 선택해주세요');
+      setErrorMessage('행정구역을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (region.regionId === 0) {
-      window.alert('시/군/구를 선택해주세요');
+      setErrorMessage('시/군/구를 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
     if (ground.groundId === 0) {
-      window.alert('구장을 선택해주세요');
+      setErrorMessage('구장을 선택해주세요');
+      setIsModal3Open(true);
       return;
     }
 
@@ -302,29 +331,34 @@ const NewMatch = () => {
     });
 
     if (dateResult.date < todayString) {
-      window.alert('오늘보다 이른 날짜는 선택할 수 없습니다');
+      setErrorMessage('오늘보다 이른 날짜는 선택할 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
     if (startDate > endDate) {
-      window.alert('종료일자가 시작일자보다 빠를 수 없습니다');
+      setErrorMessage('종료일자가 시작일자보다 빠를 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
     if (startTime > endTime) {
-      window.alert('시작시간이 종료시간보다 빠를 수 없습니다');
+      setErrorMessage('시작시간이 종료시간보다 빠를 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
 
     if (Number.isNaN(cost)) {
-      window.alert('참가비는 숫자만 입력할 수 있습니다');
+      setErrorMessage('참가비는 숫자만 입력할 수 있습니다');
+      setIsModal3Open(true);
       return;
     }
 
     if (cost <= 10) {
-      window.alert('참가비는 10원 이하로 책정될 수 없습니다');
+      setErrorMessage('참가비는 10원 이하로 책정될 수 없습니다');
+      setIsModal3Open(true);
       return;
     }
 
-    const requestData = {
+    setRequestData({
       date: dateResult.date,
       startTime: dateResult.startTime,
       endTime: dateResult.endTime,
@@ -337,16 +371,21 @@ const NewMatch = () => {
       cost,
       detail: detailRef.current?.innerHTML || '',
       players: selectedTeamWithUsers.players,
-    };
+    });
 
-    if (window.confirm('매칭을 등록하시겠습니까?')) {
-      const newMatchId = await createMatch(requestData);
-      if (newMatchId) {
-        window.alert('등록완료!');
-        window.location.replace(`/matches/post/${newMatchId.matchId}`);
-      } else {
-        window.alert('등록에 실패했습니다. 다시 시도해 주세요.');
-      }
+    setIsModal1Open(true);
+  };
+
+  const handleSubmit = async () => {
+    const cretedMatchId = await createMatch(requestData);
+    if (cretedMatchId) {
+      setNewMatchId(cretedMatchId);
+      setIsModal2Open(true);
+    } else {
+      setErrorMessage(
+        '매칭 등록에 실패했습니다. 일시적인 네트워크 오류일 수 있으니, 다시 한 번 시도해주세요.'
+      );
+      setIsModal3Open(true);
     }
   };
 
@@ -488,10 +527,51 @@ const NewMatch = () => {
         </div>
       </div>
       <div className={classNames(buttonBox)}>
-        <button className={classNames(submitButton)} type="button" onClick={handleSubmitMatchInfo}>
+        <button className={classNames(submitButton)} type="button" onClick={handleValidation}>
           매칭 등록
         </button>
       </div>
+      {isModal1Open && (
+        <CustomModalDialog
+          modalType="confirm"
+          buttonLabel="확인"
+          handleCancel={() => setIsModal1Open(false)}
+          handleApprove={() => {
+            setIsModal1Open(false);
+            handleSubmit();
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>매칭을 등록하시겠습니까?</span>
+        </CustomModalDialog>
+      )}
+      {isModal2Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => {
+            setIsModal2Open(false);
+            window.location.replace(`/matches/post/${newMatchId}`);
+          }}
+          handleApprove={() => {
+            setIsModal2Open(false);
+            window.location.replace(`/matches/post/${newMatchId}`);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            성공적으로 매칭을 등록했습니다!
+          </span>
+        </CustomModalDialog>
+      )}
+      {isModal3Open && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModal3Open(false)}
+          handleApprove={() => {
+            setIsModal3Open(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };
