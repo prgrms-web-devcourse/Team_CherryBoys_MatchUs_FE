@@ -285,21 +285,31 @@ const HiresCreate = ({
 
   const handleClickEditPosting = async () => {
     const editHires = async () => {
+      if (
+        city.cityName === '행정구역' ||
+        region.regionName === '시/군/구' ||
+        ground.groundName === '구장'
+      ) {
+        alert('장소를 선택해주세요');
+        return;
+      }
+
       const data = {
-        ageGroup: '30대',
-        cityId: 1,
-        date: '2021-12-15',
-        detail: '수정내용입니다~',
-        endTime: '19:30:00',
-        groundId: 1,
-        hirePlayerNumber: 3,
-        position: '윙백',
-        regionId: 1,
-        startTime: '17:30:00',
-        teamId: 1,
+        ageGroup,
+        cityId: city.cityId,
+        date: formattedDate || prevDate,
+        detail,
+        endTime: formatedEndTime,
+        groundId: ground.groundId,
+        hirePlayerNumber,
+        position,
+        regionId: region.regionId,
+        startTime: formatedStartTime,
+        teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
       };
+
       await editHiresPosting({ postId, data });
-      history.push(`/hires/${postId}`);
+      history.push(`/hires`);
     };
 
     editHires();
