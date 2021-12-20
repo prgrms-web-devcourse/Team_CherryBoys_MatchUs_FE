@@ -8,18 +8,18 @@ const axiosInstance: AxiosInstance = axios.create({
   timeout: 5000,
 });
 
-if (process.env.NODE_ENV === 'production') {
-  // TODO: 배포환경에서 백엔드에서 토큰을 받는 로직에 대해서 논의 필요
-}
-
-if (process.env.NODE_ENV === 'development') {
-  const token = getItemFromStorage('accessToken');
-  axiosInstance.defaults.headers.common.token = token ?? '';
-}
-
 const createApiMethod =
   (_axiosInstance: AxiosInstance, methodType: Method) =>
   (config: AxiosRequestConfig): Promise<any> => {
+    if (process.env.NODE_ENV === 'production') {
+      // TODO: 배포환경에서 백엔드에서 토큰을 받는 로직에 대해서 논의 필요
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      const token = getItemFromStorage('accessToken');
+      axiosInstance.defaults.headers.common.token = token ?? '';
+    }
+
     _axiosInstance.interceptors.response.use((response) => {
       if (!response.data) return response;
       return response.data.data;
