@@ -8,11 +8,21 @@ import { InputDetail } from '@/components';
 import { hireItemType } from '@/types';
 
 const {
+  hires_container,
+  card__gameInfos,
   card__teamInfos,
-  card__leaderInfo,
-  card__tags,
+  card__teamInfos__logo,
+  card__teamInfos__content,
+  card__teamInfos__leader,
+  card__gameInfos__tags,
   card__gameInfos__gameSchedule,
-  card__gameInfos__gameSchedule__upper,
+  card__gameInfos__location,
+  card__detailInfos,
+  card__detailInfos__tab,
+  card__detailInfos__content,
+  matchDetailContent,
+  buttonBox,
+  hires_buttonBox,
 } = style;
 
 const HiresDetail = () => {
@@ -46,52 +56,62 @@ const HiresDetail = () => {
   };
 
   return (
-    <>
+    <div className={classNames(hires_container)}>
       {hireItem && (
         <>
-          <button type="button" onClick={handleClickRemove}>
-            삭제
-          </button>
-          <button type="button" onClick={handleClickEdit}>
-            수정
-          </button>
-          <article>
-            <section>
-              <div className={classNames(card__gameInfos__gameSchedule)}>
-                <section className={classNames(card__gameInfos__gameSchedule__upper)}>
-                  <div>{`${hireItem.date} ${hireItem.startTime}`}</div>
-                  <div>{`${hireItem.hirePlayerNumber}명`}</div>
-                </section>
-                <div>{`${hireItem.city} ${hireItem.region} ${hireItem.groundName}`}</div>
+          <article className={classNames(card__gameInfos)}>
+            <section className={classNames(card__gameInfos__gameSchedule)}>
+              <div>{`${hireItem.date} ${hireItem.startTime}`}</div>
+              <div>{`${hireItem.hirePlayerNumber}명`}</div>
+            </section>
+            <section className={classNames(card__gameInfos__location)}>
+              <div>{`${hireItem.city} ${hireItem.region} ${hireItem.groundName}`}</div>
+            </section>
+            <section className={classNames(card__gameInfos__tags)}>
+              <div>{hireItem.position}</div>
+              <div>{hireItem.ageGroup}</div>
+              <div>{`${hireItem.teamMannerTemperature}도`}</div>
+            </section>
+          </article>
+          <article className={classNames(card__teamInfos)}>
+            <section className={classNames(card__teamInfos__logo)}>
+              <img src={hireItem.teamLogo} alt="team logo" />
+            </section>
+            <section className={classNames(card__teamInfos__content)}>
+              <div>{hireItem.teamName}</div>
+            </section>
+            <section className={classNames(card__teamInfos__leader)}>
+              <span>{hireItem.teamCaptainName}</span>
+              <button type="button">
+                <i className="fas fa-user" />
+              </button>
+            </section>
+          </article>
+          <article className={classNames(card__detailInfos)}>
+            <section className={classNames(card__detailInfos__tab)}>
+              <h3>상세 정보</h3>
+              <div className={classNames(buttonBox)}>
+                <button type="button" onClick={handleClickEdit}>
+                  <i className="fas fa-pen" />
+                </button>
+                <button type="button" onClick={handleClickRemove}>
+                  <i className="fas fa-times" />
+                </button>
               </div>
             </section>
-            <section className={classNames(card__tags)}>
-              <span>{hireItem.position}</span>
-              <span>{`${hireItem.ageGroup?.slice(0, hireItem.ageGroup.length - 1)}대`}</span>
-              <span>{`${hireItem.teamMannerTemperature}도`}</span>
+            <section className={classNames(card__detailInfos__content)}>
+              <div
+                dangerouslySetInnerHTML={{ __html: hireItem.detail || '' }}
+                className={classNames(matchDetailContent)}
+              />
             </section>
           </article>
-          <div>팀 정보</div>
-          <article className={classNames(card__teamInfos)}>
-            <img src={hireItem.teamLogo} alt="team logo" />
-            <div>
-              <div>{hireItem.teamName}</div>
-              <section className={classNames(card__leaderInfo)}>
-                <span>{hireItem.teamManagerName}</span>
-                <button type="button">채팅</button>
-              </section>
-            </div>
+          <article className={classNames(hires_buttonBox)}>
+            <button type="button">신청 용병 확인</button>
           </article>
-
-          <InputDetail
-            labelName="상세정보"
-            placeholder={hireItem.detail}
-            onChange={handleChangeDetail}
-          />
-          <button type="button">신청 용병 확인</button>
         </>
       )}
-    </>
+    </div>
   );
 };
 
