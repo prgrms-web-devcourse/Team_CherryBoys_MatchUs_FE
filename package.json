@@ -17,6 +17,7 @@
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@karrotframe/tabs": "^0.4.1",
+    "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.59",
     "@mui/material": "^5.2.3",
     "@reduxjs/toolkit": "^1.6.2",
