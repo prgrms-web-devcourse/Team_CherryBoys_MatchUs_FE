@@ -16,13 +16,17 @@ const {
   addPostButton,
 } = style;
 
-const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
+const Posts = ({ isMatch, selectedTeam, data, isCaptain }: PostWrapper) => {
   const { grade } = selectedTeam;
   const hasAuthority = grade.includes('CAPTAIN');
   const history = useHistory();
 
   const handleClickAddPosting = () => {
-    history.push(`/hires/post/new`);
+    if (isCaptain) {
+      history.push(`/hires/post/new`);
+    } else {
+      alert('부주장 이상만 생성 가능합니다');
+    }
   };
 
   return (

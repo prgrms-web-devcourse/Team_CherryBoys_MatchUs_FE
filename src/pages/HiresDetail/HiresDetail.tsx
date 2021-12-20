@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -6,6 +7,7 @@ import style from './hiresDetail.module.scss';
 import { getHiresDetail, deleteHiresPosting, applyHires, cancelHireRequest } from '@/api/hires';
 import { InputDetail } from '@/components';
 import { hireItemType } from '@/types';
+import { RootState } from '@/store';
 
 const {
   card__teamInfos,
@@ -18,19 +20,30 @@ const {
 const HiresDetail = () => {
   const history = useHistory();
   const [hireItem, setHireItem] = useState<hireItemType>();
-
   const { postId } = useParams<{ postId: string }>();
   const currentPostId = parseInt(postId, 10);
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const [isCaptain, setIsCaptain] = useState(false);
 
   useEffect(() => {
     const getHiresDetailInfo = async () => {
       const res = await getHiresDetail(currentPostId);
       setHireItem(res);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const gradeInfo of userInfo.userGradeResponse) {
+        const { grade, teamId } = gradeInfo;
+        if (teamId === res.teamId && (grade === 'CAPTAIN' || grade === 'SUBCAPTAIN')) {
+          setIsCaptain(true);
+        }
+      }
     };
 
     getHiresDetailInfo();
-  }, [currentPostId]);
+  }, [currentPostId, userInfo, isCaptain]);
 
+  useEffect(() => {
+    console.error(isCaptain);
+  }, []);
   const handleClickRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
     history.push(`/hires`);
@@ -52,6 +65,7 @@ const HiresDetail = () => {
   };
 
   const handleClickCancelHires = async () => {
+    const id = 7;
     const res = await cancelHireRequest(7);
     console.log(res);
   };
@@ -60,6 +74,7 @@ const HiresDetail = () => {
     history.push(`/hires/accept/${currentPostId}`);
   };
 
+  // Todo(홍중) : 용병 취소 추후 완성(2021-12-21)
   return (
     <>
       {hireItem && (
@@ -101,15 +116,18 @@ const HiresDetail = () => {
             placeholder={hireItem.detail}
             onChange={handleChangeDetail}
           />
-          <button type="button" onClick={handleClickShowApplications}>
-            신청 용병 확인
-          </button>
-          <button type="button" onClick={handleClickApplyHires}>
-            용병 신청
-          </button>
-          <button type="button" onClick={handleClickCancelHires}>
+          {isCaptain ? (
+            <button type="button" onClick={handleClickShowApplications}>
+              신청 용병 확인
+            </button>
+          ) : (
+            <button type="button" onClick={handleClickApplyHires}>
+              용병 신청
+            </button>
+          )}
+          {/* <button type="button" onClick={handleClickCancelHires}>
             용병 취소
-          </button>
+          </button> */}
         </>
       )}
     </>

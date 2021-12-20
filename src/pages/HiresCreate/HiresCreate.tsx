@@ -265,6 +265,7 @@ const HiresCreate = ({
     // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
       alert('시간을 다시 입력해주세요');
+      return;
     }
 
     // Todo(홍중) : 입력된 데이터 서버에 보내기
