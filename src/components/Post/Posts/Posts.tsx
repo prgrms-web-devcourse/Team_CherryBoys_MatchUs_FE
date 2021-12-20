@@ -25,6 +25,10 @@ const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
     history.push(`/hires/post/new`);
   };
 
+  const handleClickFilter = () => {
+    history.push(`/hires/filter`);
+  };
+
   return (
     <>
       <div className={classNames(postsContainer)}>
@@ -33,7 +37,11 @@ const Posts = ({ isMatch, selectedTeam, data }: PostWrapper) => {
             {isMatch ? <span className="match">모집중인 매치</span> : <span>모집중인 용병</span>}
           </div>
           <div className={classNames(buttonBox)}>
-            <button type="button" className={classNames(filterPostButton)}>
+            <button
+              onClick={handleClickFilter}
+              type="button"
+              className={classNames(filterPostButton)}
+            >
               <i className="fas fa-filter" />
             </button>
           </div>
