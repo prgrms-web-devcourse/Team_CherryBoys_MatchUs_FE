@@ -9,7 +9,7 @@ import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { useHistory } from 'react-router-dom';
 
-import { editHiresPosting, createHiresPosting } from '@/api/hires';
+import { editHiresPosting, createHiresPosting, hiresPosting } from '@/api/hires';
 import { fetchAuthorizedTeams, fetchLocation } from '@/api';
 
 import { InputDetail, Input } from '@/components';
@@ -227,23 +227,10 @@ const HiresCreate = ({
   };
 
   // Todo(홍중) : api 통신 추후 추가 (2021-12-17)
-  // const handleClickCreatePosting = async () => {
-  //   const data = {
-  //     ageGroup: '20대',
-  //     cityId: 1,
-  //     date: '2021-12-15',
-  //     detail: '상세내용입니다~',
-  //     endTime: '19:30:00',
-  //     groundId: 1,
-  //     hirePlayerNumber: 3,
-  //     position: '윙백',
-  //     regionId: 1,
-  //     startTime: '17:30:00',
-  //     teamId: 1,
-  //   };
-
-  //   const res = await createHiresPosting(data);
-  // };
+  const handleClickCreatePosting = async (data: hiresPosting) => {
+    await createHiresPosting(data);
+    history.push(`/hires`);
+  };
 
   const handleClickSelectDone = () => {
     const data = {
@@ -282,8 +269,8 @@ const HiresCreate = ({
     }
 
     // Todo(홍중) : 입력된 데이터 서버에 보내기
-    // handleClickCreatePosting(data);
-    console.log(data);
+    handleClickCreatePosting(data);
+    // console.log(data);
   };
 
   const handleChangePosition = (event: React.ChangeEvent) => {
