@@ -6,6 +6,9 @@ import style from './hiresDetail.module.scss';
 import { getHiresDetail, deleteHiresPosting } from '@/api/hires';
 import { InputDetail } from '@/components';
 import { hireItemType } from '@/types';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+
+const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 
 const {
   hires_container,
@@ -23,6 +26,7 @@ const {
   matchDetailContent,
   buttonBox,
   hires_buttonBox,
+  linkButton,
 } = style;
 
 const HiresDetail = () => {
@@ -55,6 +59,10 @@ const HiresDetail = () => {
     });
   };
 
+  const handleGoPage = (url: string) => {
+    history.push(url);
+  };
+
   return (
     <div className={classNames(hires_container)}>
       {hireItem && (
@@ -75,10 +83,33 @@ const HiresDetail = () => {
           </article>
           <article className={classNames(card__teamInfos)}>
             <section className={classNames(card__teamInfos__logo)}>
-              <img src={hireItem.teamLogo} alt="team logo" />
+              <button
+                type="button"
+                className={classNames(linkButton)}
+                onClick={() => handleGoPage(`/team/${hireItem.teamId || 0}`)}
+              >
+                <img
+                  src={
+                    regex.test(hireItem.teamLogo || '') ||
+                    hireItem.teamLogo === '' ||
+                    hireItem.teamLogo === null
+                      ? baseTeamLogo
+                      : hireItem.teamLogo
+                  }
+                  alt="team logo"
+                />
+              </button>
             </section>
             <section className={classNames(card__teamInfos__content)}>
-              <div>{hireItem.teamName}</div>
+              <div>
+                <button
+                  className={classNames(linkButton)}
+                  type="button"
+                  onClick={() => handleGoPage(`/team/${hireItem.teamId || 0}`)}
+                >
+                  {hireItem.teamName}
+                </button>
+              </div>
             </section>
             <section className={classNames(card__teamInfos__leader)}>
               <span>{hireItem.teamCaptainName}</span>

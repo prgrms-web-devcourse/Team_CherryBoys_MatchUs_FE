@@ -6,8 +6,11 @@ import { useHistory } from 'react-router-dom';
 // import style from './postItem.module.scss';
 import style from '@/components/Match/MatchPostCard/MatchPostCard.module.scss';
 import { Post } from '@/store/posts';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 const { card, gameInfos, tags, gameSchedule } = style;
+
+const regex = /^[ㄱ-ㅎ|가-힣|0-9]+$/;
 
 const PostItem = ({ item }: Post) => {
   const {
@@ -47,7 +50,14 @@ const PostItem = ({ item }: Post) => {
       <li onClick={handleClickPostItme} className={classNames(postCard)}>
         <article className={classNames(postBox)}>
           <section className={classNames(postTeamLogo)}>
-            <img src={teamLogo} alt={`team logo ${isMatching ? matchId : postId}`} />
+            <img
+              src={
+                regex.test(teamLogo) || teamLogo === '' || teamLogo === null
+                  ? baseTeamLogo
+                  : teamLogo
+              }
+              alt={`team logo ${isMatching ? matchId : postId}`}
+            />
           </section>
           <section className={classNames(postInfos)}>
             <div>{`${date} ${startTime}`}</div>

@@ -15,6 +15,7 @@ export interface hireItemType {
   teamName: string | undefined;
   teamCaptainName: string | undefined;
   detail: string | undefined;
+  teamId?: number;
 }
 
 export interface previousHiresInfo {
