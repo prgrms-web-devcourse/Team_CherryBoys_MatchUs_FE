@@ -49,7 +49,7 @@ const ApplicationElement = ({ currentPostId, applicationCheckList }: element) =>
   return (
     <div className={classNames(applicationContainer)}>
       <InputCheckBox
-        labelName="용병 신청자"
+        labelName="신청한 용병 목록"
         options={hiresApplications}
         onChange={handleOnChangeApplications}
         icon="far fa-check-square"

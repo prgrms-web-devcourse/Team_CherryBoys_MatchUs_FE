@@ -20,7 +20,7 @@ import { Match as MatchType, TeamSimple } from '@/types';
 import { getItemFromStorage } from '@/utils/storage';
 import { match as matchStore } from '@/store/match/match';
 
-const { awayTeam, versus } = styles;
+const { matchPageContainer, awayTeam, versus } = styles;
 
 const Match = () => {
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
@@ -75,7 +75,7 @@ const Match = () => {
   };
 
   return (
-    <div>
+    <div className={classNames(matchPageContainer)}>
       {match.length > 0 &&
         match.map((matchInfo) => (
           <Fragment key={`match${matchInfo.matchId}`}>
