@@ -26,6 +26,7 @@ interface locationInfoTypeWrapper {
   region: regionType;
   ground: groundType;
   handleInput: (e: React.ChangeEvent, category: string) => void;
+  firstLabelName: string;
 }
 
 const LocationSelect = ({
@@ -34,6 +35,7 @@ const LocationSelect = ({
   region,
   ground,
   handleInput,
+  firstLabelName,
 }: locationInfoTypeWrapper) => {
   const cityOptions = [
     '행정구역',
@@ -60,6 +62,7 @@ const LocationSelect = ({
   return (
     <div>
       <Input
+        labelName={firstLabelName}
         inputId="inputCity"
         type="dropbox"
         options={cityOptions}

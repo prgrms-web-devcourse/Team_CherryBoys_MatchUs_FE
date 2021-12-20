@@ -9,14 +9,15 @@ import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { useHistory } from 'react-router-dom';
 
-import { editHiresPosting } from '@/api/hires';
-import { fetchLocation } from '@/api';
+import { editHiresPosting, createHiresPosting } from '@/api/hires';
+import { fetchAuthorizedTeams, fetchLocation } from '@/api';
 
-import { InputDetail } from '@/components';
+import { InputDetail, Input } from '@/components';
 import { LocationSelect, AgeGroup, HiresPosition } from '@/components/selects';
-import { previousHiresInfo, Locations } from '@/types';
+import { previousHiresInfo, Locations, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
+import { getItemFromStorage } from '@/utils/storage';
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -71,12 +72,29 @@ const HiresCreate = ({
   const [city, setCity] = useState(defaultCity);
   const [region, setRegion] = useState(defaultRegion);
   const [ground, setGround] = useState(defaultGround);
+  const [team, setTeam] = useState('선택');
+  const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
+  const teamNames = userTeams.map((userTeam) => userTeam.teamName);
+
+  const token = getItemFromStorage('accessToken');
 
   const history = useHistory();
 
   const dispatch = useDispatch();
   const { locations } = useSelector((store: RootState) => store.match.data);
   const [locationInfo, setLocationInfo] = useState<Locations>(locations);
+
+  const getAuhorizedTeams = useCallback(async () => {
+    if (token) {
+      const { teamSimpleInfos } = await fetchAuthorizedTeams();
+      setUserTeams(teamSimpleInfos);
+      dispatch(match.actions.setUserTeams({ userTeams: teamSimpleInfos }));
+    }
+  }, []);
+
+  useEffect(() => {
+    getAuhorizedTeams();
+  }, []);
 
   const getLocations = useCallback(async () => {
     const locationData = await fetchLocation();
@@ -87,30 +105,8 @@ const HiresCreate = ({
   useEffect(() => {
     if (locationInfo.cities.length < 1) {
       getLocations();
-    } else {
-      console.log(locationInfo);
-      const cityOptions = [
-        '행정구역',
-        ...locationInfo.cities.reduce((acc: string[], cityInfo) => {
-          if (cityInfo.cityName) acc.push(cityInfo.cityName || '');
-          return acc;
-        }, []),
-      ];
-      const regionOptions = [
-        '시/군/구',
-        ...locationInfo.regions.reduce((acc: string[], regionInfo) => {
-          if (regionInfo.cityId === city.cityId) acc.push(regionInfo.regionName || '');
-          return acc;
-        }, []),
-      ];
-      const groundOptions = [
-        '구장',
-        ...locationInfo.grounds.reduce((acc: string[], groundInfo) => {
-          if (groundInfo.regionId === region.regionId) acc.push(groundInfo.groundName || '');
-          return acc;
-        }, []),
-      ];
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations]);
 
   useEffect(() => {
@@ -175,6 +171,9 @@ const HiresCreate = ({
         groundId: selectedGround?.groundId || 0,
         groundName: selectedGround?.groundName || '',
       });
+    }
+    if (category === 'team') {
+      setTeam(targetInput);
     }
   };
 
@@ -258,7 +257,7 @@ const HiresCreate = ({
       position,
       regionId: region.regionId,
       startTime: formatedStartTime,
-      teamId: 0,
+      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
     };
 
     const startHour = startTime?.getHours();
@@ -363,12 +362,21 @@ const HiresCreate = ({
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
+
       <LocationSelect
         locationInfo={locationInfo}
         city={city}
         region={region}
         ground={ground}
         handleInput={handleInput}
+        firstLabelName="장소"
+      />
+      <Input
+        inputId="inputTeam"
+        labelName="팀"
+        type="dropbox"
+        options={['선택', ...teamNames]}
+        onChange={(e) => handleInput(e, 'team')}
       />
       <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
       {prevCity === '행정구역' ? (
