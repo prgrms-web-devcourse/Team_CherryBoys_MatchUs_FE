@@ -2,11 +2,13 @@
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
 import { MemberElement, MatchElement, TeamInfo } from '@/types';
 import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+import { RootState } from '@/store';
 
 const {
   entireContainer,
@@ -45,6 +47,7 @@ const ageCollection: Record<string, string> = {
 };
 
 const TeamDetail = () => {
+  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
   const [modalMessage, setModalMessage] = useState('LEAVE');
   const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
@@ -97,6 +100,9 @@ const TeamDetail = () => {
   });
 
   const hasMember = memberInfo.length !== 0;
+
+  const hasHiredMember = memberInfo.filter((member) => member.grade === '용병').length !== 0;
+
   const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
   const limitedTeamTags = tags.slice(0, 3);
   const yearMonthDay = teamCreatedAt.split('T');
@@ -104,6 +110,17 @@ const TeamDetail = () => {
   const { modalMainTitle, modalSubTitle } = style;
 
   useEffect(() => {
+    const authorizationMap = userGradeResponse.map((team) => {
+      if (team.teamId === teamId && team.grade === 'CAPTAIN') {
+        return true;
+      }
+      return false;
+    });
+
+    const authorization = authorizationMap.includes(true);
+
+    setHasAuthorization(authorization);
+
     const updateTeamMatchHistory = async () => {
       const { teamMatches } = await getMatchHistory(teamId);
 
@@ -129,7 +146,7 @@ const TeamDetail = () => {
     updateTeamInfo();
     updateTeamMatchHistory();
     updateMemberInfo();
-  }, [teamId]);
+  }, [teamId, userGradeResponse]);
 
   return (
     <div className={classNames(entireContainer)}>
@@ -258,12 +275,12 @@ const TeamDetail = () => {
       <article className={classNames(teamMemberInfo)}>
         <div className={classNames(teamMemberTitle)}>
           <span className={classNames(categoryTitle)}>용병 목록</span>
-          <Link className={classNames(seeMore)} to={`/team/${teamId}/hires-member`}>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/hired-members`}>
             더보기
           </Link>
         </div>
         <div className={classNames(teamDataContainer)}>
-          {hasMember ? (
+          {hasHiredMember ? (
             <MemberList
               isMember={false}
               memberInfo={memberInfo}
@@ -281,7 +298,7 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-      {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
+
       <article className={classNames(teamMemberInfo)}>
         <div className={classNames(teamMemberTitle)}>
           <span className={classNames(categoryTitle)}>매칭 목록</span>
