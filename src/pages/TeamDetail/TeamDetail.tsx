@@ -31,7 +31,7 @@ const {
   countLow,
   countMiddle,
   countHigh,
-  teamMathchesContainer,
+  teamDataContainer,
 } = style;
 
 const ageCollection: Record<string, string> = {
@@ -234,7 +234,7 @@ const TeamDetail = () => {
             더보기
           </Link>
         </div>
-        <div>
+        <div className={classNames(teamDataContainer)}>
           {hasMember ? (
             <MemberList
               isMember
@@ -262,7 +262,7 @@ const TeamDetail = () => {
             더보기
           </Link>
         </div>
-        <div>
+        <div className={classNames(teamDataContainer)}>
           {hasMember ? (
             <MemberList
               isMember={false}
@@ -289,7 +289,7 @@ const TeamDetail = () => {
             더보기
           </Link>
         </div>
-        <div className={classNames(teamMathchesContainer)}>
+        <div className={classNames(teamDataContainer)}>
           {hasPreviousMatchHistory ? (
             previousMatchHistory.map(
               ({
