@@ -30,7 +30,7 @@ export const match = createSlice({
         matchTeamMember: false,
       },
       matchListFilter: {
-        size: 10,
+        size: 30,
       },
       locations: {
         cities: [],

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
-import { MatchPostCard, MatchListFilterModal } from '@/components';
+import { MatchPostCard, MatchListFilterModal, CustomModalDialog } from '@/components';
 import style from './MatchPosts.module.scss';
 import { fetchAllMatch } from '@/api';
 import { MatchCard } from '@/types';
@@ -18,6 +18,7 @@ const {
   filterPostButton,
   postItems,
   addPostButton,
+  modalMainTitle,
 } = style;
 
 const MatchPosts = () => {
@@ -25,6 +26,7 @@ const MatchPosts = () => {
   const { userInfo } = useSelector((state: RootState) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [matches, setMatches] = useState<MatchCard[]>([]);
   const isCaptain = userInfo.userGradeResponse.filter((gradeInfo) =>
@@ -42,7 +44,7 @@ const MatchPosts = () => {
 
   const handelCheckUserAuthority = () => {
     if (!isCaptain) {
-      window.alert('부주장 이상의 권한이 있어야 글을 작성할 수 있습니다');
+      setIsModalOpen(true);
       return;
     }
     history.push('/matches/new');
@@ -90,6 +92,19 @@ const MatchPosts = () => {
         <i className="fas fa-plus" />
       </button>
       <MatchListFilterModal showMatchListFilterModal={modal.matchListFilter} />
+      {isModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsModalOpen(false)}
+          handleApprove={() => {
+            setIsModalOpen(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>
+            부주장 이상의 권한이 있어야 글을 작성할 수 있습니다
+          </span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };

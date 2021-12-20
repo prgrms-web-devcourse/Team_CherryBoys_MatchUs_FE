@@ -9,6 +9,7 @@ import TimePicker from '@mui/lab/TimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { useHistory } from 'react-router-dom';
 
+import classNames from 'classnames';
 import { editHiresPosting, createHiresPosting, hiresPosting } from '@/api/hires';
 import { fetchAuthorizedTeams, fetchLocation } from '@/api';
 
@@ -18,6 +19,9 @@ import { previousHiresInfo, Locations, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { getItemFromStorage } from '@/utils/storage';
+import style from './HiresCreate.module.scss';
+
+const { hiresCreateContainer, inputBox, inputDateBox, buttonBox, submitButton } = style;
 
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -306,57 +310,62 @@ const HiresCreate = ({
   };
 
   return (
-    <>
-      <section>
-        <div>용병수</div>
-        <select id="hiredPlayerNumber" onChange={handleChangeHiredPlayerNumber}>
-          <option>{`${hirePlayerNumber}명`}</option>
-          {HIRED_NUMBER.map(
-            (num, index) =>
-              index > 0 && (
-                <option id="hiresWriteCategory" key={`hired-${num}`}>
-                  {`${num}명`}
-                </option>
-              )
-          )}
-        </select>
+    <div className={classNames(hiresCreateContainer)}>
+      <section className={classNames(inputBox)}>
+        <h3>용병 수</h3>
+        <div>
+          <select id="hiredPlayerNumber" onChange={handleChangeHiredPlayerNumber}>
+            <option>{`${hirePlayerNumber}명`}</option>
+            {HIRED_NUMBER.map(
+              (num, index) =>
+                index > 0 && (
+                  <option id="hiresWriteCategory" key={`hired-${num}`}>
+                    {`${num}명`}
+                  </option>
+                )
+            )}
+          </select>
+        </div>
       </section>
       <HiresPosition hiringPosition={position} handleChangePosition={handleChangePosition} />
       <AgeGroup
         ageGroup={parseInt(prevAgeGroup.slice(0, 2), 10)}
         handleChangeAge={handleChangeAge}
       />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          value={date}
-          maxDate={maximumDate}
-          minDate={currentDate}
-          onChange={hanldeChangeDate}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <TimePicker
-          value={startTime}
-          onChange={handleChangeStartDate}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <TimePicker
-          value={endTime}
-          onChange={handleChangEndDate}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-
+      <div className={classNames(inputDateBox)}>
+        <h3>날짜</h3>
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              value={date}
+              maxDate={maximumDate}
+              minDate={currentDate}
+              onChange={hanldeChangeDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              value={startTime}
+              onChange={handleChangeStartDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              value={endTime}
+              onChange={handleChangEndDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </div>
+      </div>
       <LocationSelect
         locationInfo={locationInfo}
         city={city}
         region={region}
         ground={ground}
         handleInput={handleInput}
-        firstLabelName="장소"
       />
       <Input
         inputId="inputTeam"
@@ -366,16 +375,26 @@ const HiresCreate = ({
         onChange={(e) => handleInput(e, 'team')}
       />
       <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
-      {prevCity === '행정구역' ? (
-        <button type="button" onClick={handleClickSelectDone}>
-          생성
-        </button>
-      ) : (
-        <button type="button" onClick={handleClickEditPosting}>
-          수정
-        </button>
-      )}
-    </>
+      <div className={classNames(buttonBox)}>
+        {prevCity === '행정구역' ? (
+          <button
+            className={classNames(submitButton)}
+            type="button"
+            onClick={handleClickSelectDone}
+          >
+            생성
+          </button>
+        ) : (
+          <button
+            className={classNames(submitButton)}
+            type="button"
+            onClick={handleClickEditPosting}
+          >
+            수정
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 

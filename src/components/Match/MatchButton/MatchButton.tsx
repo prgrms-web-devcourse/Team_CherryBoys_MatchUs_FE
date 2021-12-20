@@ -15,8 +15,11 @@ const { matchButtonBox, matchButton, approveButton, applyButton, show } = styles
 
 const MatchButton = ({ matchInfo, enable }: Props) => {
   const dispatch = useDispatch();
-  const { registerTeamInfo, applyTeamInfo, status } = matchInfo;
+  const { registerTeamInfo, applyTeamInfo, status, date, endTime } = matchInfo;
   const { userTeams } = useSelector((store: RootState) => store.match.data);
+
+  const matchDate = new Date(`${date} ${endTime}`);
+  const today = new Date();
 
   const matchEnables = {
     apply:
@@ -27,6 +30,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       userTeams.filter((team) => team.teamId === registerTeamInfo.teamId)[0],
     review:
       applyTeamInfo &&
+      matchDate <= today &&
       status === 'COMPLETION' &&
       (userTeams.filter((team) => team.teamId === applyTeamInfo.teamId)[0] ||
         userTeams.filter((team) => team.teamId === registerTeamInfo.teamId)[0]),

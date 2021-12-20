@@ -35,7 +35,7 @@ const Header = () => {
       return;
     }
 
-    handleHistory('');
+    handleHistory('login');
   };
 
   return (

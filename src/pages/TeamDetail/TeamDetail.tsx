@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
-import { MemberElement, MatchElement, TeamInfo } from '@/types';
+import { MemberElement, MatchElement, MatchTeamInfo } from '@/types';
 import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 import { RootState } from '@/store';
@@ -53,12 +53,12 @@ const TeamDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
-  const [teamInfo, setTeamInfo] = useState<TeamInfo>({
+  const [teamInfo, setTeamInfo] = useState<MatchTeamInfo>({
     ageGroup: '',
     bio: '',
     captainId: 0,
     logo: '',
-    captainName: '',
+    captainNickname: '',
     mannerTemperature: 0,
     matchCount: 0,
     sportsName: '',
@@ -101,12 +101,26 @@ const TeamDetail = () => {
 
   const hasMember = memberInfo.length !== 0;
 
+
   const hasHiredMember = memberInfo.filter((member) => member.grade === '용병').length !== 0;
 
   const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
   const limitedTeamTags = tags.slice(0, 3);
   const yearMonthDay = teamCreatedAt.split('T');
 
+  const {
+    teamName,
+    bio,
+    sportsName,
+    tags,
+    matchCount,
+    mannerTemperature,
+    captainId,
+    captainNickname,
+    ageGroup,
+    teamCreatedAt,
+  } = teamInfo;
+    
   const { modalMainTitle, modalSubTitle } = style;
 
   useEffect(() => {
@@ -194,6 +208,7 @@ const TeamDetail = () => {
 
       <span className={classNames(categoryTitle)}>주요정보</span>
       <article className={classNames(teamCoreInfo)}>
+
         <section className={classNames(teamCoreElementContainer)}>
           <span className={classNames(teamCoreElementTitle)}>총 경기 수</span>
           <span
@@ -242,6 +257,14 @@ const TeamDetail = () => {
           <span className={classNames(teamCoreElementTitle)}>생성일자</span>
           <span className={classNames(teamCoreElementContent)}>{yearMonthDay[0]}</span>
         </section>
+
+        <section>총 경기 수{matchCount}</section>
+        <section>매너온도 {mannerTemperature}</section>
+        <section id={`captain-${captainId}`}>{`운영진 ${captainNickname}`}</section>
+        <section>주요 종목 {sportsName}</section>
+        <section>연령대 {ageGroup}</section>
+        <section>생성일자 {teamCreatedAt}</section>
+
       </article>
 
       <article className={classNames(teamMemberInfo)}>
