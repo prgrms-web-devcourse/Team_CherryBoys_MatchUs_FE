@@ -42,6 +42,9 @@ const MemberList = ({
   );
   const hiredMemberList = memberInfo.filter((member: MemberElementType) => member.grade === '용병');
 
+  const memberIndex = memberIndexLimit === 0 ? generalMemberList.length : memberIndexLimit;
+  const hiredIndex = hiredIndexLimit === 0 ? hiredMemberList.length : hiredIndexLimit;
+
   return (
     <>
       <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
@@ -70,10 +73,10 @@ const MemberList = ({
             <>
               {subCaptains.map((subCaptain: MemberElementType) => (
                 <MemberListElement
+                  key={`subCaptain-${subCaptain.userId}`}
                   memberId={subCaptain.userId}
                   memberName={subCaptain.userName}
                   memberType="subCaptain"
-                  key={`subCaptain-${subCaptain.userId}`}
                   isEditing={isEditing}
                   grade={subCaptain.grade}
                   handleChangeMemberGrade={handleChangeMemberGrade}
@@ -86,13 +89,13 @@ const MemberList = ({
             ? generalMemberList.length !== 0 && (
                 <>
                   {generalMemberList.map((generalMember: MemberElementType, index) => {
-                    if (index < memberIndexLimit && memberIndexLimit !== 0) {
+                    if (index < memberIndexLimit) {
                       return (
                         <MemberListElement
+                          key={`generalMember-${generalMember.userId}`}
                           memberId={generalMember.userId}
                           memberName={generalMember.userName}
                           memberType="generalMember"
-                          key={`generalMember-${generalMember.userId}`}
                           isEditing={isEditing}
                           grade={generalMember.grade}
                           handleChangeMemberGrade={handleChangeMemberGrade}
@@ -100,31 +103,19 @@ const MemberList = ({
                         />
                       );
                     }
-                    return (
-                      <MemberListElement
-                        memberId={generalMember.userId}
-                        memberName={generalMember.userName}
-                        memberType="generalMember"
-                        key={`generalMember-${generalMember.userId}`}
-                        isEditing={isEditing}
-                        grade={generalMember.grade}
-                        handleChangeMemberGrade={handleChangeMemberGrade}
-                        handleAddDeletedMembers={handleAddDeletedMembers}
-                      />
-                    );
                   })}
                 </>
               )
             : hiredMemberList.length !== 0 && (
                 <>
                   {hiredMemberList.map((hiredMember: MemberElementType, index) => {
-                    if (index < hiredIndexLimit && hiredIndexLimit !== 0) {
+                    if (index < hiredIndexLimit) {
                       return (
                         <MemberListElement
+                          key={`hiredMember-${hiredMember.userId}`}
                           memberId={hiredMember.userId}
                           memberName={hiredMember.userName}
                           memberType="hiredMember"
-                          key={`hiredMember-${hiredMember.userId}`}
                           isEditing={isEditing}
                           grade={hiredMember.grade}
                           handleChangeMemberGrade={handleChangeMemberGrade}
@@ -132,18 +123,6 @@ const MemberList = ({
                         />
                       );
                     }
-                    return (
-                      <MemberListElement
-                        memberId={hiredMember.userId}
-                        memberName={hiredMember.userName}
-                        memberType="hiredMember"
-                        key={`hiredMember-${hiredMember.userId}`}
-                        isEditing={isEditing}
-                        grade={hiredMember.grade}
-                        handleChangeMemberGrade={handleChangeMemberGrade}
-                        handleAddDeletedMembers={handleAddDeletedMembers}
-                      />
-                    );
                   })}
                 </>
               )}

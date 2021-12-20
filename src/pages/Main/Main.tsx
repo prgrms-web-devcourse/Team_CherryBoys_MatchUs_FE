@@ -118,7 +118,10 @@ const Main = () => {
             </Link>
           </div>
           <section>
-            {matchList && matchList.map((match: MatchCard) => <MatchPostCard matchInfo={match} />)}
+            {matchList &&
+              matchList.map((match: MatchCard) => (
+                <MatchPostCard key={match.matchId} matchInfo={match} />
+              ))}
           </section>
         </div>
 

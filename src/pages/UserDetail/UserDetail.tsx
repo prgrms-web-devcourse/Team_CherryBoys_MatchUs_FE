@@ -82,15 +82,19 @@ const UserDetail = () => {
 
   useEffect(() => {
     const updateUserInfo = async () => {
-      const apiResult = await getUserInfo(userId);
+      if (userId !== null) {
+        const apiResult = await getUserInfo(userId);
 
-      setUserInfo(apiResult);
+        setUserInfo(apiResult);
+      }
     };
 
     const updateUserMatchHistory = async () => {
-      const { userMatches } = await getUserMatchHistory(userId);
+      if (userId !== null) {
+        const { userMatches } = await getUserMatchHistory(userId);
 
-      setUserMatchHistory(userMatches);
+        setUserMatchHistory(userMatches);
+      }
     };
 
     updateUserInfo();
@@ -143,7 +147,12 @@ const UserDetail = () => {
             <div className={classNames(tagContainer)}>
               {limitedTag.map(({ tagId, tagType, tagName }) => (
                 <>
-                  <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+                  <AttitueTag
+                    key={`tag-${tagId}`}
+                    tagId={tagId}
+                    tagName={tagName}
+                    tagType={tagType}
+                  />
                 </>
               ))}
             </div>
