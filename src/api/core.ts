@@ -20,8 +20,6 @@ const createApiMethod =
     });
 
     _axiosInstance.interceptors.request.use((requestConfig: AxiosRequestConfig) => {
-      const token = getItemFromStorage('accessToken');
-
       if (token) {
         const expireTime: number = getItemFromStorage('expireTime');
 

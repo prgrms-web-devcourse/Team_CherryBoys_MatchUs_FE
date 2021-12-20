@@ -330,8 +330,8 @@ const NewMatch = () => {
       day: '2-digit',
     });
 
-    if (dateResult.date < todayString) {
-      setErrorMessage('오늘보다 이른 날짜는 선택할 수 없습니다');
+    if (dateResult.date <= todayString) {
+      setErrorMessage('경기 날짜는 오늘 이후부터 선택할 수 있습니다');
       setIsModal3Open(true);
       return;
     }
@@ -379,7 +379,7 @@ const NewMatch = () => {
   const handleSubmit = async () => {
     const cretedMatchId = await createMatch(requestData);
     if (cretedMatchId) {
-      setNewMatchId(cretedMatchId);
+      setNewMatchId(cretedMatchId.matchId);
       setIsModal2Open(true);
     } else {
       setErrorMessage(
@@ -391,11 +391,9 @@ const NewMatch = () => {
 
   useEffect(() => {
     const today = new Date();
-    const defaultStartDate = today;
-    const defaultStartTime = today;
-
-    const nextDayTime = new Date(new Date().getTime() + 120 * 60000);
-    const defaultEndTime = nextDayTime;
+    const defaultStartDate = new Date(today.setDate(today.getDate() + 1));
+    const defaultStartTime = new Date(new Date().getTime() + 120 * 60000);
+    const defaultEndTime = new Date(new Date().getTime() + 240 * 60000);
 
     let defaultEndDate = defaultStartDate;
     const startHour = defaultStartTime.getHours();

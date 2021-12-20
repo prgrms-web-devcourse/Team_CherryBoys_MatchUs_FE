@@ -264,6 +264,11 @@ const EditMatch = () => {
     };
 
     const today = new Date();
+    const todayString = today.toLocaleDateString('fr-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
 
     if (sports === '선택') {
       setErrorMessage('종목을 선택해주세요');
@@ -290,8 +295,8 @@ const EditMatch = () => {
       setIsModal3Open(true);
       return;
     }
-    if (new Date(`${dateResult.date} ${dateResult.startTime}`) < today) {
-      setErrorMessage('오늘보다 이른 날짜는 선택할 수 없습니다');
+    if (dateResult.date <= todayString) {
+      setErrorMessage('경기 날짜는 오늘 이후부터 선택할 수 있습니다');
       setIsModal3Open(true);
       return;
     }
