@@ -78,7 +78,14 @@ const TeamCard = ({ team, status }: Props) => {
             className={classNames(linkButton)}
             onClick={() => handleGoPage(`/team/${team.teamId}`)}
           >
-            <img src={regex.test(team.teamLogo) ? baseTeamLogo : team.teamLogo} alt="team_logo" />
+            <img
+              src={
+                regex.test(team.teamLogo) || team.teamLogo === '' || team.teamLogo === null
+                  ? baseTeamLogo
+                  : team.teamLogo
+              }
+              alt="team_logo"
+            />
           </button>
         </div>
         <div className={classNames(teamName)}>
