@@ -103,6 +103,18 @@ const MemberList = ({
                         />
                       );
                     }
+                    return (
+                      <MemberListElement
+                        memberId={generalMember.userId}
+                        memberName={generalMember.userName}
+                        memberType="generalMember"
+                        key={`generalMember-${generalMember.userId}`}
+                        isEditing={isEditing}
+                        grade={generalMember.grade}
+                        handleChangeMemberGrade={handleChangeMemberGrade}
+                        handleAddDeletedMembers={handleAddDeletedMembers}
+                      />
+                    );
                   })}
                 </>
               )
@@ -123,6 +135,18 @@ const MemberList = ({
                         />
                       );
                     }
+                    return (
+                      <MemberListElement
+                        memberId={hiredMember.userId}
+                        memberName={hiredMember.userName}
+                        memberType="hiredMember"
+                        key={`hiredMember-${hiredMember.userId}`}
+                        isEditing={isEditing}
+                        grade={hiredMember.grade}
+                        handleChangeMemberGrade={handleChangeMemberGrade}
+                        handleAddDeletedMembers={handleAddDeletedMembers}
+                      />
+                    );
                   })}
                 </>
               )}
