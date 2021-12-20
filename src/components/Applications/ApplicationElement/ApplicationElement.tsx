@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import classNames from 'classnames';
 import InputCheckBox from '@/components/common/Inputs/InputCheckBox/InputCheckBox';
 import { getApplications, allowApplications } from '@/api/hires';
+import styles from './ApplicationElement.module.scss';
+
+const { applicationContainer, buttonBox, submitButton } = styles;
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -43,17 +47,23 @@ const ApplicationElement = ({ currentPostId, applicationCheckList }: element) =>
 
   // Todo(홍중) : label누르면 드랍박스로 focus되도록 수정예정(2021-12-19)
   return (
-    <>
+    <div className={classNames(applicationContainer)}>
       <InputCheckBox
         labelName="용병 신청자"
         options={hiresApplications}
         onChange={handleOnChangeApplications}
         icon="far fa-check-square"
       />
-      <button type="button" onClick={handleClickAllowApplications}>
-        용병 수락
-      </button>
-    </>
+      <div className={classNames(buttonBox)}>
+        <button
+          className={classNames(submitButton)}
+          type="button"
+          onClick={handleClickAllowApplications}
+        >
+          용병 수락
+        </button>
+      </div>
+    </div>
   );
 };
 
