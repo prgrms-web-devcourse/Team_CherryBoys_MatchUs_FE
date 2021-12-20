@@ -34,7 +34,7 @@ interface allowedApplications {
   postId: number;
   data: allApplications;
 }
-interface conditions {
+export interface conditions {
   ageGroup?: string;
   cityId?: number;
   date?: string;

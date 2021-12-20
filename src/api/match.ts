@@ -112,7 +112,7 @@ export const getTags = () => {
 
 export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
   const { matchId, tags, reviewerTeamId, reviewerTeamType, reviewedTeamId } = matchReviewInfo;
-  
+
   api
     .post({
       url: `/matches/${matchId}/review`,
@@ -123,7 +123,7 @@ export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
 
 export const modifyTeamMember = (editedTeamMemberInfo: TeamMemberEdit) => {
   const { matchId, players, teamId } = editedTeamMemberInfo;
-  
+
   api
     .put({
       url: `/matches/${matchId}/members`,

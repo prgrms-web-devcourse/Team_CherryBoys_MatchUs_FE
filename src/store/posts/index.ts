@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import hireItems from '@/fixtures/hireItems';
 import matchItems from '@/fixtures/matchItems';
+import { conditions, getHiresInfo } from '@/api/hires';
 
 export interface TeamInfo {
   teamId: number;
@@ -55,15 +56,19 @@ export interface PostItem {
   teamMannerTemperature: number;
 }
 
-export const fetchAllPost = createAsyncThunk('posts/fetchAllPost', async () => {
-  /**
-   * Todo: API 완성시 추가
-   * const { data } = await axios.get(URL);
-   * return data;
-   */
+export const fetchAllPost = createAsyncThunk(
+  'posts/fetchAllPost',
+  async (condition: conditions) => {
+    /**
+     * Todo: API 완성시 추가
+     * const { data } = await axios.get(URL);
+     * return data;
+     */
+    const response = getHiresInfo(condition);
 
-  return hireItems;
-});
+    return response;
+  }
+);
 
 export const fetchAllMatch = createAsyncThunk('matches/fetchAllMatches', async () => {
   /**

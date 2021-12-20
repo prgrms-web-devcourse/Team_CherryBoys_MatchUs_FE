@@ -27,7 +27,7 @@ export interface MatchCard {
 
 export interface TeamUser {
   userId: number;
-  userName:string;
+  userName: string;
 }
 
 export interface Team {
@@ -178,7 +178,7 @@ export interface TeamMemberEdit {
 export interface TeamMemberInfo {
   grade: string;
   userId: number;
-  userName:string;
+  userName: string;
 }
 
 export interface MatchReviewInfo {
