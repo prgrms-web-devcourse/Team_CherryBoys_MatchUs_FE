@@ -27,4 +27,3 @@ export { default as UserMatchDetail } from './UserMatchDetail/UserMatchDetail';
 export { default as UserHireRequest } from './UserHireRequest/UserHireRequest';
 export { default as UserInfoEdit } from './UserInfoEdit/UserInfoEdit';
 export { default as UserTeamInvitation } from './UserTeamInvitation/UserTeamInvitation';
-export { default as UserDetailById } from './UserDetailById/UserDetailById';
