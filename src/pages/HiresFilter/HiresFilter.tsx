@@ -18,10 +18,16 @@ import { SPORTS } from '@/consts';
 import { conditions } from '@/api/hires';
 import styles from './HiresFilter.module.scss';
 import { posts } from '@/store/posts';
-import style from '@/components/Match/MatchListFilterModal/MatchListFilterModal.module.scss';
 
-const { inputLocationBox, inputDateBox, buttonBox, submitButton } = styles;
-const { modalBackground, showModal } = style;
+const {
+  inputLocationBox,
+  inputDateBox,
+  buttonBox,
+  submitButton,
+  modalBackground,
+  showModal,
+  modalContainer,
+} = styles;
 
 const placeholder = '선택';
 
@@ -211,7 +217,7 @@ const HiresFilter = ({ showFilterModal }: Props) => {
       onClick={handleCloseModal}
       role="presentation"
     >
-      <div>
+      <div className={classNames(modalContainer)}>
         <HiresPosition handleChangePosition={handleChangePosition} />
         <Input
           inputId="inputSports"
