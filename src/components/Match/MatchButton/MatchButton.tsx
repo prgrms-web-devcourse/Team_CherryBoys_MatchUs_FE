@@ -34,7 +34,8 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       applyTeamInfo &&
       matchDate <= today &&
       status === 'COMPLETION' &&
-      userTeams.filter((team) => teamIds.includes(team.teamId)).length > 1,
+      userTeams.filter((team) => teamIds.includes(team.teamId)).length > 0,
+
   };
 
   const onToggle = (modal: string) => {
@@ -46,7 +47,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       {matchEnables.approve && (
         <button
           className={classNames(matchButton, approveButton, {
-            [show]: enable.approve,
+            [show]: matchEnables.approve,
           })}
           type="button"
           onClick={() => onToggle('matchApprove')}
@@ -57,7 +58,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       {matchEnables.apply && (
         <button
           className={classNames(matchButton, applyButton, {
-            [show]: enable.apply,
+            [show]: matchEnables.apply,
           })}
           type="button"
           onClick={() => onToggle('matchApply')}
@@ -68,7 +69,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       {matchEnables.review && (
         <button
           className={classNames(matchButton, applyButton, {
-            [show]: enable.review,
+            [show]: matchEnables.review,
           })}
           type="button"
           onClick={() => onToggle('matchReview')}

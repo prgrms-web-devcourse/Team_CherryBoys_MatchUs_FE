@@ -75,8 +75,7 @@ const UserDetailById = () => {
     tags: [],
   });
   const userMeInfo = useSelector((store: RootState) => store.user.userInfo);
-  console.log(userInfo);
-  console.log(userMeInfo);
+
   const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
   const limitedTag = userInfo.tags.slice(0, 4);
 
