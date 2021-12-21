@@ -88,6 +88,7 @@ const Signup = () => {
 
   const signup = async () => {
     const isSignup = await requestSignup({ ...signupForm, name: userName });
+    console.log(isSignup);
 
     if (isSignup) {
       setIsSignupSuccess(true);
@@ -279,7 +280,7 @@ const Signup = () => {
               className={classNames(form__input, !isValidForm.password ? inValid_form : valid_form)}
               onChange={handleOnChange}
               value={password}
-              type="input"
+              type="password"
             />
           </div>
           <div>
@@ -298,7 +299,7 @@ const Signup = () => {
               name="confirmedPassword"
               onChange={handleOnChange}
               value={confirmedPassword}
-              type="input"
+              type="password"
             />
           </div>
           <div>

@@ -53,7 +53,7 @@ const TeamCreate = () => {
       const { teamId } = await createTeam({ image, teamName, teamBio, teamSport, teamAgeGroup });
 
       if (teamId) {
-        history.push(`/teams/${teamId}`);
+        history.push(`/team/${teamId}`);
       }
     },
     validate: ({ image, teamName, teamBio, teamSport, teamAgeGroup }) => {
