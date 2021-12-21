@@ -10,6 +10,7 @@ import TeamInfoCard from './TeamInfoCard';
 import { TEAM_CREATE_PAGE } from '@/consts/routes';
 
 const {
+  entireContainer,
   highlight,
   titleContainer,
   cardsContainer,
@@ -41,7 +42,7 @@ const TeamChoice = () => {
   }, [result.userGradeResponse]);
 
   return (
-    <div>
+    <div className={classNames(entireContainer)}>
       {myTeams.length !== 0 ? (
         <>
           <div className={classNames(titleContainer)}>

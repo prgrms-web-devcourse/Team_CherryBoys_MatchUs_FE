@@ -89,7 +89,7 @@ const MemberList = ({
             ? generalMemberList.length !== 0 && (
                 <>
                   {generalMemberList.map((generalMember: MemberElementType, index) => {
-                    if (index < memberIndexLimit) {
+                    if (index < memberIndex) {
                       return (
                         <MemberListElement
                           key={`generalMember-${generalMember.userId}`}
@@ -109,7 +109,7 @@ const MemberList = ({
             : hiredMemberList.length !== 0 && (
                 <>
                   {hiredMemberList.map((hiredMember: MemberElementType, index) => {
-                    if (index < hiredIndexLimit) {
+                    if (index < hiredIndex) {
                       return (
                         <MemberListElement
                           key={`hiredMember-${hiredMember.userId}`}
