@@ -20,7 +20,9 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
 
   const matchDate = new Date(`${date} ${endTime}`);
   const today = new Date();
-
+  const teamIds = applyTeamInfo
+    ? [applyTeamInfo.teamId, registerTeamInfo.teamId]
+    : [registerTeamInfo.teamId];
   const matchEnables = {
     apply:
       status === 'WAITING' &&
@@ -32,8 +34,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       applyTeamInfo &&
       matchDate <= today &&
       status === 'COMPLETION' &&
-      (userTeams.filter((team) => team.teamId === applyTeamInfo.teamId)[0] ||
-        userTeams.filter((team) => team.teamId === registerTeamInfo.teamId)[0]),
+      userTeams.filter((team) => teamIds.includes(team.teamId)).length > 1,
   };
 
   const onToggle = (modal: string) => {
@@ -67,7 +68,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       {matchEnables.review && (
         <button
           className={classNames(matchButton, applyButton, {
-            [show]: enable.apply,
+            [show]: enable.review,
           })}
           type="button"
           onClick={() => onToggle('matchReview')}
