@@ -3,7 +3,7 @@
   margin: 0.8rem 0;
   padding: 0.4rem;
   list-style: none;
-  border: 0.2rem solid #56ad79;
+  border: 0.2rem solid #c4c4c4;
   border-radius: 0.5rem;
 
   .postBox {
@@ -50,9 +50,10 @@
       > span {
         margin: 0 0.4rem;
         padding: 0.4rem 1.2rem;
+        color: #fff;
         font-size: 1.2rem;
         text-align: center;
-        border: 0.1rem solid #56ad79;
+        background: #56ad79;
         border-radius: 1.5rem;
       }
     }

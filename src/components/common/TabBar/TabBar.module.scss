@@ -2,6 +2,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 15;
   display: grid;
   grid-template-columns: repeat(5, 20%);
   align-items: center;
@@ -19,6 +20,16 @@
       height: 100%;
       color: #777777;
       font-size: 1.6rem;
+      i {
+        font-size: 1.6rem;
+      }
+    }
+
+    &.now {
+      background: #777777;
+      a {
+        color: #f3f3f3;
+      }
     }
   }
 
