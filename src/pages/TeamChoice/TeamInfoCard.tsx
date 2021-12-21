@@ -62,7 +62,7 @@ const TeamInfoCard = ({
         <div className={classNames(ContainerAboutTeamManner)}>
           <div className={tagContainer}>
             {limitedTags.map(({ tagId, tagName, tagType }) => (
-              <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+              <AttitueTag key={tagId} tagId={tagId} tagName={tagName} tagType={tagType} />
             ))}
           </div>
           <span

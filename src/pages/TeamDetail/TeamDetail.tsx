@@ -123,18 +123,22 @@ const TeamDetail = () => {
     setHasAuthorization(authorization);
 
     const updateTeamMatchHistory = async () => {
-      const { teamMatches } = await getMatchHistory(teamId);
+      if (teamId !== null) {
+        const { teamMatches } = await getMatchHistory(teamId);
 
-      if (teamMatches) {
-        setMatchHistory(teamMatches);
+        if (teamMatches) {
+          setMatchHistory(teamMatches);
+        }
       }
     };
 
     const updateMemberInfo = async () => {
-      const { members } = await getTotalMemberInfo(teamId);
+      if (teamId !== null) {
+        const { members } = await getTotalMemberInfo(teamId);
 
-      if (members) {
-        setMemberInfo(members);
+        if (members) {
+          setMemberInfo(members);
+        }
       }
     };
 
@@ -186,7 +190,12 @@ const TeamDetail = () => {
           <section className={classNames(tagsContainer)}>
             {limitedTeamTags.map(({ tagId, tagName, tagType }) => (
               <>
-                <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+                <AttitueTag
+                  key={`tag-${tagId}`}
+                  tagId={tagId}
+                  tagName={tagName}
+                  tagType={tagType}
+                />
               </>
             ))}
           </section>
