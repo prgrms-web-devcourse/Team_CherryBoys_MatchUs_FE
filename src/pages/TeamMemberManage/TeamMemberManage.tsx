@@ -128,7 +128,6 @@ const TeamMemberManage = () => {
 
   return (
     <>
-      <Header />
       <div className={classNames(playerManange)}>
         {isModalDialogOpen && (
           <CustomModalDialog

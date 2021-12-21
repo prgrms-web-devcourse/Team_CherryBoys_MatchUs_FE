@@ -24,7 +24,7 @@ const {
 const TeamChoice = () => {
   const history = useHistory();
   const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
-  const result = useSelector((store: RootState) => store.user.userInfo);
+  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
 
   const handleMoveToTeamCreatePage = () => {
     history.push(TEAM_CREATE_PAGE);
@@ -32,14 +32,14 @@ const TeamChoice = () => {
 
   useEffect(() => {
     const updateMyTeamsInfo = () => {
-      result.userGradeResponse.map(async (myTeamInfo) => {
+      userGradeResponse.map(async (myTeamInfo) => {
         const teamInfo = await getTeamInfo(myTeamInfo.teamId);
         setMyTeams((prev) => [...prev, teamInfo]);
       });
     };
 
     updateMyTeamsInfo();
-  }, [result.userGradeResponse]);
+  }, [userGradeResponse]);
 
   return (
     <div className={classNames(entireContainer)}>
