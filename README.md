@@ -48,6 +48,7 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 지금 나에게 적합한 경기가 있는지 찾아보고 용병으로 참여할 수 있어요.
 
 </br>
+</br>
 
 <h2>⚙️ 기술 스택</h2>
 
@@ -62,11 +63,13 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 - **Deploy** : Netlify
 
 </br>
+</br>
 
 <h2>🏗 아키텍처</h2>
 
 <img alt="아키텍처" src="https://user-images.githubusercontent.com/27142025/146793945-f37db872-b8c0-4ded-a86d-a2c22bf50118.png" />
 
+</br>
 </br>
 
 <h2>🍒 팀원</h2
