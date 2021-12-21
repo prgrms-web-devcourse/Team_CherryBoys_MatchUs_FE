@@ -5,15 +5,11 @@ import { useHistory } from 'react-router-dom';
 
 import classNames from 'classnames';
 import { InputCheckBox, CustomModalDialog } from '@/components';
-import InputCheckBox from '@/components/common/Inputs/InputCheckBox/InputCheckBox';
 import { getApplications, allowApplications } from '@/api/hires';
-import styles from './ApplicationElement.module.scss';
-const { applicationContainer, buttonBox, submitButton } = styles;
 import { application } from '@/types';
 import style from './ApplicationElement.module.scss';
 
-const { modalMainTitle } = style;
-
+const { applicationContainer, modalMainTitle, buttonBox, submitButton } = style;
 
 interface CheckboxOptions {
   [key: string]: boolean;
@@ -101,9 +97,15 @@ const ApplicationElement = ({
         onChange={handleOnChangeApplications}
         icon="far fa-check-square"
       />
-      <button type="button" onClick={handleClickAllowApplications}>
-        용병 수락
-      </button>
+      <div className={classNames(buttonBox)}>
+        <button
+          type="button"
+          onClick={handleClickAllowApplications}
+          className={classNames(submitButton)}
+        >
+          용병 수락
+        </button>
+      </div>
       {isModal1Open && (
         <CustomModalDialog
           modalType="confirm"
@@ -145,7 +147,7 @@ const ApplicationElement = ({
           <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
         </CustomModalDialog>
       )}
-    </>
+    </div>
   );
 };
 

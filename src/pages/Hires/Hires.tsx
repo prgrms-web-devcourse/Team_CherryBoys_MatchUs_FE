@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { fetchAllPost, HiresResponseType } from '@/store/posts';
+import { HiresResponseType } from '@/store/posts';
 import { Posts } from '@/components';
 import { getHiresInfo } from '@/api/hires';
 import { RootState } from '@/store';
@@ -10,23 +10,19 @@ import { RootState } from '@/store';
 const selectedTeam = { teamId: 3, grade: 'CAPTAIN' };
 
 const Hires = () => {
-  const dispatch = useDispatch();
   const [data, setData] = useState<Array<HiresResponseType>>([]);
   const [isCaptain, setIsCaptain] = useState(false);
   const { userInfo } = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    dispatch(fetchAllPost());
-  }, [dispatch]);
+  const { modal, hiresFilter } = useSelector((state: RootState) => state.posts.data);
 
   useEffect(() => {
     const getCurrentHiresInfo = async () => {
-      const defaultSize = 6;
-      const params = {
-        size: defaultSize,
-      };
+      // const defaultSize = 6;
+      // const params = {
+      //   size: defaultSize,
+      // };
 
-      const { hirePosts } = await getHiresInfo(params);
+      const { hirePosts } = await getHiresInfo(hiresFilter);
       setData(hirePosts);
 
       for (const post of hirePosts) {
@@ -41,8 +37,17 @@ const Hires = () => {
     };
 
     getCurrentHiresInfo();
-  }, [userInfo, isCaptain]);
-  return <Posts isMatch={false} selectedTeam={selectedTeam} data={data} isCaptain={isCaptain} />;
+  }, [userInfo, isCaptain, hiresFilter]);
+
+  return (
+    <Posts
+      isMatch={false}
+      selectedTeam={selectedTeam}
+      data={data}
+      isCaptain={isCaptain}
+      modal={modal}
+    />
+  );
 };
 
 export default Hires;
