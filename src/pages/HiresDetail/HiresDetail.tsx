@@ -118,6 +118,7 @@ const HiresDetail = () => {
   };
 
   // Todo(홍중) : 용병 취소 추후 완성(2021-12-21)
+
   return (
     <div className={classNames(hires_container)}>
       {hireItem && (
@@ -168,7 +169,7 @@ const HiresDetail = () => {
             </section>
             <section className={classNames(card__teamInfos__leader)}>
               <span>{hireItem.teamCaptainName}</span>
-              <button type="button">
+              <button type="button" onClick={() => handleGoPage(`/user/${hireItem.teamCaptainId}`)}>
                 <i className="fas fa-user" />
               </button>
             </section>
