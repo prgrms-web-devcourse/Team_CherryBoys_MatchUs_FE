@@ -35,6 +35,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
       matchDate <= today &&
       status === 'COMPLETION' &&
       userTeams.filter((team) => teamIds.includes(team.teamId)).length > 0,
+
   };
 
   const onToggle = (modal: string) => {
