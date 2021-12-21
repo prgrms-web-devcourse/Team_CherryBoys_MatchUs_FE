@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import style from './teamChoice.module.scss';
 import { AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
@@ -37,20 +37,23 @@ const TeamInfoCard = ({
   tags,
   mannerTemperature,
 }: TeamCardInfo) => {
+  const history = useHistory();
   const teamCreatedTime = teamCreatedAt.split('T');
   const yearMonthDay = teamCreatedTime[0].split('-');
   const limitedTags = tags.slice(0, 3);
 
   return (
-    <div className={classNames(cardContainer)}>
+    <div
+      className={classNames(cardContainer)}
+      onClick={() => history.push(`/team/${teamId}`)}
+      role="presentation"
+    >
       <div className={classNames(cardLogo)}>
-        <Link to={`/team/${teamId}`}>
-          <img
-            className={classNames(teamLogoImage)}
-            src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
-            alt="팀 로고"
-          />
-        </Link>
+        <img
+          className={classNames(teamLogoImage)}
+          src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+          alt="팀 로고"
+        />
       </div>
       <div className={classNames(teamSubInfoContainer)}>
         <div className={classNames(teamBaseInfo)}>

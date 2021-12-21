@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { getUserInfo, getUserMatchHistory } from '@/api/user';
 import { AttitueTag, MatchListElement } from '@/components';
 import { MatchElement, TagType } from '@/types';
@@ -12,6 +13,7 @@ import {
   USER_HIRE_REQUEST_LIST_PAGE,
   USER_EDIT_PAGE,
 } from '@/consts/routes';
+import { RootState } from '@/store';
 
 interface MyTeamElement {
   teamId: number;
@@ -72,7 +74,9 @@ const UserDetailById = () => {
     sportsName: '',
     tags: [],
   });
-
+  const userMeInfo = useSelector((store: RootState) => store.user.userInfo);
+  console.log(userInfo);
+  console.log(userMeInfo);
   const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
   const limitedTag = userInfo.tags.slice(0, 4);
 
@@ -113,29 +117,31 @@ const UserDetailById = () => {
                     <span className={classNames(highlight)}>{userInfo.nickname}</span>님
                   </span>
                   {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
-                  <div className={classNames(historyButtonContainer)}>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_EDIT_PAGE)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
-                    >
-                      팀 초대
-                    </button>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
-                    >
-                      용병
-                    </button>
-                  </div>
+                  {userMeInfo.id === userId && (
+                    <div className={classNames(historyButtonContainer)}>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_EDIT_PAGE)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
+                      >
+                        팀 초대
+                      </button>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
+                      >
+                        용병
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <span className={classNames(bioSpace)}>
                   {userInfo.bio === null ? '자기소개가 없습니다' : userInfo.bio}
@@ -162,7 +168,7 @@ const UserDetailById = () => {
                   [mannerHigh]: mannerTemperature > 40,
                 })}
               >
-                {mannerTemperature}
+                {`${mannerTemperature}℃`}
               </span>
               의 매너온도를 가지고 있어요!
             </p>

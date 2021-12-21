@@ -71,9 +71,9 @@ const MemberList = ({
           )}
           {isMember && subCaptains && (
             <>
-              {subCaptains.map((subCaptain: MemberElementType) => (
+              {subCaptains.map((subCaptain: MemberElementType, index) => (
                 <MemberListElement
-                  key={`subCaptain-${subCaptain.userId}`}
+                  key={`subCaptain-${subCaptain.userId}-${index}`}
                   memberId={subCaptain.userId}
                   memberName={subCaptain.userName}
                   memberType="subCaptain"
@@ -92,7 +92,7 @@ const MemberList = ({
                     if (index < memberIndex) {
                       return (
                         <MemberListElement
-                          key={`generalMember-${generalMember.userId}`}
+                          key={`generalMember-${generalMember.userId}-${index}`}
                           memberId={generalMember.userId}
                           memberName={generalMember.userName}
                           memberType="generalMember"
@@ -112,7 +112,7 @@ const MemberList = ({
                     if (index < hiredIndex) {
                       return (
                         <MemberListElement
-                          key={`hiredMember-${hiredMember.userId}`}
+                          key={`hiredMember-${hiredMember.userId}-${index}`}
                           memberId={hiredMember.userId}
                           memberName={hiredMember.userName}
                           memberType="hiredMember"

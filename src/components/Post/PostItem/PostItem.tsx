@@ -64,7 +64,10 @@ const PostItem = ({ item }: Post) => {
               <span>{JSON.stringify(date).slice(3, 11)}</span>
               <span>{JSON.stringify(startTime).slice(1, 6)}</span>
             </div>
-            <div>{`${city} ${region} ${groundName}`}</div>
+            <div>
+              <span>{`${city} ${region}`}</span>
+              <p>{groundName}</p>
+            </div>
             <div className={classNames(postTags)}>
               <span>{isMatching ? `${cost}원` : position}</span>
               <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>

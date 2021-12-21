@@ -30,36 +30,27 @@
   .cardContainer {
     display: grid;
     grid-template-columns: 1fr 2fr;
+    box-sizing: border-box;
     height: 12rem;
     margin: 0.8rem 1.6rem;
     border: 0.2rem solid #c4c4c4;
     border-radius: 1rem;
+    cursor: pointer;
 
     .cardLogo {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
       height: 12rem;
-      text-align: center;
+      padding: 0.4rem;
 
-      a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      > img {
         width: fit-content;
         max-width: 100%;
-        height: 100%;
-        padding: 0.8rem;
-
-        .teamLogoImage {
-          width: fit-content;
-          max-width: 100%;
-          height: 100%;
-          max-height: 100%;
-          object-fit: contain;
-          border-radius: 1rem;
-        }
+        height: fit-content;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
       }
     }
 

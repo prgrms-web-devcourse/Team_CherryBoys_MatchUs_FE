@@ -214,15 +214,13 @@ const TeamDetail = () => {
           </div>
           <div className={classNames(bioSpace)}>{bio}</div>
           <section className={classNames(tagsContainer)}>
-            {limitedTeamTags.map(({ tagId, tagName, tagType }) => (
-              <>
-                <AttitueTag
-                  key={`tag-${tagId}`}
-                  tagId={tagId}
-                  tagName={tagName}
-                  tagType={tagType}
-                />
-              </>
+            {limitedTeamTags.map(({ tagId, tagName, tagType }, index) => (
+              <AttitueTag
+                key={`tag-${tagId}-${index}`}
+                tagId={tagId}
+                tagName={tagName}
+                tagType={tagType}
+              />
             ))}
           </section>
         </div>
@@ -345,17 +343,20 @@ const TeamDetail = () => {
         <div className={classNames(teamMatchContainer)}>
           {hasPreviousMatchHistory ? (
             previousMatchHistory.map(
-              ({
-                matchId,
-                matchDate,
-                registerTeamLogo,
-                registerTeamName,
-                applyTeamLogo,
-                applyTeamName,
-                status,
-              }) => (
+              (
+                {
+                  matchId,
+                  matchDate,
+                  registerTeamLogo,
+                  registerTeamName,
+                  applyTeamLogo,
+                  applyTeamName,
+                  status,
+                },
+                index
+              ) => (
                 <MatchListElement
-                  key={`beforeMatch-${matchId}`}
+                  key={`beforeMatch-${matchId}-${index}`}
                   matchId={matchId}
                   matchDate={matchDate}
                   registerTeamLogo={registerTeamLogo}
