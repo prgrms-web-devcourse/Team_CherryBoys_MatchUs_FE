@@ -26,16 +26,15 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
   const matchEnables = {
     apply:
       status === 'WAITING' &&
-      userTeams.filter((team) => team.teamId !== matchInfo.registerTeamInfo.teamId).length > 0,
+      userTeams.filter((team) => team.teamId === registerTeamInfo.teamId).length < 1,
     approve:
       status === 'WAITING' &&
-      userTeams.filter((team) => team.teamId === registerTeamInfo.teamId)[0],
+      userTeams.filter((team) => team.teamId === registerTeamInfo.teamId).length > 0,
     review:
       applyTeamInfo &&
       matchDate <= today &&
       status === 'COMPLETION' &&
       userTeams.filter((team) => teamIds.includes(team.teamId)).length > 0,
-
   };
 
   const onToggle = (modal: string) => {
