@@ -65,9 +65,6 @@ const HiresDetail = () => {
     getHiresDetailInfo();
   }, [currentPostId, userInfo, isCaptain]);
 
-  useEffect(() => {
-    console.error(isCaptain);
-  }, []);
   const handleClickRemove = async () => {
     setIsRemove(true);
     setIsModal1Open(true);
