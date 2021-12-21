@@ -1,6 +1,8 @@
 .matchDetailContainer {
+  min-width: fit-content;
   margin-bottom: 8.4rem;
   padding: 1.6rem;
+  
   .matchDetailMenu {
     display: flex;
     align-items: center;
@@ -57,4 +59,5 @@
   margin-bottom: 2rem;
   font-weight: 700;
   font-size: 2.4rem;
+  word-break: keep-all;
 }
