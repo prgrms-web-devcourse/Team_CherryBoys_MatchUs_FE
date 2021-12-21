@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './TabBar.module.scss';
@@ -8,9 +8,9 @@ const { tabBar, now } = styles;
 const TabBar = () => {
   const [nowPage, setNowPage] = useState('home');
 
-  const handleNowPage = (target: string) => {
+  const handleNowPage = useCallback((target: string) => {
     setNowPage(target);
-  };
+  }, []);
 
   return (
     <div className={classNames(tabBar)}>

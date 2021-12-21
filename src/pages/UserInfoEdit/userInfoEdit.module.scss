@@ -27,33 +27,49 @@
   font-size: 1.2rem;
 }
 
-.form {
-  &__label {
-    display: block;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
-    font-weight: 700;
-    font-size: 1.8rem;
-  }
-  &__input {
-    @include input-btn-size($bgc: white);
-    font-size: 2rem;
+.form_container {
+  display: block;
+  width: 100%;
+  margin: 0 1.6rem;
+  padding: 0 1.6rem;
+
+  .form {
+    &__label {
+      display: block;
+      margin: 1.6rem 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    &__input {
+      @include input-btn-size($bgc: white);
+      font-size: 2rem;
+    }
   }
 }
 
 .edit_info__btn {
   @include input-btn-size();
   margin-top: 4rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 0.2rem;
 }
 
 .container {
   @include flexCenter();
   flex-direction: column;
-  height: calc(100vh - 84px);
+  justify-content: flex-start;
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 8.4rem;
 }
 
 .title {
-  margin-bottom: 5rem;
+  margin: 1.6rem;
   font-weight: 700;
   font-size: 3rem;
 }
@@ -68,8 +84,9 @@
 
 .valid_msg {
   display: block;
-  margin-top: 1rem;
-  font-size: 1.3rem;
+  margin-top: 0.4rem;
+  color: #7b7474;
+  font-size: 1.2rem;
 }
 
 input:focus {
@@ -90,4 +107,22 @@ select:focus {
 
 .flex_container {
   display: flex;
+  .form__input {
+    padding: 0.4rem;
+    border: 0.1rem solid #c4c4c4;
+    border-radius: 0.5rem;
+    outline: none;
+  }
+}
+
+.user_bio {
+  .form__input {
+    width: 100%;
+    min-height: 10vh;
+    max-height: 20vh;
+    padding: 0.4rem;
+    border: 0.1rem solid #c4c4c4;
+    border-radius: 0.5rem;
+    outline: none;
+  }
 }

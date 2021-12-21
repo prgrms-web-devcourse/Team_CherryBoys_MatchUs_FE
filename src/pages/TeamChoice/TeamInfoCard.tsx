@@ -53,26 +53,29 @@ const TeamInfoCard = ({
         </Link>
       </div>
       <div className={classNames(teamSubInfoContainer)}>
-        <p className={classNames(teamBaseInfo)}>
-          <span className={classNames(teamNameSpan)}>{teamName}</span>
-          <span>
-            팀 생성일자: {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
-          </span>
-        </p>
-        <div className={classNames(ContainerAboutTeamManner)}>
-          <div className={tagContainer}>
-            {limitedTags.map(({ tagId, tagName, tagType }) => (
-              <AttitueTag key={tagId} tagId={tagId} tagName={tagName} tagType={tagType} />
-            ))}
+        <div className={classNames(teamBaseInfo)}>
+          <h3 className={classNames(teamNameSpan)}>{teamName}</h3>
+          <div>
+            <p>팀 창립일</p>
+            <span>
+              {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
+            </span>
           </div>
+        </div>
+        <div className={classNames(ContainerAboutTeamManner)}>
           <span
             className={classNames(mannerMiddle, {
               [mannerLow]: mannerTemperature < 20,
               [mannerHigh]: mannerTemperature > 40,
             })}
           >
-            {mannerTemperature}
+            {`${mannerTemperature}℃`}
           </span>
+        </div>
+        <div className={classNames(tagContainer)}>
+          {limitedTags.map(({ tagId, tagName, tagType }) => (
+            <AttitueTag key={tagId} tagId={tagId} tagName={tagName} tagType={tagType} />
+          ))}
         </div>
       </div>
     </div>

@@ -28,7 +28,9 @@ const MatchInfo = ({ match }: Props) => {
     <div className={classNames(matchInfoCard)}>
       <div className={classNames(matchInfoRow)}>
         <div className={classNames(matchInfo)}>
-          <div className={classNames(matchInfo_content)}>{`${match.date} ${match.startTime}`}</div>
+          <div className={classNames(matchInfo_content)}>{`${match.date} ${JSON.stringify(
+            match.startTime
+          ).slice(1, 6)}`}</div>
         </div>
         <div className={classNames(matchInfo)}>
           <div className={classNames(matchInfo_content)}>{match.sportName}</div>

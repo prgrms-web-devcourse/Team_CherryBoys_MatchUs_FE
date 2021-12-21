@@ -13,6 +13,7 @@ import { RootState } from '@/store';
 const {
   entireContainer,
   teamBaseInfo,
+  teamLogoBox,
   teamLogoImage,
   teamInfoContainer,
   bioSpace,
@@ -179,11 +180,13 @@ const TeamDetail = () => {
       )}
 
       <article className={classNames(teamBaseInfo)}>
-        <img
-          src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
-          className={classNames(teamLogoImage)}
-          alt="팀 로고 이미지"
-        />
+        <div className={classNames(teamLogoBox)}>
+          <img
+            src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
+            className={classNames(teamLogoImage)}
+            alt="팀 로고 이미지"
+          />
+        </div>
         <div className={classNames(teamInfoContainer)}>
           <span className={classNames(teamNameSpan)} key={`team-${teamId}`}>
             {teamName}

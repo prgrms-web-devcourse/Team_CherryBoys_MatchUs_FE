@@ -1,6 +1,7 @@
 @use '@/styles/color';
 
 .matchButton {
+  margin-bottom: 2.4rem;
   background-color: white;
   outline: none;
 }
@@ -17,7 +18,6 @@
   justify-content: space-around;
   width: 100%;
   height: 7.7rem;
-  margin-bottom: 2.4rem;
   border: 0.12rem solid color.$disable;
   border-radius: 1rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -38,4 +38,5 @@
   max-height: 5rem;
   margin-bottom: 0.2rem;
   object-fit: fill;
+  border-radius: 1rem;
 }

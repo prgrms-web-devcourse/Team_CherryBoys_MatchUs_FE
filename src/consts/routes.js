@@ -36,6 +36,7 @@ export const USER_EDIT_PAGE = '/user/edit';
 export const USER_MATCHING_LIST_PAGE = '/user/match';
 export const USER_TEAM_INVITAION_LIST_PAGE = '/user/team/invitation';
 export const USER_HIRE_REQUEST_LIST_PAGE = '/user/hire/invitation';
+export const USER_DETAIL_BY_ID = '/user/:id';
 
 // 기타 페이지
 export const NOT_FOUND_PAGE = '/not-found';
