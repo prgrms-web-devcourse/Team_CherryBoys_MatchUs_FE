@@ -53,19 +53,21 @@ const TeamChoice = () => {
             </p>
           </div>
           <div className={classNames(cardsContainer)}>
-            {myTeams.map(({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }) => {
-              return (
-                <TeamInfoCard
-                  key={`teamCard-${teamId}`}
-                  teamId={teamId}
-                  teamLogo={logo}
-                  teamName={teamName}
-                  teamCreatedAt={teamCreatedAt}
-                  tags={tags}
-                  mannerTemperature={mannerTemperature}
-                />
-              );
-            })}
+            {myTeams.map(
+              ({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }, index) => {
+                return (
+                  <TeamInfoCard
+                    key={`teamCard-${teamId}-${index}`}
+                    teamId={teamId}
+                    teamLogo={logo}
+                    teamName={teamName}
+                    teamCreatedAt={teamCreatedAt}
+                    tags={tags}
+                    mannerTemperature={mannerTemperature}
+                  />
+                );
+              }
+            )}
           </div>
           <button
             type="button"
