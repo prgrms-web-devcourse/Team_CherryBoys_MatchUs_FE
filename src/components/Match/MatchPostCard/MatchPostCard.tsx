@@ -47,12 +47,18 @@ const MatchPostCard = ({ matchInfo }: Props) => {
           />
         </section>
         <section className={classNames(postInfos)}>
-          <div>{`${date} ${startTime}`}</div>
-          <div>{`${city} ${region} ${ground}`}</div>
+          <div>
+            <span>{JSON.stringify(date).slice(3, 11)}</span>
+            <span>{JSON.stringify(startTime).slice(1, 6)}</span>
+          </div>
+          <div>
+            <span>{`${city} ${region}`}</span>
+            <p>{ground}</p>
+          </div>
           <div className={classNames(postTags)}>
             <span>{sports}</span>
             <span>{ageGroup}</span>
-            <span>{mannerTemperature}</span>
+            <span>{`${mannerTemperature}℃`}</span>
           </div>
         </section>
       </article>

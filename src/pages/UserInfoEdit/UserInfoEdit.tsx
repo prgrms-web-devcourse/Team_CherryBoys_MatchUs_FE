@@ -54,6 +54,7 @@ const UserInfoEdit = () => {
   });
   const [isEditSuccess, setIsEditSuccess] = useState(false);
   const {
+    form_container,
     inValid_form,
     valid_msg,
     title,
@@ -62,6 +63,7 @@ const UserInfoEdit = () => {
     container,
     form__label,
     form__input,
+    user_bio,
     edit_info__btn,
     duplicate_check__btn,
     flex_container,
@@ -189,7 +191,7 @@ const UserInfoEdit = () => {
           </span>
         </CustomModalDialog>
       )}
-      <form onSubmit={handleSubmit}>
+      <form className={classNames(form_container)} onSubmit={handleSubmit}>
         <CustomLabel htmlFor="nickname" className={classNames('whiteSpace', form__label)}>
           닉네임
         </CustomLabel>
@@ -220,7 +222,7 @@ const UserInfoEdit = () => {
         <CustomLabel htmlFor="bio" className={classNames('whiteSpace', form__label)}>
           자기 소개
         </CustomLabel>
-        <div>
+        <div className={classNames(user_bio)}>
           <ValidInput
             id="bio"
             name="bio"

@@ -26,6 +26,7 @@ const Login = () => {
     form__login,
     signup,
     form__input,
+    logo_box,
     logo_img,
   } = style;
   const dispatch = useAppDispatch();
@@ -74,7 +75,7 @@ const Login = () => {
           </span>
         </CustomModalDialog>
       )}
-      <div>
+      <div className={classNames(logo_box)}>
         <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} />
       </div>
       {/* 로그인 폼 */}

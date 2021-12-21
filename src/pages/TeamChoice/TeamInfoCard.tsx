@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import style from './teamChoice.module.scss';
 import { AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
@@ -37,42 +37,48 @@ const TeamInfoCard = ({
   tags,
   mannerTemperature,
 }: TeamCardInfo) => {
+  const history = useHistory();
   const teamCreatedTime = teamCreatedAt.split('T');
   const yearMonthDay = teamCreatedTime[0].split('-');
   const limitedTags = tags.slice(0, 3);
 
   return (
-    <div className={classNames(cardContainer)}>
+    <div
+      className={classNames(cardContainer)}
+      onClick={() => history.push(`/team/${teamId}`)}
+      role="presentation"
+    >
       <div className={classNames(cardLogo)}>
-        <Link to={`/team/${teamId}`}>
-          <img
-            className={classNames(teamLogoImage)}
-            src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
-            alt="팀 로고"
-          />
-        </Link>
+        <img
+          className={classNames(teamLogoImage)}
+          src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+          alt="팀 로고"
+        />
       </div>
       <div className={classNames(teamSubInfoContainer)}>
-        <p className={classNames(teamBaseInfo)}>
-          <span className={classNames(teamNameSpan)}>{teamName}</span>
-          <span>
-            팀 생성일자: {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
-          </span>
-        </p>
-        <div className={classNames(ContainerAboutTeamManner)}>
-          <div className={tagContainer}>
-            {limitedTags.map(({ tagId, tagName, tagType }) => (
-              <AttitueTag key={tagId} tagId={tagId} tagName={tagName} tagType={tagType} />
-            ))}
+        <div className={classNames(teamBaseInfo)}>
+          <h3 className={classNames(teamNameSpan)}>{teamName}</h3>
+          <div>
+            <p>창립일</p>
+            <span>
+              {yearMonthDay[0].slice(2)}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
+            </span>
           </div>
+        </div>
+        <div className={classNames(ContainerAboutTeamManner)}>
           <span
             className={classNames(mannerMiddle, {
               [mannerLow]: mannerTemperature < 20,
               [mannerHigh]: mannerTemperature > 40,
             })}
           >
-            {mannerTemperature}
+            {`${mannerTemperature}℃`}
           </span>
+        </div>
+        <div className={classNames(tagContainer)}>
+          {limitedTags.map(({ tagId, tagName, tagType }) => (
+            <AttitueTag key={tagId} tagId={tagId} tagName={tagName} tagType={tagType} />
+          ))}
         </div>
       </div>
     </div>

@@ -127,7 +127,7 @@ const HiresDetail = () => {
         <>
           <article className={classNames(card__gameInfos)}>
             <section className={classNames(card__gameInfos__gameSchedule)}>
-              <div>{`${hireItem.date} ${hireItem.startTime}`}</div>
+              <div>{`${hireItem.date} ${JSON.stringify(hireItem.startTime).slice(1, 6)}`}</div>
               <div>{`${hireItem.hirePlayerNumber}명`}</div>
             </section>
             <section className={classNames(card__gameInfos__location)}>
@@ -136,7 +136,7 @@ const HiresDetail = () => {
             <section className={classNames(card__gameInfos__tags)}>
               <div>{hireItem.position}</div>
               <div>{hireItem.ageGroup}</div>
-              <div>{`${hireItem.teamMannerTemperature}도`}</div>
+              <div>{`${hireItem.teamMannerTemperature}℃`}</div>
             </section>
           </article>
           <article className={classNames(card__teamInfos)}>

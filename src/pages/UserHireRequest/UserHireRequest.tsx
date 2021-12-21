@@ -119,6 +119,11 @@ const UserHireRequest = () => {
             </div>
           );
         })}
+        {hireListState.length < 1 && (
+          <div className={classNames(hire, flex_container)}>
+            <span className={classNames(text)}>신청한 용병글이 없습니다</span>
+          </div>
+        )}
       </div>
     </div>
   );

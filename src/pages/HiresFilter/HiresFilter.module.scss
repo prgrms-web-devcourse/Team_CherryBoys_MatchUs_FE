@@ -37,6 +37,7 @@
   > div {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+
     > div:last-child {
       grid-column: 1/3;
     }
@@ -45,7 +46,7 @@
 
 .inputDateBox {
   > h3 {
-    padding: 1.6rem;
+    padding: 1.6rem 0.8rem;
     padding-bottom: 0;
     font-size: 1.6rem;
   }

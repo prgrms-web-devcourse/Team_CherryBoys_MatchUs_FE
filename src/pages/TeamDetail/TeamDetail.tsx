@@ -13,6 +13,7 @@ import { RootState } from '@/store';
 const {
   entireContainer,
   teamBaseInfo,
+  teamLogoBox,
   teamLogoImage,
   teamInfoContainer,
   bioSpace,
@@ -179,11 +180,13 @@ const TeamDetail = () => {
       )}
 
       <article className={classNames(teamBaseInfo)}>
-        <img
-          src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
-          className={classNames(teamLogoImage)}
-          alt="팀 로고 이미지"
-        />
+        <div className={classNames(teamLogoBox)}>
+          <img
+            src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
+            className={classNames(teamLogoImage)}
+            alt="팀 로고 이미지"
+          />
+        </div>
         <div className={classNames(teamInfoContainer)}>
           <span className={classNames(teamNameSpan)} key={`team-${teamId}`}>
             {teamName}
@@ -211,15 +214,13 @@ const TeamDetail = () => {
           </div>
           <div className={classNames(bioSpace)}>{bio}</div>
           <section className={classNames(tagsContainer)}>
-            {limitedTeamTags.map(({ tagId, tagName, tagType }) => (
-              <>
-                <AttitueTag
-                  key={`tag-${tagId}`}
-                  tagId={tagId}
-                  tagName={tagName}
-                  tagType={tagType}
-                />
-              </>
+            {limitedTeamTags.map(({ tagId, tagName, tagType }, index) => (
+              <AttitueTag
+                key={`tag-${tagId}-${index}`}
+                tagId={tagId}
+                tagName={tagName}
+                tagType={tagType}
+              />
             ))}
           </section>
         </div>
@@ -342,17 +343,20 @@ const TeamDetail = () => {
         <div className={classNames(teamMatchContainer)}>
           {hasPreviousMatchHistory ? (
             previousMatchHistory.map(
-              ({
-                matchId,
-                matchDate,
-                registerTeamLogo,
-                registerTeamName,
-                applyTeamLogo,
-                applyTeamName,
-                status,
-              }) => (
+              (
+                {
+                  matchId,
+                  matchDate,
+                  registerTeamLogo,
+                  registerTeamName,
+                  applyTeamLogo,
+                  applyTeamName,
+                  status,
+                },
+                index
+              ) => (
                 <MatchListElement
-                  key={`beforeMatch-${matchId}`}
+                  key={`beforeMatch-${matchId}-${index}`}
                   matchId={matchId}
                   matchDate={matchDate}
                   registerTeamLogo={registerTeamLogo}

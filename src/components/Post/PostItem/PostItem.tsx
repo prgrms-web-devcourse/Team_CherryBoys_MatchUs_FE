@@ -60,12 +60,18 @@ const PostItem = ({ item }: Post) => {
             />
           </section>
           <section className={classNames(postInfos)}>
-            <div>{`${date} ${startTime}`}</div>
-            <div>{`${city} ${region} ${groundName}`}</div>
+            <div>
+              <span>{JSON.stringify(date).slice(3, 11)}</span>
+              <span>{JSON.stringify(startTime).slice(1, 6)}</span>
+            </div>
+            <div>
+              <span>{`${city} ${region}`}</span>
+              <p>{groundName}</p>
+            </div>
             <div className={classNames(postTags)}>
               <span>{isMatching ? `${cost}원` : position}</span>
               <span>{`${ageGroup.slice(0, ageGroup.length - 1)}대`}</span>
-              <span>{`${teamMannerTemperature}도`}</span>
+              <span>{`${teamMannerTemperature}℃`}</span>
             </div>
           </section>
         </article>

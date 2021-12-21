@@ -6,17 +6,15 @@ import styles from './TabBar.module.scss';
 const { tabBar, now } = styles;
 
 const TabBar = () => {
-  const [nowPage, setNowPage] = useState('home');
-
-  const handleNowPage = (target: string) => {
-    setNowPage(target);
-  };
+  const navList = ['matches', 'hires', 'team', 'user'];
+  const thisPage = window.location.pathname.split('/')[1];
+  const [nowPage, setNowPage] = useState(navList.includes(thisPage) ? thisPage : 'home');
 
   return (
     <div className={classNames(tabBar)}>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('home')}
+        onClick={() => setNowPage('home')}
         className={classNames({ [now]: nowPage === 'home' })}
       >
         <Link to="/">
@@ -25,8 +23,8 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('match')}
-        className={classNames({ [now]: nowPage === 'match' })}
+        onClick={() => setNowPage('matches')}
+        className={classNames({ [now]: nowPage === 'matches' })}
       >
         <Link to="/matches">
           <i className="far fa-futbol" />
@@ -34,8 +32,8 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('hire')}
-        className={classNames({ [now]: nowPage === 'hire' })}
+        onClick={() => setNowPage('hires')}
+        className={classNames({ [now]: nowPage === 'hires' })}
       >
         <Link to="/hires">
           <i className="far fa-handshake" />
@@ -43,7 +41,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('team')}
+        onClick={() => setNowPage('team')}
         className={classNames({ [now]: nowPage === 'team' })}
       >
         <Link to="/team/select">
@@ -52,7 +50,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('user')}
+        onClick={() => setNowPage('user')}
         className={classNames({ [now]: nowPage === 'user' })}
       >
         <Link to="/user">

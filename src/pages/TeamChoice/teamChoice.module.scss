@@ -2,6 +2,8 @@
 
 .entireContainer {
   margin-bottom: 6rem;
+  font-size: 1.4rem;
+
   .highlight {
     color: color.$primary;
     font-weight: 700;
@@ -17,6 +19,7 @@
     .mainTitle {
       font-weight: 700;
       font-size: 2.4rem;
+
       .highlight {
         color: color.$primary;
         font-weight: 700;
@@ -24,97 +27,87 @@
     }
   }
 
-  .cardsContainer {
-    margin : {
-      right: 1.6rem;
-      left: 1.6rem;
-    }
-
-    .cardContainer {
-      margin-bottom: 1rem;
-    }
-  }
-
-  .teamLogoImage {
-    width: fit-content;
-    max-width: 100%;
-    height: 9rem;
-    max-height: 9rem;
-    padding-left: 1rem;
-    object-fit: cover;
-  }
-
   .cardContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
-    height: 11rem;
-    margin-right: 1.6rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    box-sizing: border-box;
+    height: 12rem;
+    margin: 0.8rem 1.6rem;
     border: 0.2rem solid #c4c4c4;
     border-radius: 1rem;
+    cursor: pointer;
 
     .cardLogo {
       display: flex;
       align-items: center;
-      width: 20%;
-      height: 80%;
-      object-fit: cover;
-      border-radius: 1rem;
+      justify-content: center;
+      height: 12rem;
+      padding: 0.4rem;
+
+      > img {
+        width: fit-content;
+        max-width: 100%;
+        height: fit-content;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
+      }
     }
 
     .teamSubInfoContainer {
-      width: 75%;
-      height: 80%;
-      padding-top: 1.2rem;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      grid-template-columns: 2fr 1fr;
+      padding: 0.8rem 0;
       font-size: 1.2rem;
       border-radius: 1rem;
-    }
 
-    .teamBaseInfo {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 0.5rem;
-      padding-left: 1.2rem;
-      font-weight: 700;
+      .teamBaseInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        justify-content: center;
+        padding: 0 0.8rem;
 
-      .teamNameSpan {
-        margin-bottom: 0.5rem;
+        .teamNameSpan {
+          font-weight: 700;
+          font-size: 1.8rem;
+        }
       }
-    }
 
-    .ContainerAboutTeamManner {
-      display: flex;
-      padding-left: 1.2rem;
+      .ContainerAboutTeamManner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 0.4rem;
+
+        .mannerLow {
+          color: #8f8f8f;
+          font-weight: 700;
+          font-size: 2rem;
+        }
+
+        .mannerMiddle {
+          color: color.$primary;
+          font-weight: 700;
+          font-size: 2rem;
+        }
+
+        .mannerHigh {
+          color: #d89e5a;
+          font-weight: 700;
+          font-size: 2rem;
+        }
+      }
 
       .tagContainer {
         display: flex;
-        width: 65%;
-        margin-top: 0.5rem;
-      }
-
-      .mannerLow {
-        position: absolute;
-        right: 3.8rem;
-        color: #8f8f8f;
-        font-weight: 700;
-        font-size: 2.4rem;
-      }
-
-      .mannerMiddle {
-        position: absolute;
-        right: 3.8rem;
-        color: color.$primary;
-        font-weight: 700;
-        font-size: 2.4rem;
-      }
-
-      .mannerHigh {
-        position: absolute;
-        right: 3.8rem;
-        color: #d89e5a;
-        font-weight: 700;
-        font-size: 2.4rem;
+        flex-wrap: wrap;
+        grid-row: 2/3;
+        grid-column: 1/3;
+        align-items: center;
+        height: fit-content;
+        padding: 0.4rem;
       }
     }
   }

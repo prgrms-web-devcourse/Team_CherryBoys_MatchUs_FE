@@ -9,9 +9,9 @@
 .container {
   @include flexCenter();
   flex-direction: column;
+  width: 100vw;
   height: calc(100vh - 0.8rem);
   padding: 2rem 2rem 5rem 2rem;
-  width: 100vw;
 }
 
 .flex_center {
@@ -19,18 +19,18 @@
 }
 
 @mixin input-btn-size($bgc: color.$primary) {
-    border: 0.1rem solid #EAEBEC;
-    border-radius: 0.5rem;
-    background-color: $bgc;
-    width: 80vw;
-    height: 5rem;
-    padding: 1rem;
+  width: 80vw;
+  height: 5rem;
+  padding: 1rem;
+  background-color: $bgc;
+  border: 0.1rem solid #eaebec;
+  border-radius: 0.5rem;
 }
 
 .modalMainTitle {
+  margin-bottom: 2rem;
   font-weight: 700;
   font-size: 2.4rem;
-  margin-bottom: 2rem;
 }
 
 .modalSubTitle {
@@ -38,26 +38,31 @@
   font-size: 1.2rem;
 }
 
-.logo_img {
-  display: block;
-  margin-bottom: 10rem;
-  width: 80vw;
-  height: 20vh;
+.logo_box {
+  height: fit-content;
+
+  .logo_img {
+    display: block;
+    width: 80vw;
+    height: 20vw;
+    max-height: 100%;
+    object-fit: contain;
+  }
 }
 
 .form {
   &__label {
     display: block;
     margin-bottom: 2rem;
-    font-size: 1.8rem;
     font-weight: 700;
+    font-size: 1.8rem;
   }
   &form__label {
     margin-bottom: 2rem;
   }
   &__login {
     @include input-btn-size();
-    color: #ffffff
+    color: #ffffff;
   }
   &__input {
     @include input-btn-size($bgc: white);
@@ -70,6 +75,3 @@
   @include input-btn-size($bgc: white);
   margin-top: 2rem;
 }
-
-
-
