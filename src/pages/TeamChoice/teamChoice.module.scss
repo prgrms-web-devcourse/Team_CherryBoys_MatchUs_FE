@@ -36,10 +36,10 @@
 .teamLogoImage {
   width: fit-content;
   max-width: 100%;
-  height: fit-content;
-  max-height: 100%;
-  margin-top: 0.5rem;
-  object-fit: fill;
+  height: 9rem;
+  max-height: 9rem;
+  padding-left: 1rem;
+  object-fit: cover;
 }
 
 .cardContainer {
