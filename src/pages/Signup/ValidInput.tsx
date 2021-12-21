@@ -28,8 +28,8 @@ const ValidInput = ({
           name={name}
           onChange={onChange}
           value={value}
-          type={type}
           className={classNames(className)}
+          type={type}
         />
       ) : (
         <select

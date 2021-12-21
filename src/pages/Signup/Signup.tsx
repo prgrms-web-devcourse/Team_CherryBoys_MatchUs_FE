@@ -88,7 +88,6 @@ const Signup = () => {
 
   const signup = async () => {
     const isSignup = await requestSignup({ ...signupForm, name: userName });
-    console.log(isSignup);
 
     if (isSignup) {
       setIsSignupSuccess(true);
