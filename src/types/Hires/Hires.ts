@@ -13,6 +13,7 @@ export interface hireItemType {
   hiredPlayerNumber?: number | undefined;
   hirePlayerNumber: number | undefined;
   teamName: string | undefined;
+  teamCaptainId: number | undefined;
   teamCaptainName: string | undefined;
   detail: string | undefined;
   teamId?: number;

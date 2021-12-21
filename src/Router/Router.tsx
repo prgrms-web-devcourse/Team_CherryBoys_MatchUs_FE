@@ -23,7 +23,6 @@ import {
   Signup,
   TeamMatchDetail,
   UserDetail,
-  UserDetailById,
   UserMatchDetail,
   UserHireRequest,
   UserInfoEdit,
@@ -101,7 +100,7 @@ const Router = () => {
       <AuthorizedRouter path={USER_EDIT_PAGE} exact component={UserInfoEdit} />
       <AuthorizedRouter path={USER_HIRE_REQUEST_LIST_PAGE} exact component={UserHireRequest} />
       <AuthorizedRouter path={USER_TEAM_INVITAION_LIST_PAGE} exact component={UserTeamInvitation} />
-      <AuthorizedRouter path={USER_DETAIL_BY_ID} exact component={UserDetailById} />
+      <AuthorizedRouter path={USER_DETAIL_BY_ID} exact component={UserDetail} />
 
       {/* <Route path={USER_TEAM_INVITAION_LIST_PAGE} exact component={} />
       <Route path={USER_MERCENARY_INVITAION_LIST_PAGE} exact component={} /> */}
