@@ -22,9 +22,10 @@ const Hires = () => {
       //   size: defaultSize,
       // };
 
+      console.log(hiresFilter);
       const { hirePosts } = await getHiresInfo(hiresFilter);
       setData(hirePosts);
-
+      console.log(hirePosts);
       for (const post of hirePosts) {
         for (const gradeInfo of userInfo.userGradeResponse) {
           const { grade, teamId } = gradeInfo;
