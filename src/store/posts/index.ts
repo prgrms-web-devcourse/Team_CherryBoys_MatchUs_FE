@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import axios from 'axios';
 
-import hireItems from '@/fixtures/hireItems';
 import matchItems from '@/fixtures/matchItems';
 import { conditions, getHiresInfo } from '@/api/hires';
 
@@ -30,10 +28,20 @@ export interface HiresResponseType {
   teamName: string;
 }
 
+interface modalType {
+  [hiresApply: string]: boolean;
+  hiresApprove: boolean;
+  hiresReview: boolean;
+  hiresFilter: boolean;
+  hiresTeamMember: boolean;
+}
+
 export interface PostWrapper {
   isMatch: boolean;
   selectedTeam: TeamInfo;
   data: HiresResponseType[];
+  isCaptain: boolean;
+  modal: modalType;
 }
 
 export interface Post {
@@ -81,27 +89,41 @@ export const fetchAllMatch = createAsyncThunk('matches/fetchAllMatches', async (
 });
 
 export interface PostsState {
-  data: PostItem[];
+  data: {
+    modal: {
+      [hiresApply: string]: boolean;
+      hiresApprove: boolean;
+      hiresReview: boolean;
+      hiresFilter: boolean;
+      hiresTeamMember: boolean;
+    };
+    hiresFilter: conditions;
+  };
 }
 
 export const posts = createSlice({
   name: 'posts',
   initialState: {
-    data: [],
+    data: {
+      modal: {
+        hiresApply: false,
+        hiresApprove: false,
+        hiresReview: false,
+        hiresFilter: false,
+        hiresTeamMember: false,
+      },
+      hiresFilter: {
+        size: 30,
+      },
+    },
   } as PostsState,
-  reducers: {},
-  extraReducers: {
-    [fetchAllPost.pending.type]: (state: PostsState) => {
-      state.data = [];
+  reducers: {
+    toggleModal: (state, { payload }: PayloadAction<{ modalName: string }>) => {
+      state.data.modal[payload.modalName] = !state.data.modal[payload.modalName];
     },
-    [fetchAllPost.fulfilled.type]: (state: PostsState, action: PayloadAction<PostItem[]>) => {
-      state.data = action.payload;
-    },
-    [fetchAllMatch.pending.type]: (state: PostsState) => {
-      state.data = [];
-    },
-    [fetchAllMatch.fulfilled.type]: (state: PostsState, action: PayloadAction<PostItem[]>) => {
-      state.data = action.payload;
+    setHiresFilter: (state, { payload }: PayloadAction<{ hiresFilter: conditions }>) => {
+      state.data.hiresFilter = payload.hiresFilter;
     },
   },
+  extraReducers: {},
 });

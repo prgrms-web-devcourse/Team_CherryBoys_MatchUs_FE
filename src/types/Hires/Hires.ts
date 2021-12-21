@@ -13,8 +13,9 @@ export interface hireItemType {
   hiredPlayerNumber?: number | undefined;
   hirePlayerNumber: number | undefined;
   teamName: string | undefined;
-  teamManagerName: string | undefined;
+  teamCaptainName: string | undefined;
   detail: string | undefined;
+  teamId?: number;
 }
 
 export interface previousHiresInfo {
@@ -29,4 +30,10 @@ export interface previousHiresInfo {
   prevAgeGroup?: string;
   prevDetail?: string;
   postId?: number;
+}
+
+export interface application {
+  applicationId: number;
+  userId: number;
+  userNickName: string;
 }

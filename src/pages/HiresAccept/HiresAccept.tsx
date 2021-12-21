@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { getApplications } from '@/api/hires';
-import { ApplicationElement } from '@/components/Applications';
+import { ApplicationElement } from '@/components';
+import { application } from '@/types';
 
 interface CheckboxOptions {
   [key: string]: boolean;
-}
-
-interface application {
-  applicationId: number;
-  userId: number;
-  userNickName: string;
 }
 
 const HiresAccept = () => {
@@ -24,7 +19,6 @@ const HiresAccept = () => {
   useEffect(() => {
     const getCurrentHiresInfo = async () => {
       const { applications } = await getApplications(currentPostId);
-      // console.log(res);
       setOriginApplications([...applications]);
     };
 
@@ -44,10 +38,12 @@ const HiresAccept = () => {
 
   return (
     <>
+      {Object.keys(applicationCheckList).length === 0 && <h3>신청한 용병이 없습니다</h3>}
       {Object.keys(applicationCheckList).length > 0 && (
         <ApplicationElement
           currentPostId={currentPostId}
           applicationCheckList={applicationCheckList}
+          originApplications={originApplications}
         />
       )}
     </>

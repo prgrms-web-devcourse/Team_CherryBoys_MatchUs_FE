@@ -1,4 +1,5 @@
 .hiresCreateContainer {
+  min-width: fit-content;
   margin: 5.2rem 0;
 
   .inputBox {
@@ -86,4 +87,10 @@
       border-radius: 0.5rem;
     }
   }
+}
+.modalMainTitle {
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 2.4rem;
+  word-break: keep-all;
 }

@@ -1,24 +1,146 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 
-import { HiresPosition, AgeGroup, Place } from '@/components/selects';
+import classNames from 'classnames';
+import { LocationSelect, HiresPosition, AgeGroup, Place } from '@/components/selects';
+import { fetchAuthorizedTeams, fetchLocation } from '@/api';
+import { Locations, TeamSimple } from '@/types';
+import { RootState } from '@/store';
+import { match } from '@/store/match/match';
+import { getItemFromStorage } from '@/utils/storage';
+import { Input } from '@/components';
+import { SPORTS } from '@/consts';
+import { conditions } from '@/api/hires';
+import styles from './HiresFilter.module.scss';
+import { posts } from '@/store/posts';
 
-import { SPORTS_CATEGORY, AGE_GROUP, CITY, REGION, GROUND_NAME } from '@/consts';
+const {
+  inputLocationBox,
+  inputDateBox,
+  buttonBox,
+  submitButton,
+  modalBackground,
+  showModal,
+  modalContainer,
+} = styles;
+
+const placeholder = '선택';
+
+const defaultCity = {
+  cityId: 0,
+  cityName: '',
+};
+
+const defaultRegion = {
+  cityId: 0,
+  regionId: 0,
+  regionName: '',
+};
+
+const defaultGround = {
+  regionId: 0,
+  groundId: 0,
+  groundName: '',
+};
+
+interface Props {
+  showFilterModal: boolean;
+}
 
 // Todo(홍중) : 기능, 기존 구현한 달력 적용하기, input 개선 -> 다른 브랜치에서 작업한 컴포넌트를 이용하여 수정 (2021-12-17)
-const HiresFilter = () => {
+const HiresFilter = ({ showFilterModal }: Props) => {
   const [position, setPosition] = useState<string>('윙백');
-  const [ageGroup, setAgeGroup] = useState<string>('20대');
-  const [city, setCity] = useState<string>('');
-  const [region, setRegion] = useState<string>('');
-  const [groundName, setGroundName] = useState<string>('');
+  const [ageGroup, setAgeGroup] = useState<string>(placeholder);
   const [maximumDate, setMaximumDateDate] = useState<Date>(new Date());
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(
+    new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`)
+  );
   const [formattedDate, setFormattedDate] = useState<string>('');
+  const [city, setCity] = useState(defaultCity);
+  const [region, setRegion] = useState(defaultRegion);
+  const [ground, setGround] = useState(defaultGround);
+  const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
+  const [sports, setSports] = useState(placeholder);
+  const [size, setSize] = useState(30);
+  const token = getItemFromStorage('accessToken');
+
+  const dispatch = useDispatch();
+  const { locations } = useSelector((store: RootState) => store.match.data);
+  const [locationInfo, setLocationInfo] = useState<Locations>(locations);
+
+  const getAuhorizedTeams = useCallback(async () => {
+    if (token) {
+      const { teamSimpleInfos } = await fetchAuthorizedTeams();
+      setUserTeams(teamSimpleInfos);
+      dispatch(match.actions.setUserTeams({ userTeams: teamSimpleInfos }));
+    }
+  }, []);
+
+  useEffect(() => {
+    getAuhorizedTeams();
+  }, []);
+
+  const getLocations = useCallback(async () => {
+    const locationData = await fetchLocation();
+    setLocationInfo(locationData);
+    dispatch(match.actions.setLocations({ locations: locationData }));
+  }, []);
+
+  useEffect(() => {
+    if (locationInfo.cities.length < 1) {
+      getLocations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locations]);
+
+  const handleInput = (e: React.ChangeEvent, category: string) => {
+    const targetInput: string = (e.target as HTMLInputElement).value;
+
+    if (category === 'sports') {
+      setSports(targetInput);
+      return;
+    }
+    if (category === 'city') {
+      const selectedCity = locationInfo.cities.filter(
+        (cityInfo) => cityInfo.cityName === targetInput
+      )[0];
+      setCity({
+        cityId: selectedCity?.cityId || 0,
+        cityName: selectedCity?.cityName || '',
+      });
+      setRegion(defaultRegion);
+      setGround(defaultGround);
+      return;
+    }
+    if (category === 'region') {
+      const selectedRegion = locationInfo.regions.filter(
+        (regionInfo) => regionInfo.regionName === targetInput
+      )[0];
+      setRegion({
+        cityId: selectedRegion?.cityId || 0,
+        regionId: selectedRegion?.regionId || 0,
+        regionName: selectedRegion?.regionName || '',
+      });
+      setGround(defaultGround);
+      return;
+    }
+    if (category === 'ground') {
+      const selectedGround = locationInfo.grounds.filter(
+        (groundInfo) => groundInfo.groundName === targetInput
+      )[0];
+      setGround({
+        regionId: selectedGround?.regionId || 0,
+        groundId: selectedGround?.groundId || 0,
+        groundName: selectedGround?.groundName || '',
+      });
+    }
+  };
 
   const handleChangePosition = (event: React.ChangeEvent) => {
     event.preventDefault();
@@ -30,25 +152,7 @@ const HiresFilter = () => {
     const { value } = event.target;
     const ageNumber = value.slice(0, 2);
 
-    setAgeGroup(`${ageNumber}s`);
-  };
-
-  const handleChangeCity = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-
-    setCity(value);
-  };
-
-  const handleChangeRegion = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-
-    setRegion(value);
-  };
-
-  const handleChangeGroundName = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-
-    setGroundName(value);
+    setAgeGroup(`${ageNumber}대`);
   };
 
   const hanldeChangeDate = (selectedDate: React.SetStateAction<Date | null>) => {
@@ -63,30 +167,102 @@ const HiresFilter = () => {
   };
 
   // Todo(홍중) : 모달 추가후 작성(2021-12-18), Date는 추후 컴포넌트화 된것을 적용(현재 maxDate적용 안되는것도 등록페이지는 가능하여서 추후 그것을 컴포넌트화할 예정)
-  const handleClickSelectDone = () => {};
+  const handleClickSelectDone = () => {
+    const inputData: conditions = {
+      size,
+    };
+
+    if (position !== placeholder) {
+      inputData.positon = position;
+    }
+
+    if (sports !== placeholder) {
+      inputData.sports = sports;
+    }
+
+    if (ageGroup !== placeholder) {
+      inputData.ageGroup = ageGroup;
+    }
+
+    if (city.cityId > 0) {
+      inputData.cityId = city.cityId;
+    }
+    if (region.regionId > 0) {
+      inputData.regionId = region.regionId;
+    }
+    if (ground.groundId > 0) {
+      inputData.groundId = ground.groundId;
+    }
+
+    if (formattedDate !== '') {
+      inputData.date = formattedDate;
+    }
+
+    dispatch(posts.actions.setHiresFilter({ hiresFilter: inputData }));
+    dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
+  };
+
+  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
+    if ((e.target as Element).classList.contains('modalBackground')) {
+      dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
+    }
+  };
 
   return (
-    <div>
-      <HiresPosition handleChangePosition={handleChangePosition} />
-      <AgeGroup handleChangeAge={handleChangeAge} />
-      <Place
-        handleChangeCity={handleChangeCity}
-        handleChangeRegion={handleChangeRegion}
-        handleChangeGroundName={handleChangeGroundName}
-      />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          value={date}
-          maxDate={maximumDate}
-          minDate={currentDate}
-          onChange={hanldeChangeDate}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={(params) => <TextField {...params} />}
+    <div
+      className={classNames('modalBackground', modalBackground, {
+        [showModal]: showFilterModal,
+      })}
+      onClick={handleCloseModal}
+      role="presentation"
+    >
+      <div className={classNames(modalContainer)}>
+        <HiresPosition handleChangePosition={handleChangePosition} />
+        <Input
+          inputId="inputSports"
+          labelName="종목"
+          type="dropbox"
+          options={['선택', ...SPORTS]}
+          onChange={(e) => handleInput(e, 'sports')}
+          value={sports}
         />
-      </LocalizationProvider>
-      <button type="button" onClick={handleClickSelectDone}>
-        선택 완료
-      </button>
+        <AgeGroup handleChangeAge={handleChangeAge} />
+        <div className={classNames(inputLocationBox)}>
+          <div>
+            <LocationSelect
+              locationInfo={locationInfo}
+              city={city}
+              region={region}
+              ground={ground}
+              handleInput={handleInput}
+            />
+          </div>
+        </div>
+        <div className={classNames(inputDateBox)}>
+          <h3>날짜</h3>
+          <div>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                value={date}
+                maxDate={maximumDate}
+                minDate={currentDate}
+                onChange={hanldeChangeDate}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+        </div>
+        <div className={classNames(buttonBox)}>
+          <button
+            type="button"
+            className={classNames(submitButton)}
+            onClick={handleClickSelectDone}
+          >
+            선택 완료
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

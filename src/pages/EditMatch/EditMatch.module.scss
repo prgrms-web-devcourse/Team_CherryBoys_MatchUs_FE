@@ -3,6 +3,8 @@
   margin-bottom: 4.2rem;
 
   .inputLocationBox {
+    min-width: fit-content;
+
     > h3 {
       padding: 1.6rem;
       padding-bottom: 0;
@@ -19,6 +21,8 @@
   }
 
   .inputDateBox {
+    min-width: fit-content;
+
     > h3 {
       padding: 1.6rem;
       padding-bottom: 0;
@@ -46,6 +50,7 @@
     }
   }
   .matchDetailInputBox {
+    min-width: fit-content;
     padding: 1.6rem;
 
     .inputName > h3 {
