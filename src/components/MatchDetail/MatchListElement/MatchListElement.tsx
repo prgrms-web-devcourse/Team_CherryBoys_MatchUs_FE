@@ -25,14 +25,14 @@ const MatchListElement = ({
   applyTeamName,
   status,
 }: MatchInfoProps) => {
-  const yearMonthDay = matchDate.split('-');
   const history = useHistory();
+  const yearMonthDay = matchDate.split('-');
 
   return (
     <>
-      <span className={classNames(matchDateSpan)}>
-        {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[1]}일
-      </span>
+      <span
+        className={classNames(matchDateSpan)}
+      >{`${yearMonthDay[0]}년 ${yearMonthDay[1]}월 ${yearMonthDay[2]}일`}</span>
       <button
         type="button"
         className={classNames(matchButton)}
