@@ -50,7 +50,6 @@ const TeamMatchDetail = () => {
   return (
     <>
       <div>
-        <Header />
         <h1 className={classNames('a11yHidden')}>매칭 상세보기 페이지</h1>
         <div className={classNames(matchComponentContainer)}>
           <div className={classNames(titleContainer)}>
