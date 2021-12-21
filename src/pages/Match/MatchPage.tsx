@@ -27,7 +27,8 @@ const Match = () => {
   const token = getItemFromStorage('accessToken');
   const dispatch = useDispatch();
 
-  const { modal, userTeams } = useSelector((store: RootState) => store.match.data);
+  const { modal, userTeams, userId } = useSelector((store: RootState) => store.match.data);
+  const { userInfo } = useSelector((store: RootState) => store.user);
   const [match, setMatch] = useState<MatchType[]>([]);
   const [matchTeams, setMatchTeams] = useState<number[]>([]);
   const [userTeamInfo, setUserTeamInfo] = useState<TeamSimple[]>(userTeams);
@@ -52,11 +53,10 @@ const Match = () => {
   }, [matchId]);
 
   const getAuhorizedTeams = useCallback(async () => {
-    if (token) {
-      const { teamSimpleInfos } = await fetchAuthorizedTeams();
-      setUserTeamInfo(teamSimpleInfos);
-      dispatch(matchStore.actions.setUserTeams({ userTeams: teamSimpleInfos }));
-    }
+    const { teamSimpleInfos } = await fetchAuthorizedTeams();
+    setUserTeamInfo(teamSimpleInfos);
+    dispatch(matchStore.actions.setUserTeams({ userTeams: teamSimpleInfos }));
+    dispatch(matchStore.actions.setUserId({ userId: userInfo.id }));
   }, []);
 
   useEffect(() => {
@@ -64,10 +64,13 @@ const Match = () => {
       getMatchInfo();
     }
     getMatchTeams();
-    if (userTeamInfo.length < 1) {
+  }, [match]);
+
+  useEffect(() => {
+    if (userInfo.id !== userId && token) {
       getAuhorizedTeams();
     }
-  }, [match, userTeamInfo]);
+  }, [userInfo]);
 
   const registerTeamInfo = match[0] && {
     teamName: match[0].registerTeamInfo.teamName,

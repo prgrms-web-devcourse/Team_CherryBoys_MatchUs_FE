@@ -6,11 +6,23 @@
   justify-content: center;
 }
 
+.container {
+  @include flexCenter();
+  flex-direction: column;
+  height: calc(100vh - 0.8rem);
+  padding: 2rem 2rem 5rem 2rem;
+  width: 100vw;
+}
+
+.flex_center {
+  @include flexCenter();
+}
+
 @mixin input-btn-size($bgc: color.$primary) {
     border: 0.1rem solid #EAEBEC;
     border-radius: 0.5rem;
     background-color: $bgc;
-    width: 30rem;
+    width: 80vw;
     height: 5rem;
     padding: 1rem;
 }
@@ -28,13 +40,9 @@
 
 .logo_img {
   display: block;
-  position: absolute;
-  width: 70rem;
-  top: -20%;
-  left: 49%;
-  transform: translate(-50%);
-  z-index: -1;
-  background-repeat: repeat;
+  margin-bottom: 10rem;
+  width: 80vw;
+  height: 20vh;
 }
 
 .form {
@@ -63,10 +71,5 @@
   margin-top: 2rem;
 }
 
-.container {
-  @include flexCenter();
-  flex-direction: column;
-  height: calc(100vh - 0.8rem);
- 
-}
+
 

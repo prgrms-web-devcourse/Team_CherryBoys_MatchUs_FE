@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import React from 'react';
 import classNames from 'classnames';
 import style from './memberList.module.scss';
@@ -18,7 +20,7 @@ interface Props {
   handleChangeEditButtonStatus?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const { categoryTitle, playerDetailInfo } = style;
+const { buttonContainer, playerDetailInfo, membersContainer } = style;
 
 const MemberList = ({
   isMember,
@@ -44,17 +46,14 @@ const MemberList = ({
     <>
       <form className={classNames(playerDetailInfo)} onSubmit={handleSubmitDeletedMember}>
         {/* article Header */}
-        <div>
-          {hasCategoryTitle && (
-            <p className={classNames(categoryTitle)}>{isMember ? '팀원' : '용병'} 정보</p>
-          )}
+        <div className={classNames(buttonContainer)}>
           {hasAuthorization && (
             <button type="button" onClick={handleChangeEditButtonStatus}>
               {isEditing ? '완료' : '수정'}
             </button>
           )}
         </div>
-        <div>
+        <div className={membersContainer}>
           {isMember && captain && (
             <MemberListElement
               memberId={captain?.userId}
@@ -101,6 +100,18 @@ const MemberList = ({
                         />
                       );
                     }
+                    return (
+                      <MemberListElement
+                        memberId={generalMember.userId}
+                        memberName={generalMember.userName}
+                        memberType="generalMember"
+                        key={`generalMember-${generalMember.userId}`}
+                        isEditing={isEditing}
+                        grade={generalMember.grade}
+                        handleChangeMemberGrade={handleChangeMemberGrade}
+                        handleAddDeletedMembers={handleAddDeletedMembers}
+                      />
+                    );
                   })}
                 </>
               )
@@ -121,16 +132,29 @@ const MemberList = ({
                         />
                       );
                     }
+                    return (
+                      <MemberListElement
+                        memberId={hiredMember.userId}
+                        memberName={hiredMember.userName}
+                        memberType="hiredMember"
+                        key={`hiredMember-${hiredMember.userId}`}
+                        isEditing={isEditing}
+                        grade={hiredMember.grade}
+                        handleChangeMemberGrade={handleChangeMemberGrade}
+                        handleAddDeletedMembers={handleAddDeletedMembers}
+                      />
+                    );
                   })}
                 </>
               )}
         </div>
-        {isEditing && (
-          <>
-            {/* TODO: onClick도 상위에서 내려주는 방식으로 추가 예정 */}
-            <button type="submit">방출</button>
-          </>
-        )}
+        <div className={classNames(buttonContainer)}>
+          {isEditing && (
+            <>
+              <button type="submit">방출</button>
+            </>
+          )}
+        </div>
       </form>
     </>
   );

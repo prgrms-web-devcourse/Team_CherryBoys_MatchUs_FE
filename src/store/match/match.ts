@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MatchListFilter, Locations, TagInfo, TeamSimple } from '@/types';
+import { fetchAllMatch } from '@/api';
 
 interface MatchState {
   data: {
@@ -15,8 +16,18 @@ interface MatchState {
     locations: Locations;
     tags: TagInfo[];
     userTeams: TeamSimple[];
+    userId: number | null;
   };
 }
+
+export const getMatchList = createAsyncThunk(
+  'match/getMatchList',
+  async (filter: MatchListFilter) => {
+    const response = await fetchAllMatch(filter);
+
+    return response;
+  }
+);
 
 export const match = createSlice({
   name: 'match',
@@ -39,6 +50,7 @@ export const match = createSlice({
       },
       tags: [],
       userTeams: [],
+      userId: null,
     },
   } as MatchState,
   reducers: {
@@ -59,6 +71,9 @@ export const match = createSlice({
     },
     setUserTeams: (state, { payload }: PayloadAction<{ userTeams: TeamSimple[] }>) => {
       state.data.userTeams = payload.userTeams;
+    },
+    setUserId: (state, { payload }: PayloadAction<{ userId: number | null }>) => {
+      state.data.userId = payload.userId;
     },
   },
   extraReducers: {},

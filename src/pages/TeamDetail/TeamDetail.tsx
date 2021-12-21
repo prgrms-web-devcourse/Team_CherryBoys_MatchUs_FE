@@ -1,16 +1,53 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
 import { MemberElement, MatchElement, MatchTeamInfo } from '@/types';
 import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
+import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
+import { RootState } from '@/store';
 
-const { teamBaseInfo, logImage, teamCoreInfo, teamMemberInfo, hiredMemberInfo, teamMathchesInfo } =
-  style;
+const {
+  entireContainer,
+  teamBaseInfo,
+  teamLogoImage,
+  teamInfoContainer,
+  bioSpace,
+  teamNameSpan,
+  tagsContainer,
+  categoryTitle,
+  teamCoreInfo,
+  teamCoreElementContainer,
+  teamCoreElementTitle,
+  teamCoreElementContent,
+  teamCoreSportType,
+  teamMemberInfo,
+  teamMemberTitle,
+  seeMore,
+  mannerLow,
+  mannerMiddle,
+  mannerHigh,
+  countLow,
+  countMiddle,
+  countHigh,
+  teamDataContainer,
+} = style;
+
+const ageCollection: Record<string, string> = {
+  TEENAGER: '10대',
+  TWENTIES: '20대',
+  THIRTIES: '30대',
+  FORTIES: '40대',
+  FIFTIES: '50대',
+  SIXTIES: '60대',
+  SEVENTIES: '70대',
+};
+
 const TeamDetail = () => {
+  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
   const [modalMessage, setModalMessage] = useState('LEAVE');
   const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
@@ -30,6 +67,21 @@ const TeamDetail = () => {
     teamId: 0,
     teamName: '',
   });
+
+  const {
+    teamName,
+    bio,
+    tags,
+    logo,
+    sportsName,
+    matchCount,
+    mannerTemperature,
+    captainId,
+    captainName,
+    ageGroup,
+    teamCreatedAt,
+  } = teamInfo;
+
   const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
   const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
 
@@ -44,29 +96,32 @@ const TeamDetail = () => {
   };
 
   const previousMatchHistory = matchHistory.filter((match) => {
-    if (match.status === 'previousMatch') return true;
+    if (match.status === 'COMPLETION') return true;
     return false;
   });
 
   const hasMember = memberInfo.length !== 0;
-  const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
 
-  const {
-    teamName,
-    bio,
-    sportsName,
-    tags,
-    matchCount,
-    mannerTemperature,
-    captainId,
-    captainNickname,
-    ageGroup,
-    teamCreatedAt,
-  } = teamInfo;
+  const hasHiredMember = memberInfo.filter((member) => member.grade === '용병').length !== 0;
+
+  const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
+  const limitedTeamTags = tags.slice(0, 3);
+  const yearMonthDay = teamCreatedAt.split('T');
 
   const { modalMainTitle, modalSubTitle } = style;
 
   useEffect(() => {
+    const authorizationMap = userGradeResponse.map((team) => {
+      if (team.teamId === teamId && team.grade === 'CAPTAIN') {
+        return true;
+      }
+      return false;
+    });
+
+    const authorization = authorizationMap.includes(true);
+
+    setHasAuthorization(authorization);
+
     const updateTeamMatchHistory = async () => {
       const { teamMatches } = await getMatchHistory(teamId);
 
@@ -92,10 +147,10 @@ const TeamDetail = () => {
     updateTeamInfo();
     updateTeamMatchHistory();
     updateMemberInfo();
-  }, [teamId]);
+  }, [teamId, userGradeResponse]);
 
   return (
-    <div>
+    <div className={classNames(entireContainer)}>
       <h1 className={classNames('a11yHidden')}>팀 상세보기 페이지</h1>
       {isModalDialogOpen && (
         <CustomModalDialog
@@ -115,31 +170,90 @@ const TeamDetail = () => {
           </span>
         </CustomModalDialog>
       )}
-      {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
+
       <article className={classNames(teamBaseInfo)}>
-        <img className={classNames(logImage)} alt="팀 로고 이미지" />
-        <p key={`team-${teamId}`}>{teamName}</p>
-        <div>팀 세부설명{bio}</div>
-        {tags.map(({ tagId, tagName, tagType }) => (
-          <>
-            <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
-          </>
-        ))}
-      </article>
-      <article className={classNames(teamCoreInfo)}>
-        <section>총 경기 수{matchCount}</section>
-        <section>매너온도 {mannerTemperature}</section>
-        <section id={`captain-${captainId}`}>{`운영진 ${captainNickname}`}</section>
-        <section>주요 종목 {sportsName}</section>
-        <section>연령대 {ageGroup}</section>
-        <section>생성일자 {teamCreatedAt}</section>
-      </article>
-      <article className={classNames(teamMemberInfo)}>
-        <div>
-          팀원 목록
-          <Link to={`/team/${teamId}/members`}>더보기</Link>
+        <img
+          src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
+          className={classNames(teamLogoImage)}
+          alt="팀 로고 이미지"
+        />
+        <div className={classNames(teamInfoContainer)}>
+          <span className={classNames(teamNameSpan)} key={`team-${teamId}`}>
+            {teamName}
+          </span>
+          {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
+          <div className={classNames(bioSpace)}>{bio}</div>
+          <section className={classNames(tagsContainer)}>
+            {limitedTeamTags.map(({ tagId, tagName, tagType }) => (
+              <>
+                <AttitueTag tagId={tagId} tagName={tagName} tagType={tagType} />
+              </>
+            ))}
+          </section>
         </div>
-        <div>
+      </article>
+
+      <span className={classNames(categoryTitle)}>주요정보</span>
+      <article className={classNames(teamCoreInfo)}>
+
+        <section className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>총 경기 수</span>
+          <span
+            className={classNames(teamCoreElementContent, countMiddle, {
+              [countLow]: matchCount <= 20,
+              [countHigh]: matchCount > 40,
+            })}
+          >
+            {matchCount}
+          </span>
+        </section>
+        <section className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>매너온도</span>
+          <span
+            className={classNames(teamCoreElementContent, mannerMiddle, {
+              [mannerHigh]: mannerTemperature > 40,
+              [mannerLow]: mannerTemperature < 10,
+            })}
+          >
+            {mannerTemperature}
+          </span>
+        </section>
+        <section id={`captain-${captainId}`} className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>운영진</span>
+          <span className={classNames(teamCoreElementContent)}>{captainName}</span>
+        </section>
+        <section className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>주요 종목 </span>
+          <span className={classNames(teamCoreSportType)}>⚽️</span>
+        </section>
+        <section className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>연령대</span>
+          <span
+            className={classNames(teamCoreElementContent, countLow, {
+              [countMiddle]: ageGroup === 'THIRTIES',
+              [countMiddle]: ageGroup === 'FORTIES',
+              [countMiddle]: ageGroup === 'FIFTIES',
+              [countHigh]: ageGroup === 'SIXTIES',
+              [countHigh]: ageGroup === 'SEVENTIES',
+            })}
+          >
+            {ageCollection[ageGroup]}
+          </span>
+        </section>
+        <section className={classNames(teamCoreElementContainer)}>
+          <span className={classNames(teamCoreElementTitle)}>생성일자</span>
+          <span className={classNames(teamCoreElementContent)}>{yearMonthDay[0]}</span>
+        </section>
+      </article>
+
+      <article className={classNames(teamMemberInfo)}>
+        <div className={classNames(teamMemberTitle)}>
+          <span className={classNames(categoryTitle)}>팀원 목록</span>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/members`}>
+            더보기
+          </Link>
+        </div>
+        <div className={classNames(teamDataContainer)}>
           {hasMember ? (
             <MemberList
               isMember
@@ -151,7 +265,7 @@ const TeamDetail = () => {
             />
           ) : (
             <p>
-              <span className={classNames('whiteSpace')}>팀원이이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>팀원이 없습니다.</span>
               <span className={classNames('whiteSpace')}>
                 열정 가득한 팀원을 모집하러 가볼까요?
               </span>
@@ -160,13 +274,15 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-      <article className={classNames(hiredMemberInfo)}>
-        <div>
-          용병 목록
-          <Link to={`/team/${teamId}/hired-members`}>더보기</Link>
+      <article className={classNames(teamMemberInfo)}>
+        <div className={classNames(teamMemberTitle)}>
+          <span className={classNames(categoryTitle)}>용병 목록</span>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/hired-members`}>
+            더보기
+          </Link>
         </div>
-        <div>
-          {hasMember ? (
+        <div className={classNames(teamDataContainer)}>
+          {hasHiredMember ? (
             <MemberList
               isMember={false}
               memberInfo={memberInfo}
@@ -184,24 +300,26 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-      {/* TODO: 매칭 리스트 상세보기 할 때, 추상화된 컴포넌트 만들 예정 */}
-      <article className={classNames(teamMathchesInfo)}>
-        <div>
-          매칭 목록
-          <Link to={`/team/${teamId}/match`}>더보기</Link>
+
+      <article className={classNames(teamMemberInfo)}>
+        <div className={classNames(teamMemberTitle)}>
+          <span className={classNames(categoryTitle)}>매칭 목록</span>
+          <Link className={classNames(seeMore)} to={`/team/${teamId}/match`}>
+            더보기
+          </Link>
         </div>
-        {hasPreviousMatchHistory ? (
-          previousMatchHistory.map(
-            ({
-              matchId,
-              matchDate,
-              registerTeamLogo,
-              registerTeamName,
-              applyTeamLogo,
-              applyTeamName,
-              status,
-            }) => {
-              return (
+        <div className={classNames(teamDataContainer)}>
+          {hasPreviousMatchHistory ? (
+            previousMatchHistory.map(
+              ({
+                matchId,
+                matchDate,
+                registerTeamLogo,
+                registerTeamName,
+                applyTeamLogo,
+                applyTeamName,
+                status,
+              }) => (
                 <MatchListElement
                   key={`beforeMatch-${matchId}`}
                   matchId={matchId}
@@ -212,16 +330,16 @@ const TeamDetail = () => {
                   applyTeamName={applyTeamName}
                   status={status}
                 />
-              );
-            }
-          )
-        ) : (
-          <p>
-            <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
-            <span className={classNames('whiteSpace')}>경기 모집 글을 올리러 가볼까요?</span>
-            <Link to="/matches/new">경기 등록</Link>
-          </p>
-        )}
+              )
+            )
+          ) : (
+            <p>
+              <span className={classNames('whiteSpace')}>경기일정이 없습니다.</span>
+              <span className={classNames('whiteSpace')}>경기 모집 글을 올리러 가볼까요?</span>
+              <Link to="/matches/new">경기 등록</Link>
+            </p>
+          )}
+        </div>
       </article>
       <button
         type="button"

@@ -281,11 +281,6 @@ const HiresCreate = ({
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
-    // if (position === '포지션 선택') {
-    //   setCreateModalMessage('포지션을 선택해주세요');
-    //   setIsCreateModalOpen(true);
-    //   return;
-    // }
     // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
       setCreateModalMessage('시간을 다시 입력해주세요');
@@ -324,14 +319,12 @@ const HiresCreate = ({
         region.regionName === '시/군/구' ||
         ground.groundName === '구장'
       ) {
-        // alert('장소를 선택해주세요');
         setEditModalMessage('장소를 선택해주세요');
         setIsEditModalOpen(true);
         return;
       }
 
       if (team === '선택') {
-        // alert('팀을 선택해주세요');
         setEditModalMessage('팀을 선택해주세요');
         setIsEditModalOpen(true);
         return;
@@ -438,7 +431,6 @@ const HiresCreate = ({
           <button
             className={classNames(submitButton)}
             type="button"
-            // onClick={handleClickEditPosting}
             onClick={() => setIsEditModalOpen(true)}
           >
             수정

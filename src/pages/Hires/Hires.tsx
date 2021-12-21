@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { HiresResponseType } from '@/store/posts';
 import { Posts } from '@/components';
 import { getHiresInfo } from '@/api/hires';

@@ -1,15 +1,157 @@
-.teamBaseInfo {
-  .logImage {
+@use '@/styles/color';
+
+.entireContainer {
+  margin: {
+    right: 1.6rem;
+    left: 1.6rem;
   }
 }
 
+.teamBaseInfo {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 13rem;
+  margin : {
+    top: 7rem;
+    bottom: 3rem;
+  }
+  padding-top: 0.5rem;
+  border: 0.1rem solid #f7f7f7;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  .teamLogoImage {
+    width: 40%;
+    height: 90%;
+    object-fit: fill;
+    border-radius: 1rem;
+  }
+
+  .teamInfoContainer {
+    width: 50%;
+    padding : {
+      top: 1.6rem;
+    }
+
+    .teamNameSpan {
+      font-weight: 700;
+      font-size: 2.4rem;
+    }
+
+    .bioSpace {
+      min-width: 16.9rem;
+      min-height: 4.3rem;
+      padding-top: 1rem;
+    }
+
+    .tagsContainer {
+      display: flex;
+    }
+  }
+}
+
+.categoryTitle {
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
 .teamCoreInfo {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  height: 39rem;
+  margin : {
+    top: 1rem;
+    bottom: 3rem;
+  }
+  padding-top: 2rem;
+  border: 0.1rem solid #f7f7f7;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.teamPlayersInfo {
+.teamCoreElementContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .teamCoreElementTitle {
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .teamCoreSportType {
+    padding-top: 2rem;
+    font-weight: 700;
+    font-size: 4.8rem;
+  }
+
+  .teamCoreElementContent {
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .mannerLow {
+    color: #8f8f8f;
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .mannerMiddle {
+    color: color.$primary;
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .mannerHigh {
+    color: #d89e5a;
+    font-weight: 700;
+    font-size: 2.4rem;
+  }
+
+  .countLow {
+    color: #d89e5a;
+  }
+
+  .countMiddle {
+    color: #4d70c8;
+  }
+
+  .countHigh {
+    color: color.$error;
+  }
 }
 
-.teamMathchesInfo {
+.teamMemberInfo {
+  .teamMemberTitle {
+    display: flex;
+  }
+
+  .seeMore {
+    position: absolute;
+    right: 3rem;
+    margin-top: 1rem;
+    font-weight: 500;
+    font-size: 1.6rem;
+  }
+}
+
+.teamDataContainer {
+  margin: {
+    top: 1rem;
+    bottom: 3rem;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1.8rem 1.6rem;
+  border: 0.12rem solid color.$disable;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .modalMainTitle {
@@ -19,7 +161,7 @@
 }
 
 .modalSubTitle {
-  margin-top: 2rem;
+  margin-top: 1.6rem;
   color: #7b7474;
   font-size: 1.2rem;
 }
