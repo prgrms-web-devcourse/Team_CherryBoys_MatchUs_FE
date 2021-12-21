@@ -56,9 +56,9 @@ const TeamInfoCard = ({
         <div className={classNames(teamBaseInfo)}>
           <h3 className={classNames(teamNameSpan)}>{teamName}</h3>
           <div>
-            <p>팀 창립일</p>
+            <p>창립일</p>
             <span>
-              {yearMonthDay[0]}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
+              {yearMonthDay[0].slice(2)}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
             </span>
           </div>
         </div>

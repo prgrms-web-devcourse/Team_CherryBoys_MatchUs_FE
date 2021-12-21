@@ -2,6 +2,8 @@
 
 .entireContainer {
   margin-bottom: 6rem;
+  font-size: 1.4rem;
+
   .highlight {
     color: color.$primary;
     font-weight: 700;
@@ -17,6 +19,7 @@
     .mainTitle {
       font-weight: 700;
       font-size: 2.4rem;
+
       .highlight {
         color: color.$primary;
         font-weight: 700;
@@ -63,7 +66,7 @@
     .teamSubInfoContainer {
       display: grid;
       grid-template-rows: 1fr auto;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 2fr 1fr;
       padding: 0.8rem 0;
       font-size: 1.2rem;
       border-radius: 1rem;
@@ -72,10 +75,12 @@
         display: flex;
         flex-direction: column;
         gap: 0.8rem;
+        justify-content: center;
         padding: 0 0.8rem;
 
         .teamNameSpan {
           font-weight: 700;
+          font-size: 1.8rem;
         }
       }
 
@@ -83,23 +88,24 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0 0.4rem;
 
         .mannerLow {
           color: #8f8f8f;
           font-weight: 700;
-          font-size: 2.4rem;
+          font-size: 2rem;
         }
 
         .mannerMiddle {
           color: color.$primary;
           font-weight: 700;
-          font-size: 2.4rem;
+          font-size: 2rem;
         }
 
         .mannerHigh {
           color: #d89e5a;
           font-weight: 700;
-          font-size: 2.4rem;
+          font-size: 2rem;
         }
       }
 
