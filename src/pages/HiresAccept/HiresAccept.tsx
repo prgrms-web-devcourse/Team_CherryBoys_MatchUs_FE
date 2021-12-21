@@ -38,6 +38,7 @@ const HiresAccept = () => {
 
   return (
     <>
+      {Object.keys(applicationCheckList).length === 0 && <h3>신청한 용병이 없습니다</h3>}
       {Object.keys(applicationCheckList).length > 0 && (
         <ApplicationElement
           currentPostId={currentPostId}

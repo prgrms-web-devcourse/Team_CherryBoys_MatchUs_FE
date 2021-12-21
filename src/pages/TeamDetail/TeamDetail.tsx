@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
-import { MemberElement, MatchElement, MatchTeamInfo } from '@/types';
+import { MemberElement, MatchElement, TeamInfo } from '@/types';
 import { MemberList, MatchListElement, CustomModalDialog, AttitueTag } from '@/components';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 import { RootState } from '@/store';
@@ -53,12 +53,12 @@ const TeamDetail = () => {
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
   // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
   const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
-  const [teamInfo, setTeamInfo] = useState<MatchTeamInfo>({
+  const [teamInfo, setTeamInfo] = useState<TeamInfo>({
     ageGroup: '',
     bio: '',
     captainId: 0,
     logo: '',
-    captainNickname: '',
+    captainName: '',
     mannerTemperature: 0,
     matchCount: 0,
     sportsName: '',
@@ -195,7 +195,6 @@ const TeamDetail = () => {
 
       <span className={classNames(categoryTitle)}>주요정보</span>
       <article className={classNames(teamCoreInfo)}>
-
         <section className={classNames(teamCoreElementContainer)}>
           <span className={classNames(teamCoreElementTitle)}>총 경기 수</span>
           <span

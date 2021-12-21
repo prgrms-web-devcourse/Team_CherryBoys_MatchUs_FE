@@ -83,7 +83,6 @@ const HiresDetail = () => {
       );
       setIsModal3Open(true);
     }
-    setIsRemove(false);
   };
 
   // Todo(홍중) : 팀원이 onChange함수를 필수로 하는것이 이해되는데 input말고 다른 형태로 세부설명을 다시 구현할지 고민하기(2021-12-19)
@@ -232,6 +231,7 @@ const HiresDetail = () => {
           handleCancel={() => {
             setIsModal2Open(false);
             if (isRemove) {
+              setIsRemove(false);
               history.push(`/hires`);
             } else {
               history.go(0);
@@ -240,6 +240,7 @@ const HiresDetail = () => {
           handleApprove={() => {
             setIsModal2Open(false);
             if (isRemove) {
+              setIsRemove(false);
               history.push(`/hires`);
             } else {
               history.go(0);
@@ -256,9 +257,13 @@ const HiresDetail = () => {
       {isModal3Open && (
         <CustomModalDialog
           buttonLabel="확인"
-          handleCancel={() => setIsModal3Open(false)}
+          handleCancel={() => {
+            setIsModal3Open(false);
+            history.push(`/hires`);
+          }}
           handleApprove={() => {
             setIsModal3Open(false);
+            history.push(`/hires`);
           }}
         >
           <span className={classNames('whiteSpace', modalMainTitle)}>{errorMessage}</span>
