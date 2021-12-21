@@ -49,7 +49,7 @@ interface Props {
 // Todo(홍중) : 기능, 기존 구현한 달력 적용하기, input 개선 -> 다른 브랜치에서 작업한 컴포넌트를 이용하여 수정 (2021-12-17)
 const HiresFilter = ({ showFilterModal }: Props) => {
   const [position, setPosition] = useState<string>('윙백');
-  const [ageGroup, setAgeGroup] = useState<string>('20대');
+  const [ageGroup, setAgeGroup] = useState<string>(placeholder);
   const [maximumDate, setMaximumDateDate] = useState<Date>(new Date());
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | null>(
@@ -60,8 +60,8 @@ const HiresFilter = ({ showFilterModal }: Props) => {
   const [region, setRegion] = useState(defaultRegion);
   const [ground, setGround] = useState(defaultGround);
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
-  const [sports, setSports] = useState('');
-  const [size, setSize] = useState(10);
+  const [sports, setSports] = useState(placeholder);
+  const [size, setSize] = useState(30);
   const token = getItemFromStorage('accessToken');
 
   const dispatch = useDispatch();
@@ -175,7 +175,10 @@ const HiresFilter = ({ showFilterModal }: Props) => {
       inputData.sports = sports;
     }
 
-    inputData.ageGroup = ageGroup;
+    if (ageGroup !== placeholder) {
+      inputData.ageGroup = ageGroup;
+    }
+
     if (city.cityId > 0) {
       inputData.cityId = city.cityId;
     }
@@ -185,7 +188,10 @@ const HiresFilter = ({ showFilterModal }: Props) => {
     if (ground.groundId > 0) {
       inputData.groundId = ground.groundId;
     }
-    inputData.date = formattedDate;
+
+    if (formattedDate !== '') {
+      inputData.date = formattedDate;
+    }
     console.log(inputData);
     dispatch(posts.actions.setHiresFilter({ hiresFilter: inputData }));
     dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
@@ -198,54 +204,59 @@ const HiresFilter = ({ showFilterModal }: Props) => {
   };
 
   return (
-    <div>
-      <div
-        className={classNames('modalBackground', modalBackground, {
-          [showModal]: showFilterModal,
-        })}
-        onClick={handleCloseModal}
-        role="presentation"
-      />
-      <HiresPosition handleChangePosition={handleChangePosition} />
-      <Input
-        inputId="inputSports"
-        labelName="종목"
-        type="dropbox"
-        options={['선택', ...SPORTS]}
-        onChange={(e) => handleInput(e, 'sports')}
-        value={sports}
-      />
-      <AgeGroup handleChangeAge={handleChangeAge} />
-      <div className={classNames(inputLocationBox)}>
-        <div>
-          <LocationSelect
-            locationInfo={locationInfo}
-            city={city}
-            region={region}
-            ground={ground}
-            handleInput={handleInput}
-          />
-        </div>
-      </div>
-      <div className={classNames(inputDateBox)}>
-        <h3>날짜</h3>
-        <div>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              value={date}
-              maxDate={maximumDate}
-              minDate={currentDate}
-              onChange={hanldeChangeDate}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => <TextField {...params} />}
+    <div
+      className={classNames('modalBackground', modalBackground, {
+        [showModal]: showFilterModal,
+      })}
+      onClick={handleCloseModal}
+      role="presentation"
+    >
+      <div>
+        <HiresPosition handleChangePosition={handleChangePosition} />
+        <Input
+          inputId="inputSports"
+          labelName="종목"
+          type="dropbox"
+          options={['선택', ...SPORTS]}
+          onChange={(e) => handleInput(e, 'sports')}
+          value={sports}
+        />
+        <AgeGroup handleChangeAge={handleChangeAge} />
+        <div className={classNames(inputLocationBox)}>
+          <div>
+            <LocationSelect
+              locationInfo={locationInfo}
+              city={city}
+              region={region}
+              ground={ground}
+              handleInput={handleInput}
             />
-          </LocalizationProvider>
+          </div>
         </div>
-      </div>
-      <div className={classNames(buttonBox)}>
-        <button type="button" className={classNames(submitButton)} onClick={handleClickSelectDone}>
-          선택 완료
-        </button>
+        <div className={classNames(inputDateBox)}>
+          <h3>날짜</h3>
+          <div>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                value={date}
+                maxDate={maximumDate}
+                minDate={currentDate}
+                onChange={hanldeChangeDate}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+        </div>
+        <div className={classNames(buttonBox)}>
+          <button
+            type="button"
+            className={classNames(submitButton)}
+            onClick={handleClickSelectDone}
+          >
+            선택 완료
+          </button>
+        </div>
       </div>
     </div>
   );
