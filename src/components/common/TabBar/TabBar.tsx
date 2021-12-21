@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './TabBar.module.scss';
@@ -8,15 +8,11 @@ const { tabBar, now } = styles;
 const TabBar = () => {
   const [nowPage, setNowPage] = useState('home');
 
-  const handleNowPage = useCallback((target: string) => {
-    setNowPage(target);
-  }, []);
-
   return (
     <div className={classNames(tabBar)}>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('home')}
+        onClick={() => setNowPage('home')}
         className={classNames({ [now]: nowPage === 'home' })}
       >
         <Link to="/">
@@ -25,7 +21,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('match')}
+        onClick={() => setNowPage('match')}
         className={classNames({ [now]: nowPage === 'match' })}
       >
         <Link to="/matches">
@@ -34,7 +30,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('hire')}
+        onClick={() => setNowPage('hire')}
         className={classNames({ [now]: nowPage === 'hire' })}
       >
         <Link to="/hires">
@@ -43,7 +39,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('team')}
+        onClick={() => setNowPage('team')}
         className={classNames({ [now]: nowPage === 'team' })}
       >
         <Link to="/team/select">
@@ -52,7 +48,7 @@ const TabBar = () => {
       </nav>
       <nav
         role="presentation"
-        onClick={() => handleNowPage('user')}
+        onClick={() => setNowPage('user')}
         className={classNames({ [now]: nowPage === 'user' })}
       >
         <Link to="/user">
