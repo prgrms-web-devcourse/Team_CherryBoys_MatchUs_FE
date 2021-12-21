@@ -15,9 +15,15 @@ import { match } from '@/store/match/match';
 import { getItemFromStorage } from '@/utils/storage';
 import { Input } from '@/components';
 import { SPORTS } from '@/consts';
+import { conditions } from '@/api/hires';
 import styles from './HiresFilter.module.scss';
+import { posts } from '@/store/posts';
+import style from '@/components/Match/MatchListFilterModal/MatchListFilterModal.module.scss';
 
 const { inputLocationBox, inputDateBox, buttonBox, submitButton } = styles;
+const { modalBackground, showModal } = style;
+
+const placeholder = '선택';
 
 const defaultCity = {
   cityId: 0,
@@ -36,20 +42,26 @@ const defaultGround = {
   groundName: '',
 };
 
+interface Props {
+  showFilterModal: boolean;
+}
+
 // Todo(홍중) : 기능, 기존 구현한 달력 적용하기, input 개선 -> 다른 브랜치에서 작업한 컴포넌트를 이용하여 수정 (2021-12-17)
-const HiresFilter = () => {
+const HiresFilter = ({ showFilterModal }: Props) => {
   const [position, setPosition] = useState<string>('윙백');
   const [ageGroup, setAgeGroup] = useState<string>('20대');
   const [maximumDate, setMaximumDateDate] = useState<Date>(new Date());
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(
+    new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`)
+  );
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [city, setCity] = useState(defaultCity);
   const [region, setRegion] = useState(defaultRegion);
   const [ground, setGround] = useState(defaultGround);
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
   const [sports, setSports] = useState('');
-
+  const [size, setSize] = useState(10);
   const token = getItemFromStorage('accessToken');
 
   const dispatch = useDispatch();
@@ -68,6 +80,7 @@ const HiresFilter = () => {
     getAuhorizedTeams();
   }, []);
 
+  console.log(showFilterModal);
   const getLocations = useCallback(async () => {
     const locationData = await fetchLocation();
     setLocationInfo(locationData);
@@ -134,7 +147,7 @@ const HiresFilter = () => {
     const { value } = event.target;
     const ageNumber = value.slice(0, 2);
 
-    setAgeGroup(`${ageNumber}s`);
+    setAgeGroup(`${ageNumber}대`);
   };
 
   const hanldeChangeDate = (selectedDate: React.SetStateAction<Date | null>) => {
@@ -149,10 +162,50 @@ const HiresFilter = () => {
   };
 
   // Todo(홍중) : 모달 추가후 작성(2021-12-18), Date는 추후 컴포넌트화 된것을 적용(현재 maxDate적용 안되는것도 등록페이지는 가능하여서 추후 그것을 컴포넌트화할 예정)
-  const handleClickSelectDone = () => {};
+  const handleClickSelectDone = () => {
+    const inputData: conditions = {
+      size,
+    };
+
+    if (position !== placeholder) {
+      inputData.positon = position;
+    }
+
+    if (sports !== placeholder) {
+      inputData.sports = sports;
+    }
+
+    inputData.ageGroup = ageGroup;
+    if (city.cityId > 0) {
+      inputData.cityId = city.cityId;
+    }
+    if (region.regionId > 0) {
+      inputData.regionId = region.regionId;
+    }
+    if (ground.groundId > 0) {
+      inputData.groundId = ground.groundId;
+    }
+    inputData.date = formattedDate;
+    console.log(inputData);
+    dispatch(posts.actions.setHiresFilter({ hiresFilter: inputData }));
+    dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
+  };
+
+  const handleCloseModal = (e: React.MouseEvent<HTMLElement>) => {
+    if ((e.target as Element).classList.contains('modalBackground')) {
+      dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
+    }
+  };
 
   return (
     <div>
+      <div
+        className={classNames('modalBackground', modalBackground, {
+          [showModal]: showFilterModal,
+        })}
+        onClick={handleCloseModal}
+        role="presentation"
+      />
       <HiresPosition handleChangePosition={handleChangePosition} />
       <Input
         inputId="inputSports"
@@ -164,7 +217,6 @@ const HiresFilter = () => {
       />
       <AgeGroup handleChangeAge={handleChangeAge} />
       <div className={classNames(inputLocationBox)}>
-        <h3>위치</h3>
         <div>
           <LocationSelect
             locationInfo={locationInfo}

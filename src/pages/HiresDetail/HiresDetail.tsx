@@ -198,7 +198,9 @@ const HiresDetail = () => {
             </section>
           </article>
           <article className={classNames(hires_buttonBox)}>
-            <button type="button">신청 용병 확인</button>
+            <button type="button" onClick={handleClickShowApplications}>
+              신청 용병 확인
+            </button>
           </article>
         </>
       )}

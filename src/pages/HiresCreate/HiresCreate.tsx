@@ -13,35 +13,36 @@ import classNames from 'classnames';
 import { editHiresPosting, createHiresPosting, hiresPosting } from '@/api/hires';
 import { fetchAuthorizedTeams, fetchLocation } from '@/api';
 
-import { InputDetail, Input } from '@/components';
+import { InputDetail, Input, CustomModalDialog } from '@/components';
 import { LocationSelect, AgeGroup, HiresPosition } from '@/components/selects';
 import { previousHiresInfo, Locations, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { getItemFromStorage } from '@/utils/storage';
 import style from './HiresCreate.module.scss';
+import styles from '@/pages/HiresDetail/hiresDetail.module.scss';
 
 const { hiresCreateContainer, inputBox, inputDateBox, buttonBox, submitButton } = style;
-
+const { modalMainTitle } = styles;
 const HIRED_NUMBER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const DETAIL_PLACEHOLDER = '약속 잘지키고 유쾌하신분과 즐겁게 경기하고 싶습니다';
 
 const defaultCity = {
   cityId: 0,
-  cityName: '',
+  cityName: '행정구역',
 };
 
 const defaultRegion = {
   cityId: 0,
   regionId: 0,
-  regionName: '',
+  regionName: '시/군/구',
 };
 
 const defaultGround = {
   regionId: 0,
   groundId: 0,
-  groundName: '',
+  groundName: '구장',
 };
 
 const HiresCreate = ({
@@ -55,7 +56,7 @@ const HiresCreate = ({
   prevCity = '행정구역',
   prevRegion = '시/군/구',
   prevGroundName = '구장',
-  prevPosition = '포지션 선택',
+  prevPosition = '윙백',
   prevAgeGroup = '20대',
   prevDetail = '즐겁게 합시다',
   postId,
@@ -78,6 +79,10 @@ const HiresCreate = ({
   const [ground, setGround] = useState(defaultGround);
   const [team, setTeam] = useState('선택');
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editModalMessage, setEditModalMessage] = useState('수정이 완료되었습니다.');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createModalMessage, setCreateModalMessage] = useState('생성이 완료되었습니다.');
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
 
   const token = getItemFromStorage('accessToken');
@@ -231,8 +236,10 @@ const HiresCreate = ({
   };
 
   const handleClickCreatePosting = async (data: hiresPosting) => {
-    await createHiresPosting(data);
-    history.push(`/hires`);
+    setCreateModalMessage('생성이 완료되었습니다.');
+    setIsCreateModalOpen(true);
+    // await createHiresPosting(data);
+    // history.push(`/hires`);
   };
 
   const handleClickSelectDone = () => {
@@ -262,13 +269,25 @@ const HiresCreate = ({
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
-    if (position === '포지션 선택') {
-      alert('포지션을 선택해주세요');
-      return;
-    }
+    // if (position === '포지션 선택') {
+    //   setCreateModalMessage('포지션을 선택해주세요');
+    //   setIsCreateModalOpen(true);
+    //   return;
+    // }
     // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
     if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
-      alert('시간을 다시 입력해주세요');
+      setCreateModalMessage('시간을 다시 입력해주세요');
+      setIsCreateModalOpen(true);
+      return;
+    }
+
+    if (
+      city.cityName === '행정구역' ||
+      region.regionName === '시/군/구' ||
+      ground.groundName === '구장'
+    ) {
+      setCreateModalMessage('장소를 선택해주세요');
+      setIsCreateModalOpen(true);
       return;
     }
 
@@ -295,6 +314,15 @@ const HiresCreate = ({
         ground.groundName === '구장'
       ) {
         alert('장소를 선택해주세요');
+        // setEditModalMessage('장소를 선택해주세요');
+        // setIsEditModalOpen(true);
+        return;
+      }
+
+      if (team === '선택') {
+        alert('팀을 선택해주세요');
+        // setEditModalMessage('팀을 선택해주세요');
+        // setIsEditModalOpen(true);
         return;
       }
 
@@ -311,9 +339,10 @@ const HiresCreate = ({
         startTime: formatedStartTime,
         teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
       };
-
-      await editHiresPosting({ postId, data });
-      history.push(`/hires`);
+      setEditModalMessage('수정이 완료되었습니다.');
+      // await editHiresPosting({ postId, data });
+      setIsEditModalOpen(true);
+      // history.push(`/hires`);
     };
 
     editHires();
@@ -399,11 +428,38 @@ const HiresCreate = ({
             className={classNames(submitButton)}
             type="button"
             onClick={handleClickEditPosting}
+            // onClick={() => setIsEditModalOpen(true)}
           >
             수정
           </button>
         )}
       </div>
+      {isCreateModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsCreateModalOpen(false)}
+          handleApprove={() => {
+            setIsCreateModalOpen(false);
+            // msg
+            // true, false
+            // 로직
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{createModalMessage}</span>
+        </CustomModalDialog>
+      )}
+      {isEditModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsEditModalOpen(false)}
+          handleApprove={() => {
+            setIsEditModalOpen(false);
+            history.push('/hires');
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{editModalMessage}</span>
+        </CustomModalDialog>
+      )}
     </div>
   );
 };
