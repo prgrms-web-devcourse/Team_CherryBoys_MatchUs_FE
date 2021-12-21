@@ -196,9 +196,15 @@ const HiresDetail = () => {
             </section>
           </article>
           <article className={classNames(hires_buttonBox)}>
-            <button type="button" onClick={handleClickShowApplications}>
-              신청 용병 확인
-            </button>
+            {isCaptain ? (
+              <button type="button" onClick={handleClickShowApplications}>
+                신청 용병 확인
+              </button>
+            ) : (
+              <button type="button" onClick={() => setIsModal1Open(true)}>
+                용병 신청
+              </button>
+            )}
           </article>
         </>
       )}
