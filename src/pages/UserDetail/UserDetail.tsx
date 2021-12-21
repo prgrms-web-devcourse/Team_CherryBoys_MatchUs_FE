@@ -77,8 +77,10 @@ const UserDetail = () => {
 
   const limitedUserMatchHistory = userMatchHistory.slice(0, 3);
   const limitedTag = userInfo.tags.slice(0, 4);
+  const { nickname, bio, id } = useSelector((store: RootState) => store.user.userInfo);
+  const pathUserId = parseInt(window.location.pathname.split('/')[2], 10);
 
-  const { nickname, bio, id: userId } = useSelector((store: RootState) => store.user.userInfo);
+  const userId = pathUserId || id;
 
   useEffect(() => {
     const updateUserInfo = async () => {
@@ -112,35 +114,37 @@ const UserDetail = () => {
               <div className={classNames(userBaseInfo)}>
                 <div>
                   <span className={classNames(userNickname)}>
-                    <span className={classNames(highlight)}>{nickname}</span>님
+                    <span className={classNames(highlight)}>{userInfo.nickname || nickname}</span>님
                   </span>
                   {/* TODO: 아이콘 라이브러리 통일 후 변경 예정 */}
-                  <div className={classNames(historyButtonContainer)}>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_EDIT_PAGE)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
-                    >
-                      팀 초대
-                    </button>
-                    <button
-                      type="button"
-                      className={classNames(historyButton)}
-                      onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
-                    >
-                      용병
-                    </button>
-                  </div>
+                  {pathUserId === id && (
+                    <div className={classNames(historyButtonContainer)}>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_EDIT_PAGE)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_TEAM_INVITAION_LIST_PAGE)}
+                      >
+                        팀 초대
+                      </button>
+                      <button
+                        type="button"
+                        className={classNames(historyButton)}
+                        onClick={() => history.push(USER_HIRE_REQUEST_LIST_PAGE)}
+                      >
+                        용병
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <span className={classNames(bioSpace)}>
-                  {bio === null ? '자기소개가 없습니다' : bio}
+                  {pathUserId === userId ? userInfo.bio : bio}
                 </span>
               </div>
               <div className={classNames(sportsPart)}>⚽️</div>
