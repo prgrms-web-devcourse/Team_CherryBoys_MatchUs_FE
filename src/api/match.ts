@@ -116,7 +116,7 @@ export const postMatchReview = (matchReviewInfo: MatchReviewInfo) => {
   return api
     .post({
       url: `/matches/${matchId}/review`,
-      data: { tags, reviewerTeamId, reviewerTeamType, reviewedTeamId },
+      data: { tagIds: tags, reviewerTeamId, reviewerTeamType, reviewedTeamId },
     })
     .catch(throwErrorMessage);
 };
