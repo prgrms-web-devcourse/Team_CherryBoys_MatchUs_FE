@@ -42,7 +42,7 @@ button {
 }
 
 .menu_card {
-  width: 90%;
+  width: 95%;
   height: 13rem;
   padding-top: 1.5rem;
   border: 0.1rem solid #f7f7f7;
@@ -97,6 +97,7 @@ button {
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(2, 1fr);
   height: 30rem;
+  margin-left: 0.5rem;
   padding-top: 2rem;
   padding-left: 1rem;
   border-radius: 1rem;

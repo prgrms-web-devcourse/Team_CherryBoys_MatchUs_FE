@@ -52,7 +52,7 @@ const Main = () => {
     <div className={classNames(container)}>
       <p>
         <span className={classNames('whiteSpace', text_title)}>
-          환영합니다 <span className={classNames(text_user)}>{nickname || '플레이어'}</span> 님
+          환영합니다 <span className={classNames(text_user)}>{nickname || '플레이어'}</span>님
         </span>
         <span className={classNames('whiteSpace', text_title)}>
           오늘도 즐겁게 {sport || '축구'}를 ⚽️
