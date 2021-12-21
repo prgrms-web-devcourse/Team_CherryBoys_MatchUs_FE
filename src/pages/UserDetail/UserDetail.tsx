@@ -180,7 +180,7 @@ const UserDetail = () => {
       <section className={classNames(sectionContainer)}>
         <div className={classNames(elementRowContainer)}>
           {myTeams.map(({ teamId, teamLogo }, index) => (
-            <Link to={`team/${teamId}`} key={`team-${teamId}-${index}`}>
+            <Link to={`/team/${teamId}`} key={`team-${teamId}-${index}`}>
               <img
                 className={classNames(logoImage)}
                 src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
