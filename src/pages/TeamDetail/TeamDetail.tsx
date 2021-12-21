@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import style from './teamDetail.module.scss';
 import { deleteTeam, withdrawTeam, getTeamInfo, getTotalMemberInfo, getMatchHistory } from '@/api';
@@ -34,6 +34,9 @@ const {
   countMiddle,
   countHigh,
   teamDataContainer,
+  historyButtonContainer,
+  teamMatchContainer,
+  historyButton,
 } = style;
 
 const ageCollection: Record<string, string> = {
@@ -47,6 +50,7 @@ const ageCollection: Record<string, string> = {
 };
 
 const TeamDetail = () => {
+  const history = useHistory();
   const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
   const [modalMessage, setModalMessage] = useState('LEAVE');
   const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
@@ -73,7 +77,6 @@ const TeamDetail = () => {
     bio,
     tags,
     logo,
-    sportsName,
     matchCount,
     mannerTemperature,
     captainId,
@@ -185,7 +188,27 @@ const TeamDetail = () => {
           <span className={classNames(teamNameSpan)} key={`team-${teamId}`}>
             {teamName}
           </span>
-          {hasAuthorization && <Link to={`/team/${teamId}/edit`}>수정</Link>}
+          <div className={classNames(historyButtonContainer)}>
+            {hasAuthorization && (
+              <button
+                type="button"
+                className={classNames(historyButton)}
+                onClick={() => history.push(`/team/${teamId}/edit`)}
+              >
+                수정
+              </button>
+            )}
+            <button
+              type="button"
+              className={classNames(historyButton)}
+              onClick={() => {
+                hasAuthorization ? setModalMessage('DISBAND') : setModalMessage('LEAVE');
+                setIsModalDialogOpen(true);
+              }}
+            >
+              {hasAuthorization ? '팀 해체' : '팀 탈퇴'}
+            </button>
+          </div>
           <div className={classNames(bioSpace)}>{bio}</div>
           <section className={classNames(tagsContainer)}>
             {limitedTeamTags.map(({ tagId, tagName, tagType }) => (
@@ -316,7 +339,7 @@ const TeamDetail = () => {
             더보기
           </Link>
         </div>
-        <div className={classNames(teamDataContainer)}>
+        <div className={classNames(teamMatchContainer)}>
           {hasPreviousMatchHistory ? (
             previousMatchHistory.map(
               ({
@@ -349,15 +372,6 @@ const TeamDetail = () => {
           )}
         </div>
       </article>
-      <button
-        type="button"
-        onClick={() => {
-          hasAuthorization ? setModalMessage('DISBAND') : setModalMessage('LEAVE');
-          setIsModalDialogOpen(true);
-        }}
-      >
-        {hasAuthorization ? '팀 해체' : '팀 탈퇴'}
-      </button>
     </div>
   );
 };
