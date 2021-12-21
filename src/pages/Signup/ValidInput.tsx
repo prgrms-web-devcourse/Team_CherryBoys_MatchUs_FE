@@ -7,7 +7,7 @@ type ValidInputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
   value: string;
   selectOptions?: string[];
-  type: 'input' | 'select';
+  type: 'input' | 'select' | 'password';
   className?: string;
 };
 
@@ -22,12 +22,13 @@ const ValidInput = ({
 }: ValidInputProps) => {
   return (
     <>
-      {type === 'input' ? (
+      {type === 'input' || type === 'password' ? (
         <input
           id={id}
           name={name}
           onChange={onChange}
           value={value}
+          type={type}
           className={classNames(className)}
         />
       ) : (
