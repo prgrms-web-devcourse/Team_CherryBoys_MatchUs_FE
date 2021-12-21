@@ -202,6 +202,20 @@ const HiresDetail = () => {
               신청 용병 확인
             </button>
           </article>
+          <InputDetail
+            labelName="상세정보"
+            placeholder={hireItem.detail}
+            onChange={handleChangeDetail}
+          />
+          <button type="button" onClick={handleClickShowApplications}>
+            신청 용병 확인
+          </button>
+          <button type="button" onClick={() => setIsModal1Open(true)}>
+            용병 신청
+          </button>
+          <button type="button" onClick={handleClickCancelHires}>
+            용병 취소
+          </button>
         </>
       )}
 
