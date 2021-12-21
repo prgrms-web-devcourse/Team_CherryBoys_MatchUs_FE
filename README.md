@@ -1,12 +1,12 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/27142025/146795684-a02530f7-2a1a-4846-80e3-0cce420c69e5.png" height="220" height="220">
+    <img src="https://user-images.githubusercontent.com/27142025/146670076-ac40fd58-a325-4f30-9f14-f695bd635e55.png" height="220" height="220">
 </p>
-
 <div align="center">
+  🤼 스포츠 매칭 플랫폼<br>
+  ⚽️ [MatchUs](https://matchus.netlify.app)
+</div>
 
-🤼 스포츠 매칭 플랫폼<br>
-⚽️ MatchUs<br>
-[백엔드 Repository 링크](https://github.com/prgrms-web-devcourse/Team_CherryBoys_MatchUs_BE)
+<div align="center"
 
 </div>
 <br/>
@@ -22,12 +22,14 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 <h2>🌟 주요 기능</h2>
 
 <h3>팀을 만들고, 함께 할 동료들을 초대해보세요 🙋🏻</h3>
+
 <br>
 주장이 되어 팀원들을 모집하고, 함께 경기에 참여할 수 있어요. ⚽️
 <br>
 <br>
 
 <h3>이제 팀은 만들어졌고, 매너 좋은 팀 어디 없나? 👀</h3>
+
 <br>
 우리 팀에게 딱 맞는 경기를 찾을 수 있어요. 🤩  
 필터 기능을 통해 우리 팀이 참여하기 좋은 경기를 탐색하고, 상대 팀의 매너온도와 성향을 바탕으로 경기에 신청할 수 있어요.
@@ -35,6 +37,7 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 <br>
 
 <h3>좋은 팀을 만나 즐겁게 스포츠를 즐겼다면? 🕺</h3>
+
 <br>
 경기가 끝난 후, 상대 팀을 평가할 수 있어요.  
 선택한 태그들을 바탕으로 상대 팀과 참여한 선수들의 매너 온도🌡️가 결정돼요.
@@ -42,6 +45,7 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 <br>
 
 <h3>팀 가입은 너무 복잡해! 😤</h3>
+
 <br>
 용병 게시판에서는 경기에 필요한 선수들을 모집하고 있어요.  
 지금 나에게 적합한 경기가 있는지 찾아보고 용병으로 참여할 수 있어요.
@@ -68,7 +72,7 @@ MatchUs는 다양한 사람들이 함께 스포츠를 즐길 수 있도록 돕�
 
 </br>
 
-<h2>🍒 팀원</h2>
+<h2>🍒 팀원</h2
 
 <div align="center">
 
