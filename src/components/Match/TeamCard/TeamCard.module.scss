@@ -1,4 +1,6 @@
 .TeamInfoCard {
+  min-width: fit-content;
+
   .TeamInfo {
     display: grid;
     grid-template-rows: repeat(3, 1fr);

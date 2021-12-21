@@ -103,9 +103,9 @@ const TeamCard = ({ team, status }: Props) => {
             <button type="button" onClick={() => handleGoPage(`/user/${team.captainId}`)}>
               <i className="fas fa-user" />
             </button>
-            <button type="button">
+            {/* <button type="button">
               <i className="fas fa-comment" />
-            </button>
+            </button> */}
           </div>
         </div>
         <div className={classNames(tags)}>
@@ -133,7 +133,11 @@ const TeamCard = ({ team, status }: Props) => {
               onClick={handleShowTeamUser}
               className={classNames(showTeamUserButton)}
             >
-              {!showTeamUser ? '더보기' : '숨기기'}
+              {!showTeamUser ? (
+                <i className="fas fa-chevron-down" />
+              ) : (
+                <i className="fas fa-chevron-up" />
+              )}
             </button>
           )}
           {status === 'WAITING' && isEditable && (
@@ -142,7 +146,7 @@ const TeamCard = ({ team, status }: Props) => {
               onClick={handleShowTeamMemberModal}
               className={classNames(showTeamMemberModalButton)}
             >
-              교체
+              <i className="fas fa-exchange-alt" />
             </button>
           )}
         </div>

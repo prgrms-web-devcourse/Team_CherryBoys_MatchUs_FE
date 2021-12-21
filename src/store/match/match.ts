@@ -16,6 +16,7 @@ interface MatchState {
     locations: Locations;
     tags: TagInfo[];
     userTeams: TeamSimple[];
+    userId: number | null;
   };
 }
 
@@ -49,6 +50,7 @@ export const match = createSlice({
       },
       tags: [],
       userTeams: [],
+      userId: null,
     },
   } as MatchState,
   reducers: {
@@ -70,10 +72,9 @@ export const match = createSlice({
     setUserTeams: (state, { payload }: PayloadAction<{ userTeams: TeamSimple[] }>) => {
       state.data.userTeams = payload.userTeams;
     },
-  },
-  extraReducers: {
-    [getMatchList.fulfilled.type]: (state, { payload }) => {
-      state.data.matchListFilter = payload.matchList;
+    setUserId: (state, { payload }: PayloadAction<{ userId: number | null }>) => {
+      state.data.userId = payload.userId;
     },
   },
+  extraReducers: {},
 });
