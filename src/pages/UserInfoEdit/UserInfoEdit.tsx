@@ -114,7 +114,7 @@ const UserInfoEdit = () => {
     setIsModalDialogOpen(false);
 
     if (isEditSuccess) {
-      history.push('/main');
+      history.push('/');
     }
   };
 

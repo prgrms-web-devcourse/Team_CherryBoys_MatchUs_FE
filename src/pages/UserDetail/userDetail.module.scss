@@ -100,6 +100,8 @@
   .bioSpace {
     min-width: 16.9rem;
     min-height: 4.3rem;
+    padding-top: 1rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -115,7 +117,7 @@
   justify-content: space-around;
   margin : {
     top: 1rem;
-    bottom: 4rem;
+    bottom: 6rem;
   }
   padding: 1.8rem 1.6rem;
   border: 0.12rem solid color.$disable;

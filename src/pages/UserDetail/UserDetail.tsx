@@ -176,12 +176,14 @@ const UserDetail = () => {
       <section className={classNames(sectionContainer)}>
         <div className={classNames(elementRowContainer)}>
           {myTeams.map(({ teamId, teamLogo }) => (
-            <img
-              className={classNames(logoImage)}
-              key={`team-${teamId}`}
-              src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
-              alt="팀 로고"
-            />
+            <Link to={`team/${teamId}`}>
+              <img
+                className={classNames(logoImage)}
+                key={`team-${teamId}`}
+                src={teamLogo === '' || teamLogo === '팀로고' ? baseTeamLogo : teamLogo}
+                alt="팀 로고"
+              />
+            </Link>
           ))}
         </div>
       </section>

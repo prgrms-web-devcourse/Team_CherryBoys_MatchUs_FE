@@ -49,7 +49,6 @@ const MatchListElement = ({
               }
               alt="등록 팀 로고 이미지"
             />
-            <span>{registerTeamName}</span>
           </div>
           <span className={classNames(versus)}>vs</span>
           <div className={classNames(teamInfoContainer)}>
@@ -60,7 +59,6 @@ const MatchListElement = ({
               }
               alt="신청 팀 로고 이미지"
             />
-            <span>{applyTeamName}</span>
           </div>
         </div>
       </button>
