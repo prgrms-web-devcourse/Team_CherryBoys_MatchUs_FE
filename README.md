@@ -6,9 +6,6 @@
   ⚽️ [MatchUs](https://matchus.netlify.app)
 </div>
 
-<div align="center"
-
-</div>
 <br/>
 
 <h2>💻 서비스 소개</h2>
