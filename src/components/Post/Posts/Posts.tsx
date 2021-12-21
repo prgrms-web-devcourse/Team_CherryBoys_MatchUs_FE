@@ -46,10 +46,6 @@ const Posts = ({ isMatch, selectedTeam, data, isCaptain, modal }: PostWrapper) =
     dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
   };
 
-  // useEffect(() => {
-  //   console.log(modal.hiresFilter);
-  // }, [modal]);
-
   return (
     <>
       <div className={classNames(postsContainer)}>

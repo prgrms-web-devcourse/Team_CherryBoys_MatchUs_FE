@@ -84,6 +84,19 @@ const HiresCreate = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createModalMessage, setCreateModalMessage] = useState('생성이 완료되었습니다.');
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
+  const [requestData, setRequestData] = useState<hiresPosting>({
+    ageGroup: '',
+    cityId: 0,
+    date: '',
+    detail: '',
+    endTime: '',
+    groundId: 0,
+    hirePlayerNumber: 0,
+    position: '',
+    regionId: 0,
+    startTime: '',
+    teamId: 0,
+  });
 
   const token = getItemFromStorage('accessToken');
 
@@ -123,7 +136,8 @@ const HiresCreate = ({
 
     const startHour = newDate.getHours();
     const endHour = startHour >= 22 ? startHour - 22 : startHour;
-    const minute = newDate.getMinutes();
+    const initialMinute = newDate.getMinutes();
+    const minute = initialMinute < 10 ? `0${initialMinute}` : initialMinute;
     const initialSeconds = newDate.getSeconds();
     const seconds = initialSeconds < 10 ? `0${initialSeconds}` : initialSeconds;
 
@@ -236,10 +250,8 @@ const HiresCreate = ({
   };
 
   const handleClickCreatePosting = async (data: hiresPosting) => {
-    setCreateModalMessage('생성이 완료되었습니다.');
-    setIsCreateModalOpen(true);
-    // await createHiresPosting(data);
-    // history.push(`/hires`);
+    const res = await createHiresPosting(data);
+    history.push(`/hires`);
   };
 
   const handleClickSelectDone = () => {
@@ -291,9 +303,8 @@ const HiresCreate = ({
       return;
     }
 
-    // Todo(홍중) : 입력된 데이터 서버에 보내기
-    handleClickCreatePosting(data);
-    // console.log(data);
+    setRequestData(data);
+    setIsCreateModalOpen(true);
   };
 
   const handleChangePosition = (event: React.ChangeEvent) => {
@@ -313,16 +324,16 @@ const HiresCreate = ({
         region.regionName === '시/군/구' ||
         ground.groundName === '구장'
       ) {
-        alert('장소를 선택해주세요');
-        // setEditModalMessage('장소를 선택해주세요');
-        // setIsEditModalOpen(true);
+        // alert('장소를 선택해주세요');
+        setEditModalMessage('장소를 선택해주세요');
+        setIsEditModalOpen(true);
         return;
       }
 
       if (team === '선택') {
-        alert('팀을 선택해주세요');
-        // setEditModalMessage('팀을 선택해주세요');
-        // setIsEditModalOpen(true);
+        // alert('팀을 선택해주세요');
+        setEditModalMessage('팀을 선택해주세요');
+        setIsEditModalOpen(true);
         return;
       }
 
@@ -339,9 +350,9 @@ const HiresCreate = ({
         startTime: formatedStartTime,
         teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
       };
-      setEditModalMessage('수정이 완료되었습니다.');
-      // await editHiresPosting({ postId, data });
-      setIsEditModalOpen(true);
+      // setEditModalMessage('수정이 완료되었습니다.');
+      await editHiresPosting({ postId, data });
+      // setIsEditModalOpen(true);
       // history.push(`/hires`);
     };
 
@@ -427,8 +438,8 @@ const HiresCreate = ({
           <button
             className={classNames(submitButton)}
             type="button"
-            onClick={handleClickEditPosting}
-            // onClick={() => setIsEditModalOpen(true)}
+            // onClick={handleClickEditPosting}
+            onClick={() => setIsEditModalOpen(true)}
           >
             수정
           </button>
@@ -439,10 +450,9 @@ const HiresCreate = ({
           buttonLabel="확인"
           handleCancel={() => setIsCreateModalOpen(false)}
           handleApprove={() => {
-            setIsCreateModalOpen(false);
-            // msg
-            // true, false
-            // 로직
+            setCreateModalMessage('생성이 완료되었습니다.');
+            setIsCreateModalOpen(true);
+            handleClickCreatePosting(requestData);
           }}
         >
           <span className={classNames('whiteSpace', modalMainTitle)}>{createModalMessage}</span>
@@ -453,7 +463,9 @@ const HiresCreate = ({
           buttonLabel="확인"
           handleCancel={() => setIsEditModalOpen(false)}
           handleApprove={() => {
-            setIsEditModalOpen(false);
+            setCreateModalMessage('수정이 완료되었습니다.');
+            setIsCreateModalOpen(true);
+            handleClickEditPosting();
             history.push('/hires');
           }}
         >

@@ -80,7 +80,6 @@ const HiresFilter = ({ showFilterModal }: Props) => {
     getAuhorizedTeams();
   }, []);
 
-  console.log(showFilterModal);
   const getLocations = useCallback(async () => {
     const locationData = await fetchLocation();
     setLocationInfo(locationData);
@@ -192,7 +191,7 @@ const HiresFilter = ({ showFilterModal }: Props) => {
     if (formattedDate !== '') {
       inputData.date = formattedDate;
     }
-    console.log(inputData);
+
     dispatch(posts.actions.setHiresFilter({ hiresFilter: inputData }));
     dispatch(posts.actions.toggleModal({ modalName: 'hiresFilter' }));
   };

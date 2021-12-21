@@ -102,7 +102,6 @@ const HiresDetail = () => {
 
   const handleClickApplyHires = async () => {
     const res = await applyHires(currentPostId);
-    console.log(res);
     if (res) {
       setIsModal2Open(true);
     } else {

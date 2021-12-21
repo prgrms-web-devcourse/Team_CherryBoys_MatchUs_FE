@@ -19,7 +19,6 @@ const HiresAccept = () => {
   useEffect(() => {
     const getCurrentHiresInfo = async () => {
       const { applications } = await getApplications(currentPostId);
-      // console.log(res);
       setOriginApplications([...applications]);
     };
 
