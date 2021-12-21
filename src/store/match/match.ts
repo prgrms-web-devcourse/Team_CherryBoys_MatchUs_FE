@@ -71,9 +71,5 @@ export const match = createSlice({
       state.data.userTeams = payload.userTeams;
     },
   },
-  extraReducers: {
-    [getMatchList.fulfilled.type]: (state, { payload }) => {
-      state.data.matchListFilter = payload.matchList;
-    },
-  },
+  extraReducers: {},
 });
