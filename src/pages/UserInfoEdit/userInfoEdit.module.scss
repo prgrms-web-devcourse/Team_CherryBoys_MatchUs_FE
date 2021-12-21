@@ -7,19 +7,19 @@
 }
 
 @mixin input-btn-size($bgc: color.$primary) {
-    border: 0.1rem solid #EAEBEC;
-    border-radius: 0.5rem;
-    background-color: $bgc;
-    width: 100%;
-    height: 5rem;
-    padding: 1rem;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 5rem;
+  padding: 1rem;
+  background-color: $bgc;
+  border: 0.1rem solid #eaebec;
+  border-radius: 0.5rem;
 }
 
 .modalMainTitle {
+  margin-bottom: 2rem;
   font-weight: 700;
   font-size: 2.4rem;
-  margin-bottom: 2rem;
 }
 
 .modalSubTitle {
@@ -30,10 +30,10 @@
 .form {
   &__label {
     display: block;
-    margin-bottom: 2rem;
     margin-top: 3rem;
-    font-size: 1.8rem;
+    margin-bottom: 2rem;
     font-weight: 700;
+    font-size: 1.8rem;
   }
   &__input {
     @include input-btn-size($bgc: white);
@@ -81,11 +81,11 @@ select:focus {
 }
 
 .duplicate_check__btn {
+  width: 40%;
+  margin-left: 1rem;
+  color: #ffffff;
   background-color: color.$primary;
   border-radius: 5px;
-  width: 40%;
-  color: #ffffff;
-  margin-left: 1rem;
 }
 
 .flex_container {
