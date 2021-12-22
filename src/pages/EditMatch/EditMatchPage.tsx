@@ -47,6 +47,13 @@ const defaultGround = {
   groundName: '',
 };
 
+const toTimeString = (date: Date) =>
+  date.toLocaleTimeString('fr-BE', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+
 const EditMatch = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -300,7 +307,7 @@ const EditMatch = () => {
       setIsModal3Open(true);
       return;
     }
-    if (startTime > endTime) {
+    if (toTimeString(startTime) > toTimeString(endTime)) {
       setErrorMessage('시작시간이 종료시간보다 빠를 수 없습니다');
       setIsModal3Open(true);
       return;

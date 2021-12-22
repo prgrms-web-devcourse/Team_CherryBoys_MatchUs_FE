@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './TabBar.module.scss';
@@ -9,6 +9,11 @@ const TabBar = () => {
   const navList = ['matches', 'hires', 'team', 'user'];
   const thisPage = window.location.pathname.split('/')[1];
   const [nowPage, setNowPage] = useState(navList.includes(thisPage) ? thisPage : 'home');
+
+  useEffect(() => {
+    const newThisPage = window.location.pathname.split('/')[1];
+    setNowPage(navList.includes(thisPage) ? newThisPage : 'home');
+  }, []);
 
   return (
     <div className={classNames(tabBar)}>
