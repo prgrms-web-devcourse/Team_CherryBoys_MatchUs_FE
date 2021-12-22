@@ -51,6 +51,13 @@ const defaultGround = {
   groundName: '',
 };
 
+const toTimeString = (date: Date) =>
+  date.toLocaleTimeString('fr-BE', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+
 const NewMatch = () => {
   const dispatch = useDispatch();
   const [newMatchId, setNewMatchId] = useState(0);
@@ -335,17 +342,16 @@ const NewMatch = () => {
       setIsModal3Open(true);
       return;
     }
-    if (startDate > endDate) {
-      setErrorMessage('종료일자가 시작일자보다 빠를 수 없습니다');
-      setIsModal3Open(true);
-      return;
-    }
-    if (startTime > endTime) {
+    if (toTimeString(startTime) > toTimeString(endTime)) {
       setErrorMessage('시작시간이 종료시간보다 빠를 수 없습니다');
       setIsModal3Open(true);
       return;
     }
-
+    if (startDate.getDate() > endDate.getDate()) {
+      setErrorMessage('종료일자가 시작일자보다 빠를 수 없습니다');
+      setIsModal3Open(true);
+      return;
+    }
     if (Number.isNaN(cost)) {
       setErrorMessage('참가비는 숫자만 입력할 수 있습니다');
       setIsModal3Open(true);
