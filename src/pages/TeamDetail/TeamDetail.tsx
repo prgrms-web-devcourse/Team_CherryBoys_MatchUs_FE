@@ -38,6 +38,8 @@ const {
   historyButtonContainer,
   teamMatchContainer,
   historyButton,
+  modalMainTitle,
+  modalSubTitle,
 } = style;
 
 const ageCollection: Record<string, string> = {
@@ -50,14 +52,27 @@ const ageCollection: Record<string, string> = {
   SEVENTIES: '70대',
 };
 
+const MODAL_MAIN_TITLE: Record<string, string> = {
+  LEAVE: '정말 탈퇴하시겠습니까?',
+  DISBAND: '정말 해체하시겠습니까?',
+};
+
+const MODAL_SUB_TITLE: Record<string, string> = {
+  LEAVE: '탈퇴하시면 현재 팀에서 더이상 경기를 할 수 없어요.',
+  DISBAND: '팀을 해체하면 되돌릴 수 없어요 :(',
+};
+
 const TeamDetail = () => {
   const history = useHistory();
-  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
-  const [modalMessage, setModalMessage] = useState('LEAVE');
-  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
   const teamId = parseInt(useParams<{ teamId: string }>().teamId, 10);
-  // const authorization = userGrade[teamId] === 'captain' || userGrade[teamId] === 'subCaptain';
-  const [hasAuthorization, setHasAuthorization] = useState<boolean>(true); // TODO : authorization으로 대체 예정
+
+  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
+
+  const [modalMessageType, setModalMessageType] = useState('LEAVE');
+  const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
+  const [hasAuthorization, setHasAuthorization] = useState<boolean>(false);
+  const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
+  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
   const [teamInfo, setTeamInfo] = useState<TeamInfo>({
     ageGroup: '',
     bio: '',
@@ -86,43 +101,17 @@ const TeamDetail = () => {
     teamCreatedAt,
   } = teamInfo;
 
-  const [memberInfo, setMemberInfo] = useState<MemberElement[]>([]);
-  const [matchHistory, setMatchHistory] = useState<MatchElement[]>([]);
-
-  const MODAL_MAIN_TITLE: Record<string, string> = {
-    LEAVE: '정말 탈퇴하시겠습니까?',
-    DISBAND: '정말 해체하시겠습니까?',
-  };
-
-  const MODAL_SUB_TITLE: Record<string, string> = {
-    LEAVE: '탈퇴하시면 현재 팀에서 더이상 경기를 할 수 없어요.',
-    DISBAND: '팀을 해체하면 되돌릴 수 없어요 :(',
-  };
-
-  const previousMatchHistory = matchHistory.filter((match) => {
-    if (match.status === 'COMPLETION') return true;
-    return false;
-  });
-
+  const previousMatchHistory = matchHistory.filter((match) => match.status === 'COMPLETION');
   const hasMember = memberInfo.length !== 0;
-
   const hasHiredMember = memberInfo.filter((member) => member.grade === '용병').length !== 0;
-
   const hasPreviousMatchHistory = previousMatchHistory.length !== 0;
   const limitedTeamTags = tags.slice(0, 3);
   const yearMonthDay = teamCreatedAt.split('T');
 
-  const { modalMainTitle, modalSubTitle } = style;
-
   useEffect(() => {
-    const authorizationMap = userGradeResponse.map((team) => {
-      if (team.teamId === teamId && team.grade === 'CAPTAIN') {
-        return true;
-      }
-      return false;
-    });
-
-    const authorization = authorizationMap.includes(true);
+    const authorization = userGradeResponse
+      .map((team) => team.teamId === teamId && team.grade === 'CAPTAIN')
+      .includes(true);
 
     setHasAuthorization(authorization);
 
@@ -160,21 +149,22 @@ const TeamDetail = () => {
   return (
     <div className={classNames(entireContainer)}>
       <h1 className={classNames('a11yHidden')}>팀 상세보기 페이지</h1>
+
       {isModalDialogOpen && (
         <CustomModalDialog
           modalType="confirm"
           buttonLabel="전송"
           handleCancel={() => setIsModalDialogOpen(false)}
           handleApprove={() => {
-            modalMessage === 'LEAVE' ? withdrawTeam(teamId) : deleteTeam(teamId);
+            modalMessageType === 'LEAVE' ? withdrawTeam(teamId) : deleteTeam(teamId);
             setIsModalDialogOpen(false);
           }}
         >
           <span className={classNames('whiteSpace', modalMainTitle)}>
-            {MODAL_MAIN_TITLE[modalMessage]}
+            {MODAL_MAIN_TITLE[modalMessageType]}
           </span>
           <span className={classNames('whiteSpace', modalSubTitle)}>
-            {MODAL_SUB_TITLE[modalMessage]}
+            {MODAL_SUB_TITLE[modalMessageType]}
           </span>
         </CustomModalDialog>
       )}
@@ -182,7 +172,7 @@ const TeamDetail = () => {
       <article className={classNames(teamBaseInfo)}>
         <div className={classNames(teamLogoBox)}>
           <img
-            src={logo === '팀로고' || logo === '' || logo === null ? baseTeamLogo : logo}
+            src={logo === '' || logo === null ? baseTeamLogo : logo}
             className={classNames(teamLogoImage)}
             alt="팀 로고 이미지"
           />
@@ -205,7 +195,7 @@ const TeamDetail = () => {
               type="button"
               className={classNames(historyButton)}
               onClick={() => {
-                hasAuthorization ? setModalMessage('DISBAND') : setModalMessage('LEAVE');
+                hasAuthorization ? setModalMessageType('DISBAND') : setModalMessageType('LEAVE');
                 setIsModalDialogOpen(true);
               }}
             >
