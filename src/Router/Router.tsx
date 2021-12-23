@@ -73,7 +73,7 @@ const Router = () => {
       <Route path={SIGNUP_PAGE} exact component={Signup} />
 
       {/* 용병 페이지 */}
-      <AuthorizedRouter path={HIRES_PAGE} exact component={Hires} />
+      <Route path={HIRES_PAGE} exact component={Hires} />
       <AuthorizedRouter path={HIRES_FILTER_PAGE} exact component={HiresFilter} />
       <AuthorizedRouter path={HIRES_DETAIL_PAGE} exact component={HiresDetail} />
       <AuthorizedRouter path={HIRES_POST_PAGE} exact component={HiresCreate} />
@@ -81,9 +81,9 @@ const Router = () => {
       <AuthorizedRouter path={HIRES_ACCEPT_PAGE} exact component={HiresAccept} />
 
       {/* 매치 페이지 */}
-      <AuthorizedRouter path={MATCHES_PAGE} exact component={Matches} />
+      <Route path={MATCHES_PAGE} exact component={Matches} />
       <AuthorizedRouter path={MATCHES_POST_PAGE} exact component={NewMatch} />
-      <AuthorizedRouter path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
       <AuthorizedRouter path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
 
       {/* 팀 페이지 */}

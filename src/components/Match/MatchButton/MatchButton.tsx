@@ -17,6 +17,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
   const dispatch = useDispatch();
   const { registerTeamInfo, applyTeamInfo, status, date, endTime } = matchInfo;
   const { userTeams } = useSelector((store: RootState) => store.match.data);
+  const { userInfo } = useSelector((store: RootState) => store.user);
 
   const matchDate = new Date(`${date} ${endTime}`);
   const today = new Date();
@@ -26,6 +27,7 @@ const MatchButton = ({ matchInfo, enable }: Props) => {
   const matchEnables = {
     apply:
       status === 'WAITING' &&
+      userInfo.id &&
       userTeams.filter((team) => team.teamId === registerTeamInfo.teamId).length < 1,
     approve:
       status === 'WAITING' &&
