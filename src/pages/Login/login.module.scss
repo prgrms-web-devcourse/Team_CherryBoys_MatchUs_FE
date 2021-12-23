@@ -9,8 +9,6 @@
 .container {
   @include flexCenter();
   flex-direction: column;
-  width: 100vw;
-  height: calc(100vh - 0.8rem);
   padding: 2rem 2rem 5rem 2rem;
 }
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState, useCallback } from 'react';
@@ -44,12 +46,13 @@ const defaultGround = {
   groundId: 0,
   groundName: '구장',
 };
-
 const HiresCreate = ({
-  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리
+  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리, 수정버튼을 생성버튼과 동작이 동일하여 통합하면서 수정버튼 관련 코드들 추후 삭제
   prevHiredNumber = 1,
   prevDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
-  prevStartTime = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+  prevStartTime = `${new Date().getHours()}:${
+    new Date().getMinutes() < 10 ? `${new Date().getMinutes()}` : new Date().getMinutes()
+  }:${new Date().getSeconds() < 10 ? `${new Date().getSeconds()}` : new Date().getSeconds()}`,
   prevEndTime = `${
     new Date().getHours() >= 22 ? new Date().getHours() - 22 + 2 : new Date().getHours() + 2
   }:${new Date().getMinutes()}:${new Date().getSeconds()}`,
@@ -80,21 +83,29 @@ const HiresCreate = ({
   const [team, setTeam] = useState('선택');
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editModalMessage, setEditModalMessage] = useState('수정이 완료되었습니다.');
+  const [editModalMessage, setEditModalMessage] = useState('완료되었습니다.');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [createModalMessage, setCreateModalMessage] = useState('생성이 완료되었습니다.');
+  const [isValidateModalOpen, setIsValidateModalOpen] = useState(false);
+  const [createModalMessage, setCreateModalMessage] = useState('완료되었습니다!');
+  const [validateModalMessage, setValidateModalMessage] = useState('');
+  const [teamModalMessage, setTeamModalMessage] = useState('');
+  const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+  const [placeModalMessage, setPlaceModalMessage] = useState('');
+  const [isPlaceModalOpen, setIsPlaceModalOpen] = useState(false);
+  // const [overDay, setOverDay] = useState(false);
   const teamNames = userTeams.map((userTeam) => userTeam.teamName);
+
   const [requestData, setRequestData] = useState<hiresPosting>({
-    ageGroup: '',
+    ageGroup: prevAgeGroup,
     cityId: 0,
-    date: '',
-    detail: '',
-    endTime: '',
+    date: prevDate,
+    detail: prevDetail,
+    endTime: prevEndTime,
     groundId: 0,
-    hirePlayerNumber: 0,
-    position: '',
+    hirePlayerNumber: prevHiredNumber,
+    position: prevPosition,
     regionId: 0,
-    startTime: '',
+    startTime: prevStartTime,
     teamId: 0,
   });
 
@@ -137,9 +148,9 @@ const HiresCreate = ({
     const startHour = newDate.getHours();
     const endHour = startHour >= 22 ? startHour - 22 : startHour;
     const initialMinute = newDate.getMinutes();
-    const minute = initialMinute < 10 ? `0${initialMinute}` : initialMinute;
+    const minute = initialMinute < 10 ? `${initialMinute}` : initialMinute;
     const initialSeconds = newDate.getSeconds();
-    const seconds = initialSeconds < 10 ? `0${initialSeconds}` : initialSeconds;
+    const seconds = initialSeconds < 10 ? `${initialSeconds}` : initialSeconds;
 
     const formettedStartTime = `${startHour}:${minute}:${seconds}`;
     const formettedEndTime = `${endHour + 2}:${minute}:${seconds}`;
@@ -249,8 +260,58 @@ const HiresCreate = ({
     setAgeGroup(`${ageNumber}대`);
   };
 
+  const validateRequest = (data: hiresPosting) => {
+    const formattedStartTime = data?.startTime;
+    const formatttedEndTime = data?.endTime;
+    const startTimes = formattedStartTime.split(':');
+    const endTimes = formatttedEndTime.split(':');
+    const requestStartTimes = [];
+    const requestEndTimes = [];
+
+    for (const time of startTimes) {
+      if (parseInt(time, 10) < 10) {
+        requestStartTimes.push(`0${time}`);
+      } else {
+        requestStartTimes.push(time);
+      }
+    }
+
+    for (const time of endTimes) {
+      if (parseInt(time, 10) < 10) {
+        requestEndTimes.push(`0${time}`);
+      } else {
+        requestEndTimes.push(time);
+      }
+    }
+
+    const multipleTime = [60 * 60, 60, 1];
+
+    const calculatedStartTime =
+      parseInt(startTimes[0], 10) * multipleTime[0] +
+      parseInt(startTimes[1], 10) * multipleTime[1] +
+      parseInt(startTimes[2], 10) * multipleTime[2];
+
+    const calculatedEndTime =
+      parseInt(endTimes[0], 10) * multipleTime[0] +
+      parseInt(endTimes[1], 10) * multipleTime[1] +
+      parseInt(endTimes[2], 10) * multipleTime[2];
+
+    const isOverDay = calculatedEndTime - calculatedStartTime < 0;
+    if (isOverDay) {
+      return true;
+    }
+    requestData.startTime = requestStartTimes.join(':');
+    requestData.endTime = requestEndTimes.join(':');
+    return false;
+  };
   const handleClickCreatePosting = async (data: hiresPosting) => {
-    const res = await createHiresPosting(data);
+    const isEmpty =
+      data.cityId === 0 || data.regionId === 0 || data.groundId === 0 || data.teamId === 0;
+    if (isEmpty) {
+      return;
+    }
+
+    await createHiresPosting(data);
     history.push(`/hires`);
   };
 
@@ -266,7 +327,7 @@ const HiresCreate = ({
       position,
       regionId: region.regionId,
       startTime: formatedStartTime,
-      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
+      teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0]?.teamId,
     };
 
     const startHour = startTime?.getHours();
@@ -281,25 +342,29 @@ const HiresCreate = ({
       calculatedStartHour && calculatedEndHour && calculatedStartHour > calculatedEndHour;
     const isStartMinuteBigger = startMinute && endMinute && startMinute > endMinute;
 
-    // Todo(홍중) : am일때 올바름에도 다시 입력 요구하는것 수정하기(2021-12-19)
-    if (isStartHourBigger || (!isStartHourBigger && isStartMinuteBigger)) {
-      setCreateModalMessage('시간을 다시 입력해주세요');
-      setIsCreateModalOpen(true);
-      return;
-    }
-
     if (
       city.cityName === '행정구역' ||
       region.regionName === '시/군/구' ||
       ground.groundName === '구장'
     ) {
-      setCreateModalMessage('장소를 선택해주세요');
-      setIsCreateModalOpen(true);
+      setPlaceModalMessage('장소를 선택해주세요');
+      setIsPlaceModalOpen(true);
       return;
     }
 
+    if (team === '선택') {
+      setTeamModalMessage('팀을 선택해주세요');
+      setIsTeamModalOpen(true);
+      return;
+    }
     setRequestData(data);
-    setIsCreateModalOpen(true);
+    const over = validateRequest(data);
+    if (!over) {
+      setIsCreateModalOpen(true);
+    } else {
+      setValidateModalMessage('잘못된 시간을 입력하였습니다.');
+      setIsValidateModalOpen(true);
+    }
   };
 
   const handleChangePosition = (event: React.ChangeEvent) => {
@@ -325,7 +390,7 @@ const HiresCreate = ({
       }
 
       if (team === '선택') {
-        setEditModalMessage('팀을 선택해주세요');
+        setTeamModalMessage('팀을 선택해주세요');
         setIsEditModalOpen(true);
         return;
       }
@@ -341,17 +406,16 @@ const HiresCreate = ({
         position,
         regionId: region.regionId,
         startTime: formatedStartTime,
-        teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0].teamId,
+        teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0]?.teamId,
       };
-      // setEditModalMessage('수정이 완료되었습니다.');
       await editHiresPosting({ postId, data });
-      // setIsEditModalOpen(true);
-      // history.push(`/hires`);
     };
 
     editHires();
   };
 
+  const createButton = '생성';
+  const editButton = '수정';
   return (
     <div className={classNames(hiresCreateContainer)}>
       <section className={classNames(inputBox)}>
@@ -419,35 +483,62 @@ const HiresCreate = ({
       />
       <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
       <div className={classNames(buttonBox)}>
-        {prevCity === '행정구역' ? (
-          <button
-            className={classNames(submitButton)}
-            type="button"
-            onClick={handleClickSelectDone}
-          >
-            생성
-          </button>
-        ) : (
-          <button
-            className={classNames(submitButton)}
-            type="button"
-            onClick={() => setIsEditModalOpen(true)}
-          >
-            수정
-          </button>
-        )}
+        <button className={classNames(submitButton)} type="button" onClick={handleClickSelectDone}>
+          {prevCity === '행정구역' ? createButton : editButton}
+        </button>
+        )
       </div>
       {isCreateModalOpen && (
         <CustomModalDialog
           buttonLabel="확인"
           handleCancel={() => setIsCreateModalOpen(false)}
           handleApprove={() => {
-            setCreateModalMessage('생성이 완료되었습니다.');
-            setIsCreateModalOpen(true);
-            handleClickCreatePosting(requestData);
+            setIsCreateModalOpen(false);
+            const over = validateRequest(requestData);
+            if (!over) {
+              if (prevCity === '행정구역') {
+                handleClickCreatePosting(requestData);
+              } else {
+                handleClickEditPosting();
+                history.push('/hires');
+              }
+            }
           }}
         >
           <span className={classNames('whiteSpace', modalMainTitle)}>{createModalMessage}</span>
+        </CustomModalDialog>
+      )}
+      {isValidateModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsValidateModalOpen(false)}
+          handleApprove={() => {
+            setIsValidateModalOpen(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{validateModalMessage}</span>
+        </CustomModalDialog>
+      )}
+      {isTeamModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsTeamModalOpen(false)}
+          handleApprove={() => {
+            setIsTeamModalOpen(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{teamModalMessage}</span>
+        </CustomModalDialog>
+      )}
+      {isPlaceModalOpen && (
+        <CustomModalDialog
+          buttonLabel="확인"
+          handleCancel={() => setIsPlaceModalOpen(false)}
+          handleApprove={() => {
+            setIsPlaceModalOpen(false);
+          }}
+        >
+          <span className={classNames('whiteSpace', modalMainTitle)}>{placeModalMessage}</span>
         </CustomModalDialog>
       )}
       {isEditModalOpen && (
@@ -455,7 +546,7 @@ const HiresCreate = ({
           buttonLabel="확인"
           handleCancel={() => setIsEditModalOpen(false)}
           handleApprove={() => {
-            setCreateModalMessage('수정이 완료되었습니다.');
+            setCreateModalMessage('완료되었습니다.');
             setIsCreateModalOpen(true);
             handleClickEditPosting();
             history.push('/hires');
