@@ -15,6 +15,7 @@ import { createTeam, checkTeamNameDuplication } from '@/api';
 import baseTeamLogo from '@/assets/images/baseTeamLogo.png';
 
 const {
+  pageContainer,
   titleContainer,
   highlight,
   mainTitle,
@@ -125,7 +126,7 @@ const TeamCreate = () => {
   const isDisabled = !!Object.keys(errors).length || isLoading;
 
   return (
-    <>
+    <div className={classNames(pageContainer)}>
       <form onSubmit={handleSubmit}>
         <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
         <p className={classNames(titleContainer)}>
@@ -229,7 +230,7 @@ const TeamCreate = () => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 
