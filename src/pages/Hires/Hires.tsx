@@ -19,13 +19,11 @@ const Hires = () => {
       const { hirePosts } = await getHiresInfo(hiresFilter);
       setData(hirePosts);
 
-      for (const post of hirePosts) {
-        for (const gradeInfo of userInfo.userGradeResponse) {
-          const { grade, teamId } = gradeInfo;
-          if (teamId === post.teamId && (grade === 'CAPTAIN' || grade === 'SUBCAPTAIN')) {
-            setIsCaptain(true);
-            return;
-          }
+      for (const gradeInfo of userInfo.userGradeResponse) {
+        const { grade, teamId } = gradeInfo;
+        if (grade === 'CAPTAIN' || grade === 'SUBCAPTAIN') {
+          setIsCaptain(true);
+          return;
         }
       }
     };
