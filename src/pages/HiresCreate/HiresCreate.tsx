@@ -46,11 +46,8 @@ const defaultGround = {
   groundId: 0,
   groundName: '구장',
 };
-// prevEndTime = `${
-//   new Date().getHours() >= 22 ? new Date().getHours() - 22 + 2 : new Date().getHours() + 2
-// }:${new Date().getMinutes()}:${new Date().getSeconds()}`,
 const HiresCreate = ({
-  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리
+  // Todo(홍중) : 디폴트값을 매칭에서도 사용가능하도록 추후 consts로 분리, 수정버튼을 생성버튼과 동작이 동일하여 통합하면서 수정버튼 관련 코드들 추후 삭제
   prevHiredNumber = 1,
   prevDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
   prevStartTime = `${new Date().getHours()}:${
@@ -86,10 +83,10 @@ const HiresCreate = ({
   const [team, setTeam] = useState('선택');
   const [userTeams, setUserTeams] = useState<TeamSimple[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editModalMessage, setEditModalMessage] = useState('수정이 완료되었습니다.');
+  const [editModalMessage, setEditModalMessage] = useState('완료되었습니다.');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isValidateModalOpen, setIsValidateModalOpen] = useState(false);
-  const [createModalMessage, setCreateModalMessage] = useState('생성이 완료되었습니다!');
+  const [createModalMessage, setCreateModalMessage] = useState('완료되었습니다!');
   const [validateModalMessage, setValidateModalMessage] = useState('');
   const [teamModalMessage, setTeamModalMessage] = useState('');
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
@@ -417,6 +414,8 @@ const HiresCreate = ({
     editHires();
   };
 
+  const createButton = '생성';
+  const editButton = '수정';
   return (
     <div className={classNames(hiresCreateContainer)}>
       <section className={classNames(inputBox)}>
@@ -484,23 +483,10 @@ const HiresCreate = ({
       />
       <InputDetail labelName="상세정보" placeholder={detail} onChange={handleChangeDetail} />
       <div className={classNames(buttonBox)}>
-        {prevCity === '행정구역' ? (
-          <button
-            className={classNames(submitButton)}
-            type="button"
-            onClick={handleClickSelectDone}
-          >
-            생성
-          </button>
-        ) : (
-          <button
-            className={classNames(submitButton)}
-            type="button"
-            onClick={() => setIsEditModalOpen(true)}
-          >
-            수정
-          </button>
-        )}
+        <button className={classNames(submitButton)} type="button" onClick={handleClickSelectDone}>
+          {prevCity === '행정구역' ? createButton : editButton}
+        </button>
+        )
       </div>
       {isCreateModalOpen && (
         <CustomModalDialog
@@ -510,7 +496,12 @@ const HiresCreate = ({
             setIsCreateModalOpen(false);
             const over = validateRequest(requestData);
             if (!over) {
-              handleClickCreatePosting(requestData);
+              if (prevCity === '행정구역') {
+                handleClickCreatePosting(requestData);
+              } else {
+                handleClickEditPosting();
+                history.push('/hires');
+              }
             }
           }}
         >
@@ -555,7 +546,7 @@ const HiresCreate = ({
           buttonLabel="확인"
           handleCancel={() => setIsEditModalOpen(false)}
           handleApprove={() => {
-            setCreateModalMessage('수정이 완료되었습니다.');
+            setCreateModalMessage('완료되었습니다.');
             setIsCreateModalOpen(true);
             handleClickEditPosting();
             history.push('/hires');
