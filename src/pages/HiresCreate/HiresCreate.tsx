@@ -131,6 +131,7 @@ const HiresCreate = ({
 
   const getLocations = useCallback(async () => {
     const locationData = await fetchLocation();
+
     setLocationInfo(locationData);
     dispatch(match.actions.setLocations({ locations: locationData }));
   }, []);
@@ -311,7 +312,11 @@ const HiresCreate = ({
       return;
     }
 
-    await createHiresPosting(data);
+    const res = await createHiresPosting(data);
+    if (!res) {
+      alert('실패했습니다.');
+      return;
+    }
     history.push(`/hires`);
   };
 
@@ -408,7 +413,10 @@ const HiresCreate = ({
         startTime: formatedStartTime,
         teamId: userTeams.filter((userTeam) => userTeam.teamName === team)[0]?.teamId,
       };
-      await editHiresPosting({ postId, data });
+      const res = await editHiresPosting({ postId, data });
+      if (!res) {
+        alert('실패했습니다.');
+      }
     };
 
     editHires();

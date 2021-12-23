@@ -72,6 +72,7 @@ const HiresDetail = () => {
 
   const handlePostRemove = async () => {
     const res = await deleteHiresPosting(currentPostId);
+
     if (res) {
       setIsModal2Open(true);
     } else {
