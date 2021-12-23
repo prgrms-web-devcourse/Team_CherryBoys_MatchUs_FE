@@ -103,9 +103,8 @@ const Signup = () => {
       return;
     }
 
-    const { isduplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
-
-    const msg = !isduplicated
+    const { duplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
+    const msg = !duplicated
       ? USER_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
       : USER_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
 
@@ -116,7 +115,7 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      nickname: !isduplicated,
+      nickname: !duplicated,
     });
   };
 
@@ -124,9 +123,9 @@ const Signup = () => {
     if (!isValidForm.email) {
       return;
     }
-    const { isduplicated } = await requestCheckDuplicatedEmail(signupForm.email);
+    const { duplicated } = await requestCheckDuplicatedEmail(signupForm.email);
 
-    const msg = !isduplicated
+    const msg = !duplicated
       ? USER_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
       : USER_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
 
@@ -137,7 +136,7 @@ const Signup = () => {
 
     setIsValidForm({
       ...isValidForm,
-      email: !isduplicated,
+      email: !duplicated,
     });
   };
 
