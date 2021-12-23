@@ -264,7 +264,6 @@ const HiresCreate = ({
   };
 
   const validateRequest = (data: hiresPosting) => {
-    // console.log(data.startTime);
     const formattedStartTime = data?.startTime;
     const formatttedEndTime = data?.endTime;
     const startTimes = formattedStartTime.split(':');
@@ -288,7 +287,19 @@ const HiresCreate = ({
       }
     }
 
-    const isOverDay = parseInt(endTimes[0], 10) - parseInt(startTimes[0], 10) < 0;
+    const multipleTime = [60 * 60, 60, 1];
+
+    const calculatedStartTime =
+      parseInt(startTimes[0], 10) * multipleTime[0] +
+      parseInt(startTimes[1], 10) * multipleTime[1] +
+      parseInt(startTimes[2], 10) * multipleTime[2];
+
+    const calculatedEndTime =
+      parseInt(endTimes[0], 10) * multipleTime[0] +
+      parseInt(endTimes[1], 10) * multipleTime[1] +
+      parseInt(endTimes[2], 10) * multipleTime[2];
+
+    const isOverDay = calculatedEndTime - calculatedStartTime < 0;
     if (isOverDay) {
       return true;
     }
