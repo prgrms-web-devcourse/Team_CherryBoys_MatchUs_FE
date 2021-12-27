@@ -6,8 +6,6 @@ export { default as HiresCreate } from './HiresCreate/HiresCreate';
 export { default as HiresEdit } from './HiresEdit/HiresEdit';
 export { default as HiresAccept } from './HiresAccept/HiresAccept';
 export { default as HiresFilter } from './HiresFilter/HiresFilter';
-export { default as Teams } from './Teams/Teams';
-export { default as Users } from './Users/Users';
 export { default as Login } from './Login/Login';
 export { default as Setting } from './Setting/Setting';
 export { default as TeamMemberManage } from './TeamMemberManage/TeamMemberManage';
