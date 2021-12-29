@@ -42,65 +42,68 @@ const TeamChoice = () => {
   }, [userGradeResponse]);
 
   return (
-    <div className={classNames(entireContainer)}>
-      {myTeams.length !== 0 ? (
-        <>
-          <div className={classNames(titleContainer)}>
-            <p className={classNames(mainTitle)}>
-              <span className={classNames('whiteSpace')}>자신이 속한</span>
-              <span className={classNames('whiteSpace')}>
-                <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
-              </span>
-            </p>
-          </div>
-          <div className={classNames(cardsContainer)}>
-            {myTeams.map(
-              ({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }, index) => {
-                return (
-                  <TeamInfoCard
-                    key={`teamCard-${teamId}-${index}`}
-                    teamId={teamId}
-                    teamLogo={logo}
-                    teamName={teamName}
-                    teamCreatedAt={teamCreatedAt}
-                    tags={tags}
-                    mannerTemperature={mannerTemperature}
-                  />
-                );
-              }
-            )}
-          </div>
-          <button
-            type="button"
-            className={classNames(addTeamButton)}
-            onClick={handleMoveToTeamCreatePage}
-          >
-            +
-          </button>
-        </>
-      ) : (
-        <div className={classNames(hasNoTeamContainer)}>
-          <article>
-            <div>
-              <span className={classNames(mainTitle, 'whiteSpace')}>소속된 팀이 없어요 ❌</span>
-              <span className={classNames(subTitle, 'whiteSpace')}>
-                새로운 <span className={classNames(highlight)}>팀</span>을 만들고
-              </span>
-              <span className={classNames(subTitle, 'whiteSpace')}>
-                다 함께 땀을 흘려볼까요? 🏃🏻
-              </span>
+    <>
+      <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
+      <div className={classNames(entireContainer)}>
+        {myTeams.length !== 0 ? (
+          <>
+            <div className={classNames(titleContainer)}>
+              <p className={classNames(mainTitle)}>
+                <span className={classNames('whiteSpace')}>자신이 속한</span>
+                <span className={classNames('whiteSpace')}>
+                  <span className={classNames(highlight)}>팀</span>을 한 눈에 👀
+                </span>
+              </p>
+            </div>
+            <div className={classNames(cardsContainer)}>
+              {myTeams.map(
+                ({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }, index) => {
+                  return (
+                    <TeamInfoCard
+                      key={`teamCard-${teamId}-${index}`}
+                      teamId={teamId}
+                      teamLogo={logo}
+                      teamName={teamName}
+                      teamCreatedAt={teamCreatedAt}
+                      tags={tags}
+                      mannerTemperature={mannerTemperature}
+                    />
+                  );
+                }
+              )}
             </div>
             <button
               type="button"
-              className={classNames(noTeamAddButton)}
+              className={classNames(addTeamButton)}
               onClick={handleMoveToTeamCreatePage}
             >
               +
             </button>
-          </article>
-        </div>
-      )}
-    </div>
+          </>
+        ) : (
+          <div className={classNames(hasNoTeamContainer)}>
+            <article>
+              <div>
+                <span className={classNames(mainTitle, 'whiteSpace')}>소속된 팀이 없어요 ❌</span>
+                <span className={classNames(subTitle, 'whiteSpace')}>
+                  새로운 <span className={classNames(highlight)}>팀</span>을 만들고
+                </span>
+                <span className={classNames(subTitle, 'whiteSpace')}>
+                  다 함께 땀을 흘려볼까요? 🏃🏻
+                </span>
+              </div>
+              <button
+                type="button"
+                className={classNames(noTeamAddButton)}
+                onClick={handleMoveToTeamCreatePage}
+              >
+                +
+              </button>
+            </article>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
