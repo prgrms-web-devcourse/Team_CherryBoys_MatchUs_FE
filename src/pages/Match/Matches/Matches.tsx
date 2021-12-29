@@ -1,8 +1,8 @@
 import React from 'react';
 import { MatchPosts } from '@/components';
 
-const MatchesPage = () => {
+const Matches = () => {
   return <MatchPosts />;
 };
 
-export default MatchesPage;
+export default Matches;
