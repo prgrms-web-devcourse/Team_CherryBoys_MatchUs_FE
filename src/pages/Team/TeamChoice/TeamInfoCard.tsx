@@ -38,9 +38,10 @@ const TeamInfoCard = ({
   mannerTemperature,
 }: TeamCardInfo) => {
   const history = useHistory();
+  const limitedTags = tags.slice(0, 3);
   const teamCreatedTime = teamCreatedAt.split('T');
   const yearMonthDay = teamCreatedTime[0].split('-');
-  const limitedTags = tags.slice(0, 3);
+  const foundingDay = `${yearMonthDay[0].slice(2)}년 ${yearMonthDay[1]}월 ${yearMonthDay[2]}일`;
 
   return (
     <div
@@ -58,12 +59,10 @@ const TeamInfoCard = ({
       <div className={classNames(teamSubInfoContainer)}>
         <div className={classNames(teamBaseInfo)}>
           <h3 className={classNames(teamNameSpan)}>{teamName}</h3>
-          <div>
+          <span>
             <p>창립일</p>
-            <span>
-              {yearMonthDay[0].slice(2)}년 {yearMonthDay[1]}월 {yearMonthDay[2]}일
-            </span>
-          </div>
+            <span>{foundingDay}</span>
+          </span>
         </div>
         <div className={classNames(ContainerAboutTeamManner)}>
           <span
