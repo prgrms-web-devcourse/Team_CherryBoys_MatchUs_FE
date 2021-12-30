@@ -32,8 +32,13 @@ const TeamChoice = () => {
 
   useEffect(() => {
     const updateMyTeamsInfo = () => {
-      userGradeResponse.map(async (myTeamInfo) => {
-        const teamInfo = await getTeamInfo(myTeamInfo.teamId);
+      const removedDuplicatedTeamInfo = userGradeResponse.filter(
+        (value, index, self) => index === self.findIndex((t) => t.teamId === value.teamId)
+      );
+
+      removedDuplicatedTeamInfo.map(async ({ teamId }) => {
+        const teamInfo = await getTeamInfo(teamId);
+
         setMyTeams((prev) => [...prev, teamInfo]);
       });
     };
@@ -43,7 +48,7 @@ const TeamChoice = () => {
 
   return (
     <>
-      <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
+      <h1 className={classNames('a11yHidden')}>팀 선택 페이지</h1>
       <div className={classNames(entireContainer)}>
         {myTeams.length !== 0 ? (
           <>
