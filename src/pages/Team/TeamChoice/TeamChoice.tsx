@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { TeamInfo } from '@/types';
 import { getTeamInfo } from '@/api';
 import TeamInfoCard from './TeamInfoCard';
 import { TEAM_CREATE_PAGE } from '@/consts/routes';
+import SoccerBallLoading from '@/components/common/SoccerBallLoading';
 
 const {
   entireContainer,
@@ -23,6 +24,7 @@ const {
 
 const TeamChoice = () => {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
   const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
   const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
 
@@ -40,11 +42,14 @@ const TeamChoice = () => {
         const teamInfo = await getTeamInfo(teamId);
 
         setMyTeams((prev) => [...prev, teamInfo]);
+        setIsLoading(false);
       });
     };
 
     updateMyTeamsInfo();
   }, [userGradeResponse]);
+
+  if (isLoading) return <SoccerBallLoading />;
 
   return (
     <>
