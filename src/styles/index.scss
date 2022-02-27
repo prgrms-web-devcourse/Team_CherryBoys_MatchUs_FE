@@ -1,2 +1,8 @@
 @forward './_reset';
 @forward './_common';
+
+#root {
+  display: flex;
+  justify-content: center;
+  background-color: #c5c5c5;
+}

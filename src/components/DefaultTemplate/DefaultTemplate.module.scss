@@ -1,3 +1,17 @@
+.mainContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 36rem;
+  max-width: 64rem;
+  height: 100vh;
+  background-color: white;
+}
+
 .main {
+  display: block;
   margin-top: 4.2rem;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
