@@ -6,6 +6,28 @@
   justify-content: center;
 }
 
+@mixin basicInputIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  color: gray;
+  background-color: #fafbfc;
+  border-right: 1px solid #ddd;
+  border-radius: 10px 0 0 10px;
+  cursor: default;
+  pointer-events: none;
+}
+
+@mixin basicButton {
+  width: 25%;
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 1.4rem;
+  border-left: 1px solid #ddd;
+  border-radius: 0 10px 10px 0;
+}
+
 @mixin input-btn-size($bgc: color.$primary) {
   box-sizing: border-box;
   width: 100%;
@@ -64,6 +86,37 @@
   }
 }
 
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  height: 5.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  svg {
+    font-size: 30px;
+  }
+
+  .inputIcon {
+    @include basicInputIcon();
+    color: gray;
+    background-color: #fafbfc;
+  }
+
+  .successInputIcon {
+    @include basicInputIcon();
+    color: #1ccf44;
+    background-color: #f3fff7;
+  }
+
+  .failInputIcon {
+    @include basicInputIcon();
+    color: #f64646;
+    background-color: #fff8f8;
+    border-right: 1px solid #f64646;
+  }
+}
+
 .title {
   margin-bottom: 5rem;
   font-weight: 700;
@@ -71,15 +124,15 @@
 }
 
 .inValid_form {
-  border-color: red;
+  padding-left: 1.5rem;
+  border: none;
+  border-radius: 0 10px 10px 0;
 }
 
 .valid_form {
-  border-color: color.$primary;
-}
-
-.valid-form {
-  border-color: color.$primary;
+  padding-left: 1.5rem;
+  border: none;
+  border-radius: 0 10px 10px 0;
 }
 
 .valid_msg {
@@ -96,15 +149,15 @@ select:focus {
   outline: none;
 }
 
-.duplicate_check__btn {
-  width: 40%;
-  margin-left: 1rem;
-  color: #ffffff;
-  font-size: 1.4rem;
-  background-color: color.$primary;
-  border-radius: 5px;
+.checkBtnWithVaild {
+  @include basicButton();
+  color: #0091fa;
+  background-color: #f6faff;
 }
 
-.flex {
-  display: flex;
+.checkBtnWithoutVaild {
+  @include basicButton();
+  color: #ababab;
+  background-color: #fff;
+  cursor: not-allowed;
 }
