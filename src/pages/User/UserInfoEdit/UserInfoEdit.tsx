@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { AGE, SPORTS } from '@/consts/user';
-import ValidInput from '../Signup/ValidInput';
+import ValidInput from '@/pages/Signup/ValidInput';
 import {
   BIO_MAX_LEN,
   validateUser,

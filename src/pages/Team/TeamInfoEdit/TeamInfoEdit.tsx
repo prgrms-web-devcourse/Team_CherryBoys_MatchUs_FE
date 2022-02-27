@@ -92,7 +92,7 @@ const TeamInfoEdit = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
+        <h1 className={classNames('a11yHidden')}>팀 수정 페이지</h1>
         <p className={classNames(titleContainer)}>
           <span className={classNames(mainTitle, 'whiteSpace')}>
             우리 <span className={classNames(highlight)}>팀</span>의

@@ -127,8 +127,8 @@ const TeamCreate = () => {
 
   return (
     <div className={classNames(pageContainer)}>
+      <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
       <form onSubmit={handleSubmit}>
-        <h1 className={classNames('a11yHidden')}>팀 생성 페이지</h1>
         <p className={classNames(titleContainer)}>
           <span className={classNames(mainTitle, 'whiteSpace')}>
             멋진 <span className={classNames(highlight)}>팀</span>을

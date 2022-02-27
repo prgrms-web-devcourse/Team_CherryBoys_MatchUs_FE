@@ -21,8 +21,8 @@ import { previousHiresInfo, Locations, TeamSimple } from '@/types';
 import { RootState } from '@/store';
 import { match } from '@/store/match/match';
 import { getItemFromStorage } from '@/utils/storage';
-import style from './HiresCreate.module.scss';
-import styles from '@/pages/HiresDetail/hiresDetail.module.scss';
+import style from './hiresCreate.module.scss';
+import styles from '@/pages/Hire/HiresDetail/hiresDetail.module.scss';
 
 const { hiresCreateContainer, inputBox, inputDateBox, buttonBox, submitButton } = style;
 const { modalMainTitle } = styles;

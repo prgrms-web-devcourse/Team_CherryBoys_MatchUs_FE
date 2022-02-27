@@ -14,7 +14,7 @@ import {
   MatchReviewModal,
   MatchTeamMemberModal,
 } from '@/components';
-import styles from './Match.module.scss';
+import styles from './matchDetail.module.scss';
 import { fetchMatchById, fetchAuthorizedTeams } from '@/api';
 import { Match as MatchType, TeamSimple } from '@/types';
 import { getItemFromStorage } from '@/utils/storage';
@@ -22,7 +22,7 @@ import { match as matchStore } from '@/store/match/match';
 
 const { matchPageContainer, awayTeam, versus } = styles;
 
-const Match = () => {
+const Matches = () => {
   const matchId = parseInt(useParams<{ postId: string }>().postId, 10);
   const token = getItemFromStorage('accessToken');
   const dispatch = useDispatch();
@@ -128,4 +128,4 @@ const Match = () => {
   );
 };
 
-export default Match;
+export default Matches;

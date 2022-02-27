@@ -8,8 +8,8 @@ import {
   TeamCreate,
   TeamInfoEdit,
   TeamChoice,
-  Match,
   Matches,
+  MatchDetail,
   NewMatch,
   EditMatch,
   Hires,
@@ -83,7 +83,7 @@ const Router = () => {
       {/* 매치 페이지 */}
       <Route path={MATCHES_PAGE} exact component={Matches} />
       <AuthorizedRouter path={MATCHES_POST_PAGE} exact component={NewMatch} />
-      <Route path={MATCHES_DETAIL_PAGE} exact component={Match} />
+      <Route path={MATCHES_DETAIL_PAGE} exact component={MatchDetail} />
       <AuthorizedRouter path={MATCHES_EDIT_PAGE} exact component={EditMatch} />
 
       {/* 팀 페이지 */}
