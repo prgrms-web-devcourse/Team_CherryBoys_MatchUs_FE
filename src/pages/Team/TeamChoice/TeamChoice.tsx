@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
@@ -22,32 +22,37 @@ const {
   noTeamAddButton,
 } = style;
 
-const TeamChoice = () => {
+const TeamChoice = React.memo(() => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
   const [myTeams, setMyTeams] = useState<TeamInfo[]>([]);
-  const { userGradeResponse } = useSelector((store: RootState) => store.user.userInfo);
+  const { userGradeResponse: userTeamInfo } = useSelector(
+    (store: RootState) => store.user.userInfo
+  );
 
   const handleMoveToTeamCreatePage = () => {
     history.push(TEAM_CREATE_PAGE);
   };
 
   useEffect(() => {
-    const updateMyTeamsInfo = () => {
-      const removedDuplicatedTeamInfo = userGradeResponse.filter(
-        (value, index, self) => index === self.findIndex((t) => t.teamId === value.teamId)
+    const updateMyTeamsInfo = async () => {
+      setIsLoading(() => true);
+
+      const removedDuplicatedTeamInfo = userTeamInfo.filter(
+        (value, index, self) => index === self.findIndex((team) => team.teamId === value.teamId)
       );
 
       removedDuplicatedTeamInfo.map(async ({ teamId }) => {
         const teamInfo = await getTeamInfo(teamId);
 
         setMyTeams((prev) => [...prev, teamInfo]);
-        setIsLoading(false);
       });
+
+      setIsLoading(() => false);
     };
 
     updateMyTeamsInfo();
-  }, [userGradeResponse]);
+  }, [userTeamInfo]);
 
   if (isLoading) return <SoccerBallLoading />;
 
@@ -67,19 +72,17 @@ const TeamChoice = () => {
             </div>
             <div className={classNames(cardsContainer)}>
               {myTeams.map(
-                ({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }, index) => {
-                  return (
-                    <TeamInfoCard
-                      key={`teamCard-${teamId}-${index}`}
-                      teamId={teamId}
-                      teamLogo={logo}
-                      teamName={teamName}
-                      teamCreatedAt={teamCreatedAt}
-                      tags={tags}
-                      mannerTemperature={mannerTemperature}
-                    />
-                  );
-                }
+                ({ logo, teamId, teamName, teamCreatedAt, tags, mannerTemperature }, index) => (
+                  <TeamInfoCard
+                    key={`teamCard-${teamId}-${index}`}
+                    teamId={teamId}
+                    teamLogo={logo}
+                    teamName={teamName}
+                    teamCreatedAt={teamCreatedAt}
+                    tags={tags}
+                    mannerTemperature={mannerTemperature}
+                  />
+                )
               )}
             </div>
             <button
@@ -115,6 +118,6 @@ const TeamChoice = () => {
       </div>
     </>
   );
-};
+});
 
 export default TeamChoice;
