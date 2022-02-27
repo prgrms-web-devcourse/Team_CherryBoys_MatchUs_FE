@@ -8,6 +8,7 @@ type ValidInputProps = {
   value: string;
   selectOptions?: string[];
   type: 'input' | 'select' | 'password';
+  placeholder?: string;
   className?: string;
 };
 
@@ -18,6 +19,7 @@ const ValidInput = ({
   value,
   selectOptions,
   type,
+  placeholder,
   className,
 }: ValidInputProps) => {
   return (
@@ -29,6 +31,7 @@ const ValidInput = ({
           onChange={onChange}
           value={value}
           type={type}
+          placeholder={placeholder}
           className={classNames(className)}
         />
       ) : (
