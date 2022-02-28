@@ -66,11 +66,15 @@
 
 .edit_info__btn {
   @include input-btn-size();
+  height: 5.5rem;
   margin-top: 4rem;
   color: #ffffff;
   font-weight: 700;
   font-size: 1.8rem;
   letter-spacing: 0.2rem;
+  border: 1px solid #0165c1;
+  border-radius: 1rem;
+  box-shadow: 0 0.15rem 0.3rem rgb(0 0 0 / 15%);
 }
 
 .container {
