@@ -29,6 +29,19 @@
   border-radius: 0 10px 10px 0;
 }
 
+@mixin baseInputContainer {
+  display: flex;
+  flex-direction: row;
+  height: 5.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0.15rem 0.3rem rgb(0 0 0 / 15%);
+
+  select {
+    width: 98%;
+    background-color: transparent;
+  }
+}
+
 @mixin input-btn-size($bgc: #0091fa) {
   box-sizing: border-box;
   width: 100%;
@@ -92,15 +105,43 @@
 }
 
 .inputContainer {
-  display: flex;
-  flex-direction: row;
-  height: 5.5rem;
+  @include baseInputContainer();
   border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0.15rem 0.3rem rgb(0 0 0 / 15%);
 
   svg {
     font-size: 30px;
+  }
+
+  .inputIcon {
+    @include basicInputIcon();
+    color: gray;
+    background-color: #fafbfc;
+  }
+
+  .successInputIcon {
+    @include basicInputIcon();
+    color: #1ccf44;
+    background-color: #f3fff7;
+  }
+
+  .failInputIcon {
+    @include basicInputIcon();
+    color: #f64646;
+    background-color: #fff8f8;
+    border-right: 1px solid #f64646;
+  }
+}
+
+.failInputContainer {
+  @include baseInputContainer();
+  border: 1px solid #f64646;
+
+  svg {
+    font-size: 30px;
+  }
+
+  select {
+    width: 50px;
   }
 
   .inputIcon {
