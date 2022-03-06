@@ -34,6 +34,7 @@ const VaildationInput = ({
     successInputIcon,
     failInputIcon,
     inputContainer,
+    failInputContainer,
     inputIcon,
     form__label,
     form__input,
@@ -46,11 +47,11 @@ const VaildationInput = ({
   return (
     <>
       <CustomLabel className={classNames(form__label)} htmlFor={`${name}`} />
-      <div className={classNames(!option && inputContainer)}>
+      <div className={classNames(value && error !== '' ? failInputContainer : inputContainer)}>
         {!option && (
           <div
             className={classNames(
-              value ? (error !== 'undefined' ? failInputIcon : successInputIcon) : inputIcon,
+              value ? (error !== '' ? failInputIcon : successInputIcon) : inputIcon,
               option === undefined ? '' : ''
             )}
           >
@@ -60,7 +61,7 @@ const VaildationInput = ({
         <ValidInput
           id={`${name}`}
           name={`${name}`}
-          className={classNames(form__input, error ? inValid_form : valid_form)}
+          className={classNames(form__input, error !== '' ? inValid_form : valid_form)}
           onChange={handleChange}
           value={`${value}`}
           type={type}
@@ -72,9 +73,7 @@ const VaildationInput = ({
           <button
             type="button"
             onClick={handleClick}
-            className={classNames(
-              value && error === 'undefined' ? checkBtnWithVaild : checkBtnWithoutVaild
-            )}
+            className={classNames(value && error === '' ? checkBtnWithVaild : checkBtnWithoutVaild)}
           >
             중복확인
           </button>

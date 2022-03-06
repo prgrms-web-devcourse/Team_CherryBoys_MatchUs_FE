@@ -10,6 +10,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import {
   USER_VALIDATION_SUCCESS_MSG,
   USER_VALIDATION_ERR_MSG,
+  validateUser,
 } from '@/utils/validation/userValidation';
 import {
   requestCheckDuplicatedEmail,
@@ -41,8 +42,33 @@ const Signup = () => {
       sports: '',
     },
     onSubmit: () => {},
-    validate: () => {
+    validate: ({
+      userName,
+      nickname,
+      email,
+      password,
+      confirmedPassword,
+      gender,
+      ageGroup,
+      sports,
+    }: signupFormType) => {
       const newErrors = {} as any;
+
+      newErrors.userName = validateUser.userName(userName);
+
+      newErrors.nickname = validateUser.nickname(nickname);
+
+      newErrors.email = validateUser.email(email);
+
+      newErrors.password = validateUser.password(password);
+
+      newErrors.confirmedPassword = validateUser.confirmedPassword(confirmedPassword, password);
+
+      newErrors.gender = validateUser.gender(gender);
+
+      newErrors.ageGroup = validateUser.ageGroup(ageGroup);
+
+      newErrors.sports = validateUser.sports(sports);
 
       return newErrors;
     },
@@ -108,6 +134,8 @@ const Signup = () => {
 
   const { container, flex_container, edit_info__btn, modalMainTitle, modalSubTitle } = style;
 
+  console.log(errors);
+
   return (
     <div className={classNames(container)}>
       {isModalDialogOpen && (
@@ -125,9 +153,9 @@ const Signup = () => {
           </span>
         </CustomModalDialog>
       )}
+      {/* 길다는 이유로 이를 배열로 돌리면, 보수/유지가 어렵지 않을까? */}
       <div className={classNames(flex_container)}>
         <form onSubmit={handleSubmit}>
-          {/* Debounce를 통해서 입력이 완료된 뒤에, 변화가 되도록 하자. */}
           <VaildationInputSet
             name="userName"
             placeholder="이름"
