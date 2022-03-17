@@ -12,6 +12,19 @@
   padding: 2rem 2rem 5rem 2rem;
 }
 
+.inputContainer {
+  width: 100%;
+  margin-top: 7rem;
+
+  input {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
 .flex_center {
   @include flexCenter();
 }
@@ -38,11 +51,12 @@
 
 .logo_box {
   height: fit-content;
+  margin-top: 3rem;
 
   .logo_img {
     display: block;
-    width: 80vw;
-    height: 20vw;
+    width: 30rem;
+    height: 15rem;
     max-height: 100%;
     object-fit: contain;
   }

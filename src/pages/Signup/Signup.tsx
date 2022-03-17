@@ -3,91 +3,82 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
-import ValidInput from './ValidInput';
+import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import KeyIcon from '@mui/icons-material/Key';
 import {
   USER_VALIDATION_SUCCESS_MSG,
-  validateUser,
   USER_VALIDATION_ERR_MSG,
+  validateUser,
 } from '@/utils/validation/userValidation';
 import {
   requestCheckDuplicatedEmail,
   requestCheckDuplicatedNickname,
   requestSignup,
 } from '@/api/user';
-import { isValidFormType, signupFormType, validMsgType } from '@/types/users';
+import { signupFormType } from '@/types/users';
 import { AGE, GENDER, SPORTS } from '@/consts/user';
-import { CustomLabel, CustomModalDialog } from '@/components';
+import { CustomModalDialog } from '@/components';
 import style from './signup.module.scss';
+import useForm from '@/hooks/useForm';
+import VaildationInputSet from '@/components/common/VaildationInputSet/VaildationInputSet';
 
 const Signup = () => {
-  const [signupForm, setSignupForm] = useState<signupFormType>({
-    userName: '',
-    nickname: '',
-    email: '',
-    password: '',
-    confirmedPassword: '',
-    gender: '',
-    ageGroup: '',
-    sports: '',
-  });
-
-  const [isValidForm, setIsValidForm] = useState<isValidFormType>({
-    userName: false,
-    nickname: false,
-    email: false,
-    password: false,
-    confirmedPassword: false,
-    gender: false,
-    ageGroup: false,
-    sports: false,
-  });
-
-  const [validMsg, setValidMsg] = useState<validMsgType>({
-    userName: '',
-    nickname: '',
-    email: '',
-    password: '',
-    confirmedPassword: '',
-    gender: '',
-    ageGroup: '',
-    sports: '',
-  });
+  const history = useHistory();
   const [isModalDialogOpen, setIsModalDialogOpen] = useState(false);
+  // 회원가입 이후에 나오는 모달을 관리하기 위해서 사용되는 state
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
+  const { values, errors, handleChange, handleSubmit } = useForm<signupFormType>({
+    initialValues: {
+      userName: '',
+      nickname: '',
+      email: '',
+      password: '',
+      confirmedPassword: '',
+      gender: '',
+      ageGroup: '',
+      sports: '',
+    },
+    onSubmit: () => {},
+    validate: ({
+      userName,
+      nickname,
+      email,
+      password,
+      confirmedPassword,
+      gender,
+      ageGroup,
+      sports,
+    }: signupFormType) => {
+      const newErrors = {} as any;
+
+      newErrors.userName = validateUser.userName(userName);
+
+      newErrors.nickname = validateUser.nickname(nickname);
+
+      newErrors.email = validateUser.email(email);
+
+      newErrors.password = validateUser.password(password);
+
+      newErrors.confirmedPassword = validateUser.confirmedPassword(confirmedPassword, password);
+
+      newErrors.gender = validateUser.gender(gender);
+
+      newErrors.ageGroup = validateUser.ageGroup(ageGroup);
+
+      newErrors.sports = validateUser.sports(sports);
+
+      return newErrors;
+    },
+  });
+
   const { userName, nickname, email, password, confirmedPassword, gender, ageGroup, sports } =
-    signupForm;
-
-  const history = useHistory();
-
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const { name } = e.target;
-    const value = e.target.value.trim();
-    const errMsg =
-      name !== 'confirmedPassword'
-        ? validateUser[name](value)
-        : validateUser[name](value, password);
-
-    setValidMsg({
-      ...validMsg,
-      [name]: errMsg,
-    });
-
-    setIsValidForm({
-      ...isValidForm,
-      [name]: !errMsg,
-    });
-
-    setSignupForm({
-      ...signupForm,
-      [name]: value,
-    });
-  };
+    values;
 
   const signup = async () => {
-    const isSignup = await requestSignup({ ...signupForm, name: userName });
+    const isSignup = await requestSignup({ ...values, name: userName });
 
     if (isSignup) {
       setIsSignupSuccess(true);
@@ -97,96 +88,53 @@ const Signup = () => {
     setIsModalDialogOpen(false);
   };
 
+  // TODO: 중복에 대한 처리를 어떻게 할지 고민을 해볼 것
   // 닉네임 중복 확인
   const handleClickNicknameDuplicate = async () => {
-    if (!isValidForm.nickname) {
+    if (!errors.nickname) {
       return;
     }
 
-    const { duplicated } = await requestCheckDuplicatedNickname(signupForm.nickname);
+    const { duplicated } = await requestCheckDuplicatedNickname(values.nickname);
     const msg = !duplicated
       ? USER_VALIDATION_SUCCESS_MSG.NICKNAME_SUCCESS_MSG
       : USER_VALIDATION_ERR_MSG.DUPLICATE_NICKNAME;
-
-    setValidMsg({
-      ...validMsg,
-      nickname: msg,
-    });
-
-    setIsValidForm({
-      ...isValidForm,
-      nickname: !duplicated,
-    });
   };
 
+  // 이메일 중복 확인
   const handleClickCheckDuplicatedEmail = async () => {
-    if (!isValidForm.email) {
+    if (!errors.email) {
       return;
     }
-    const { duplicated } = await requestCheckDuplicatedEmail(signupForm.email);
+    const { duplicated } = await requestCheckDuplicatedEmail(values.email);
 
     const msg = !duplicated
       ? USER_VALIDATION_SUCCESS_MSG.EMAIL_SUCCESS_MSG
       : USER_VALIDATION_ERR_MSG.DUPLICATE_EMIAL;
-
-    setValidMsg({
-      ...validMsg,
-      email: msg,
-    });
-
-    setIsValidForm({
-      ...isValidForm,
-      email: !duplicated,
-    });
   };
 
-  const IsSignupValid = () => {
-    return !Object.values(isValidForm).includes(false);
-  };
-
-  const changeUnvalidateMsg = () => {
-    const newValidMsgState: validMsgType = { ...validMsg };
-
-    Object.keys(isValidForm).forEach((key) => {
-      newValidMsgState[key] = !isValidForm[key]
-        ? '필수로 입력해야 하는 항목입니다.'
-        : validMsg[key];
-    });
-
-    setValidMsg(newValidMsgState);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  // 제출을 위한 handler => onSubmit으로 이전 계획
+  const handleInfoSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!IsSignupValid()) {
-      changeUnvalidateMsg();
-      return;
-    }
+    // if (!IsSignupValid()) {
+    //   changeUnvalidateMsg();
+    //   return;
+    // }
 
     signup();
   };
 
+  // 모달에 나온 버튼을 클릭하면 이동하는 것으로 추측 => 네이밍을 변경
   const handleClickModal = () => {
     if (isSignupSuccess) {
       history.push('/login');
     }
   };
 
-  const {
-    flex,
-    duplicate_check__btn,
-    valid_msg,
-    container,
-    form__label,
-    form__input,
-    flex_container,
-    edit_info__btn,
-    inValid_form,
-    valid_form,
-    modalMainTitle,
-    modalSubTitle,
-  } = style;
+  const { container, flex_container, edit_info__btn, modalMainTitle, modalSubTitle } = style;
+
+  console.log(errors);
 
   return (
     <div className={classNames(container)}>
@@ -196,6 +144,7 @@ const Signup = () => {
           handleCancel={() => setIsModalDialogOpen(false)}
           handleApprove={handleClickModal}
         >
+          {/* TODO: 메세지를 상수로 변경  */}
           <span className={classNames('whiteSpace', modalMainTitle)}>
             {isSignupSuccess ? '회원 가입 완료!' : '에러가 발생했어요!'}
           </span>
@@ -204,156 +153,88 @@ const Signup = () => {
           </span>
         </CustomModalDialog>
       )}
+      {/* 길다는 이유로 이를 배열로 돌리면, 보수/유지가 어렵지 않을까? */}
       <div className={classNames(flex_container)}>
         <form onSubmit={handleSubmit}>
-          <CustomLabel htmlFor="userName" className={classNames(form__label)}>
-            사용자명
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="userName"
-              name="userName"
-              className={classNames(form__input, !isValidForm.userName ? inValid_form : valid_form)}
-              onChange={handleOnChange}
-              value={userName}
-              type="input"
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.userName}</span>
-          </div>
-          <CustomLabel htmlFor="nickname" className={classNames(form__label)}>
-            닉네임
-          </CustomLabel>
-          <div className={classNames(flex)}>
-            <ValidInput
-              id="nickname"
-              name="nickname"
-              className={classNames(form__input, !isValidForm.nickname ? inValid_form : valid_form)}
-              onChange={handleOnChange}
-              value={nickname}
-              type="input"
-            />
-            <button
-              type="button"
-              onClick={handleClickNicknameDuplicate}
-              className={classNames(duplicate_check__btn)}
-            >
-              중복확인
-            </button>
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.nickname}</span>
-          </div>
-          <CustomLabel htmlFor="email" className={classNames(form__label)}>
-            이메일
-          </CustomLabel>
-          <div className={classNames(flex)}>
-            <ValidInput
-              id="email"
-              className={classNames(form__input, !isValidForm.email ? inValid_form : valid_form)}
-              name="email"
-              onChange={handleOnChange}
-              value={email}
-              type="input"
-            />
-            <button
-              type="button"
-              onClick={handleClickCheckDuplicatedEmail}
-              className={classNames(duplicate_check__btn)}
-            >
-              중복확인
-            </button>
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.email}</span>
-          </div>
-          <CustomLabel htmlFor="password" className={classNames(form__label)}>
-            비밀번호
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="password"
-              name="password"
-              className={classNames(form__input, !isValidForm.password ? inValid_form : valid_form)}
-              onChange={handleOnChange}
-              value={password}
-              type="password"
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.password}</span>
-          </div>
-          <CustomLabel htmlFor="confirmedPassword" className={classNames(form__label)}>
-            비밀번호 확인
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="confirmedPassword"
-              className={classNames(
-                form__input,
-                !isValidForm.confirmedPassword ? inValid_form : valid_form
-              )}
+          <VaildationInputSet
+            name="userName"
+            placeholder="이름"
+            value={`${userName}`}
+            error={`${errors.userName}`}
+            type="input"
+            handleChange={handleChange}
+          >
+            <PermIdentityIcon />
+          </VaildationInputSet>
+          <VaildationInputSet
+            name="nickname"
+            placeholder="닉네임"
+            value={`${nickname}`}
+            error={`${errors.nickname}`}
+            type="input"
+            handleChange={handleChange}
+            handleClick={handleClickCheckDuplicatedEmail}
+          >
+            <EmojiEmotionsIcon />
+          </VaildationInputSet>
+          <VaildationInputSet
+            name="email"
+            placeholder="이메일"
+            value={`${email}`}
+            error={`${errors.email}`}
+            type="input"
+            handleChange={handleChange}
+            handleClick={handleClickCheckDuplicatedEmail}
+          >
+            <LocalPostOfficeIcon />
+          </VaildationInputSet>
+          <VaildationInputSet
+            name="password"
+            placeholder="비밀번호"
+            value={`${password}`}
+            error={`${errors.password}`}
+            type="password"
+            handleChange={handleChange}
+          >
+            <KeyIcon />
+          </VaildationInputSet>
+          {/* 장치를 통해서 password가 정상적으로 입력되었을 때를 받아보도록 하자. */}
+          {password && (
+            <VaildationInputSet
               name="confirmedPassword"
-              onChange={handleOnChange}
-              value={confirmedPassword}
+              placeholder="비밀번호 확인"
+              value={`${confirmedPassword}`}
+              error={`${errors.confirmedPassword}`}
               type="password"
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.confirmedPassword}</span>
-          </div>
-          <CustomLabel htmlFor="gender" className={classNames(form__label)}>
-            성별
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="gender"
-              name="gender"
-              onChange={handleOnChange}
-              value={gender}
-              className={classNames(form__input, !isValidForm.gender ? inValid_form : valid_form)}
-              type="select"
-              selectOptions={GENDER}
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.gender}</span>
-          </div>
-          <CustomLabel htmlFor="ageGroup" className={classNames(form__label)}>
-            연령대
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="ageGroup"
-              className={classNames(form__input, !isValidForm.ageGroup ? inValid_form : valid_form)}
-              name="ageGroup"
-              onChange={handleOnChange}
-              value={ageGroup}
-              type="select"
-              selectOptions={AGE}
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.ageGroup}</span>
-          </div>
-          <CustomLabel htmlFor="sports" className={classNames(form__label)}>
-            종목
-          </CustomLabel>
-          <div>
-            <ValidInput
-              id="sports"
-              name="sports"
-              className={classNames(form__input, !isValidForm.sports ? inValid_form : valid_form)}
-              onChange={handleOnChange}
-              value={sports}
-              type="select"
-              selectOptions={SPORTS}
-            />
-          </div>
-          <div>
-            <span className={classNames(valid_msg)}>{validMsg.sports}</span>
-          </div>
+              handleChange={handleChange}
+            >
+              <KeyIcon />
+            </VaildationInputSet>
+          )}
+          <VaildationInputSet
+            name="gender"
+            value={`${gender}`}
+            error={`${errors.gender}`}
+            type="select"
+            handleChange={handleChange}
+            option={GENDER}
+          />
+          <VaildationInputSet
+            name="ageGroup"
+            value={`${ageGroup}`}
+            error={`${errors.ageGroup}`}
+            type="select"
+            handleChange={handleChange}
+            option={AGE}
+          />
+          <VaildationInputSet
+            name="sports"
+            value={`${sports}`}
+            error={`${errors.sports}`}
+            type="select"
+            handleChange={handleChange}
+            option={SPORTS}
+          />
           <button type="submit" className={classNames(edit_info__btn)}>
             회원가입
           </button>

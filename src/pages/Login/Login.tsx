@@ -22,6 +22,7 @@ const Login = () => {
     modalSubTitle,
     modalMainTitle,
     container,
+    inputContainer,
     form__label,
     form__login,
     signup,
@@ -79,7 +80,7 @@ const Login = () => {
         <img src={logo} alt="로고" className={classNames('whiteSpace', logo_img)} />
       </div>
       {/* 로그인 폼 */}
-      <div className={classNames()}>
+      <div className={classNames(inputContainer)}>
         <form onSubmit={handleSubmit}>
           <CustomLabel htmlFor="email" className={classNames('whiteSpace', form__label)}>
             아이디
@@ -88,7 +89,7 @@ const Login = () => {
             type="text"
             name="email"
             id="email"
-            placeholder="아이디를 입력해주세요."
+            placeholder=""
             value={email}
             onChange={handleChange}
             className={classNames('whiteSpace', form__input)}
@@ -100,7 +101,7 @@ const Login = () => {
             type="password"
             name="password"
             id="password"
-            placeholder="패스워드를 입력해주세요."
+            placeholder=""
             value={password}
             onChange={handleChange}
             className={classNames('whiteSpace', form__input)}
@@ -109,15 +110,15 @@ const Login = () => {
           <button type="submit" className={classNames('whiteSpace', form__login)}>
             로그인
           </button>
+          <button
+            type="button"
+            onClick={() => history.push('/signup')}
+            className={classNames('whiteSpace', signup)}
+          >
+            회원가입
+          </button>
         </form>
       </div>
-      <button
-        type="button"
-        onClick={() => history.push('/signup')}
-        className={classNames('whiteSpace', signup)}
-      >
-        회원가입
-      </button>
     </div>
   );
 };

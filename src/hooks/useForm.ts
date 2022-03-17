@@ -18,15 +18,15 @@ const useForm = <T>({ initialValues, onSubmit, validate }: UseFormArgs<T>) => {
   }, [values]);
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { id, value } = e.target;
+    const { id, value } = event.target;
     setValues({ ...values, [id]: value });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
-    e.preventDefault();
+    event.preventDefault();
 
     const newErrors = validate ? validate(values) : initialValues;
     if (Object.keys(newErrors).length === 0) {
