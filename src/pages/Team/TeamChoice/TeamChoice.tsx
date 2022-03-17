@@ -38,17 +38,23 @@ const TeamChoice = React.memo(() => {
     const updateMyTeamsInfo = async () => {
       setIsLoading(() => true);
 
-      const removedDuplicatedTeamInfo = userTeamInfo.filter(
+      const filteredTeamInfo = userTeamInfo.filter(
         (value, index, self) => index === self.findIndex((team) => team.teamId === value.teamId)
       );
 
-      removedDuplicatedTeamInfo.map(async ({ teamId }) => {
-        const teamInfo = await getTeamInfo(teamId);
+      const newTeamInfo = await Promise.all(
+        filteredTeamInfo.map(async ({ teamId }) => {
+          const teamInfo = await getTeamInfo(teamId);
 
-        setMyTeams((prev) => [...prev, teamInfo]);
-      });
+          return teamInfo;
+        })
+      );
 
-      setIsLoading(() => false);
+      setMyTeams((prev) => [...prev, ...newTeamInfo]);
+
+      setTimeout(() => {
+        setIsLoading(() => false);
+      }, 2000);
     };
 
     updateMyTeamsInfo();
