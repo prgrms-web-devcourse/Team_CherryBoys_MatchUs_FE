@@ -17,6 +17,7 @@ const {
   menu_card,
   bgc_white,
   teamMemberTitle,
+  recruitContainer,
   categoryTitle,
   seeMore,
   teamCoreInfo,
@@ -103,7 +104,7 @@ const Main = () => {
           </div>
         </section>
 
-        <div>
+        <div className={classNames(recruitContainer)}>
           <div className={classNames(teamMemberTitle)}>
             <span className={classNames(categoryTitle)}>모집 중인 경기</span>
             <Link className={classNames(seeMore)} to="/matches">
@@ -118,7 +119,7 @@ const Main = () => {
           </section>
         </div>
 
-        <div>
+        <div className={classNames(recruitContainer)}>
           <div className={classNames(teamMemberTitle)}>
             <span className={classNames(categoryTitle)}>용병 모집</span>
             <Link className={classNames(seeMore)} to="/hires">
