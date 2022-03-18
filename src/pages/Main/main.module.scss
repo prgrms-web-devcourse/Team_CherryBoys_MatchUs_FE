@@ -92,10 +92,14 @@ button {
   margin-top: 3rem;
 }
 
+.recruitContainer {
+  position: relative;
+}
+
 .seeMore {
   position: absolute;
-  right: 4rem;
-  margin-top: 1rem;
+  right: 1rem;
+  margin-top: 0.5rem;
   font-weight: 500;
   font-size: 1.6rem;
 }
