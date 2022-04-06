@@ -2,12 +2,7 @@
   "name": "matchus",
   "scripts": {
     "dev": "webpack serve --mode=development --open",
-    "build": "webpack --mode=production",
-    "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx",
-    "lint:style": "stylelint '**/*.{scss,css}'",
-    "postinstall": "husky install"
+    "build": "webpack --mode=production"
   },
   "keywords": [],
   "author": "",
@@ -68,7 +63,6 @@
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.3.2",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.2",
     "jest": "^27.3.1",
     "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^2.3.0",
@@ -91,19 +85,5 @@
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.6.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --cache --fix",
-      "prettier --write"
-    ],
-    "*.{scss,css}": [
-      "stylelint --fix"
-    ]
   }
 }
